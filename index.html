@@ -1,0 +1,93 @@
+<!-- Ravindra Games Hub with integrated /games/ folder links -->
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ravindra Games Hub</title>
+  <meta name="description" content="Ravindra Games Hub — collection of lightweight web games (TicTacToe, Mastermind, Memory...)">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0f172a" id="meta-theme-color">
+  <style>
+    :root{--bg:#f7f8fb;--card:#fff;--text:#0f172a;--muted:#475569;--accent:#0ea5a3;}
+    [data-theme="dark"]{--bg:#071024;--card:#071a2b;--text:#e6eef8;--muted:#9fb3c8;--accent:#22c1c3}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+    .container{max-width:1100px;margin:24px auto;padding:20px}
+    header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#60a5fa);display:grid;place-items:center;color:#fff;font-weight:700}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:0;color:var(--muted)}
+    .controls{display:flex;gap:8px;align-items:center}
+    .chip{background:var(--card);padding:8px 12px;border-radius:999px;border:1px solid rgba(0,0,0,.06);cursor:pointer}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:20px}
+    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,.06);display:flex;flex-direction:column;gap:8px}
+    .card h3{margin:0;font-size:16px}
+    .card p{margin:0;color:var(--muted);font-size:13px}
+    .card .actions{margin-top:auto;display:flex;gap:8px}
+    .btn{padding:8px 10px;border-radius:8px;border:0;background:var(--accent);color:#fff;font-weight:600;cursor:pointer}
+    .btn.ghost{background:transparent;border:1px solid rgba(0,0,0,.08);color:var(--text)}
+    footer{margin-top:28px;color:var(--muted);font-size:13px;text-align:center}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">RG</div>
+        <div><h1>Ravindra Games Hub</h1><p class="lead">Play fun web games instantly</p></div>
+      </div>
+      <div class="controls">
+        <button class="chip" id="leaderBtn">Leaderboard</button>
+        <button class="chip" id="themeToggle">Dark</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="grid" id="gamesGrid"></section>
+    </main>
+
+    <footer>© 2025 Ravindra — Built with ❤️ for everyone.</footer>
+  </div>
+
+  <script defer data-domain="ravindra-games-hub" src="https://plausible.io/js/script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(()=>console.log('SW registered'));
+    }
+    </script>
+  <script>
+    const games = [
+      {id:'tictactoe', title:'Tic Tac Toe', desc:'Classic X vs O — human or AI', href:'games/tictactoe/index.html'},
+      {id:'tictactoe1', title:'Tic Tac Toe New', desc:'Classic X vs O — human or AI', href:'games/tictactoe1/index.html'},
+      {id:'threeinarow', title:'3 in Row (Tic Tac Toe)', desc:'Classic X vs O — human or AI', href:'games/threeinarow/index.html'},
+      {id:'mastermind', title:'Mastermind', desc:'Guess the color code, AI solver', href:'/games/mastermind/index.html'},
+      {id:'memory', title:'Memory Game', desc:'Find pairs before timer ends', href:'/games/memory/index.html'},
+      {id:'gomoku', title:'Gomoku (5 in a Row)', desc:'Beat computer with smart AI', href:'/games/gomoku/index.html'},
+      {id:'sudoku', title:'Sudoku', desc:'Solve logic puzzles of various sizes', href:'/games/sudoku/index.html'},
+      {id:'slitherlink', title:'Slitherlink', desc:'Create a single loop puzzle', href:'/games/slitherlink/index.html'}
+    ];
+
+    const grid = document.getElementById('gamesGrid');
+    games.forEach(g => {
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.innerHTML = `<h3>${g.title}</h3><p>${g.desc}</p><div class='actions'><a href='${g.href}' class='btn'>Play</a><button class='btn ghost' onclick=alert('Leaderboard for ${g.title} coming soon!')>Leaderboard</button></div>`;
+      grid.appendChild(card);
+    });
+
+    const themeToggle=document.getElementById('themeToggle');
+    function setTheme(t){
+      if(t==='dark')document.documentElement.setAttribute('data-theme','dark');else document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('rg_theme',t);
+      document.getElementById('meta-theme-color').setAttribute('content',t==='dark'?'#071a2b':'#0f172a');
+      themeToggle.textContent=t==='dark'?'Light':'Dark';
+    }
+    themeToggle.addEventListener('click',()=>setTheme(localStorage.getItem('rg_theme')==='dark'?'light':'dark'));
+    setTheme(localStorage.getItem('rg_theme')==='dark'?'dark':'light');
+
+    if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}
+  </script>
+</body>
+</html>

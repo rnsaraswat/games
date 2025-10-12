@@ -1,0 +1,1 @@
+// (Left intentionally small — auth handled in leaderboard.js using supabase-js)

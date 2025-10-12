@@ -1,0 +1,140 @@
+# Ravindra Games Hub
+
+A mobile-friendly, offline-ready game hub for your HTML/JS games (like Tic Tac Toe, Mastermind, etc.) with Supabase leaderboard integration.
+
+---
+
+## 📱 Mobile Optimization
+
+### 1. Responsive Layout
+All pages (homepage + games + leaderboard) use **flexbox/grid** layouts, **meta viewport tags**, and **relative units (%, rem, vh, vw)** so that they automatically adapt to different screen sizes.
+
+### 2. Touch Support Enhancements
+- All clickable elements are at least 44px high for better touch targets.
+- Added CSS `touch-action: manipulation` and JS `passive: true` listeners for smoother scrolling.
+- Game UI buttons are spaced and padded for thumb reach.
+
+### 3. Mobile Web App (PWA Mode)
+Added `manifest.json` + Service Worker to allow **Add to Home Screen** installation. Once installed, games run fullscreen like native apps.
+
+### 4. Performance Improvements
+- Deferred JS loading (`<script defer>`).
+- Lazy load images for game thumbnails.
+- Font display swap for instant text rendering.
+
+---
+
+## ⚙️ Caching Strategy (Service Worker)
+
+### Service Worker: `/sw.js`
+Implements a **hybrid caching strategy**:
+- **Precache**: Core shell files (`index.html`, `/games/`, `/leaderboard/`, `/assets/`)
+- **Runtime Cache**: Network-first for dynamic data (Supabase, analytics)
+- **Cache-first** for static assets (images, JS, CSS)
+- **Versioned cache names** to safely update without manual clears.
+
+```javascript
+// sw.js
+const CACHE_NAME = 'ravindra-games-v1';
+const ASSETS = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/styles.css',
+  '/leaderboard/',
+  '/games/tictactoe/',
+  '/games/mastermind/',
+  '/leaderboard/submit-helper.js'
+];
+
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
+  );
+});
+
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    )
+  );
+});
+
+self.addEventListener('fetch', e => {
+  const url = new URL(e.request.url);
+  if (url.origin === location.origin) {
+    e.respondWith(
+      caches.match(e.request).then(resp => resp || fetch(e.request))
+    );
+  } else {
+    // network first for external (Supabase, analytics)
+    e.respondWith(
+      fetch(e.request)
+        .then(resp => {
+          const clone = resp.clone();
+          caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
+          return resp;
+        })
+        .catch(() => caches.match(e.request))
+    );
+  }
+});
+```
+
+### Registration snippet:
+```html
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then(()=>console.log('SW registered'));
+}
+</script>
+```
+
+---
+
+## 🔍 Analytics Setup
+Added lightweight analytics using **Umami / Plausible** (GDPR-friendly, no cookies) or fallback custom event logging to Supabase.
+
+```html
+<!-- index.html -->
+<script defer data-domain="ravindra-games-hub" src="https://plausible.io/js/script.js"></script>
+```
+
+You can replace with your own analytics script or disable entirely.
+
+---
+
+## 🧩 Folder Structure
+```
+/
+├── index.html               # homepage with game cards
+├── sw.js                    # service worker
+├── manifest.json            # PWA manifest
+├── /games/
+│   ├── tictactoe/
+│   └── mastermind/
+├── /leaderboard/
+│   ├── index.html
+│   ├── config.example.js
+│   ├── submit-helper.js
+├── /assets/                 # icons, images, etc.
+└── README.md
+```
+
+---
+
+## 🚀 Deploy Guide
+1. **Local test**: `python -m http.server` then open `http://localhost:8000`  
+2. **Deploy to GitHub Pages** — Push to `main` branch, enable Pages, set branch root.
+3. Test on mobile and tap “Add to Home Screen.” It will run as standalone PWA.
+4. Supabase integration auto-detects if `/leaderboard/config.js` exists.
+
+---
+
+## 🔐 Optional Supabase Secure Edge Function
+Same as before, you can proxy score submissions through an Edge Function to protect keys (see earlier section in README).
+
+---
+
+✅ **Result:** The hub is now mobile-first, installable offline, fast-loading, and analytics-ready.
