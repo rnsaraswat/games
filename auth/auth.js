@@ -5,6 +5,6 @@ if (SUPABASE_URL && SUPABASE_ANON_KEY) {
     const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     document.getElementById('googleSign').addEventListener('click', () => {
-        supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + '/leaderboard/index.html' } });
+        supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + 'leaderboard/index.html' } });
     });
 }
