@@ -1,51 +1,42 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-// load initial
-loadTop(gameFilter.value);
 
 
-gameFilter.addEventListener('change', ()=> loadTop(gameFilter.value));
+// Try to import config (config.example.js -> user creates config.js)
+let SUPABASE_URL = null, SUPABASE_ANON_KEY = null;
+try{ const cfg = await import('./config.js'); SUPABASE_URL = cfg.SUPABASE_URL; SUPABASE_ANON_KEY = cfg.SUPABASE_ANON_KEY; }catch(e){/* no config */}
 
 
-// submit test score
-submitBtn.addEventListener('click', async ()=>{
-const name = (playerNameEl.value || 'anon').slice(0,64);
-const score = Number(playerScoreEl.value) || 0;
-const gameId = gameFilter.value;
-submitBtn.disabled = true;
-const payload = { game_id: gameId, player_name: name, score };
-const { data, error } = await supabase.from('scores').insert(payload).select();
-submitBtn.disabled = false;
-if(error){ alert('Failed to submit score. Check console.'); console.error(error); return; }
-playerNameEl.value=''; playerScoreEl.value='';
-loadTop(gameId);
-});
+const hasRemote = SUPABASE_URL && SUPABASE_ANON_KEY;
+const supabase = hasRemote ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
 
-// Auth helpers
-signBtn.addEventListener('click', async ()=>{
-const { data, error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
-if(error) console.error(error);
-});
+const gameFilter = document.getElementById('gameFilter');
+const listEl = document.getElementById('leaderboardList');
 
 
-signOutBtn.addEventListener('click', async ()=>{
-await supabase.auth.signOut();
-currentUser = null; updateAuthUi();
-});
-
-
-// Listen to auth state
-supabase.auth.onAuthStateChange((event, session)=>{
-currentUser = session?.user ?? null;
-updateAuthUi();
-});
-
-
-function updateAuthUi(){
-if(currentUser){ signBtn.style.display='none'; signOutBtn.style.display='inline-block'; }
-else{ signBtn.style.display='inline-block'; signOutBtn.style.display='none'; }
+async function loadTop(gameId){
+listEl.innerHTML = '<div style="color:var(--muted)">Loading...</div>';
+if(hasRemote){
+const { data, error } = await supabase.from('scores').select('*').eq('game_id', gameId).order('score', { ascending:false }).limit(10);
+if(error){ listEl.innerHTML = '<div style="color:crimson">Error loading scores</div>'; console.error(error); return; }
+if(!data || data.length===0){ listEl.innerHTML = '<div style="color:var(--muted)">No scores yet.</div>'; return; }
+renderRows(data);
+} else {
+const key = `rg_scores_${gameId}`;
+const arr = JSON.parse(localStorage.getItem(key) || '[]');
+if(arr.length===0){ listEl.innerHTML = '<div style="color:var(--muted)">No local scores yet.</div>'; return; }
+renderRows(arr.slice(0,10));
+}
 }
 
 
-// Anonymous fallback: allow submitting as guest without auth
-// (Already supported by using anon key — but you can record player_id if signed in)
+function renderRows(rows){
+listEl.innerHTML = rows.map((r,i)=>`<div class="score-row"><div><strong>${i+1}. ${escapeHtml(r.player_name||r.name||'anon')}</strong><div class="muted">${new Date(r.created_at||r.ts||Date.now()).toLocaleString()}</div></div><div class="score">${r.score}</div></div>`).join('');
+}
+
+
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;" })[c]); }
+
+
+loadTop(gameFilter.value);
+gameFilter.addEventListener('change', ()=> loadTop(gameFilter.value));

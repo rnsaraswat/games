@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="hi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Leaderboard — Ravindra Games Hub</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header style="display:flex;justify-content:space-between;align-items:center">
+            <h2>Global Leaderboard</h2>
+            <div>
+                <a href="/auth/login.html" class="chip">Sign in (Google)</a>
+            </div>
+        </header>
+
+
+        <section style="margin-top:12px">
+            <label>Filter game: </label>
+            <select id="gameFilter">
+                <option value="tictactoe">Tic Tac Toe</option>
+                <option value="mastermind">Mastermind</option>
+            </select>
+        </section>
+
+
+        <section id="leaderboardList" style="margin-top:12px"></section>
+
+
+        <p style="margin-top:18px;color:var(--muted)">Top 10 scores are shown. If Supabase config is missing, local
+            scores (from this device) are shown.</p>
+    </div>
+
+
+    <script type="module" src="/leaderboard/leaderboard.js"></script>
+</body>
+
+</html>

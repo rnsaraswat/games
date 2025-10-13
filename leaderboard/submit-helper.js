@@ -1,25 +1,22 @@
-// submit-helper.js
+// Attempts to post score to Supabase if /leaderboard/config.js exists.
+// Falls back to localStorage if config missing or network error.
 async function tryImportConfig() {
-    try {
-        return await import('./config.js');
-    } catch (err) {
-        return null;
-    }
+    try { return await import('./config.js'); } catch (e) { return null; }
 }
 
 
 window.submitScore = async function (gameId, numericScore, playerName = 'anon') {
     const cfg = await tryImportConfig();
     if (cfg && cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY) {
-        // use supabase client via CDN
-        const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
-        const supabase = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
         try {
-            await supabase.from('scores').insert({ game_id: gameId, player_name: playerName, score: numericScore });
+            const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+            const supabase = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+            const { error } = await supabase.from('scores').insert({ game_id: gameId, player_name: playerName, score: numericScore });
+            if (error) throw error;
             console.log('Score submitted to Supabase');
             return { ok: true, remote: true };
-        } catch (e) {
-            console.warn('Supabase submit failed, saving locally', e);
+        } catch (err) {
+            console.warn('Supabase submit failed, saving locally', err.message || err);
         }
     }
     // fallback local save
