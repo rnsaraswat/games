@@ -123,11 +123,17 @@ window.addEventListener('load', function () {
         if (checkWin(x, y)) {
             winnerName = currentPlayer === 'x' ? player1 : player2;
             saveToLeaderboard(winnerName);
+            let score = 0;
             if (modeEl.value === 'pvc' && currentPlayer === 'o') {
                 messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;
+                score = 50;
             } else {
                 messageEl.textContent = `${currentPlayer === 'x' ? player1 : player2} ${currentPlayer.toUpperCase()} wins!`;
+                score = 100;
             }
+            window.submitScore && 
+            window.submitScore('tictactoe', score, 'player'); alert('Game over — score: ' + score);
+
             timer = false;
             gameOver = true;
             switchStartingPlayer();
