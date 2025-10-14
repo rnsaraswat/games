@@ -1,11 +1,12 @@
 // Attempts to post score to Supabase if /leaderboard/config.js exists.
 // Falls back to localStorage if config missing or network error.
 async function tryImportConfig() {
-    try { return await import('./config.js'); } catch (e) { return null; }
+    try { return await import('config.js'); } catch (e) { return null; }
 }
 
 
 window.submitScore = async function (gameId, numericScore, playerName = 'anon') {
+    console.log("submit-helper.js window.submitScore", gameId, numericScore, playerName)
     const cfg = await tryImportConfig();
     if (cfg && cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY) {
         try {

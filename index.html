@@ -61,11 +61,11 @@
             { id: 'tictactoe2', title: 'Tic Tac Toe simple', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe2/index.html' },
             { id: 'threeinarow', title: '3 in Row (Tic Tac Toe)', desc: 'Classic X vs O — human or AI', href: 'games/threeinarow/index.html' },
             { id: 'mastermind', title: 'Mastermind', desc: 'Guess the color code', href: 'games/mastermind/index.html' },
-            { id: 'mastermind1', title: 'Mastermind', desc: 'Guess the color code', href: 'games/mastermindtext/mastermind_text.html' },
-            { id: 'memory', title: 'Memory Game', desc: 'Find pairs before timer ends', href: '/games/memory/index.html' },
-            { id: 'gomoku', title: 'Gomoku (5 in a Row)', desc: 'Beat computer with smart AI', href: '/games/gomoku/index.html' },
-            { id: 'sudoku', title: 'Sudoku', desc: 'Solve logic puzzles of various sizes', href: '/games/sudoku/index.html' },
-            { id: 'slitherlink', title: 'Slitherlink', desc: 'Create a single loop puzzle', href: '/games/slitherlink/index.html' }
+            { id: 'mastermind1', title: 'Mastermind', desc: 'Guess the color code', href: 'games/mastermindtext/mastermind_text.html' }
+            // { id: 'memory', title: 'Memory Game', desc: 'Find pairs before timer ends', href: '/games/memory/index.html' },
+            // { id: 'gomoku', title: 'Gomoku (5 in a Row)', desc: 'Beat computer with smart AI', href: '/games/gomoku/index.html' },
+            // { id: 'sudoku', title: 'Sudoku', desc: 'Solve logic puzzles of various sizes', href: '/games/sudoku/index.html' },
+            // { id: 'slitherlink', title: 'Slitherlink', desc: 'Create a single loop puzzle', href: '/games/slitherlink/index.html' }
         ];
 
         const grid = document.getElementById('gamesGrid');
@@ -85,7 +85,7 @@
             themeToggle.textContent = t === 'dark' ? 'Light' : 'Dark';
         }
         themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
-        setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+        // setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
     </script>
     <script>
         // Lazy register SW
