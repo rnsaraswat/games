@@ -277,6 +277,9 @@
 							return;
 						}
 						if (bothCorrect == globalGameState.numPegs) {
+							const score = Math.max(0, 100 - gameCount * 10); 
+							window.submitScore && window.submitScore('mastermind', score, 'player'); 
+							alert('You cracked it! Score: ' + score);
 							$curGuessAlert.hide();
 							$success.show();
 							return;
