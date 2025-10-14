@@ -3,7 +3,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 // Try to import config (config.example.js -> user creates config.js)
 let SUPABASE_URL = null, SUPABASE_ANON_KEY = null;
-try { const cfg = await import('./config.js'); SUPABASE_URL = cfg.SUPABASE_URL; SUPABASE_ANON_KEY = cfg.SUPABASE_ANON_KEY; } catch (e) {/* no config */ }
+try { const cfg = await import('config.js'); SUPABASE_URL = cfg.SUPABASE_URL; SUPABASE_ANON_KEY = cfg.SUPABASE_ANON_KEY; } catch (e) {/* no config */ }
 
 
 const hasRemote = SUPABASE_URL && SUPABASE_ANON_KEY;
