@@ -13,10 +13,12 @@
         <h2>Mastermind (4 slots, 6 colors)</h2>
         <div id="gameArea"></div>
         <div style="margin-top:12px"><button id="restart" class="chip">Restart</button></div>
+        <p id="secret">Code is</p>
     </div>
     <script>
         // Simple Mastermind: randomly generate code of 4 colors (0..5). Player guesses via prompts.
         let secret = Array.from({ length: 4 }, () => Math.floor(Math.random() * 6));
+        document.getElementById("secret").textContent = secret;
         let attempts = 0;
         async function makeGuess() {
             const guessStr = prompt('Enter 4 digits (0-5) e.g. 0123'); if (!guessStr) return;
