@@ -31,6 +31,23 @@
             // score: X win 100, O win 50, tie 20
             console.log("window.submitScore", window.submitScore)
             window.submitScore && window.submitScore('tictactoe', score, 'player'); alert('Game over — score: ' + score);
+
+            const player_name = localStorage.getItem("player_name") || "Guest";
+            const email = localStorage.getItem("email") || null;
+            const game_id = "tictactoe"; // या mastermind आदि
+            const score = finalScore; // अपनी गेम की स्कोर variable डालें
+
+            fetch("https://bkhoexvgorxzgdujofar.supabase.co/functions/v1/submit-score", {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ player_name, email, game_id, score })
+            })
+                .then(res => res.json())
+                .then(data => console.log("✅ Score saved:", data))
+                .catch(err => console.error("❌ Error saving score:", err));
         }
         document.getElementById('reset').addEventListener('click', () => { board = Array(9).fill(null); over = false; moves = 0; render(); });
         render();

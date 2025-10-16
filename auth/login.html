@@ -13,22 +13,22 @@
         <div id="auth-section">
             <h2>Login to save your score</h2>
             
-            <button id="google-login">Login with Google</button>
-            <button id="facebook-login">Login with Facebook</button>
-            <button id="guest-login">Continue as Guest</button>
+            <button id="google-login" class="btn">Login with Google</button>
+            <button id="facebook-login" class="btn">Login with Facebook</button>
+            <button id="guest-login" class="btn">Continue as Guest</button>
             
             <form id="email-login">
               <input type="email" id="email" placeholder="Email" required>
               <input type="text" id="name" placeholder="Name (optional)">
-              <button type="submit">Login with Email</button>
+              <button type="submit" class="btn">Login with Email</button>
             </form>
             
             <div id="auth-status"></div>
           </div>
 
           
-        <h2>Sign in with Google</h2>
-        <button id="googleSign" class="btn">Sign in with Google</button>
+        <!-- <h2>Sign in with Google</h2>
+        <button id="googleSign" class="btn">Sign in with Google</button> -->
         <p style="margin-top:12px;color:var(--muted)">After login you will be redirected back to the leaderboard.</p>
     </div>
     <script type="module" src="auth.js"></script>

@@ -123,16 +123,33 @@ window.addEventListener('load', function () {
         if (checkWin(x, y)) {
             winnerName = currentPlayer === 'x' ? player1 : player2;
             saveToLeaderboard(winnerName);
-            let score = 0;
+            let finalScore = 0;
             if (modeEl.value === 'pvc' && currentPlayer === 'o') {
                 messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;
-                score = 50;
+                finalScore = 50;
             } else {
                 messageEl.textContent = `${currentPlayer === 'x' ? player1 : player2} ${currentPlayer.toUpperCase()} wins!`;
-                score = 100;
+                finalScore = 100;
             }
-            window.submitScore && 
-            window.submitScore('tictactoe', score, 'player'); alert('Game over — score: ' + score);
+            window.submitScore &&
+                window.submitScore('tictactoe', finalScore, 'player'); alert('Game over — score: ' + finalScore);
+
+            const player_name = localStorage.getItem("player_name") || "Guest";
+            const email = localStorage.getItem("email") || null;
+            const game_id = "tictactoe"; // या mastermind आदि
+            const score = finalScore; // अपनी गेम की स्कोर variable डालें
+
+            fetch("https://lzaubusgcfgjxiyyfuof.supabase.co/functions/v1/submit-score", {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer YOUR_SUPABASE_ANON_KEY",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ player_name, email, game_id, score })
+            })
+                .then(res => res.json())
+                .then(data => console.log("✅ Score saved:", data))
+                .catch(err => console.error("❌ Error saving score:", err));
 
             timer = false;
             gameOver = true;
