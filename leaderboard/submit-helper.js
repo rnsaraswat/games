@@ -29,3 +29,31 @@ window.submitScore = async function (gameId, numericScore, playerName = 'anon') 
     console.log('Score saved locally');
     return { ok: true, remote: false };
 }
+
+
+
+// Client-side helper: calls the Edge Function instead of direct DB insert
+
+
+export async function submitSecureScore(player_name, email, game_id, score) {
+    try {
+    const res = await fetch("https://YOUR_PROJECT.functions.supabase.co/submit-score", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ player_name, email, game_id, score }),
+    });
+    
+    
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Unknown error");
+    console.log("✅ Score submitted securely:", data);
+    return data;
+    } catch (err) {
+    console.error("❌ Error submitting score:", err);
+    alert("Error submitting score. Please try again.");
+    }
+    }
+    
+    
+    // Usage example in your game code:
+    // window.submitScore = (gameId, score) => submitSecureScore('Player', '', gameId, score);

@@ -40,3 +40,51 @@ function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp
 
 loadTop(gameFilter.value);
 gameFilter.addEventListener('change', () => loadTop(gameFilter.value));
+
+
+
+// leaderboard.js
+const SUPABASE_URL = "https://lzaubusgcfgjxiyyfuof.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY"; // <-- अपने project key से बदलें
+
+// Fetch Top 10 scores
+export async function fetchLeaderboard(game_id) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/top_scores?game_id=eq.${game_id}&select=*`, {
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+    }
+  });
+  const data = await res.json();
+  return data.slice(0, 10);
+}
+
+// Render Leaderboard in a target <div>
+export async function renderLeaderboard(game_id, targetSelector) {
+  const container = document.querySelector(targetSelector);
+  container.innerHTML = "<p>Loading leaderboard...</p>";
+
+  try {
+    const scores = await fetchLeaderboard(game_id);
+    if (scores.length === 0) {
+      container.innerHTML = "<p>No scores yet — be the first!</p>";
+      return;
+    }
+
+    const list = scores.map((s, i) => `
+      <div class="score-row">
+        <span class="rank">#${i + 1}</span>
+        <span class="name">${s.player_name}</span>
+        <span class="score">${s.score}</span>
+      </div>
+    `).join("");
+
+    container.innerHTML = `
+      <h3>🏆 Top 10 Players</h3>
+      <div class="scoreboard">${list}</div>
+    `;
+  } catch (err) {
+    container.innerHTML = "<p>⚠️ Error loading leaderboard.</p>";
+    console.error(err);
+  }
+}
