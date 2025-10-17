@@ -5,18 +5,43 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Tic Tac Toe — Ravindra Games Hub</title>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="../../style.css">
 </head>
 
 <body>
     <div class="container">
         <h2>Tic Tac Toe</h2>
-        <div id="board" class="tic-grid"></div>
-        <div style="margin-top:12px"><button id="reset" class="chip">Reset</button></div>
+
         <section class="leaderboard-section">
             <div id="leaderboard"></div>
           </section>
+
+        <button onclick="submitScore('tictactoe', Math.floor(Math.random()*100))">
+          Submit Random Score
+        </button>
+
+
+        <div id="board" class="tic-grid"></div>
+        <div style="margin-top:12px"><button id="reset" class="chip">Reset</button></div>
+        <!-- <section class="leaderboard-section">
+            <div id="leaderboard"></div>
+          </section> -->
     </div>
+
+    <!-- <script type="module">
+        import { renderLeaderboard } from "./assets/js/leaderboard.js";
+    
+        // ✅ Leaderboard को DOM लोड के बाद रेंडर करें
+        window.addEventListener("DOMContentLoaded", () => {
+          renderLeaderboard("tictactoe", "#leaderboard");
+        });
+      </script> -->
+
+    <script type="module">
+        import { renderLeaderboard } from "../../leaderboard/leaderboard.js";
+        renderLeaderboard("tictactoe", "#leaderboard");
+      </script>
     <script>
         // Minimal TicTacToe: human vs AI (random)
         const boardEl = document.getElementById('board');
@@ -35,30 +60,56 @@
             console.log("window.submitScore", window.submitScore)
             window.submitScore && window.submitScore('tictactoe', finalScore, 'player'); alert('Game over — score: ' + finalScore);
 
-            const player_name = localStorage.getItem("player_name") || "Guest";
-            const email = localStorage.getItem("email") || null;
-            const game_id = "tictactoe"; // या mastermind आदि
-            const score = finalScore; // अपनी गेम की स्कोर variable डालें
+            // const player_name = localStorage.getItem("player_name") || "Guest";
+            // const email = localStorage.getItem("email") || null;
+            // const game_id = "tictactoe"; // या mastermind आदि
+            // const score = finalScore; // अपनी गेम की स्कोर variable डालें
 
-            fetch("https://bkhoexvgorxzgdujofar.supabase.co/functions/v1/submit-score", {
-                method: "POST",
-                headers: {
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ player_name, email, game_id, score })
-            })
-                .then(res => res.json())
-                .then(data => console.log("✅ Score saved:", data))
-                .catch(err => console.error("❌ Error saving score:", err));
+            // fetch("https://bkhoexvgorxzgdujofar.supabase.co/functions/v1/submit-score", {
+            //     method: "POST",
+            //     headers: {
+            //         "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ",
+            //         "Content-Type": "application/json"
+            //     },
+            //     body: JSON.stringify({ player_name, email, game_id, score })
+            // })
+            //     .then(res => res.json())
+            //     .then(data => console.log("✅ Score saved:", data))
+            //     .catch(err => console.error("❌ Error saving score:", err));
         }
         document.getElementById('reset').addEventListener('click', () => { board = Array(9).fill(null); over = false; moves = 0; render(); });
         render();
     </script>
-    <script type="module">
-        import { renderLeaderboard } from "../../leaderboard/leaderboard.js";
-        renderLeaderboard("tictactoe", "#leaderboard");
-      </script>
+
+
+<!-- ✅ Global function (window.submitScore) -->
+<script>
+    window.submitScore = async function (game_id, score) {
+      const player_name = localStorage.getItem("player_name") || "Guest";
+      const email = localStorage.getItem("email") || "";
+
+      try {
+        const res = await fetch("https://bkhoexvgorxzgdujofar.supabase.co/functions/v1/submit-score", {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ player_name, email, game_id, score })
+        });
+
+        const data = await res.json();
+        console.log("✅ Score saved:", data);
+        alert("✅ " + data.message);
+      } catch (err) {
+        console.error("❌ Error saving score:", err);
+        alert("❌ Error saving score. Check console.");
+      }
+    };
+  </script>
+
+
+      
 </body>
 
 </html>
