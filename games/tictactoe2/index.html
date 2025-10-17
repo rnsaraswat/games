@@ -33,7 +33,7 @@
         function onGameOver(finalScore) { // higher better
             // score: X win 100, O win 50, tie 20
             console.log("window.submitScore", window.submitScore)
-            window.submitScore && window.submitScore('tictactoe', score, 'player'); alert('Game over — score: ' + finalScore);
+            window.submitScore && window.submitScore('tictactoe', finalScore, 'player'); alert('Game over — score: ' + finalScore);
 
             const player_name = localStorage.getItem("player_name") || "Guest";
             const email = localStorage.getItem("email") || null;
@@ -56,7 +56,7 @@
         render();
     </script>
     <script type="module">
-        import { renderLeaderboard } from "../leaderboard/leaderboard.js";
+        import { renderLeaderboard } from "../../leaderboard/leaderboard.js";
         renderLeaderboard("tictactoe", "#leaderboard");
       </script>
 </body>

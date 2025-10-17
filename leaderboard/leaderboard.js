@@ -44,8 +44,8 @@ gameFilter.addEventListener('change', () => loadTop(gameFilter.value));
 
 
 // leaderboard.js
-const SUPABASE_URL = "https://lzaubusgcfgjxiyyfuof.supabase.co";
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY"; // <-- अपने project key से बदलें
+SUPABASE_URL = "https://lzaubusgcfgjxiyyfuof.supabase.co";
+SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY"; // <-- अपने project key से बदलें
 
 // Fetch Top 10 scores
 export async function fetchLeaderboard(game_id) {
