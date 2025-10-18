@@ -49,8 +49,8 @@
             const msg = `Attempt ${attempts}: exact=${exact}, color=${colorOnly}`;
             alert(msg);
             document.getElementById("choice").textContent = msg;
-            if (exact === 4) { const finalScore = Math.max(0, 100 - attempts * 10); console.log("window.submitScore", window.submitScore)
-            window.submitScore && window.submitScore('mastermind', finalScore, 'player'); alert('Game over — score: ' + finalScore); }
+            if (exact === 4) { const score = Math.max(0, 100 - attempts * 10); console.log("window.submitScore", window.submitScore)
+            window.submitScore && window.submitScore('mastermind', score, 'player'); alert('Game over — score: ' + score); }
         }
         document.getElementById('gameArea').innerHTML = '<button id="guessBtn" class="btn">Make Guess</button>';
         document.getElementById('guessBtn').addEventListener('click', makeGuess);
