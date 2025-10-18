@@ -41,7 +41,11 @@ function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp
 
 
 loadTop(gameId);
-gameFilter.addEventListener('change', () => loadTop(gameId));
+gameFilter.addEventListener('change', (event) => {
+    gameId = event.target.value;
+    console.log(gameId);
+    loadTop(gameId)
+} );
 
 
 
