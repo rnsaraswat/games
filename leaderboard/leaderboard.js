@@ -11,6 +11,8 @@ const supabase = hasRemote ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : nul
 
 
 const gameFilter = document.getElementById('gameFilter');
+export let gameId = gameFilter.value;
+console.log(gameId);
 const listEl = document.getElementById('leaderboardList');
 
 

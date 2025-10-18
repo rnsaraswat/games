@@ -21,6 +21,7 @@ const guestBtn = document.getElementById('guest-login');
 const emailForm = document.getElementById('email-login');
 const statusDiv = document.getElementById('auth-status');
 
+export let userName  
 // --- 1️⃣ Google Login ---
 googleBtn?.addEventListener('click', async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
@@ -44,6 +45,7 @@ emailForm?.addEventListener('submit', async (e) => {
   } else {
     localStorage.setItem('username', name);
     statusDiv.textContent = 'Check your email for the login link!';
+    userName = name;
   }
 });
 
@@ -53,6 +55,7 @@ guestBtn?.addEventListener('click', () => {
   localStorage.setItem('username', guestName);
   localStorage.setItem('isGuest', 'true');
   statusDiv.textContent = `Welcome, ${guestName}!`;
+  userName = guestName;
 });
 
 // --- 5️⃣ On Page Load: Show Current User ---
@@ -60,5 +63,6 @@ supabase.auth.getUser().then(({ data }) => {
   if (data?.user) {
     localStorage.setItem('username', data.user.user_metadata.full_name || data.user.email);
     statusDiv.textContent = `Logged in as ${localStorage.getItem('username')}`;
-  }
+    userName = data.user.user_metadata.full_name || data.user.email;
+}
 });
