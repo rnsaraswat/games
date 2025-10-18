@@ -40,8 +40,8 @@ function renderRows(rows) {
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": "&#39;" })[c]); }
 
 
-loadTop(gameFilter.value);
-gameFilter.addEventListener('change', () => loadTop(gameFilter.value));
+loadTop(gameId);
+gameFilter.addEventListener('change', () => loadTop(gameId));
 
 
 
