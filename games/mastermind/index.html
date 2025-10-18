@@ -50,7 +50,7 @@
             alert(msg);
             document.getElementById("choice").textContent = msg;
             if (exact === 4) { const score = Math.max(0, 100 - attempts * 10); console.log("window.submitScore", window.submitScore)
-            window.submitScore && window.submitScore('tictactoe', finalScore, 'player'); alert('Game over — score: ' + finalScore); }
+            window.submitScore && window.submitScore('mastermind', finalScore, 'player'); alert('Game over — score: ' + finalScore); }
         }
         document.getElementById('gameArea').innerHTML = '<button id="guessBtn" class="btn">Make Guess</button>';
         document.getElementById('guessBtn').addEventListener('click', makeGuess);
