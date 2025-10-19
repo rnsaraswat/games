@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="hi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tic Tac Toe — Ravindra Games Hub</title>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+    body {
+      display: flex;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #222;
+      color: #fff;
+    }
+
+    #gameArea {
+      flex: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #sidebar {
+      flex: 1;
+      background: #111;
+      padding: 20px;
+      overflow-y: auto;
+      border-left: 2px solid #333;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      background: #333;
+      margin: 8px 0;
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    .muted {
+      color: #bbb;
+      font-size: 12px;
+    }
+  </style>
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Tic Tac Toe</h2>
+
+    <div id="gameArea">
+      <div id="board" class="tic-grid"></div>
+      <div style="margin-top:12px"><button id="reset" class="chip">Reset</button></div>
+    </div>
+
+    <aside id="sidebar">
+      <h2>🏆 Leaderboard</h2>
+      <div id="leaderboardList">Loading...</div>
+    </aside>
+
+  </div>
+
+  <script type="module">
+    import { renderLeaderboard } from "./leaderboard/leaderboard.js";
+
+    // ✅ Leaderboard को DOM लोड के बाद रेंडर करें
+    window.addEventListener("DOMContentLoaded", () => {
+      renderLeaderboard("tictactoe", "#leaderboard");
+    });
+  </script>
+
+
+  <script>
+    window.submitScore = async function (game_id, score) {
+      const player_name = localStorage.getItem("player_name") || "Guest";
+      const email = localStorage.getItem("email") || "";
+
+      try {
+        const res = await fetch("https://bkhoexvgorxzgdujofar.supabase.co/functions/v1/submit-score", {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ player_name, email, game_id, score })
+        });
+
+        const data = await res.json();
+        console.log("✅ Score saved:", data);
+      } catch (err) {
+        console.error("❌ Error saving score:", err);
+      }
+    };
+
+  // पहली बार पेज खुलने पर leaderboard दिखाओ
+  // loadLeaderboard();
+  </script>
+  <script>
+    // Minimal TicTacToe: human vs AI (random)
+    const boardEl = document.getElementById('board');
+    let board = Array(9).fill(null), turn = 'X', over = false, moves = 0;
+    function render() {
+      boardEl.innerHTML = board.map((c, i) => `<button class="cell">${c || ''}</button>`).join(''); document.querySelectorAll('.cell').forEach((el, i) => el.addEventListener('click', () => play(i)));
+    }
+    function play(i) { if (over || board[i]) return; board[i] = turn; moves++; check(); if (!over) { aiMove(); } render(); }
+    function aiMove() { const empties = board.map((v, i) => v ? null : i).filter(x => x !== null); if (empties.length === 0) return; const pick = empties[Math.floor(Math.random() * empties.length)]; board[pick] = 'O'; moves++; check(); }
+    function check() {
+      const wins = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]; for (const w of wins) { const [a, b, c] = w; if (board[a] && board[a] === board[b] && board[a] === board[c]) { over = true; const winner = board[a]; setTimeout(() => onGameOver(winner === 'X' ? 100 : 50), 100); return; } }
+      if (board.every(Boolean)) { over = true; setTimeout(() => onGameOver(20), 100); }
+    }
+    function onGameOver(finalScore) { // higher better
+      // score: X win 100, O win 50, tie 20
+      console.log("window.submitScore", window.submitScore)
+      // window.submitScore && window.submitScore('tictactoe', finalScore, 'player'); alert('Game over — score: ' + finalScore);
+      window.submitScore && window.submitScore('tictactoe', finalScore); alert('Game over — score: ' + finalScore);
+    }
+    document.getElementById('reset').addEventListener('click', () => { board = Array(9).fill(null); over = false; moves = 0; render(); });
+    render();
+  </script>
+
+
+  <!-- ✅ Global function (window.submitScore) -->
+  <!-- <script>
+    window.submitScore = async function (game_id, score) {
+      const player_name = localStorage.getItem("player_name") || "Guest";
+      const email = localStorage.getItem("email") || "";
+
+      try {
+        const res = await fetch("https://bkhoexvgorxzgdujofar.supabase.co/functions/v1/submit-score", {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ player_name, email, game_id, score })
+        });
+
+        const data = await res.json();
+        console.log("✅ Score saved:", data);
+        alert("✅ " + data.message);
+      } catch (err) {
+        console.error("❌ Error saving score:", err);
+        alert("❌ Error saving score. Check console.");
+      }
+    };
+  </script> -->
+
+
+
+</body>
+
+</html>

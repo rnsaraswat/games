@@ -1,162 +1,187 @@
-<!doctype html>
-<html lang="hi">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Tic Tac Toe — Ravindra Games Hub</title>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link rel="stylesheet" href="../../style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic Tac Toe with Leaderboard inteagreated</title>
   <style>
     body {
       display: flex;
-      height: 100vh;
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #222;
-      color: #fff;
+      background: #f5f5f5;
     }
-
-    #gameArea {
-      flex: 3;
+    #sidebar {
+      width: 300px;
+      background: #fff;
+      border-right: 2px solid #ccc;
+      padding: 20px;
+      overflow-y: auto;
+      height: 100vh;
+    }
+    #leaderboard ul {
+      list-style: none;
+      padding: 0;
+    }
+    #leaderboard li {
+      margin-bottom: 12px;
+      padding: 8px;
+      background: #f0f0f0;
+      border-radius: 8px;
+    }
+    main {
+      flex: 1;
+      padding: 20px;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-gap: 10px;
+      justify-content: center;
+      margin-top: 40px;
+    }
+    .cell {
+      width: 100px;
+      height: 100px;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 2rem;
+      background: white;
+      border: 2px solid #333;
+      cursor: pointer;
     }
-
-    #sidebar {
-      flex: 1;
-      background: #111;
-      padding: 20px;
-      overflow-y: auto;
-      border-left: 2px solid #333;
-    }
-
-    h2 {
-      text-align: center;
-      margin-top: 0;
-    }
-
-    .score-row {
-      display: flex;
-      justify-content: space-between;
-      background: #333;
-      margin: 8px 0;
-      padding: 6px 10px;
-      border-radius: 6px;
-    }
-
-    .muted {
-      color: #bbb;
-      font-size: 12px;
-    }
-  </style>
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <h2>Tic Tac Toe</h2>
+  <aside id="sidebar">
+    <h2>🏆 Leaderboard</h2>
+    <div id="leaderboard">Loading...</div>
+  </aside>
 
-    <div id="gameArea">
-      <div id="board" class="tic-grid"></div>
-      <div style="margin-top:12px"><button id="reset" class="chip">Reset</button></div>
+  <main>
+    <h1>Tic Tac Toe</h1>
+    <div class="board" id="board">
+      <div class="cell" data-index="0"></div>
+      <div class="cell" data-index="1"></div>
+      <div class="cell" data-index="2"></div>
+      <div class="cell" data-index="3"></div>
+      <div class="cell" data-index="4"></div>
+      <div class="cell" data-index="5"></div>
+      <div class="cell" data-index="6"></div>
+      <div class="cell" data-index="7"></div>
+      <div class="cell" data-index="8"></div>
     </div>
-
-    <aside id="sidebar">
-      <h2>🏆 Leaderboard</h2>
-      <div id="leaderboardList">Loading...</div>
-    </aside>
-
-  </div>
+  </main>
 
   <script type="module">
-    import { renderLeaderboard } from "./leaderboard/leaderboard.js";
+    // ---------------- Leaderboard Module ----------------
+    const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co";
+    const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY"; // Replace with your anon key
+    const TABLE_NAME = "leaderboard";
 
-    // ✅ Leaderboard को DOM लोड के बाद रेंडर करें
-    window.addEventListener("DOMContentLoaded", () => {
-      renderLeaderboard("tictactoe", "#leaderboard");
+    export async function saveScore(game_id, score) {
+      const player_name = localStorage.getItem("player_name") || "Guest";
+      const email = localStorage.getItem("email") || "";
+
+      try {
+        const response = await fetch("http://localhost:3000/api/saveScore", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ player_name, email, game_id, score }),
+        });
+        const data = await response.json();
+        console.log("✅ Score saved:", data);
+      } catch (error) {
+        console.error("❌ Error saving score:", error);
+      }
+    }
+
+    export async function renderLeaderboard() {
+      const container = document.getElementById("leaderboard");
+      if (!container) return;
+
+      container.innerHTML = "<p>Loading leaderboard...</p>";
+
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}?select=*`, {
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
+          },
+        });
+
+        if (!res.ok) throw new Error(`Failed: ${res.status}`);
+        const data = await res.json();
+
+        if (!Array.isArray(data)) throw new Error("Invalid data");
+
+        const sorted = data.sort((a, b) => b.score - a.score).slice(0, 10);
+
+        container.innerHTML = `
+          <ul>
+            ${sorted
+              .map(
+                (row, i) => `
+                <li>
+                  <strong>${i + 1}. ${row.player_name || "Guest"}</strong><br>
+                  ${new Date(row.created_at).toLocaleString()}<br>
+                  Score: ${row.score}
+                </li>`
+              )
+              .join("")}
+          </ul>
+        `;
+      } catch (err) {
+        console.error("Error loading leaderboard:", err);
+        container.innerHTML = `<p style="color:red;">⚠️ Failed to load leaderboard.</p>`;
+      }
+    }
+
+    // ---------------- Game Logic ----------------
+    const board = document.getElementById("board");
+    const cells = document.querySelectorAll(".cell");
+    let currentPlayer = "X";
+    let gameActive = true;
+
+    const winningCombos = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    cells.forEach((cell) => {
+      cell.addEventListener("click", () => {
+        if (!gameActive || cell.textContent) return;
+        cell.textContent = currentPlayer;
+        if (checkWinner()) {
+          alert(`${currentPlayer} wins!`);
+          gameActive = false;
+          window.submitScore("tictactoe", 100);
+        } else if ([...cells].every((c) => c.textContent)) {
+          alert("Draw!");
+          gameActive = false;
+          window.submitScore("tictactoe", 50);
+        } else {
+          currentPlayer = currentPlayer === "X" ? "O" : "X";
+        }
+      });
     });
-  </script>
 
-
-  <script>
-    window.submitScore = async function (game_id, score) {
-      const player_name = localStorage.getItem("player_name") || "Guest";
-      const email = localStorage.getItem("email") || "";
-
-      try {
-        const res = await fetch("https://bkhoexvgorxzgdujofar.supabase.co/functions/v1/submit-score", {
-          method: "POST",
-          headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ player_name, email, game_id, score })
-        });
-
-        const data = await res.json();
-        console.log("✅ Score saved:", data);
-      } catch (err) {
-        console.error("❌ Error saving score:", err);
-      }
-    };
-
-  // पहली बार पेज खुलने पर leaderboard दिखाओ
-  // loadLeaderboard();
-  </script>
-  <script>
-    // Minimal TicTacToe: human vs AI (random)
-    const boardEl = document.getElementById('board');
-    let board = Array(9).fill(null), turn = 'X', over = false, moves = 0;
-    function render() {
-      boardEl.innerHTML = board.map((c, i) => `<button class="cell">${c || ''}</button>`).join(''); document.querySelectorAll('.cell').forEach((el, i) => el.addEventListener('click', () => play(i)));
+    function checkWinner() {
+      return winningCombos.some((combo) => {
+        return combo.every((index) => cells[index].textContent === currentPlayer);
+      });
     }
-    function play(i) { if (over || board[i]) return; board[i] = turn; moves++; check(); if (!over) { aiMove(); } render(); }
-    function aiMove() { const empties = board.map((v, i) => v ? null : i).filter(x => x !== null); if (empties.length === 0) return; const pick = empties[Math.floor(Math.random() * empties.length)]; board[pick] = 'O'; moves++; check(); }
-    function check() {
-      const wins = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]; for (const w of wins) { const [a, b, c] = w; if (board[a] && board[a] === board[b] && board[a] === board[c]) { over = true; const winner = board[a]; setTimeout(() => onGameOver(winner === 'X' ? 100 : 50), 100); return; } }
-      if (board.every(Boolean)) { over = true; setTimeout(() => onGameOver(20), 100); }
-    }
-    function onGameOver(finalScore) { // higher better
-      // score: X win 100, O win 50, tie 20
-      console.log("window.submitScore", window.submitScore)
-      // window.submitScore && window.submitScore('tictactoe', finalScore, 'player'); alert('Game over — score: ' + finalScore);
-      window.submitScore && window.submitScore('tictactoe', finalScore); alert('Game over — score: ' + finalScore);
-    }
-    document.getElementById('reset').addEventListener('click', () => { board = Array(9).fill(null); over = false; moves = 0; render(); });
-    render();
+
+    // ---------------- Global Functions ----------------
+    window.submitScore = saveScore;
+    renderLeaderboard();
   </script>
-
-
-  <!-- ✅ Global function (window.submitScore) -->
-  <!-- <script>
-    window.submitScore = async function (game_id, score) {
-      const player_name = localStorage.getItem("player_name") || "Guest";
-      const email = localStorage.getItem("email") || "";
-
-      try {
-        const res = await fetch("https://bkhoexvgorxzgdujofar.supabase.co/functions/v1/submit-score", {
-          method: "POST",
-          headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ player_name, email, game_id, score })
-        });
-
-        const data = await res.json();
-        console.log("✅ Score saved:", data);
-        alert("✅ " + data.message);
-      } catch (err) {
-        console.error("❌ Error saving score:", err);
-        alert("❌ Error saving score. Check console.");
-      }
-    };
-  </script> -->
-
-
-
 </body>
-
 </html>
