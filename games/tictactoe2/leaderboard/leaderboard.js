@@ -1,5 +1,6 @@
 const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co"; // आपके प्रोजेक्ट URL
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2MTU3NzUsImV4cCI6MjA3NjE5MTc3NX0.fwz-N1PE6vF3ZwAXXnSm9FTRhV0EotmU_XjREaZBFzU"; // अपना anon key डालें
+const TABLE_NAME = "scores";
 
 export async function loadLeaderboard() {
     const listEl = document.getElementById("leaderboardList");
