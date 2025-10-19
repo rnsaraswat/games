@@ -77,8 +77,8 @@
   <script type="module">
     // ---------------- Leaderboard Module ----------------
     const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co";
-    const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY"; // Replace with your anon key
-    const TABLE_NAME = "leaderboard";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ"; // Replace with your anon key
+    const TABLE_NAME = "scores";
 
     export async function saveScore(game_id, score) {
       const player_name = localStorage.getItem("player_name") || "Guest";
