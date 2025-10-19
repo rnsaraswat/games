@@ -121,7 +121,8 @@
     function onGameOver(finalScore) { // higher better
       // score: X win 100, O win 50, tie 20
       console.log("window.submitScore", window.submitScore)
-      window.submitScore && window.submitScore('tictactoe', finalScore, 'player'); alert('Game over — score: ' + finalScore);
+      // window.submitScore && window.submitScore('tictactoe', finalScore, 'player'); alert('Game over — score: ' + finalScore);
+      window.submitScore && window.submitScore('tictactoe', finalScore); alert('Game over — score: ' + finalScore);
     }
     document.getElementById('reset').addEventListener('click', () => { board = Array(9).fill(null); over = false; moves = 0; render(); });
     render();
