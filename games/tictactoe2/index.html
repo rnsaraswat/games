@@ -63,21 +63,21 @@
       <div style="margin-top:12px"><button id="reset" class="chip">Reset</button></div>
     </div>
 
-    <div id="sidebar">
+    <aside id="sidebar">
       <h2>🏆 Leaderboard</h2>
       <div id="leaderboardList">Loading...</div>
-    </div>
+    </aside>
 
   </div>
 
-  <!-- <script type="module">
-    // import { renderLeaderboard } from "../../leaderboard/leaderboard.js";
+  <script type="module">
+    import { renderLeaderboard } from "./leaderboard/leaderboard.js";
 
     // ✅ Leaderboard को DOM लोड के बाद रेंडर करें
     window.addEventListener("DOMContentLoaded", () => {
       renderLeaderboard("tictactoe", "#leaderboard");
     });
-  </script> -->
+  </script>
 
 
   <script>

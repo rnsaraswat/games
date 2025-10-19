@@ -2,7 +2,7 @@ const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co"; // आपके
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2MTU3NzUsImV4cCI6MjA3NjE5MTc3NX0.fwz-N1PE6vF3ZwAXXnSm9FTRhV0EotmU_XjREaZBFzU"; // अपना anon key डालें
 const TABLE_NAME = "scores";
 
-export async function loadLeaderboard() {
+export async function renderLeaderboard() {
     const listEl = document.getElementById("leaderboardList");
     if (!listEl) return;
 
@@ -13,7 +13,7 @@ export async function loadLeaderboard() {
         const game = "tictactoe"; // अगर dynamic चाहिए तो param बनाएं
         const url = `${SUPABASE_URL}/rest/v1/scores?select=player_name,score,created_at,game_id&game_id=eq.${encodeURIComponent(game)}&order=score.desc&limit=10`;
 
-        console.log("loading1");
+        listEl.innerHTML = "⏳ Loading...1";
         const res = await fetch(url, {
             headers: {
                 apikey: SUPABASE_ANON_KEY,
@@ -21,7 +21,7 @@ export async function loadLeaderboard() {
                 Accept: "application/json"
             }
         });
-        console.log("loading2");
+        listEl.innerHTML = "⏳ Loading...2";
 
         if (!res.ok) {
             // parse possible json error
@@ -48,7 +48,7 @@ export async function loadLeaderboard() {
             listEl.innerHTML = "<div style='color:var(--muted)'>No scores yet.</div>";
             return;
         }
-        console.log("loading6");
+        console.log("loading6", data);
 
         listEl.innerHTML = data.map((r, i) => `
       <div class="score-row">
@@ -98,4 +98,6 @@ export async function saveScore(game_id, score) {
       throw err;
     }
   }
+
+  
   
