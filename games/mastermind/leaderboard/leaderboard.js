@@ -1,5 +1,5 @@
-const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ"; // अपना anon key डालें
+const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co"; // आपके प्रोजेक्ट URL
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ"; 
 const TABLE_NAME = "scores";
 
 export async function renderLeaderboard() {
@@ -9,21 +9,17 @@ export async function renderLeaderboard() {
     listEl.innerHTML = "⏳ Loading...";
 
     try {
-        // REST v1 query: scores table से top 10 for specific game
-        const game = "tictactoe"; // अगर dynamic चाहिए तो param बनाएं
-        // const url = `${SUPABASE_URL}/rest/v1/scores?select=player_name,score,created_at,game_id&game_id=eq.${encodeURIComponent(game)}&order=score.desc&limit=10`;
+        const game = "tictactoe"; 
         const url = `${SUPABASE_URL}/rest/v1/scores?select=*`;
 
         const res = await fetch(url, {
             headers: {
                 apikey: SUPABASE_ANON_KEY,
                 Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-                // Accept: "application/json"
             }
         });
 
         if (!res.ok) {
-            // parse possible json error
             let errText;
             try { errText = await res.json(); } catch (e) { errText = await res.text(); }
             console.error("Leaderboard fetch error:", res.status, errText);

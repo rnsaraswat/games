@@ -5,7 +5,53 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Mastermind — Ravindra Games Hub</title>
-    <link rel="stylesheet" href="../../style.css">
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../../style.css">
+    <style>
+      body {
+        display: flex;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #222;
+        color: #fff;
+      }
+  
+      #gameArea {
+        flex: 3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+  
+      #sidebar {
+        width: 300px;
+        background: #fff;
+        border-right: 2px solid #ccc;
+        padding: 20px;
+        overflow-y: auto;
+        height: 100vh;
+      }
+  
+      h2 {
+        text-align: center;
+        margin-top: 0;
+      }
+  
+      .score-row {
+        display: flex;
+        justify-content: space-between;
+        background: #333;
+        margin: 8px 0;
+        padding: 6px 10px;
+        border-radius: 6px;
+      }
+  
+      .muted {
+        color: #bbb;
+        font-size: 12px;
+      }
+  </style>
 </head>
 
 <body>
@@ -15,14 +61,15 @@
         <div style="margin-top:12px"><button id="restart" class="chip">Restart</button></div>
         <p id="secret">Code is</p>
         <p id="choice">Guess Code is</p>
-        <section class="leaderboard-section">
-            <div id="leaderboard"></div>
-          </section>
     </div>
-    <script type="module">
-        // import { renderLeaderboard } from "../../leaderboard/leaderboard.js";
+    <aside id="sidebar">
+      <h2>🏆 Leaderboard</h2>
+      <div id="leaderboardList">Loading...</div>
+    </aside>
     
-        // ✅ Leaderboard को DOM लोड के बाद रेंडर करें
+    <script type="module">
+        import { renderLeaderboard } from "./leaderboard/leaderboard.js";
+    
         window.addEventListener("DOMContentLoaded", () => {
           renderLeaderboard("mastermind", "#leaderboard");
         });
@@ -57,7 +104,6 @@
         document.getElementById('restart').addEventListener('click', () => { secret = Array.from({ length: 4 }, () => Math.floor(Math.random() * 6)); attempts = 0; alert('New code generated'); });
     </script>
 
-    <!-- ✅ Global function (window.submitScore) -->
 <script>
     window.submitScore = async function (game_id, score) {
       const player_name = localStorage.getItem("player_name") || "Guest";
