@@ -12,6 +12,7 @@ export async function loadLeaderboard() {
         const game = "tictactoe"; // अगर dynamic चाहिए तो param बनाएं
         const url = `${SUPABASE_URL}/rest/v1/scores?select=player_name,score,created_at,game_id&game_id=eq.${encodeURIComponent(game)}&order=score.desc&limit=10`;
 
+        console.log("loading1");
         const res = await fetch(url, {
             headers: {
                 apikey: SUPABASE_ANON_KEY,
@@ -19,6 +20,7 @@ export async function loadLeaderboard() {
                 Accept: "application/json"
             }
         });
+        console.log("loading2");
 
         if (!res.ok) {
             // parse possible json error
@@ -29,18 +31,23 @@ export async function loadLeaderboard() {
             return;
         }
 
+        console.log("loading3");
+
         const data = await res.json();
+        console.log("loading4");
 
         if (!Array.isArray(data)) {
             console.error("Unexpected leaderboard response:", data);
             listEl.innerHTML = `<div style="color:crimson">⚠️ Unexpected response</div>`;
             return;
         }
+        console.log("loading5");
 
         if (data.length === 0) {
             listEl.innerHTML = "<div style='color:var(--muted)'>No scores yet.</div>";
             return;
         }
+        console.log("loading6");
 
         listEl.innerHTML = data.map((r, i) => `
       <div class="score-row">
@@ -51,6 +58,8 @@ export async function loadLeaderboard() {
         <div class="score">${r.score}</div>
       </div>
     `).join("");
+
+    console.log("loading7");
 
     } catch (err) {
         console.error("Fetch failed:", err);
