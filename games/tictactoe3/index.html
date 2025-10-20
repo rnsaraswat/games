@@ -52,6 +52,13 @@
       color: #bbb;
       font-size: 12px;
     }
+    table,
+    th,
+    td {
+      color: #bbb;
+      border: 1px solid #d9d8d8;
+      box-shadow: 0 0.5vw 2.5vw 0 rgba(0, 0, 0, 0.2);
+    }
   </style>
 </head>
 
@@ -70,49 +77,29 @@
     <h1>🏆 Leaderboard</h1>
     <!-- <div id="leaderboardList">Loading...</div> -->
     <section id="leaderboardSection" style="margin-top:12px;">
-      <h3>🏆 Leaderboard</h3>
+      <h2>🏆 Leaderboard</h2>
 
-      <input id="searchInput" type="text" placeholder="🔍 Search player name..."
-        style="width:100%;padding:6px;margin-bottom:10px;border-radius:8px;border:1px solid #ccc;">
-
-      <table style="width:100%;border-collapse:collapse;text-align:left;">
-        <thead>
-          <tr style="background:#222;color:#fff;">
-            <th style="cursor:pointer;" onclick="sortTable('rank')">Rank ⬍</th>
-            <th style="cursor:pointer;" onclick="sortTable('player_name')">Player ⬍</th>
-            <th style="cursor:pointer;" onclick="sortTable('score')">Score ⬍</th>
-            <th style="cursor:pointer;" onclick="sortTable('created_at')">Date ⬍</th>
-          </tr>
-        </thead>
-        <tbody id="leaderboardTableBody"></tbody>
-      </table>
-
-
-      <!-- leaderboard HTML (table + search) -->
-      <!-- <input id="searchInput" placeholder="Search player name..." />
-      <table>
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="🔍 Search player...">
+      </div>
+      
+      <table id="leaderboardTable">
         <thead>
           <tr>
-            <th onclick="sortTable('rank')">#</th>
-            <th onclick="sortTable('player_name')">Player</th>
-            <th onclick="sortTable('score')">Score</th>
-            <th onclick="sortTable('created_at')">Date</th>
+            <th onclick="sortTable(0)">#</th>
+            <th onclick="sortTable(1)">Player</th>
+            <th onclick="sortTable(2)">Date</th>
+            <th onclick="sortTable(3)">Score</th>
           </tr>
         </thead>
-        <tbody id="leaderboardTableBody"></tbody>
-      </table> -->
+        <tbody id="leaderboardTableBody">
+          <tr><td colspan="4">Loading...</td></tr>
+        </tbody>
+      </table>
+      
     </section>
 
   </aside>
-
-  <!-- <script type="module">
-    import { renderLeaderboard } from "./leaderboard/leaderboard.js";
-
-    // ✅ Leaderboard को DOM लोड के बाद रेंडर करें
-    window.addEventListener("DOMContentLoaded", () => {
-      renderLeaderboard("tictactoe", "#leaderboard");
-    });
-  </script> -->
 
   <script type="module">
     import { renderLeaderboard, saveScore, sortTable } from './leaderboard/leaderboard.js';
@@ -137,29 +124,7 @@
   </script>
 
 
-  <!-- <script>
-    window.submitScore = async function (game_id, score) {
-      const player_name = localStorage.getItem("player_name") || "Guest";
-      const email = localStorage.getItem("email") || "";
 
-      try {
-        const res = await fetch("https://bkhoexvgorxzgdujofar.supabase.co/functions/v1/submit-score", {
-          method: "POST",
-          headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ player_name, email, game_id, score })
-        });
-
-        const data = await res.json();
-        console.log("✅ Score saved:", data);
-      } catch (err) {
-        console.error("❌ Error saving score:", err);
-      }
-    };
-
-  </script> -->
   <script>
     // Minimal TicTacToe: human vs AI (random)
     const boardEl = document.getElementById('board');
@@ -183,37 +148,7 @@
     render();
   </script>
 
-  <!-- <script type="module">
-    import { loadLeaderboard, sortTable } from './leaderboard/leaderboard.js';
-    window.sortTable = sortTable; // global बनाना ताकि onclick काम करे
-    loadLeaderboard('tictactoe'); // default game
-  </script> -->
-
-  <!-- ✅ Global function (window.submitScore) -->
-  <!-- <script>
-    window.submitScore = async function (game_id, score) {
-      const player_name = localStorage.getItem("player_name") || "Guest";
-      const email = localStorage.getItem("email") || "";
-
-      try {
-        const res = await fetch("https://bkhoexvgorxzgdujofar.supabase.co/functions/v1/submit-score", {
-          method: "POST",
-          headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ player_name, email, game_id, score })
-        });
-
-        const data = await res.json();
-        console.log("✅ Score saved:", data);
-        alert("✅ " + data.message);
-      } catch (err) {
-        console.error("❌ Error saving score:", err);
-        alert("❌ Error saving score. Check console.");
-      }
-    };
-  </script> -->
+  
 
 
 

@@ -52,6 +52,14 @@
       color: #bbb;
       font-size: 12px;
     }
+
+    table,
+    th,
+    td {
+      color: #bbb;
+      border: 1px solid #d9d8d8;
+      box-shadow: 0 0.5vw 2.5vw 0 rgba(0, 0, 0, 0.2);
+    }
   </style>
 </head>
 
@@ -63,76 +71,77 @@
   <div class="container">
     <h1>Mastermind (4 slots, 6 colors)</h1>
     <div id="gameArea">
-      <div><button id="guessBtn" class="chip">Make Guess</button><button id="restart" class="chip">Restart</button> 
-    </div><div>
-      <p id="secret">Code is</p>
-      <p id="choice">Guess Code is</p>
+      <div><button id="guessBtn" class="chip">Make Guess</button><button id="restart" class="chip">Restart</button>
+      </div>
+      <div>
+        <p id="secret">Code is</p>
+        <p id="choice">Guess Code is</p>
+      </div>
     </div>
-  </div>
 
-  <script type="module">
-    import { renderLeaderboard } from "./leaderboard/leaderboard.js";
+    <script type="module">
+      import { renderLeaderboard } from "./leaderboard/leaderboard.js";
 
-    window.addEventListener("DOMContentLoaded", () => {
-      renderLeaderboard("mastermind", "#leaderboard");
-    });
-  </script>
+      window.addEventListener("DOMContentLoaded", () => {
+        renderLeaderboard("mastermind", "#leaderboard");
+      });
+    </script>
 
-  <script>
-    // Simple Mastermind: randomly generate code of 4 colors (0..5). Player guesses via prompts.
-    let secret = Array.from({ length: 4 }, () => Math.floor(Math.random() * 6));
-    console.log("secret", secret);
-    let attempts = 0;
-    async function makeGuess() {
-      const guessStr = prompt('Enter 4 digits (0-5) e.g. 0123'); if (!guessStr) return;
-      const guess = guessStr.split('').map(Number);
-      attempts++;
-      let exact = 0, colorOnly = 0;
-      const sCopy = [...secret];
-      for (let i = 0; i < 4; i++) if (guess[i] === sCopy[i]) { exact++; sCopy[i] = null; }
-      for (let i = 0; i < 4; i++) {
-        if (guess[i] !== secret[i]) {
-          const idx = sCopy.indexOf(guess[i]); if (idx !== -1) { colorOnly++; sCopy[idx] = null; }
+    <script>
+      // Simple Mastermind: randomly generate code of 4 colors (0..5). Player guesses via prompts.
+      let secret = Array.from({ length: 4 }, () => Math.floor(Math.random() * 6));
+      console.log("secret", secret);
+      let attempts = 0;
+      async function makeGuess() {
+        const guessStr = prompt('Enter 4 digits (0-5) e.g. 0123'); if (!guessStr) return;
+        const guess = guessStr.split('').map(Number);
+        attempts++;
+        let exact = 0, colorOnly = 0;
+        const sCopy = [...secret];
+        for (let i = 0; i < 4; i++) if (guess[i] === sCopy[i]) { exact++; sCopy[i] = null; }
+        for (let i = 0; i < 4; i++) {
+          if (guess[i] !== secret[i]) {
+            const idx = sCopy.indexOf(guess[i]); if (idx !== -1) { colorOnly++; sCopy[idx] = null; }
+          }
+        }
+        const msg = `Attempt ${attempts}: exact=${exact}, color=${colorOnly}`;
+        alert(msg);
+        document.getElementById("choice").textContent = msg;
+        if (exact === 4) {
+          const finalScore = Math.max(0, 100 - attempts * 10); console.log("window.submitScore", window.submitScore)
+          window.submitScore && window.submitScore('mastermind', finalScore); alert('Game over — score: ' + finalScore);
         }
       }
-      const msg = `Attempt ${attempts}: exact=${exact}, color=${colorOnly}`;
-      alert(msg);
-      document.getElementById("choice").textContent = msg;
-      if (exact === 4) {
-        const finalScore = Math.max(0, 100 - attempts * 10); console.log("window.submitScore", window.submitScore)
-        window.submitScore && window.submitScore('mastermind', finalScore); alert('Game over — score: ' + finalScore);
-      }
-    }
-    document.getElementById('gameArea').innerHTML = '<div><button id="guessBtn" class="chip">Make Guess</button><button id="restart" class="chip">Restart</button> </div><div><p id="secret">Code is</p><p id="choice">Guess Code is</p></div>';
-    document.getElementById("secret").textContent = "Code is " + secret;
-    document.getElementById('guessBtn').addEventListener('click', makeGuess);
-    document.getElementById('restart').addEventListener('click', () => { secret = Array.from({ length: 4 }, () => Math.floor(Math.random() * 6)); attempts = 0; alert('New code generated'); });
-  </script>
+      document.getElementById('gameArea').innerHTML = '<div><button id="guessBtn" class="chip">Make Guess</button><button id="restart" class="chip">Restart</button> </div><div><p id="secret">Code is</p><p id="choice">Guess Code is</p></div>';
+      document.getElementById("secret").textContent = "Code is " + secret;
+      document.getElementById('guessBtn').addEventListener('click', makeGuess);
+      document.getElementById('restart').addEventListener('click', () => { secret = Array.from({ length: 4 }, () => Math.floor(Math.random() * 6)); attempts = 0; alert('New code generated'); });
+    </script>
 
-  <script>
-    window.submitScore = async function (game_id, score) {
-      const player_name = localStorage.getItem("player_name") || "Guest";
-      const email = localStorage.getItem("email") || "";
+    <script>
+      window.submitScore = async function (game_id, score) {
+        const player_name = localStorage.getItem("player_name") || "Guest";
+        const email = localStorage.getItem("email") || "";
 
-      try {
-        const res = await fetch("https://bkhoexvgorxzgdujofar.supabase.co/functions/v1/submit-score", {
-          method: "POST",
-          headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ player_name, email, game_id, score })
-        });
+        try {
+          const res = await fetch("https://bkhoexvgorxzgdujofar.supabase.co/functions/v1/submit-score", {
+            method: "POST",
+            headers: {
+              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ player_name, email, game_id, score })
+          });
 
-        const data = await res.json();
-        console.log("✅ Score saved:", data);
-        alert("✅ " + data.message);
-      } catch (err) {
-        console.error("❌ Error saving score:", err);
-        alert("❌ Error saving score. Check console.");
-      }
-    };
-  </script>
+          const data = await res.json();
+          console.log("✅ Score saved:", data);
+          alert("✅ " + data.message);
+        } catch (err) {
+          console.error("❌ Error saving score:", err);
+          alert("❌ Error saving score. Check console.");
+        }
+      };
+    </script>
 </body>
 
 </html>
