@@ -52,12 +52,31 @@
       color: #bbb;
       font-size: 12px;
     }
+
     table,
     th,
     td {
       color: #bbb;
       border: 1px solid #d9d8d8;
       box-shadow: 0 0.5vw 2.5vw 0 rgba(0, 0, 0, 0.2);
+    }
+
+    th {
+      cursor: default;
+      position: relative;
+      user-select: none;
+    }
+
+    .arrow {
+      font-size: 14px;
+      margin-left: 4px;
+      cursor: pointer;
+      opacity: 0.3;
+      transition: opacity 0.2s;
+    }
+
+    .arrow:hover {
+      opacity: 1;
     }
   </style>
 </head>
@@ -75,8 +94,39 @@
   </div>
   <aside id="sidebar">
     <h1>🏆 Leaderboard</h1>
+    <h2>🏆 Leaderboard</h2>
+
+    <div class="search-container" style="margin-bottom:10px;">
+      <input type="text" id="searchInput" placeholder="🔍 Search player..." />
+    </div>
+
+    <table id="leaderboardTable" border="1" cellspacing="0" cellpadding="6"
+      style="width:100%;border-collapse:collapse;text-align:left;">
+      <thead style="background:#222;color:#fff;">
+        <tr>
+          <th>#</th>
+          <th class="sortable">Player
+            <span class="arrow asc">🔼</span>
+            <span class="arrow desc">🔽</span>
+          </th>
+          <th class="sortable">Date
+            <span class="arrow asc">🔼</span>
+            <span class="arrow desc">🔽</span>
+          </th>
+          <th class="sortable">Score
+            <span class="arrow asc">🔼</span>
+            <span class="arrow desc">🔽</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody id="leaderboardTableBody">
+        <tr>
+          <td colspan="4" style="text-align:center;">Loading...</td>
+        </tr>
+      </tbody>
+    </table>
     <!-- <div id="leaderboardList">Loading...</div> -->
-    <section id="leaderboardSection" style="margin-top:12px;">
+    <!-- <section id="leaderboardSection" style="margin-top:12px;">
       <h2>🏆 Leaderboard</h2>
 
       <div class="search-container">
@@ -95,20 +145,19 @@
         <tbody id="leaderboardTableBody">
           <tr><td colspan="4">Loading...</td></tr>
         </tbody>
-      </table>
-      
+      </table> -->
     </section>
 
   </aside>
 
   <script type="module">
     import { renderLeaderboard, saveScore, sortTable } from './leaderboard/leaderboard.js';
-  
+
     // make sortTable global so onclick in <th> works
     window.sortTable = sortTable;
-  
+
     // expose submitScore as global for your game to call
-    window.submitScore = async function(game_id, score) {
+    window.submitScore = async function (game_id, score) {
       try {
         await saveScore(game_id, score);
         console.log('Score saved and leaderboard refreshed');
@@ -116,7 +165,7 @@
         console.error('Error saving score from index:', e);
       }
     };
-  
+
     // initial render
     document.addEventListener('DOMContentLoaded', () => {
       renderLeaderboard('tictactoe');
@@ -148,7 +197,7 @@
     render();
   </script>
 
-  
+
 
 
 

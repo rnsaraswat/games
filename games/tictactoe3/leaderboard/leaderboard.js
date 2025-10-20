@@ -10,8 +10,9 @@ let allScores = [];
 let currentSort = { column: 'score', asc: false };
 let searchQuery = '';
 let currentData = [];
-let sortDirections = [true, true, true, true];
+// let sortDirections = [true, true, true, true];
 let currentSortColumn = null;
+let currentSortOrder = 'asc';
 // ---------- public exports ----------
 // export async function renderLeaderboard(game_id = 'tictactoe') {
 //   const tbody = document.getElementById('leaderboardTableBody');
@@ -111,12 +112,12 @@ let currentSortColumn = null;
 export async function renderLeaderboard() {
   try {
     // const res = await fetch("https://bkhoexvgorxzgdujofar.supabase.co/rest/v1/leaderboard?select=*");
-      const res = await fetch("https://bkhoexvgorxzgdujofar.supabase.co/rest/v1/scores?select=*", {
-    headers: {
-      apikey: SUPABASE_ANON_KEY,
-      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-    }
-  });
+    const res = await fetch("https://bkhoexvgorxzgdujofar.supabase.co/rest/v1/scores?select=*", {
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+      }
+    });
     const data = await res.json();
     currentData = data;
     displayTable(currentData);
@@ -125,24 +126,7 @@ export async function renderLeaderboard() {
   }
 }
 
-// function displayTable(data) {
-//   const tbody = document.getElementById("leaderboardTableBody");
-//   if (!tbody) return;
-//   tbody.innerHTML = "";
-
-//   data.forEach((row, i) => {
-//     const tr = document.createElement("tr");
-//     tr.innerHTML = `
-//       <td>${i + 1}</td>
-//       <td>${row.player_name || "Guest"}</td>
-//       <td>${new Date(row.created_at).toLocaleString()}</td>
-//       <td>${row.score}</td>
-//     `;
-//     tbody.appendChild(tr);
-//   });
-// }
-
-// 📋 टेबल रेंडर करें
+// 📋 टेबल दिखाएं
 function displayTable(data) {
   const tbody = document.getElementById("leaderboardTableBody");
   if (!tbody) return;
@@ -164,6 +148,119 @@ function displayTable(data) {
     tbody.appendChild(tr);
   });
 }
+
+// 🔼🔽 Sorting logic
+export function sortTable(colIndex, order) {
+  if (!currentData || currentData.length === 0) return;
+  currentSortColumn = colIndex;
+  currentSortOrder = order;
+
+  currentData.sort((a, b) => {
+    let valA, valB;
+    switch (colIndex) {
+      case 1:
+        valA = (a.player_name || "Guest").toLowerCase();
+        valB = (b.player_name || "Guest").toLowerCase();
+        break;
+      case 2:
+        valA = new Date(a.created_at);
+        valB = new Date(b.created_at);
+        break;
+      case 3:
+        valA = a.score || 0;
+        valB = b.score || 0;
+        break;
+      default:
+        valA = a.id || 0;
+        valB = b.id || 0;
+    }
+
+    if (valA < valB) return order === 'asc' ? -1 : 1;
+    if (valA > valB) return order === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  updateIndicators(colIndex, order);
+  displayTable(currentData);
+}
+
+// 🧭 Indicators अपडेट करें
+function updateIndicators(activeCol, order) {
+  const headers = document.querySelectorAll("#leaderboardTable thead th");
+  headers.forEach((th, i) => {
+    const arrows = th.querySelectorAll(".arrow");
+    arrows.forEach(arrow => {
+      arrow.style.opacity = "0.3"; // inactive
+    });
+
+    if (i === activeCol) {
+      const arrow = th.querySelector(`.arrow.${order}`);
+      if (arrow) arrow.style.opacity = "1"; // highlight active
+    }
+  });
+}
+
+// 🔍 Search
+const searchInput = document.getElementById("searchInput");
+if (searchInput) {
+  searchInput.addEventListener("input", e => {
+    const q = e.target.value.toLowerCase();
+    const filtered = currentData.filter(row =>
+      (row.player_name || "Guest").toLowerCase().includes(q)
+    );
+    displayTable(filtered);
+  });
+}
+
+// 🧩 Header click event binding
+document.addEventListener("DOMContentLoaded", () => {
+  const headers = document.querySelectorAll("#leaderboardTable thead th.sortable");
+  headers.forEach((th, i) => {
+    const up = th.querySelector(".arrow.asc");
+    const down = th.querySelector(".arrow.desc");
+    up.addEventListener("click", e => { e.stopPropagation(); sortTable(i, 'asc'); });
+    down.addEventListener("click", e => { e.stopPropagation(); sortTable(i, 'desc'); });
+  });
+});
+// function displayTable(data) {
+//   const tbody = document.getElementById("leaderboardTableBody");
+//   if (!tbody) return;
+//   tbody.innerHTML = "";
+
+//   data.forEach((row, i) => {
+//     const tr = document.createElement("tr");
+//     tr.innerHTML = `
+//       <td>${i + 1}</td>
+//       <td>${row.player_name || "Guest"}</td>
+//       <td>${new Date(row.created_at).toLocaleString()}</td>
+//       <td>${row.score}</td>
+//     `;
+//     tbody.appendChild(tr);
+//   });
+// }
+
+// 📋 टेबल रेंडर करें
+// function displayTable(data) {
+//   const tbody = document.getElementById("leaderboardTableBody");
+//   if (!tbody) return;
+//   tbody.innerHTML = "";
+
+//   if (!data || data.length === 0) {
+//     tbody.innerHTML = `<tr><td colspan="4" style="text-align:center">No records found</td></tr>`;
+//     return;
+//   }
+
+//   data.forEach((row, i) => {
+//     const tr = document.createElement("tr");
+//     tr.innerHTML = `
+//       <td>${i + 1}</td>
+//       <td>${row.player_name || "Guest"}</td>
+//       <td>${new Date(row.created_at).toLocaleString()}</td>
+//       <td>${row.score}</td>
+//     `;
+//     tbody.appendChild(tr);
+//   });
+// }
 
 // window.sortTable = function (colIndex) {
 //   sortDirections[colIndex] = !sortDirections[colIndex];
@@ -226,78 +323,78 @@ function displayTable(data) {
 // };
 
 // 🔼🔽 Sort function
-export function sortTable(colIndex) {
-  if (!currentData || currentData.length === 0) return;
+// export function sortTable(colIndex) {
+//   if (!currentData || currentData.length === 0) return;
 
-  // toggle direction if same column clicked again
-  if (currentSortColumn === colIndex) {
-    sortDirections[colIndex] = !sortDirections[colIndex];
-  } else {
-    currentSortColumn = colIndex;
-  }
+//   // toggle direction if same column clicked again
+//   if (currentSortColumn === colIndex) {
+//     sortDirections[colIndex] = !sortDirections[colIndex];
+//   } else {
+//     currentSortColumn = colIndex;
+//   }
 
-  const asc = sortDirections[colIndex];
+//   const asc = sortDirections[colIndex];
 
-  currentData.sort((a, b) => {
-    let valA, valB;
-    switch (colIndex) {
-      case 1: // player name
-        valA = (a.player_name || "Guest").toLowerCase();
-        valB = (b.player_name || "Guest").toLowerCase();
-        break;
-      case 2: // date
-        valA = new Date(a.created_at);
-        valB = new Date(b.created_at);
-        break;
-      case 3: // score
-        valA = a.score || 0;
-        valB = b.score || 0;
-        break;
-      default:
-        valA = a.id || 0;
-        valB = b.id || 0;
-    }
-    if (valA < valB) return asc ? -1 : 1;
-    if (valA > valB) return asc ? 1 : -1;
-    return 0;
-  });
+//   currentData.sort((a, b) => {
+//     let valA, valB;
+//     switch (colIndex) {
+//       case 1: // player name
+//         valA = (a.player_name || "Guest").toLowerCase();
+//         valB = (b.player_name || "Guest").toLowerCase();
+//         break;
+//       case 2: // date
+//         valA = new Date(a.created_at);
+//         valB = new Date(b.created_at);
+//         break;
+//       case 3: // score
+//         valA = a.score || 0;
+//         valB = b.score || 0;
+//         break;
+//       default:
+//         valA = a.id || 0;
+//         valB = b.id || 0;
+//     }
+//     if (valA < valB) return asc ? -1 : 1;
+//     if (valA > valB) return asc ? 1 : -1;
+//     return 0;
+//   });
 
-  updateSortIndicators(colIndex, asc);
-  displayTable(currentData);
-}
+//   updateSortIndicators(colIndex, asc);
+//   displayTable(currentData);
+// }
 
-// 🔰 Sort arrow update
-function updateSortIndicators(colIndex, asc) {
-  const headers = document.querySelectorAll("#leaderboardTable thead th");
-  headers.forEach((th, i) => {
-    th.textContent = th.dataset.title;
-    if (i === colIndex) {
-      th.textContent += asc ? " 🔼" : " 🔽";
-    }
-  });
-}
+// // 🔰 Sort arrow update
+// function updateSortIndicators(colIndex, asc) {
+//   const headers = document.querySelectorAll("#leaderboardTable thead th");
+//   headers.forEach((th, i) => {
+//     th.textContent = th.dataset.title;
+//     if (i === colIndex) {
+//       th.textContent += asc ? " 🔼" : " 🔽";
+//     }
+//   });
+// }
 
-// 🔍 Search filter
-const searchInput = document.getElementById("searchInput");
-if (searchInput) {
-  searchInput.addEventListener("input", e => {
-    const q = e.target.value.toLowerCase();
-    const filtered = currentData.filter(row =>
-      (row.player_name || "Guest").toLowerCase().includes(q)
-    );
-    displayTable(filtered);
-  });
-}
+// // 🔍 Search filter
+// const searchInput = document.getElementById("searchInput");
+// if (searchInput) {
+//   searchInput.addEventListener("input", e => {
+//     const q = e.target.value.toLowerCase();
+//     const filtered = currentData.filter(row =>
+//       (row.player_name || "Guest").toLowerCase().includes(q)
+//     );
+//     displayTable(filtered);
+//   });
+// }
 
-// 🧩 Header click binding (for modules)
-document.addEventListener("DOMContentLoaded", () => {
-  const headers = document.querySelectorAll("#leaderboardTable thead th");
-  headers.forEach((th, i) => {
-    th.dataset.title = th.textContent; // store original
-    th.style.cursor = "pointer";
-    th.addEventListener("click", () => sortTable(i));
-  });
-});
+// // 🧩 Header click binding (for modules)
+// document.addEventListener("DOMContentLoaded", () => {
+//   const headers = document.querySelectorAll("#leaderboardTable thead th");
+//   headers.forEach((th, i) => {
+//     th.dataset.title = th.textContent; // store original
+//     th.style.cursor = "pointer";
+//     th.addEventListener("click", () => sortTable(i));
+//   });
+// });
 
 // const searchInput = document.getElementById("searchInput");
 // if (searchInput) {
