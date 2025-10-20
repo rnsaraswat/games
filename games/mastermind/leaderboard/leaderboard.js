@@ -9,7 +9,7 @@ export async function renderLeaderboard() {
     listEl.innerHTML = "⏳ Loading...";
 
     try {
-        const game = "tictactoe"; 
+        const game = "mastermind"; 
         const url = `${SUPABASE_URL}/rest/v1/scores?select=*`;
 
         const res = await fetch(url, {

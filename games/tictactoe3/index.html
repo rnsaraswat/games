@@ -64,24 +64,80 @@
       <div style="margin-top:12px"><button id="reset" class="chip">Reset</button></div>
     </div>
 
-    
+
   </div>
   <aside id="sidebar">
     <h1>🏆 Leaderboard</h1>
-    <div id="leaderboardList">Loading...</div>
+    <!-- <div id="leaderboardList">Loading...</div> -->
+    <section id="leaderboardSection" style="margin-top:12px;">
+      <h3>🏆 Leaderboard</h3>
+
+      <input id="searchInput" type="text" placeholder="🔍 Search player name..."
+        style="width:100%;padding:6px;margin-bottom:10px;border-radius:8px;border:1px solid #ccc;">
+
+      <table style="width:100%;border-collapse:collapse;text-align:left;">
+        <thead>
+          <tr style="background:#222;color:#fff;">
+            <th style="cursor:pointer;" onclick="sortTable('rank')">Rank ⬍</th>
+            <th style="cursor:pointer;" onclick="sortTable('player_name')">Player ⬍</th>
+            <th style="cursor:pointer;" onclick="sortTable('score')">Score ⬍</th>
+            <th style="cursor:pointer;" onclick="sortTable('created_at')">Date ⬍</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardTableBody"></tbody>
+      </table>
+
+
+      <!-- leaderboard HTML (table + search) -->
+      <!-- <input id="searchInput" placeholder="Search player name..." />
+      <table>
+        <thead>
+          <tr>
+            <th onclick="sortTable('rank')">#</th>
+            <th onclick="sortTable('player_name')">Player</th>
+            <th onclick="sortTable('score')">Score</th>
+            <th onclick="sortTable('created_at')">Date</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardTableBody"></tbody>
+      </table> -->
+    </section>
+
   </aside>
 
-  <script type="module">
+  <!-- <script type="module">
     import { renderLeaderboard } from "./leaderboard/leaderboard.js";
 
     // ✅ Leaderboard को DOM लोड के बाद रेंडर करें
     window.addEventListener("DOMContentLoaded", () => {
       renderLeaderboard("tictactoe", "#leaderboard");
     });
+  </script> -->
+
+  <script type="module">
+    import { renderLeaderboard, saveScore, sortTable } from './leaderboard/leaderboard.js';
+  
+    // make sortTable global so onclick in <th> works
+    window.sortTable = sortTable;
+  
+    // expose submitScore as global for your game to call
+    window.submitScore = async function(game_id, score) {
+      try {
+        await saveScore(game_id, score);
+        console.log('Score saved and leaderboard refreshed');
+      } catch (e) {
+        console.error('Error saving score from index:', e);
+      }
+    };
+  
+    // initial render
+    document.addEventListener('DOMContentLoaded', () => {
+      renderLeaderboard('tictactoe');
+    });
   </script>
 
 
-  <script>
+  <!-- <script>
     window.submitScore = async function (game_id, score) {
       const player_name = localStorage.getItem("player_name") || "Guest";
       const email = localStorage.getItem("email") || "";
@@ -103,7 +159,7 @@
       }
     };
 
-  </script>
+  </script> -->
   <script>
     // Minimal TicTacToe: human vs AI (random)
     const boardEl = document.getElementById('board');
@@ -127,6 +183,11 @@
     render();
   </script>
 
+  <!-- <script type="module">
+    import { loadLeaderboard, sortTable } from './leaderboard/leaderboard.js';
+    window.sortTable = sortTable; // global बनाना ताकि onclick काम करे
+    loadLeaderboard('tictactoe'); // default game
+  </script> -->
 
   <!-- ✅ Global function (window.submitScore) -->
   <!-- <script>
