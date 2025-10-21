@@ -77,8 +77,9 @@ function displayTable(data) {
     tr.innerHTML = `
       <td>${i + 1}</td>
       <td>${row.player_name || "Guest"}</td>
-      <td>${new Date(row.created_at).toLocaleString()}</td>
+      <td>${row.game_id}</td>
       <td>${row.score}</td>
+      <td>${new Date(row.created_at).toLocaleString()}</td>
     `;
     tbody.appendChild(tr);
   });
@@ -93,21 +94,27 @@ export function sortTable(colIndex, order) {
   currentData.sort((a, b) => {
     let valA, valB;
     switch (colIndex) {
-      case 1:
+      case 0:
         valA = (a.player_name || "Guest").toLowerCase();
         valB = (b.player_name || "Guest").toLowerCase();
+        break;
+      case 1:
+        valA = (a.game_id).toLowerCase();
+        valB = (b.game_id).toLowerCase();
         break;
       case 2:
         valA = new Date(a.created_at);
         valB = new Date(b.created_at);
         break;
-      case 3:
+      // case 3:
+      //   valA = a.score || 0;
+      //   valB = b.score || 0;
+      //   break;
+      default:
+        // valA = a.id || 0;
+        // valB = b.id || 0;
         valA = a.score || 0;
         valB = b.score || 0;
-        break;
-      default:
-        valA = a.id || 0;
-        valB = b.id || 0;
     }
 
     if (valA < valB) return order === 'asc' ? -1 : 1;
@@ -128,7 +135,7 @@ function updateIndicators(activeCol, order) {
       arrow.style.opacity = "0.3"; // inactive
     });
 
-    if (i === activeCol) {
+    if (i === activeCol + 1) {
       const arrow = th.querySelector(`.arrow.${order}`);
       if (arrow) arrow.style.opacity = "1"; // highlight active
     }

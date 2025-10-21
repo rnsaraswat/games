@@ -72,13 +72,15 @@ export function sortTable(colIndex, order) {
         valA = new Date(a.created_at);
         valB = new Date(b.created_at);
         break;
-      case 3:
-        valA = a.score || 0;
-        valB = b.score || 0;
-        break;
+      // case 3:
+      //   valA = a.score || 0;
+      //   valB = b.score || 0;
+      //   break;
       default:
-        valA = a.id || 0;
-        valB = b.id || 0;
+        // valA = a.id || 0;
+        // valB = b.id || 0;
+          valA = a.score || 0;
+          valB = b.score || 0;
     }
 
     if (valA < valB) return order === 'asc' ? -1 : 1;
@@ -99,7 +101,7 @@ function updateIndicators(activeCol, order) {
       arrow.style.opacity = "0.3"; // inactive
     });
 
-    if (i === activeCol) {
+    if (i === activeCol + 1) {
       const arrow = th.querySelector(`.arrow.${order}`);
       if (arrow) arrow.style.opacity = "1"; // highlight active
     }
