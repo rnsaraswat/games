@@ -64,11 +64,11 @@ export function sortTable(colIndex, order) {
   currentData.sort((a, b) => {
     let valA, valB;
     switch (colIndex) {
-      case 1:
+      case 0:
         valA = (a.player_name || "Guest").toLowerCase();
         valB = (b.player_name || "Guest").toLowerCase();
         break;
-      case 2:
+      case 1:
         valA = new Date(a.created_at);
         valB = new Date(b.created_at);
         break;
