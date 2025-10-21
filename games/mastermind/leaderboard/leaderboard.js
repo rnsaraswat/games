@@ -1,12 +1,23 @@
-const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co"; // आपके प्रोजेक्ट URL
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ"; 
 const TABLE_NAME = "scores";
 
-export async function renderLeaderboard() {
-    const listEl = document.getElementById("leaderboardList");
-    if (!listEl) return;
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let allScores = [];
+let currentSort = { column: 'score', asc: false };
+let searchQuery = '';
+let currentData = [];
+// let sortDirections = [true, true, true, true];
+let currentSortColumn = null;
+let currentSortOrder = 'asc';
 
-    listEl.innerHTML = "⏳ Loading...";
+export async function renderLeaderboard() {
+    // const listEl = document.getElementById("leaderboardList");
+    // if (!listEl) return;
+
+    // listEl.innerHTML = "⏳ Loading...";
 
     try {
         const game = "mastermind"; 
@@ -23,41 +34,131 @@ export async function renderLeaderboard() {
             let errText;
             try { errText = await res.json(); } catch (e) { errText = await res.text(); }
             console.error("Leaderboard fetch error:", res.status, errText);
-            listEl.innerHTML = `<div style="color:crimson">⚠️ Unable to load leaderboard (${res.status})</div>`;
-            return;
+            // listEl.innerHTML = `<div style="color:crimson">⚠️ Unable to load leaderboard (${res.status})</div>`;
+            // return;
         }
 
 
         const data = await res.json();
 
         if (!Array.isArray(data)) {
-            listEl.innerHTML = `<div style="color:crimson">⚠️ Unexpected response</div>`;
+          console.log("⚠️ Unexpected response");
+            // listEl.innerHTML = `<div style="color:crimson">⚠️ Unexpected response</div>`;
             return;
         }
 
         if (data.length === 0) {
-            listEl.innerHTML = "<div style='color:var(--muted)'>No scores yet.</div>";
+          console.log("No scores yet.");
+          // listEl.innerHTML = "<div style='color:var(--muted)'>No scores yet.</div>";
             return;
         }
 
-        listEl.innerHTML = data.map((r, i) => `
-      <div class="score-row">
-        <div>
-          <strong>${i + 1}. ${escapeHtml(r.player_name || 'Guest')}</strong>
-          <div class="muted">${new Date(r.created_at).toLocaleString()}</div>
-        </div>
-        <div class="score">${r.score}</div>
-      </div>
-    `).join("");
-
+        currentData = data;
+        displayTable(currentData);
 
     } catch (err) {
-        console.error("Fetch failed:", err);
-        listEl.innerHTML = `<div style="color:crimson">❌ Error loading leaderboard</div>`;
+      console.error("❌ Error loading leaderboard:", err);
+      // listEl.innerHTML = `<div style="color:crimson">❌ Error loading leaderboard</div>`;
     }
 }
 
-function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": "&#39;" }[c])); }
+function displayTable(data) {
+  const tbody = document.getElementById("leaderboardTableBody");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+
+  if (!data || data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center">No records found</td></tr>`;
+    return;
+  }
+
+  data.forEach((row, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${i + 1}</td>
+      <td>${row.player_name || "Guest"}</td>
+      <td>${new Date(row.created_at).toLocaleString()}</td>
+      <td>${row.score}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// 🔼🔽 Sorting logic
+export function sortTable(colIndex, order) {
+  if (!currentData || currentData.length === 0) return;
+  currentSortColumn = colIndex;
+  currentSortOrder = order;
+
+  currentData.sort((a, b) => {
+    let valA, valB;
+    switch (colIndex) {
+      case 1:
+        valA = (a.player_name || "Guest").toLowerCase();
+        valB = (b.player_name || "Guest").toLowerCase();
+        break;
+      case 2:
+        valA = new Date(a.created_at);
+        valB = new Date(b.created_at);
+        break;
+      case 3:
+        valA = a.score || 0;
+        valB = b.score || 0;
+        break;
+      default:
+        valA = a.id || 0;
+        valB = b.id || 0;
+    }
+
+    if (valA < valB) return order === 'asc' ? -1 : 1;
+    if (valA > valB) return order === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  updateIndicators(colIndex, order);
+  displayTable(currentData);
+}
+
+// 🧭 Indicators अपडेट करें
+function updateIndicators(activeCol, order) {
+  const headers = document.querySelectorAll("#leaderboardTable thead th");
+  headers.forEach((th, i) => {
+    const arrows = th.querySelectorAll(".arrow");
+    arrows.forEach(arrow => {
+      arrow.style.opacity = "0.3"; // inactive
+    });
+
+    if (i === activeCol) {
+      const arrow = th.querySelector(`.arrow.${order}`);
+      if (arrow) arrow.style.opacity = "1"; // highlight active
+    }
+  });
+}
+
+// 🔍 Search
+const searchInput = document.getElementById("searchInput");
+if (searchInput) {
+  searchInput.addEventListener("input", e => {
+    const q = e.target.value.toLowerCase();
+    const filtered = currentData.filter(row =>
+      (row.player_name || "Guest").toLowerCase().includes(q)
+    );
+    displayTable(filtered);
+  });
+}
+
+// 🧩 Header click event binding
+document.addEventListener("DOMContentLoaded", () => {
+  const headers = document.querySelectorAll("#leaderboardTable thead th.sortable");
+  headers.forEach((th, i) => {
+    const up = th.querySelector(".arrow.asc");
+    const down = th.querySelector(".arrow.desc");
+    up.addEventListener("click", e => { e.stopPropagation(); sortTable(i, 'asc'); });
+    down.addEventListener("click", e => { e.stopPropagation(); sortTable(i, 'desc'); });
+  });
+});
+
+// function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": "&#39;" }[c])); }
 
 
 export async function saveScore(game_id, score) {

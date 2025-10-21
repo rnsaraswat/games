@@ -6,7 +6,13 @@ const TABLE_NAME = "scores";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+let allScores = [];
+let currentSort = { column: 'score', asc: false };
+let searchQuery = '';
 let currentData = [];
+// let sortDirections = [true, true, true, true];
+let currentSortColumn = null;
+let currentSortOrder = 'asc';
 
 
 export async function renderLeaderboard() {
