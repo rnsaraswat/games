@@ -69,12 +69,7 @@
 
 
 
-// import { supabase } from "../supabaseClient.js";
-
-// --- Supabase Initialization (पहले से होना चाहिए) ---
-// import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/+esm';
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../leaderboard/config.js';
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+import { supabase } from "../supabaseClient.js";
 
 // Elements
 const googleBtn = document.getElementById("google-login");
