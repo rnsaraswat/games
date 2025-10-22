@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirecting...</title>
+  <script type="module">
+    import { supabase } from "../supabaseClient.js";
+
+    async function completeLogin() {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (user) {
+        localStorage.setItem("player_name", user.user_metadata.full_name || "User");
+        localStorage.setItem("email", user.email || "");
+        localStorage.setItem("user_id", user.id || "");
+        window.location.href = "../index.html";
+      } else {
+        document.body.innerHTML = "<p>Login failed. Please try again.</p>";
+      }
+    }
+
+    completeLogin();
+  </script>
+</head>
+<body>
+  <p>Completing login...</p>
+</body>
+</html>

@@ -145,7 +145,8 @@ function nextPage() {
         (row.game_id).toLowerCase().includes(q)
       );
       }
-    renderTable();
+  currentPage = 1;
+  renderTable();
   });
 
 export async function renderLeaderboard() {
