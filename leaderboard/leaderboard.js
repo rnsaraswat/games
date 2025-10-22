@@ -12,7 +12,12 @@ let currentData = [];
 // let sortDirections = [true, true, true, true];
 let currentSortColumn = null;
 let currentSortOrder = 'asc';
-let gameId = document.getElementById("gameFilter").value;
+let gameId = document.getElementById("gameFilter").value || "tictactoe";
+
+let leaderboardData = [];
+let filteredData = [];
+let currentPage = 1;
+let itemsPerPage = 10;
 
 // ------display leaderboard without table and without sort---
 // window.addEventListener("DOMContentLoaded", async () => {
@@ -89,10 +94,58 @@ let gameId = document.getElementById("gameFilter").value;
 // });
 // ------display leaderboard without table and without sort---
 
-  // On game selection change
+document.getElementById("searchInput").addEventListener("input", handleSearch);
+document.getElementById("topSelect").addEventListener("change", handleTopSelect);
+document.getElementById("prevPage").addEventListener("click", prevPage);
+document.getElementById("nextPage").addEventListener("click", nextPage);
+
+document.querySelectorAll("#leaderboardTable th").forEach(th => {
+  th.addEventListener("click", () => handleSort(th.dataset.column));
+});
+
+// await loadLeaderboard();
+
+function handleSearch(e) {
+  const searchTerm = e.target.value.toLowerCase();
+  filteredData = leaderboardData.filter(row =>
+    row.player_name?.toLowerCase().includes(searchTerm)
+  );
+  currentPage = 1;
+  renderTable();
+}
+
+function handleTopSelect(e) {
+  itemsPerPage = parseInt(e.target.value);
+  currentPage = 1;
+  renderTable();
+}
+
+function prevPage() {
+  if (currentPage > 1) {
+    currentPage--;
+    renderTable();
+  }
+}
+
+function nextPage() {
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTable();
+  }
+}
+
   gameFilter.addEventListener("change", async (event) => {
-    gameId = event.target.value;
-    renderLeaderboard();
+    const q = event.target.value.toLowerCase();
+    if (q == "all") {
+      filteredData = leaderboardData;
+
+    } else {
+      filteredData = leaderboardData.filter(row =>
+        (row.game_id).toLowerCase().includes(q)
+      );
+      }
+    renderTable();
   });
 
 export async function renderLeaderboard() {
@@ -126,49 +179,56 @@ export async function renderLeaderboard() {
       return;
     }
 
-      currentData = data;
-      displayTable(currentData);
+      leaderboardData = data;
+      filteredData = [...data];
+      currentPage = 1;
+      renderTable();
 
   } catch (err) {
     console.error("❌ Error loading leaderboard:", err);
   }
 }
 
-function displayTable(data) {
+function renderTable() {
   const tbody = document.getElementById("leaderboardTableBody");
-  if (!tbody) return;
-  tbody.innerHTML = "";
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const currentItems = filteredData.slice(start, end);
+  console.log("currentItems",currentItems);
+  console.log("start",start, end);
 
-  if (!data || data.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center">No records found</td></tr>`;
+  if (currentItems.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4">No results found.</td></tr>`;
+    document.getElementById("pageInfo").textContent = "";
     return;
   }
 
-  console.log(gameId);
-  data.forEach((row, i) => {
-  console.log(row.game_id);
-  if(row.game_id === gameId) {
-  console.log(row.game_id);
-  const tr = document.createElement("tr");
-        tr.innerHTML = `
-        <td>${i + 1}</td>
-        <td>${row.player_name || "Guest"}</td>
+  let i = 1;
+  tbody.innerHTML = currentItems
+    .map(
+      row => `
+      <tr>
+        <td>${i++}</td>
+        <td>${row.player_name}</td>
         <td>${row.game_id}</td>
         <td>${row.score}</td>
         <td>${new Date(row.created_at).toLocaleString()}</td>
-      `;
-        tbody.appendChild(tr);
-    }
-  });
+      </tr>
+    `
+    )
+    .join("");
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  document.getElementById("pageInfo").textContent = `Page ${currentPage} of ${totalPages}`;
 }
 
 // 🔼🔽 Sorting logic
 export function sortTable(colIndex, order) {
-  if (!currentData || currentData.length === 0) return;
+  if (!filteredData || filteredData.length === 0) return;
   currentSortColumn = colIndex;
   currentSortOrder = order;
 
-  currentData.sort((a, b) => {
+  filteredData.sort((a, b) => {
     let valA, valB;
     switch (colIndex) {
       case 0:
@@ -183,13 +243,7 @@ export function sortTable(colIndex, order) {
         valA = a.score || 0;
         valB = b.score || 0;
         break;
-      // case 3:
-      //   valA = a.score || 0;
-      //   valB = b.score || 0;
-      //   break;
       default:
-        // valA = a.id || 0;
-        // valB = b.id || 0;
         valA = new Date(a.created_at);
         valB = new Date(b.created_at);
     }
@@ -200,21 +254,20 @@ export function sortTable(colIndex, order) {
   });
 
   updateIndicators(colIndex, order);
-  displayTable(currentData);
+  renderTable();
 }
 
-// 🧭 Indicators अपडेट करें
 function updateIndicators(activeCol, order) {
   const headers = document.querySelectorAll("#leaderboardTable thead th");
   headers.forEach((th, i) => {
     const arrows = th.querySelectorAll(".arrow");
     arrows.forEach(arrow => {
-      arrow.style.opacity = "0.3"; // inactive
+      arrow.style.opacity = "1"; 
     });
 
     if (i === activeCol + 1) {
       const arrow = th.querySelector(`.arrow.${order}`);
-      if (arrow) arrow.style.opacity = "1";
+      if (arrow) arrow.style.opacity = "0.3";
     }
   });
 }
@@ -227,11 +280,10 @@ if (searchInput) {
     const filtered = currentData.filter(row =>
       (row.player_name || "Guest").toLowerCase().includes(q)
     );
-    displayTable(filtered);
+    renderTable(filtered);
   });
 }
 
-// 🧩 Header click event binding
 document.addEventListener("DOMContentLoaded", () => {
   const headers = document.querySelectorAll("#leaderboardTable thead th.sortable");
   headers.forEach((th, i) => {
@@ -241,5 +293,3 @@ document.addEventListener("DOMContentLoaded", () => {
     down.addEventListener("click", e => { e.stopPropagation(); sortTable(i, 'desc'); });
   });
 });
-
-// function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": "&#39;" }[c])); }

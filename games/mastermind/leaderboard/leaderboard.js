@@ -103,8 +103,8 @@ export function sortTable(colIndex, order) {
         valB = (b.game_id).toLowerCase();
         break;
       case 2:
-        valA = new Date(a.created_at);
-        valB = new Date(b.created_at);
+        valA = a.score || 0;
+        valB = b.score || 0;
         break;
       // case 3:
       //   valA = a.score || 0;
@@ -113,8 +113,8 @@ export function sortTable(colIndex, order) {
       default:
         // valA = a.id || 0;
         // valB = b.id || 0;
-        valA = a.score || 0;
-        valB = b.score || 0;
+        valA = new Date(a.created_at);
+        valB = new Date(b.created_at);
     }
 
     if (valA < valB) return order === 'asc' ? -1 : 1;
