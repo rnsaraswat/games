@@ -4,13 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tic Tac Toe with Leaderboard inteagreated</title>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../../style.css">
   <style>
     body {
       display: flex;
+      height: 100vh;
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      background: #222;
+      color: #fff;
     }
+
+    #gameArea {
+      flex: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     #sidebar {
       width: 300px;
       background: #fff;
@@ -19,124 +31,125 @@
       overflow-y: auto;
       height: 100vh;
     }
-    #leaderboard ul {
-      list-style: none;
-      padding: 0;
+
+    h2 {
+      text-align: center;
+      margin-top: 0;
+      color: #f3f1f1;
     }
-    #leaderboard li {
-      margin-bottom: 12px;
-      padding: 8px;
-      background: #f0f0f0;
-      border-radius: 8px;
-    }
-    main {
-      flex: 1;
-      padding: 20px;
-    }
-    .board {
-      display: grid;
-      grid-template-columns: repeat(3, 100px);
-      grid-gap: 10px;
-      justify-content: center;
-      margin-top: 40px;
-    }
-    .cell {
-      width: 100px;
-      height: 100px;
+
+    .score-row {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      background: white;
-      border: 2px solid #333;
+      justify-content: space-between;
+      background: #333;
+      margin: 8px 0;
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    .muted {
+      color: #bbb;
+      font-size: 12px;
+    }
+
+    table,
+    th,
+    td {
+      color: #bbb;
+      border: 1px solid #d9d8d8;
+      box-shadow: 0 0.5vw 2.5vw 0 rgba(0, 0, 0, 0.2);
+    }
+
+    th {
+      cursor: default;
+      position: relative;
+      user-select: none;
+    }
+
+    .arrow {
+      font-size: 14px;
+      margin-left: 4px;
       cursor: pointer;
+      opacity: 0.3;
+      transition: opacity 0.2s;
+    }
+
+    .arrow:hover {
+      opacity: 1;
     }
   </style>
 </head>
 <body>
   <aside id="sidebar">
-    <h2>🏆 Leaderboard</h2>
-    <div id="leaderboard">Loading...</div>
+    <h1>🏆 Leaderboard</h1>
+
+    <div class="search-container" style="margin-bottom:10px;">
+      <input type="text" id="searchInput" placeholder="🔍 Search player..." />
+    </div>
+
+    <table id="leaderboardTable" border="1" cellspacing="0" cellpadding="6"
+      style="width:100%;border-collapse:collapse;text-align:left;">
+      <thead style="background:#222;color:#fff;">
+        <tr>
+          <th>#</th>
+          <th class="sortable">Player
+            <span class="arrow asc">🔼</span>
+            <span class="arrow desc">🔽</span>
+          </th>
+          <th class="sortable">Date
+            <span class="arrow asc">🔼</span>
+            <span class="arrow desc">🔽</span>
+          </th>
+          <th class="sortable">Score
+            <span class="arrow asc">🔼</span>
+            <span class="arrow desc">🔽</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody id="leaderboardTableBody">
+        <tr>
+          <td colspan="4" style="text-align:center;">Loading...</td>
+        </tr>
+      </tbody>
+    </table>
+    <!--  -->
+    </section>
+
   </aside>
 
-  <main>
-    <h1>Tic Tac Toe</h1>
-    <div class="board" id="board">
-      <div class="cell" data-index="0"></div>
-      <div class="cell" data-index="1"></div>
-      <div class="cell" data-index="2"></div>
-      <div class="cell" data-index="3"></div>
-      <div class="cell" data-index="4"></div>
-      <div class="cell" data-index="5"></div>
-      <div class="cell" data-index="6"></div>
-      <div class="cell" data-index="7"></div>
-      <div class="cell" data-index="8"></div>
+  <div class="container">
+    <h2>Tic Tac Toe</h2>
+
+    <div id="gameArea">
+      <div id="board" class="tic-grid"></div>
+      <div style="margin-top:12px"><button id="reset" class="chip">Reset</button></div>
     </div>
-  </main>
+
+
+  </div>
 
   <script type="module">
-    // ---------------- Leaderboard Module ----------------
-    const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ"; // Replace with your anon key
-    const TABLE_NAME = "scores";
+    import { renderLeaderboard, saveScore, sortTable } from './leaderboard/leaderboard.js';
 
-    export async function saveScore(game_id, score) {
-      const player_name = localStorage.getItem("player_name") || "Guest";
-      const email = localStorage.getItem("email") || "";
+    // make sortTable global so onclick in <th> works
+    window.sortTable = sortTable;
 
+    // expose submitScore as global for your game to call
+    window.submitScore = async function (game_id, score) {
       try {
-        const response = await fetch("http://localhost:3000/api/saveScore", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ player_name, email, game_id, score }),
-        });
-        const data = await response.json();
-        console.log("✅ Score saved:", data);
-      } catch (error) {
-        console.error("❌ Error saving score:", error);
+        await saveScore(game_id, score);
+        console.log('Score saved and leaderboard refreshed');
+      } catch (e) {
+        console.error('Error saving score from index:', e);
       }
-    }
+    };
 
-    export async function renderLeaderboard() {
-      const container = document.getElementById("leaderboard");
-      if (!container) return;
-
-      container.innerHTML = "<p>Loading leaderboard...</p>";
-
-      try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}?select=*`, {
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization: `Bearer ${SUPABASE_KEY}`,
-          },
-        });
-
-        if (!res.ok) throw new Error(`Failed: ${res.status}`);
-        const data = await res.json();
-
-        if (!Array.isArray(data)) throw new Error("Invalid data");
-
-        const sorted = data.sort((a, b) => b.score - a.score).slice(0, 10);
-
-        container.innerHTML = `
-          <ul>
-            ${sorted
-              .map(
-                (row, i) => `
-                <li>
-                  <strong>${i + 1}. ${row.player_name || "Guest"}</strong><br>
-                  ${new Date(row.created_at).toLocaleString()}<br>
-                  Score: ${row.score}
-                </li>`
-              )
-              .join("")}
-          </ul>
-        `;
-      } catch (err) {
-        console.error("Error loading leaderboard:", err);
-        container.innerHTML = `<p style="color:red;">⚠️ Failed to load leaderboard.</p>`;
-      }
-    }
+    // initial render
+    document.addEventListener('DOMContentLoaded', () => {
+      renderLeaderboard('tictactoe');
+    });
+  </script>
+  <script>
 
     // ---------------- Game Logic ----------------
     const board = document.getElementById("board");
