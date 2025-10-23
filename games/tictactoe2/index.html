@@ -134,6 +134,7 @@
     // make sortTable global so onclick in <th> works
     window.sortTable = sortTable;
 
+    const game_id = 'tictactoe';
     // expose submitScore as global for your game to call
     window.submitScore = async function (game_id, score) {
       try {
@@ -192,9 +193,6 @@
       });
     }
 
-    // ---------------- Global Functions ----------------
-    window.submitScore = saveScore;
-    renderLeaderboard();
   </script>
 </body>
 </html>
