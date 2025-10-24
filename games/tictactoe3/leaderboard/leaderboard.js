@@ -133,8 +133,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 export async function saveScore(game_id, score) {
+  console.log(localStorage.getItem('player_name'));
   const player_name = localStorage.getItem('player_name') || 'Guest';
   const email = localStorage.getItem('email') || '';
+  console.log(player_name);
 
   const EDGE_FUNCTION_URL = ""; 
   try {

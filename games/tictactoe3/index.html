@@ -138,9 +138,10 @@
 
     // expose submitScore as global for your game to call
     window.submitScore = async function (game_id, score) {
+      console.log(player_name)
       try {
         await saveScore(game_id, score);
-        console.log('Score saved and leaderboard refreshed');
+        console.log('Score saved and leaderboard refreshed', game_id, score);
       } catch (e) {
         console.error('Error saving score from index:', e);
       }
@@ -169,7 +170,6 @@
     }
     function onGameOver(finalScore) { // higher better
       // score: X win 100, O win 50, tie 20
-      console.log("window.submitScore", window.submitScore)
       // window.submitScore && window.submitScore('tictactoe', finalScore, 'player'); alert('Game over — score: ' + finalScore);
       window.submitScore && window.submitScore('tictactoe', finalScore); alert('Game over — score: ' + finalScore);
     }
