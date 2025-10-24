@@ -21,6 +21,7 @@
                 <div>
                     <h1>Ravindra Games Hub</h1>
                     <p class="lead">Quick browser games — PWA-ready</p>
+                    <p id="welcom" class="lead">Welcome</p>
                 </div>
             </div>
             <div>
@@ -73,6 +74,8 @@
         const player_name = localStorage.getItem('player_name') || 'Guest';
         console.log(player_name);
 
+        document.getElementById("welcom").textContent = `Welcome ${player_name}`;
+        document.getElementById("welcom").style.alignContent = "center";
         const grid = document.getElementById('gamesGrid');
         games.forEach(g => {
             const card = document.createElement('article');
