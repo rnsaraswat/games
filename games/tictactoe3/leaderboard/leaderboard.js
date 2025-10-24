@@ -135,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
 export async function saveScore(game_id, score) {
   console.log(localStorage.getItem('player_name'));
   const player_name = localStorage.getItem('player_name') || 'Guest';
+  console.log(localStorage.getItem('player_name'));
   const email = localStorage.getItem('email') || '';
   console.log(player_name);
 

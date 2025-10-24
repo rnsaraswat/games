@@ -138,7 +138,6 @@
 
     // expose submitScore as global for your game to call
     window.submitScore = async function (game_id, score) {
-      console.log(player_name)
       try {
         await saveScore(game_id, score);
         console.log('Score saved and leaderboard refreshed', game_id, score);
