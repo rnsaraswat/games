@@ -69,6 +69,10 @@
             // { id: 'slitherlink', title: 'Slitherlink', desc: 'Create a single loop puzzle', href: '/games/slitherlink/index.html' }
         ];
 
+        console.log(localStorage.getItem());
+        const player_name = localStorage.getItem('player_name') || 'Guest';
+        console.log(player_name);
+
         const grid = document.getElementById('gamesGrid');
         games.forEach(g => {
             const card = document.createElement('article');
