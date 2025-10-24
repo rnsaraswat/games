@@ -1,11 +1,11 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js'; 
-import { supabase } from '../supabaseClient.js'; 
+// import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
+// import { supabase } from '../supabaseClient.js';
 
-// const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co";
-// const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ"; 
+const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ"; 
 
-// const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // अब supabase.from(...) का उपयोग करें
 
 
@@ -18,9 +18,6 @@ import { supabase } from '../supabaseClient.js';
 // const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ";
 const TABLE_NAME = "scores";
 
-const { data: { user } } = await supabase.auth.getUser();
-console.log(user);
-// console.log(data);
 
 let allScores = [];
 let currentSort = { column: 'score', asc: false };
@@ -152,22 +149,45 @@ function nextPage() {
   }
 }
 
-  gameFilter.addEventListener("change", async (event) => {
-    const q = event.target.value.toLowerCase();
-    if (q == "all") {
-      filteredData = leaderboardData;
+gameFilter.addEventListener("change", async (event) => {
+  const q = event.target.value.toLowerCase();
+  if (q == "all") {
+    filteredData = leaderboardData;
 
-    } else {
-      filteredData = leaderboardData.filter(row =>
-        (row.game_id).toLowerCase().includes(q)
-      );
-      }
+  } else {
+    filteredData = leaderboardData.filter(row =>
+      (row.game_id).toLowerCase().includes(q)
+    );
+  }
   currentPage = 1;
   renderTable();
-  });
+});
 
 export async function renderLeaderboard() {
   console.log(SUPABASE_URL);
+  console.log(supabase);
+  console.log(supabase.auth);
+
+  const { data, error } = await supabase.auth.exchangeCodeForSession(window.location.href);
+    if (error) console.error("Auth exchange error:", error);
+
+  const { data: { user } } = await supabase.auth.getUser();
+  console.log("User:", user);
+  // console.log(data);
+  console.log(user.user_metadata);
+  console.log(user.email);
+  if (user) {
+    // const name = user.user_metadata?.name || "Guest";
+    // const email = user.email || "No email";
+    const name = user.user_metadata?.name;
+    const email = user.email;
+    console.log(name);
+    console.log(email);
+  } else {
+    console.log("user",user);
+    console.log("❌ No user found. Please log in again.");
+  }
+
   try {
     const url = `${SUPABASE_URL}/rest/v1/scores?select=*`;
     console.log(url);
@@ -179,6 +199,30 @@ export async function renderLeaderboard() {
       }
     });
 
+    const url1 = "https://bkhoexvgorxzgdujofar.supabase.co.auth.getUser()";
+    console.log(url1);
+    // const user = await fetch( url1, {
+    //   headers: {
+    //     apikey: SUPABASE_ANON_KEY,
+    //     Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+    //   }
+    // });
+    const { data: { user } } = await supabase.auth.getUser();
+    console.log(user);
+    // console.log(data);
+    console.log(user.user_metadata);
+    console.log(user.email);
+    if (user) {
+      // const name = user.user_metadata?.name || "Guest";
+      // const email = user.email || "No email";
+      const name = user.user_metadata?.name;
+      const email = user.email;
+      console.log(name);
+      console.log(email);
+
+    }
+
+
     if (!res.ok) {
       let errText;
       try { errText = await res.json(); } catch (e) { errText = await res.text(); }
@@ -188,7 +232,7 @@ export async function renderLeaderboard() {
 
 
     const data = await res.json();
-    console.log("data",data);
+    console.log("data", data);
 
     if (!Array.isArray(data)) {
       console.log("⚠️ Unexpected response");
@@ -200,10 +244,10 @@ export async function renderLeaderboard() {
       return;
     }
 
-      leaderboardData = data;
-      filteredData = [...data];
-      currentPage = 1;
-      renderTable();
+    leaderboardData = data;
+    filteredData = [...data];
+    currentPage = 1;
+    renderTable();
 
   } catch (err) {
     console.error("❌ Error loading leaderboard:", err);
@@ -215,8 +259,8 @@ function renderTable() {
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage;
   const currentItems = filteredData.slice(start, end);
-  console.log("currentItems",currentItems);
-  console.log("start",start, end);
+  console.log("currentItems", currentItems);
+  console.log("start", start, end);
 
   if (currentItems.length === 0) {
     tbody.innerHTML = `<tr><td colspan="4">No results found.</td></tr>`;
@@ -283,7 +327,7 @@ function updateIndicators(activeCol, order) {
   headers.forEach((th, i) => {
     const arrows = th.querySelectorAll(".arrow");
     arrows.forEach(arrow => {
-      arrow.style.opacity = "1"; 
+      arrow.style.opacity = "1";
     });
 
     if (i === activeCol + 1) {
