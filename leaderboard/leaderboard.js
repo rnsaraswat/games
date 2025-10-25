@@ -1,29 +1,13 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-// import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-// import { supabase } from '../supabaseClient.js';
-
-const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ"; 
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-// अब supabase.from(...) का उपयोग करें
-
-
-// const { data, error } = await supabase.from('scores').select('*').limit(10);
-
-
-
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
+import { supabase } from '../supabaseClient.js';
 
 // const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co";
-// const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ";
+// const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ"; 
+
 const TABLE_NAME = "scores";
 
-
-let allScores = [];
-let currentSort = { column: 'score', asc: false };
-let searchQuery = '';
 let currentData = [];
-// let sortDirections = [true, true, true, true];
 let currentSortColumn = null;
 let currentSortOrder = 'asc';
 let gameId = document.getElementById("gameFilter").value || "tictactoe";
@@ -32,6 +16,7 @@ let leaderboardData = [];
 let filteredData = [];
 let currentPage = 1;
 let itemsPerPage = 10;
+let sNo = 1;
 
 // ------display leaderboard without table and without sort---
 // window.addEventListener("DOMContentLoaded", async () => {
@@ -117,8 +102,6 @@ document.querySelectorAll("#leaderboardTable th").forEach(th => {
   th.addEventListener("click", () => handleSort(th.dataset.column));
 });
 
-// await loadLeaderboard();
-
 function handleSearch(e) {
   const searchTerm = e.target.value.toLowerCase();
   filteredData = leaderboardData.filter(row =>
@@ -137,6 +120,7 @@ function handleTopSelect(e) {
 function prevPage() {
   if (currentPage > 1) {
     currentPage--;
+    // sNo = currentPage * itemsPerPage;
     renderTable();
   }
 }
@@ -144,6 +128,7 @@ function prevPage() {
 function nextPage() {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   if (currentPage < totalPages) {
+    // sNo = currentPage * itemsPerPage;
     currentPage++;
     renderTable();
   }
@@ -164,33 +149,8 @@ gameFilter.addEventListener("change", async (event) => {
 });
 
 export async function renderLeaderboard() {
-  console.log(SUPABASE_URL);
-  console.log(supabase);
-  console.log(supabase.auth);
-
-  const { data, error } = await supabase.auth.exchangeCodeForSession(window.location.href);
-    if (error) console.error("Auth exchange error:", error);
-
-  const { data: { user } } = await supabase.auth.getUser();
-  console.log("User:", user);
-  // console.log(data);
-  console.log(user.user_metadata);
-  console.log(user.email);
-  if (user) {
-    // const name = user.user_metadata?.name || "Guest";
-    // const email = user.email || "No email";
-    const name = user.user_metadata?.name;
-    const email = user.email;
-    console.log(name);
-    console.log(email);
-  } else {
-    console.log("user",user);
-    console.log("❌ No user found. Please log in again.");
-  }
-
   try {
     const url = `${SUPABASE_URL}/rest/v1/scores?select=*`;
-    console.log(url);
 
     const res = await fetch(url, {
       headers: {
@@ -199,30 +159,6 @@ export async function renderLeaderboard() {
       }
     });
 
-    const url1 = "https://bkhoexvgorxzgdujofar.supabase.co.auth.getUser()";
-    console.log(url1);
-    // const user = await fetch( url1, {
-    //   headers: {
-    //     apikey: SUPABASE_ANON_KEY,
-    //     Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-    //   }
-    // });
-    const { data: { user } } = await supabase.auth.getUser();
-    console.log(user);
-    // console.log(data);
-    console.log(user.user_metadata);
-    console.log(user.email);
-    if (user) {
-      // const name = user.user_metadata?.name || "Guest";
-      // const email = user.email || "No email";
-      const name = user.user_metadata?.name;
-      const email = user.email;
-      console.log(name);
-      console.log(email);
-
-    }
-
-
     if (!res.ok) {
       let errText;
       try { errText = await res.json(); } catch (e) { errText = await res.text(); }
@@ -230,9 +166,7 @@ export async function renderLeaderboard() {
       return;
     }
 
-
     const data = await res.json();
-    console.log("data", data);
 
     if (!Array.isArray(data)) {
       console.log("⚠️ Unexpected response");
@@ -268,12 +202,12 @@ function renderTable() {
     return;
   }
 
-  let i = 1;
+  // sNo = 1;
   tbody.innerHTML = currentItems
     .map(
       row => `
       <tr>
-        <td>${i++}</td>
+        <td>${sNo++}</td>
         <td>${row.player_name}</td>
         <td>${row.game_id}</td>
         <td>${row.score}</td>

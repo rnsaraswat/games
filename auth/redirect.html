@@ -1,14 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Redirecting...</title>
   <script type="module">
     import { supabase } from "../supabaseClient.js";
-
     async function completeLogin() {
       const { data: { user } } = await supabase.auth.getUser();
-
       if (user) {
         localStorage.setItem("player_name", user.user_metadata.full_name || "User");
         localStorage.setItem("email", user.email || "");
@@ -18,11 +11,41 @@
         document.body.innerHTML = "<p>Login failed. Please try again.</p>";
       }
     }
-
     completeLogin();
   </script>
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
 </head>
 <body>
-  <p>Completing login...</p>
+  <h3>Completing login, please wait...</h3>
+  <script type="module">
+    // import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/+esm';
+    import { supabase } from "../supabaseClient.js";
+    // import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../leaderboard/config.js';
+
+    // const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function handleRedirect() {
+      const { data, error } = await supabase.auth.exchangeCodeForSession(window.location.href);
+      if (error) {
+        console.error("Auth exchange error:", error);
+        document.body.innerHTML = `<p style="color:red">Login failed: ${error.message}</p>`;
+        return;
+      }
+      const { user } = data;
+      if (user) {
+        localStorage.setItem('player_name', user.user_metadata?.name || user.email || 'Guest');
+        localStorage.setItem('email', user.email || '');
+        window.location.href = '/index.html';
+      }
+    }
+    handleRedirect();
+  </script>
 </body>
 </html>
+

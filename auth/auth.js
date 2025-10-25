@@ -101,7 +101,7 @@ googleBtn.addEventListener("click", async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: window.location.origin + "/auth/redirect.html", // after login
+      redirectTo: window.location.origin + "./redirect.html", // after login
     },
   });
   if (error) showStatus("Google login failed: " + error.message, false);
@@ -129,11 +129,20 @@ emailForm.addEventListener("submit", async e => {
     return;
   }
 
+  if (!name) {
+    showStatus("Please enter your name.", false);
+    return;
+  } 
+
   try {
     // Supabase Magic Link Login (optional)
     const { data, error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: window.location.origin + "/auth/redirect.html" },
+      // options: { emailRedirectTo: window.location.origin + "/auth/redirect.html" },
+      // options: { emailRedirectTo: redirectAfterLogin() },
+      options: { 
+        emailRedirectTo: "https://rnsaraswat.github.io/games/auth/redirect.html"
+      },
     });
 
     if (error) throw error;
