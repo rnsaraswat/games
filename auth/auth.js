@@ -101,7 +101,7 @@ googleBtn.addEventListener("click", async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: window.location.origin + "./redirect.html", // after login
+      redirectTo: window.location.origin + "/auth/redirect.html", 
     },
   });
   if (error) showStatus("Google login failed: " + error.message, false);
@@ -138,8 +138,6 @@ emailForm.addEventListener("submit", async e => {
     // Supabase Magic Link Login (optional)
     const { data, error } = await supabase.auth.signInWithOtp({
       email,
-      // options: { emailRedirectTo: window.location.origin + "/auth/redirect.html" },
-      // options: { emailRedirectTo: redirectAfterLogin() },
       options: { 
         emailRedirectTo: "https://rnsaraswat.github.io/games/auth/redirect.html"
       },
@@ -156,9 +154,21 @@ emailForm.addEventListener("submit", async e => {
 
 // 🔹 Guest Login
 guestBtn.addEventListener("click", () => {
-  let name = prompt("Enter your name:", "Guest");
-  if (!name) name = "Guest";
-  saveUserLocally({ name });
+  const email = document.getElementById("email").value.trim();
+  const name = document.getElementById("name").value.trim();
+
+  if (!email) {
+    showStatus("Please enter a valid email.", false);
+    return;
+  }
+
+  if (!name) {
+    showStatus("Please enter your name.", false);
+    return;
+  } 
+
+    saveUserLocally({ name: name || "Guest", email });
+
   showStatus(`Welcome, ${name}! Logging in as Guest...`);
   setTimeout(redirectAfterLogin, 1000);
 });
