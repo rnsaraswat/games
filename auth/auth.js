@@ -155,23 +155,24 @@ emailForm.addEventListener("submit", async e => {
 });
 
 // 🔹 Guest Login
-guestBtn.addEventListener("click", () => {
-  const email = document.getElementById("email").value.trim();
-  const name = document.getElementById("name").value.trim();
+guestForm.addEventListener("submit", async e => {
+  e.preventDefault();
+  const gemail = document.getElementById("gemail").value.trim();
+  const gname = document.getElementById("gname").value.trim();
 
-  if (!email) {
+  if (!gemail) {
     showStatus("Please enter a valid email.", false);
     return;
   }
 
-  if (!name) {
+  if (!gname) {
     showStatus("Please enter your name.", false);
     return;
   } 
 
-    saveUserLocally({ name: name || "Guest", email });
+    saveUserLocally({ name: gname || "Guest", gemail });
 
-  showStatus(`Welcome, ${name}! Logging in as Guest...`);
+  showStatus(`Welcome, ${gname}! Logging in as Guest...`);
   setTimeout(redirectAfterLogin, 1000);
 });
 

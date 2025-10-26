@@ -15,14 +15,18 @@
             
             <button id="google-login" class="btn">Login with Google</button>
             <button id="facebook-login" class="btn">Login with Facebook</button>
-            <button id="guest-login" class="btn">Continue as Guest</button>
+            <!-- <button id="guest-login" class="btn">Continue as Guest</button> -->
             
             <form id="email-login">
               <input type="email" id="email" placeholder="Email" required>
-              <input type="text" id="name" placeholder="Name (optional)">
+              <input type="text" id="name" placeholder="Name (required)">
               <button type="submit" class="btn">Login with Email</button>
             </form>
-            
+            <form id="guest-login">
+              <input type="email" id="email" placeholder="Email" required>
+              <input type="text" id="name" placeholder="Name (required)">
+              <button type="submit" class="btn">Login as Guest</button>
+            </form>
             <div id="auth-status"></div>
           </div>
 
