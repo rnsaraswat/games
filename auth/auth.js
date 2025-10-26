@@ -101,7 +101,9 @@ googleBtn.addEventListener("click", async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: window.location.origin + "/auth/redirect.html", 
+      // redirectTo: window.location.origin + "/auth/redirect.html", 
+      emailRedirectTo: "https://rnsaraswat.github.io/games/auth/redirect.html"
+
     },
   });
   if (error) showStatus("Google login failed: " + error.message, false);
