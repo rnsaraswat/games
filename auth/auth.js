@@ -74,7 +74,7 @@ import { supabase } from "../supabaseClient.js";
 // Elements
 const googleBtn = document.getElementById("google-login");
 const facebookBtn = document.getElementById("facebook-login");
-const guestBtn = document.getElementById("guest-login");
+const guestForm = document.getElementById("guest-login");
 const emailForm = document.getElementById("email-login");
 const statusDiv = document.getElementById("auth-status");
 
@@ -160,6 +160,7 @@ guestForm.addEventListener("submit", async e => {
   const gemail = document.getElementById("gemail").value.trim();
   const gname = document.getElementById("gname").value.trim();
 
+  console.log(gemail, gname);
   if (!gemail) {
     showStatus("Please enter a valid email.", false);
     return;
