@@ -87,13 +87,15 @@
 
     <div id="gameArea">
       <div id="board" class="tic-grid"></div>
-      <div style="margin-top:12px"><button id="reset" class="chip">Reset</button></div>
     </div>
-
-
+    <div style="margin-top:12px">
+      <button id="reset" class="chip">Reset</button>
+      <button id="local-toggle-leaderboard" class="chip">Local Leaderboard</button>
+      <button id="global-toggle-leaderboard" class="chip">Global Leaderboard</button>
+    </div>
   </div>
   <aside id="sidebar">
-    <h1>🏆 Leaderboard</h1>
+    <h1>🏆 Global Leaderboard</h1>
 
     <div class="search-container" style="margin-bottom:10px;">
       <input type="text" id="searchInput" placeholder="🔍 Search player..." />
@@ -129,6 +131,43 @@
 
   </aside>
 
+  <aside id="sidebarLocal">
+    <h1>🏆 Local Leaderboard</h1>
+
+    <div class="search-container" style="margin-bottom:10px;">
+      <input type="text" id="localsearchInput" placeholder="🔍 Search player..." />
+    </div>
+
+    <table id="localleaderboardTable" border="1" cellspacing="0" cellpadding="6"
+      style="width:100%;border-collapse:collapse;text-align:left;">
+      <thead style="background:#222;color:#fff;">
+        <tr>
+          <th>#</th>
+          <th class="sortable">Player
+            <span class="arrow asc">🔼</span>
+            <span class="arrow desc">🔽</span>
+          </th>
+          <th class="sortable">Date
+            <span class="arrow asc">🔼</span>
+            <span class="arrow desc">🔽</span>
+          </th>
+          <th class="sortable">Score
+            <span class="arrow asc">🔼</span>
+            <span class="arrow desc">🔽</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody id="localleaderboardTableBody">
+        <tr>
+          <td colspan="4" style="text-align:center;">Loading...</td>
+        </tr>
+      </tbody>
+    </table>
+    <!--  -->
+    </section>
+
+  </aside>
+
   <script type="module">
     import { renderLeaderboard, saveScore, sortTable } from './leaderboard/leaderboard.js';
 
@@ -151,7 +190,7 @@
       renderLeaderboard('tictactoe');
     });
   </script>
-
+  <script type="module" src="../../leaderboard/localleaderboard.js"></script>
 
 
   <script>
@@ -171,6 +210,7 @@
       // score: X win 100, O win 50, tie 20
       // window.submitScore && window.submitScore('tictactoe', finalScore, 'player'); alert('Game over — score: ' + finalScore);
       window.submitScore && window.submitScore('tictactoe', finalScore); alert('Game over — score: ' + finalScore);
+      saveToLeaderboard('tictactoe', finalScore)
     }
     document.getElementById('reset').addEventListener('click', () => { board = Array(9).fill(null); over = false; moves = 0; render(); });
     render();

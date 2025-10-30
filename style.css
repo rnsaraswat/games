@@ -6,6 +6,7 @@
     --accent: #0ea5a3;
     --cell-border: #d9d8d8;
     --box-shadow: rgba(255, 255, 255, 0.5);
+    --btn-shadow: rgba(0, 0, 0, 0.2);
 }
 
 [data-theme='dark'] {
@@ -15,7 +16,13 @@
     --muted: #9fb3c8;
     --accent: #22c1c3;
     --box-shadow: rgba(0, 0, 0, 0.2);
+    --btn-shadow: rgba(0, 0, 0, 0.2);
     --cell-border: #333;
+}
+
+@font-face {
+    font-family: 'EnglishFontBangers';
+    src: url('assets/font/Bangers-Regular.ttf') format('truetype');
 }
 
 * {
@@ -24,6 +31,7 @@
 
 body {
     margin: 0;
+    padding: 0;
     font-family: Inter, system-ui, sans-serif;
     background: var(--bg);
     color: var(--text)
@@ -43,8 +51,13 @@ header {
 
 .brand {
     display: flex;
-    gap: 12px;
+    gap: 1.2vw;
+    width: 60%;
     align-items: center
+}
+
+.hdrbtns {
+    display: flex;
 }
 
 .logo {
@@ -69,7 +82,7 @@ header {
     background: var(--card);
     padding: 1vw;
     margin: 1vw;
-    border-radius: 1vw;
+    border-radius: 5%;
     overflow: hidden;
     box-shadow: 0 6px 18px rgba(2, 6, 23, .06);
     display: flex;
@@ -88,12 +101,38 @@ header {
 
 .play-btn {
     display: inline-block;
-    margin-top: 0.8vw;
+    margin: 1vw 1vw;
     padding: 0.8vw 1vw;
-    border-radius: 1vw;
+    border-radius: 5%;
     background: var(--accent);
     color: white;
-    text-decoration: none
+    font-weight: bold;
+    font-size: 1.6vw;
+    text-decoration: none;
+    box-shadow: 0 1vw 4vw var(--btn-shadow);
+}
+
+button.primary {
+    /* gap: 0.8vw; */
+    /* align-items: center; */
+    /* flex-wrap: wrap; */
+    /* display: flex; */
+    /* flex-direction: row; */
+    /* flex-wrap: wrap; */
+    padding: 1vw 1vw;
+    margin: 1vw 1vw;
+    font-size: 1.6vw;
+    /* display: inline-block; */
+    /* margin-top: 0.1vh; */
+    transition: background-color 0.3s, transform 0.2s;
+    /* box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow); */
+    border-radius: 5%;
+    /* background: linear-gradient(90deg, var(--accent), #7c3aed); */
+    color: #fff;
+    /* border-color: transparent; */
+    background: linear-gradient(180deg, #10b981, #059669);
+    border: none;
+    box-shadow: 0 1vw 4vw var(--btn-shadow);
 }
 
 .chip {
@@ -103,14 +142,19 @@ header {
     padding: 1vw 1.2vw;
     font-size: 1.6vw;
     margin-top: 0.1vh;
+    margin: 0.5vw;
     transition: background-color 0.3s, transform 0.2s;
     box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
     cursor: pointer;
     background: var(--bg-color);
     color: var(--text);
     border: 0.2vw solid var(--cell-border);
+    text-decoration: none;
 }
 
+.lead {
+    font-size: 1.6vw;
+}
 .tic-grid {
     display: grid;
     grid-template-columns: repeat(3, 80px);
@@ -123,7 +167,39 @@ header {
     font-size: 28px
 }
 
-@media(max-width:520px) {
+h1 {
+    text-align: center;
+    font-size: 4vw;
+    font-family: 'EnglishFontBangers', Arial, Helvetica, sans-serif;
+    color: var(--text-color);
+    letter-spacing: .8vw;
+    text-shadow: 0 1px 0 #030303,
+        0 2px 0 #c9c9c9,
+        0 3px 0 #bbb,
+        0 4px 0 #b9b9b9,
+        0 5px 0 #aaa,
+        0 6px 1px var(--box-shadow),
+        0 0 5px var(--box-shadow),
+        0 1px 3px var(--box-shadow),
+        0 3px 5px var(--box-shadow),
+        0 5px 10px var(--box-shadow),
+        0 10px 10px var(--box-shadow),
+        0 20px 20px var(--box-shadow);
+    margin-bottom: 1vw;
+}
+
+/* 🧭 Portrait (Top-Bottom layout) */
+@media(max-width:520px), (max-aspect-ratio: 1/1) {
+    header {
+        flex-direction: column;
+    }
+    .brand {
+        width: 100%;
+        justify-content: center;
+    }
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(50vw, 1fr));
+    }
     .tic-grid {
         grid-template-columns: repeat(3, 60px)
     }
@@ -178,3 +254,92 @@ header {
 .score-row .score {
     font-weight: bold;
 }
+
+  /* leaderboard Table */
+  table,
+  td {
+      border: 0.1vw solid var(--cell-border);
+      box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+      margin: auto;
+      text-align: center;
+      padding: 0.1vw;
+      background: var(--bg);
+      color: var(--text);
+  }
+
+  /* for sticky header of table */
+  th {
+      position: sticky;
+      top: 0;
+      /* Sticks to the top of the scroll container */
+      background-color: var(--bg);
+      z-index: 1;
+      /* Keeps header above scrolling content */
+      padding: 10px;
+      text-align: left;
+      border-bottom: 0.2vw solid var(--cell-border);
+  }
+
+    /* Leaderboard Popup */
+    #leaderboardPopup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 2vw;
+        border-radius: 1vw;
+        display: none;
+        z-index: 10;
+        width: 80%;
+        height: 60%;
+        overflow-y: auto;
+        text-align: center;
+        border: 0.2vw solid var(--cell-border);
+        background: var(--bg);
+        color: var(--text);
+    }
+  
+    /* leaderboard heading */
+    h3 {
+        display: inline;
+        background: var(--bg);
+        color: var(--text);
+    }
+  
+    /* popup window with sicky haed */
+    .popupWindow {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 2vw;
+        border-radius: 1vw;
+        display: none;
+        z-index: 10;
+        width: 80%;
+        height: 80%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        text-align: center;
+        border: 0.2vw solid var(--cell-border);
+        background: var(--bg);
+        color: var(--text);
+    }
+  
+    .popupHeadeer {
+        position: fixed;
+        /* Make the header sticky */
+        top: 0;
+        width: 100%;
+        /* Ensure it spans the full width of the popup */
+        padding: 1vw;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+    }
+  
+    .popupContent {
+        margin-top: 3vw;
+        height: calc(100% - 3vw);
+        overflow-y: auto;
+        /* overflow-x: hidden; */
+    }

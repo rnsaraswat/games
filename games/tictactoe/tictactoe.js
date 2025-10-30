@@ -126,7 +126,7 @@ window.addEventListener('load', function () {
         if (winner) {
             gameOver = true;
             const score = Math.max(0, 100 - gameCount * 10); 
-            window.submitScore && window.submitScore('mastermind', score, 'player'); 
+            window.submitScore && window.submitScore('tictactoe', score, 'player'); 
             alert('You cracked it! Score: ' + score);
             if (winner === human) {
                 winnerName = winner;
