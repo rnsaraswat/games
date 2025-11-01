@@ -24,10 +24,16 @@
                 </div>
             </div>
             <div class="hdrbtns">
-                <a class="chip" href="leaderboard/index.html">Global Leaderboard</a>
-                <a class="chip" href="auth/login.html">Sign in</a>
-                <bautton class="chip" id="themeToggle">Light</button>
-                    <p id="welcom" class="lead">Welcome</p>
+                <div class="hdr-child-div">
+                    <!-- <a class="chip" id="toggle-leaderboard" href="leaderboard/index.html">Global Leaderboard</a> -->
+                    <a class="chip" id="toggle-leaderboard">Global Leaderboard</a>
+                    <a class="chip" href="auth/login.html">Sign in</a>
+                </div>
+                <div class="hdr-child-div">
+                    <button class="chip" id="local-toggle-leaderboard">Local Leaderboard</button>
+                    <button class="chip" id="themeToggle">Light</button>
+                </div>
+                <p id="welcom" class="lead">Welcome</p>
             </div>
         </header>
 
@@ -52,29 +58,204 @@
 
         <footer style="margin-top:20px;color:var(--muted)">© 2025 Ravindra</footer>
     </div>
-    <!-- Leaderboard Popup -->
-    <div id="leaderboardPopup" class="popupWindow">
+    <!-- Local Leaderboard Popup -->
+    <div id="localleaderboardPopup" class="popupWindow">
         <div class="popupHeadeer">
-            <h3>🏆Local Leaderboard</h3>
-            <button class="primary" id="hide-leaderboard">Hide Leaderboard</button>
-            <button class="primary" id="clear-leaderboard">Clear Leaderboard</button>
+            <!-- <h3>🏆Local Leaderboard</h3>
+            <button class="primary" id="local-hide-leaderboard">Hide Leaderboard</button>
+            <button class="primary" id="clear-leaderboard">Clear Leaderboard</button> -->
+
+            <div class="controls">
+                <h3>🏆Local Leaderboard</h3>
+                <button class="chip" id="local-hide-leaderboard">Hide Leaderboard</button>
+                <button class="primary" id="clear-leaderboard">Clear Leaderboard</button>
+                <a href="../auth/login.html" class="chip">Sign in</a>
+            </div>
+            <div class="search-container" style="margin-bottom:10px;">
+                <label>Filter game: </label>
+                <select id="localgameFilter">
+                    <option value="all">All</option>
+                    <option value="tictactoe">Tic Tac Toe</option>
+                    <option value="mastermind">Mastermind</option>
+                </select>
+                <label>Per page:
+                    <select id="localtopSelect">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                </label>
+                <input type="text" id="localsearchInput" placeholder="🔍 Search player..." />
+            </div>
         </div>
         <div class="popupContent">
-            <ul id="leaderboardList"></ul>
+            <!-- <ul id="local-leaderboardList"></ul> -->
+
+            <section style="margin-top:12px">
+                <div>
+                    <table id="localleaderboardTable" border="1" cellspacing="0" cellpadding="6"
+                        style="width:100%;border-collapse:collapse;text-align:left;">
+                        <thead style="background:#222;color:#fff;">
+                            <tr>
+                                <th>#</th>
+                                <th class="sortable">Game
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Winner
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Looser
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Size
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Difficulty
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Moves
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Score
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Elapsed time
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Date
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="localleaderboardTableBody">
+                            <tr>
+                                <td colspan="4" style="text-align:center;">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button id="localprevPage">⬅ Prev</button>
+                    <span id="localpageInfo"></span>
+                    <button id="localnextPage">Next ➡</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Global Leaderboard Popup -->
+    <div id="leaderboardPopup" class="popupWindow">
+        <div class="popupHeadeer">
+            <div class="controls">
+                <h3>🏆Global Leaderboard</h3>
+                <button class="chip" id="hide-leaderboard">Hide Leaderboard</button>
+                <!-- <button class="primary" id="clear-leaderboard">Clear Leaderboard</button> -->
+                <a href="../auth/login.html" class="chip">Sign in</a>
+            </div>
+            <div class="search-container" style="margin-bottom:10px;">
+                <label>Filter game: </label>
+                <select id="gameFilter">
+                    <option value="all">All</option>
+                    <option value="tictactoe">Tic Tac Toe</option>
+                    <option value="mastermind">Mastermind</option>
+                </select>
+                <label>Show Top:
+                    <select id="topSelect">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                </label>
+                <input type="text" id="searchInput" placeholder="🔍 Search player..." />
+            </div>
+            <div id="err-text">Error text</div>
+        </div>
+        <div class="popupContent">
+            <!-- <ul id="leaderboardList"></ul> -->
+            <section style="margin-top:12px">
+                <div>
+                    <table id="leaderboardTable" border="1" cellspacing="0" cellpadding="6"
+                        style="width:100%;border-collapse:collapse;text-align:left;">
+                        <thead style="background:#222;color:#fff;">
+                            <tr>
+                                <th>#</th>
+                                <th class="sortable">Game
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Winner
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Looser
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Size
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Difficulty
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Moves
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Score
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Elapsed time
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Date
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardTableBody">
+                            <tr>
+                                <td colspan="4" style="text-align:center;">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button id="prevPage">⬅ Prev</button>
+                    <span id="pageInfo"></span>
+                    <button id="nextPage">Next ➡</button>
+                </div>
+            </section>
         </div>
     </div>
 
     <script src="leaderboard/submit-helper.js"></script>
     <script type="module" src="leaderboard/localleaderboard.js"></script>
+    <script type="module" src="leaderboard/leaderboard.js"></script>
     <script>
         const games = [
-            { id: 'tictactoe', title: 'Tic Tac Toe', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe/index.html' },
-            { id: 'tictactoe1', title: 'Tic Tac Toe New', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe1/index.html' },
-            { id: 'tictactoe2', title: 'Tic Tac Toe simple', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe2/index.html' },
-            { id: 'tictactoe3', title: 'Tic Tac Toe', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe3/index.html' },
-            { id: 'threeinarow', title: '3 in Row (Tic Tac Toe)', desc: 'Classic X vs O — human or AI', href: 'games/threeinarow/index.html' },
-            { id: 'mastermind', title: 'Mastermind', desc: 'Guess the color code', href: 'games/mastermind/index.html' },
-            { id: 'mastermind1', title: 'Mastermind', desc: 'Guess the color code', href: 'games/mastermindtext/mastermind_text.html' }
+            { id: 'tictactoe', name: 'tictactoe', title: 'Tic Tac Toe', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe/index.html' },
+            { id: 'tictactoe1', name: 'tictactoe', title: 'Tic Tac Toe New', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe1/index.html' },
+            { id: 'tictactoe2', name: 'tictactoe', title: 'Tic Tac Toe simple', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe2/index.html' },
+            { id: 'tictactoe3', name: 'tictactoe', title: 'Tic Tac Toe', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe3/index.html' },
+            { id: 'threeinarow', name: 'threeinarow', title: '3 in Row (Tic Tac Toe)', desc: 'Classic X vs O — human or AI', href: 'games/threeinarow/index.html' },
+            { id: 'mastermind', name: 'mastermind', title: 'Mastermind', desc: 'Guess the color code', href: 'games/mastermind/index.html' },
+            { id: 'mastermind1', name: 'mastermind', title: 'Mastermind', desc: 'Guess the color code', href: 'games/mastermindtext/mastermind_text.html' }
             // { id: 'memory', title: 'Memory Game', desc: 'Find pairs before timer ends', href: '/games/memory/index.html' },
             // { id: 'gomoku', title: 'Gomoku (5 in a Row)', desc: 'Beat computer with smart AI', href: '/games/gomoku/index.html' },
             // { id: 'sudoku', title: 'Sudoku', desc: 'Solve logic puzzles of various sizes', href: '/games/sudoku/index.html' },
@@ -90,7 +271,7 @@
             const card = document.createElement('article');
             card.className = 'game-card';
             card.dataset = g.id;
-            card.innerHTML = `<h3>${g.title}</h3><p>${g.desc}</p><div class='actions'><a href='${g.href}' class='play-btn'>Play</a><button class='btn primary' id="toggle-leaderboard">Local Leaderboard</button></div>`;
+            card.innerHTML = `<h3>${g.title}</h3><p>${g.desc}</p><div class='actions'><a href='${g.href}' class='play-btn'>Play</a><button class='localLeaderboardBtn' id="local-toggle-leaderboard">Local Leaderboard</button></div>`;
             grid.appendChild(card);
         });
 
@@ -115,7 +296,6 @@
             }
         }
         toggleTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
-
     </script>
     <script>
         // Lazy register SW

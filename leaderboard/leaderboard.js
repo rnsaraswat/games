@@ -1,6 +1,7 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { supabase } from '../supabaseClient.js';
+import { textToSpeechEng } from './speak.js';
 
 // const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co";
 // const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ"; 
@@ -18,80 +19,72 @@ let currentPage = 1;
 let itemsPerPage = 10;
 let sNo = 1;
 
-// ------display leaderboard without table and without sort---
-// window.addEventListener("DOMContentLoaded", async () => {
-//   const gameFilter = document.getElementById("gameFilter");
-//   const listEl = document.getElementById("leaderboardList");
+// window.sortTable = sortTable;
 
-//   if (!gameFilter || !listEl) {
-//     console.error("❌ Missing #gameFilter or #leaderboardList element in HTML.");
-//     return;
-//   }
+// const gameid = document.getElementById("gameFilter").value;
 
-//   // Default game
-//   let gameId = gameFilter.value || "tictactoe";
-
-//   // Load initial leaderboard
-//   await loadTop(gameId);
-
-//   // On game selection change
-//   gameFilter.addEventListener("change", async (event) => {
-//     gameId = event.target.value;
-//     await loadTop(gameId);
-//   });
-
-//   // 🧩 Load top scores
-//   async function loadTop(gameId) {
-//     listEl.innerHTML = '<div style="color:var(--muted)">⏳ Loading...</div>';
-//     try {
-//       const { data, error } = await supabase
-//         .from("scores")
-//         .select("*")
-//         .eq("game_id", gameId)
-//         .order("score", { ascending: false })
-//         .limit(10);
-
-//       if (error) throw error;
-
-//       if (!data || data.length === 0) {
-//         listEl.innerHTML = '<div style="color:var(--muted)">No scores yet.</div>';
-//         return;
-//       }
-
-//       renderRows(data);
-//     } catch (err) {
-//       listEl.innerHTML = '<div style="color:crimson">⚠️ Error loading scores</div>';
-//       console.error(err);
-//     }
-//   }
-
-//   // 🎨 Render leaderboard rows
-//   function renderRows(rows) {
-//     listEl.innerHTML = rows
-//       .map(
-//         (r, i) => `
-//         <div class="score-row">
-//           <div>
-//             <strong>${i + 1}. ${escapeHtml(r.player_name || "Anonymous")}</strong>
-//             <div class="muted">${new Date(r.created_at).toLocaleString()}</div>
-//           </div>
-//           <div class="score">${r.score}</div>
-//         </div>`
-//       )
-//       .join("");
-//   }
-
-//   function escapeHtml(s) {
-//     return String(s).replace(/[&<>"']/g, (c) => ({
-//       "&": "&amp;",
-//       "<": "&lt;",
-//       ">": "&gt;",
-//       '"': "&quot;",
-//       "'": "&#39;"
-//     }[c]));
-//   }
+// window.addEventListener("DOMContentLoaded", () => {
+//     renderLeaderboard();
 // });
-// ------display leaderboard without table and without sort---
+
+//code for toggle leaderbaord in popup box
+//toggle Global leaderboard Listener
+document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+  if (document.getElementById("toggle-leaderboard").textContent === "Global Leaderboard") {
+    document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
+    textToSpeechEng('Open Global Leaderboard');
+    toggleLeaderboard();
+    // renderLeaderboard();
+  } else {
+    document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard"
+    textToSpeechEng('Close Global Leaderboard');
+    document.getElementById("leaderboardPopup").style.display = "none";
+  }
+});
+
+// save score to leaderboard
+// export function saveToLeaderboard(game, winner) {
+//   if (winner === 'draw') return;
+//   // let name = winner.toUpperCase();
+//   let elapsed = `${hrs}:${min}:${sec}`;
+//   const mode = modeEl.value;
+//   const difficulty = difficultyEl.value;
+//   const time = new Date().toLocaleString();
+
+//   const entry = { winner, game, mode, difficulty, time, elapsed };
+//   console.log(entry);
+//   const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+//   boardData.push(entry);
+//   localStorage.setItem("leaderboard", JSON.stringify(boardData));
+// }
+
+// toggle leaderboard
+export function toggleLeaderboard() {
+  // let list = document.getElementById("leaderboardList");
+  if (document.getElementById("leaderboardPopup").style.display === 'block') {
+    document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+    document.getElementById("leaderboardPopup").style.display = 'none';
+    return;
+  }
+  // const data = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+  // document.getElementById("toggle-leaderboard").textContent = "Hide Globa Leaderboard";
+  // if (data.length === 0) {
+  //   list.innerHTML = '<p>No entries yet.</p>';
+  // } else {
+  //   list.innerHTML = `<table><thead><tr><th>Winner</th><th>Mode</th><th>Difficulty</th><th>Time</th><th>Elapsed</th></tr></thead><tbody>${data.map(entry => `<tr><td>${entry.winner}</td><td>${entry.mode}</td><td>${entry.difficulty}</td><td>${entry.time}</td><td>${entry.elapsed}</td></tr>`).join('')}</tbody></table>`;
+  // }
+  document.getElementById("leaderboardPopup").style.display = 'block';
+    renderLeaderboard();
+}
+
+//hide leaderbaord
+document.getElementById("hide-leaderboard").addEventListener("click", () => {
+  textToSpeechEng('Close Leaderboard');
+  document.getElementById("leaderboardPopup").style.display = "none";
+  document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+})
+// code for popupleaderboard
+
 
 document.getElementById("searchInput").addEventListener("input", handleSearch);
 document.getElementById("topSelect").addEventListener("change", handleTopSelect);
@@ -162,19 +155,22 @@ export async function renderLeaderboard() {
     if (!res.ok) {
       let errText;
       try { errText = await res.json(); } catch (e) { errText = await res.text(); }
-      console.error("Leaderboard fetch error:", res.status, errText);
+      document.getElementById("err-text").textContent = "Leaderboard fetch error: " + res.status + errText;
+      // console.error("Leaderboard fetch error:", res.status, errText);
       return;
     }
 
     const data = await res.json();
 
     if (!Array.isArray(data)) {
-      console.log("⚠️ Unexpected response");
+      // console.log("⚠️ Unexpected response");
+      document.getElementById("err-text").textContent = "⚠️ Unexpected response";
       return;
     }
 
     if (data.length === 0) {
-      console.log("No scores yet.");
+      // console.log("No scores yet.");
+      document.getElementById("err-text").textContent = "No scores yet.";
       return;
     }
 
@@ -184,7 +180,8 @@ export async function renderLeaderboard() {
     renderTable();
 
   } catch (err) {
-    console.error("❌ Error loading leaderboard:", err);
+    // console.error("❌ Error loading leaderboard:", err);
+      document.getElementById("err-text").textContent = "❌ Error loading leaderboard: " + err;
   }
 }
 
@@ -193,8 +190,7 @@ function renderTable() {
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage;
   const currentItems = filteredData.slice(start, end);
-  console.log("currentItems", currentItems);
-  console.log("start", start, end);
+  // console.log("start", start, end);
 
   if (currentItems.length === 0) {
     tbody.innerHTML = `<tr><td colspan="4">No results found.</td></tr>`;
@@ -209,8 +205,13 @@ function renderTable() {
       <tr>
         <td>${sNo++}</td>
         <td>${row.player_name}</td>
+        <td>${row.player_looser}</td>
         <td>${row.game_id}</td>
+        <td>${row.size}</td>
+        <td>${row.difficulty}</td>
+        <td>${row.moves}</td>
         <td>${row.score}</td>
+        <td>${row.elapsed}</td>
         <td>${new Date(row.created_at).toLocaleString()}</td>
       </tr>
     `
@@ -235,12 +236,32 @@ export function sortTable(colIndex, order) {
         valB = (b.player_name || "Guest").toLowerCase();
         break;
       case 1:
+        valA = (a.player_looser || "Guest").toLowerCase();
+        valB = (b.player_looser || "Guest").toLowerCase();
+        break;
+      case 2:
         valA = (a.game_id).toLowerCase();
         valB = (b.game_id).toLowerCase();
         break;
-      case 2:
+      case 3:
+        valA = (a.size).toLowerCase();
+        valB = (b.size).toLowerCase();
+        break;
+      case 4:
+        valA = (a.difficulty).toLowerCase();
+        valB = (b.difficulty).toLowerCase();
+        break;
+      case 5:
+        valA = a.moves || 0;
+        valB = b.moves || 0;
+        break;
+      case 6:
         valA = a.score || 0;
         valB = b.score || 0;
+        break;
+      case 7:
+        valA = a.elapsed || 0;
+        valB = b.elapsed || 0;
         break;
       default:
         valA = new Date(a.created_at);

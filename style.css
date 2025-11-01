@@ -58,6 +58,18 @@ header {
 
 .hdrbtns {
     display: flex;
+    flex-direction: column;
+    /* background-color: #f0f0f0;  */
+    /* padding: 20px; */
+    /* border: 2px solid #333 */
+}
+
+.hdr-child-div {
+    display: flex;
+    /* background-color: #e0e0e0; 
+    margin-top: 10px; 
+    padding: 15px;
+    border: 1px solid #666 */
 }
 
 .logo {
@@ -135,6 +147,18 @@ button.primary {
     box-shadow: 0 1vw 4vw var(--btn-shadow);
 }
 
+.localLeaderboardBtn {
+    padding: 1vw 1vw;
+    margin: 1vw 1vw;
+    font-size: 1.6vw;
+    transition: background-color 0.3s, transform 0.2s;
+    border-radius: 5%;
+    color: #fff;
+    background: linear-gradient(180deg, #10b981, #059669);
+    border: none;
+    box-shadow: 0 1vw 4vw var(--btn-shadow);
+}
+
 .chip {
     background: var(--card);
     border-radius: 1vw;
@@ -207,6 +231,10 @@ h1 {
     .cell {
         width: 60px;
         height: 60px
+    }
+    .hdrbtns {
+        display: flex;
+        flex-direction: row;
     }
 }
 
@@ -328,18 +356,16 @@ h1 {
   
     .popupHeadeer {
         position: fixed;
-        /* Make the header sticky */
+        display: flex;
+        flex-direction: column;
         top: 0;
         width: 100%;
-        /* Ensure it spans the full width of the popup */
-        padding: 1vw;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         z-index: 10;
     }
   
     .popupContent {
-        margin-top: 3vw;
-        height: calc(100% - 3vw);
+        margin-top: 5vw;
+        height: calc(100% - 5vw);
         overflow-y: auto;
-        /* overflow-x: hidden; */
     }

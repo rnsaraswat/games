@@ -169,7 +169,7 @@
   </aside>
 
   <script type="module">
-    import { renderLeaderboard, saveScore, sortTable } from './leaderboard/leaderboard.js';
+    // import { renderLeaderboard, saveScore, sortTable } from './leaderboard/leaderboard.js';
 
     // make sortTable global so onclick in <th> works
     window.sortTable = sortTable;
@@ -191,26 +191,64 @@
     });
   </script>
   <script type="module" src="../../leaderboard/localleaderboard.js"></script>
+  <script type="module" src="../../leaderboard/leaderboard.js"></script>
 
 
   <script>
     // Minimal TicTacToe: human vs AI (random)
     const boardEl = document.getElementById('board');
-    let board = Array(9).fill(null), turn = 'X', over = false, moves = 0;
+    let board = Array(9).fill(null), turn = 'X', over = false, moves = 0, startms = 0, elapsed = 0;
     function render() {
       boardEl.innerHTML = board.map((c, i) => `<button class="cell">${c || ''}</button>`).join(''); document.querySelectorAll('.cell').forEach((el, i) => el.addEventListener('click', () => play(i)));
     }
-    function play(i) { if (over || board[i]) return; board[i] = turn; moves++; check(); if (!over) { aiMove(); } render(); }
+    function play(i) { 
+      if (moves == 0) { let d = new Date(); startms = d.getTime(); }
+      if (over || board[i]) return; 
+      board[i] = turn; moves++; check(); if (!over) { aiMove(); } render(); }
     function aiMove() { const empties = board.map((v, i) => v ? null : i).filter(x => x !== null); if (empties.length === 0) return; const pick = empties[Math.floor(Math.random() * empties.length)]; board[pick] = 'O'; moves++; check(); }
     function check() {
-      const wins = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]; for (const w of wins) { const [a, b, c] = w; if (board[a] && board[a] === board[b] && board[a] === board[c]) { over = true; const winner = board[a]; setTimeout(() => onGameOver(winner === 'X' ? 100 : 50), 100); return; } }
-      if (board.every(Boolean)) { over = true; setTimeout(() => onGameOver(20), 100); }
+      const wins = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]; 
+      for (const w of wins) { 
+        const [a, b, c] = w; 
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) { 
+          over = true; 
+          const winner = board[a]; 
+          setTimeout(() => onGameOver(winner, winner === 'X' ? 100 : 50), 100); 
+          return; 
+        } 
+      }
+      if (board.every(Boolean)) { 
+        over = true; 
+        d = new Date();
+        elapsed = (d.getTime() - startms) / 1000;
+        setTimeout(() => onGameOver(20), 100); 
+      }
     }
-    function onGameOver(finalScore) { // higher better
+    function onGameOver(winner, finalScore) { // higher better
       // score: X win 100, O win 50, tie 20
       // window.submitScore && window.submitScore('tictactoe', finalScore, 'player'); alert('Game over — score: ' + finalScore);
-      window.submitScore && window.submitScore('tictactoe', finalScore); alert('Game over — score: ' + finalScore);
-      saveToLeaderboard('tictactoe', finalScore)
+      
+      
+      if (winner === 'draw') return;
+      let name = player_name.toUpperCase();
+      let opponent = winner.toUpperCase() + " " + turn;
+      let game = 'tictactoe';
+      let size = '3x3';
+      // let elapsed = 0;
+      let moves = 0;
+      let score = finalScore;
+      let difficulty = '-';
+      const time = new Date().toLocaleString();
+      
+      const entry = { name, opponent, game, size, difficulty, moves, score, elapsed };
+      console.log(entry);
+      const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+      boardData.push(entry);
+      localStorage.setItem("leaderboard", JSON.stringify(boardData));
+      
+      window.submitScore && window.submitScore(name, opponent, game, size, difficulty, moves, score, elapsed); alert('Game over — score: ' + finalScore);
+      saveToLeaderboard(name, opponent, game, size, difficulty, moves, score, elapsed);
+      
     }
     document.getElementById('reset').addEventListener('click', () => { board = Array(9).fill(null); over = false; moves = 0; render(); });
     render();
