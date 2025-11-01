@@ -3,13 +3,13 @@
 // import { modeEl, difficultyEl } from './script.js';
 import { textToSpeechEng } from './speak.js';
 
-let currentData = [];
+let localcurrentData = [];
 let gameId = "tictactoe";
-let leaderboardData = [];
-let filteredData = [];
-let currentPage = 1;
-let itemsPerPage = 10;
-let sNo = 1;
+let localleaderboardData = [];
+let localfilteredData = [];
+let localcurrentPage = 1;
+let localitemsPerPage = 10;
+let localsNo = 1;
 
 // window.sortTable = sortTable;
 
@@ -100,7 +100,7 @@ document.getElementById("local-toggle-leaderboard").addEventListener("click", ()
   if (document.getElementById("local-toggle-leaderboard").textContent === "Local Leaderboard") {
     document.getElementById("local-toggle-leaderboard").textContent = "Hide Local Leaderboard";
     textToSpeechEng('Open Local Leaderboard');
-    toggleLeaderboard();
+    localtoggleLeaderboard();
   } else {
     document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard"
     textToSpeechEng('Close Local Leaderboard');
@@ -122,15 +122,15 @@ document.getElementById("local-toggle-leaderboard").addEventListener("click", ()
 // });
 
 // save score to leaderboard
-export function saveToLeaderboard(game, winner) {
+export function saveToLeaderboard(name, opponent, email, size, difficulty, game, score, elapsed, moves) {
   if (winner === 'draw') return;
   // let name = winner.toUpperCase();
-  let elapsed = `${hrs}:${min}:${sec}`;
-  const mode = modeEl.value;
-  const difficulty = difficultyEl.value;
+  // let elapsed = `${hrs}:${min}:${sec}`;
+  // const mode = modeEl.value;
+  // const difficulty = difficultyEl.value;
   const time = new Date().toLocaleString();
 
-  const entry = { winner, game, mode, difficulty, time, elapsed };
+  const entry = { name, opponent, email, size, difficulty, game, score, elapsed, moves, time };
   console.log(entry);
   const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
   boardData.push(entry);
@@ -138,7 +138,7 @@ export function saveToLeaderboard(game, winner) {
 }
 
 // toggle leaderboard
-export function toggleLeaderboard() {
+export function localtoggleLeaderboard() {
   // let list = document.getElementById("localleaderboardPopup");
   if (document.getElementById("localleaderboardPopup").style.display === 'block') {
     document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
@@ -170,7 +170,7 @@ export function toggleLeaderboard() {
   // }
   document.getElementById("localleaderboardPopup").style.display = 'block';
   // renderTable();
-  renderLeaderboard();
+  localrenderLeaderboard();
 }
 
 
@@ -180,7 +180,7 @@ export function toggleLeaderboard() {
 document.getElementById("local-hide-leaderboard").addEventListener("click", () => {
   textToSpeechEng('Close Leaderboard');
   document.getElementById("localleaderboardPopup").style.display = "none";
-  document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+  document.getElementById("local-hide-leaderboard").textContent = "Local Leaderboard";
 })
 
 // clear leaderboard data
@@ -196,8 +196,8 @@ document.getElementById("clear-leaderboard").addEventListener("click", () => {
 
 
 
-document.getElementById("localsearchInput").addEventListener("input", handleSearch);
-document.getElementById("localtopSelect").addEventListener("change", handleTopSelect);
+document.getElementById("localsearchInput").addEventListener("input", localhandleSearch);
+document.getElementById("localtopSelect").addEventListener("change", localhandleTopSelect);
 document.getElementById("localprevPage").addEventListener("click", localprevPage);
 document.getElementById("localnextPage").addEventListener("click", localnextPage);
 
@@ -205,78 +205,80 @@ document.querySelectorAll("#localleaderboardTable th").forEach(th => {
   th.addEventListener("click", () => handleSort(th.dataset.column));
 });
 
-function handleSearch(e) {
+function localhandleSearch(e) {
   const searchTerm = e.target.value.toLowerCase();
-  filteredData = leaderboardData.filter(row =>
+  localfilteredData = localleaderboardData.filter(row =>
     row.player_name?.toLowerCase().includes(searchTerm)
   );
   currentPage = 1;
   renderTable();
 }
 
-function handleTopSelect(e) {
-  itemsPerPage = parseInt(e.target.value);
-  currentPage = 1;
-  renderTable();
+function localhandleTopSelect(e) {
+  localitemsPerPage = parseInt(e.target.value);
+  localcurrentPage = 1;
+  localrenderTable();
 }
 
 function localprevPage() {
-  if (currentPage > 1) {
-    currentPage--;
+  if (localcurrentPage > 1) {
+    localcurrentPage--;
     // sNo = currentPage * itemsPerPage;
-    renderTable();
+    localrenderTable();
   }
 }
 
 function localnextPage() {
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  if (currentPage < totalPages) {
+  const totalPages = Math.ceil(localfilteredData.length / localitemsPerPage);
+  if (localcurrentPage < totalPages) {
     // sNo = currentPage * itemsPerPage;
-    currentPage++;
-    renderTable();
+    localcurrentPage++;
+    localrenderTable();
   }
 }
 
 localgameFilter.addEventListener("change", async (event) => {
   const q = event.target.value.toLowerCase();
   if (q == "all") {
-    filteredData = leaderboardData;
+    localfilteredData = localleaderboardData;
 
   } else {
-    filteredData = leaderboardData.filter(row =>
+    localfilteredData = localleaderboardData.filter(row =>
       (row.game_id).toLowerCase().includes(q)
     );
   }
-  currentPage = 1;
-  renderTable();
+  localcurrentPage = 1;
+  localrenderTable();
 });
 
-export async function renderLeaderboard() {
+export async function localrenderLeaderboard() {
     const data = JSON.parse(localStorage.getItem('leaderboard') || '[]');
     // const data = await res.json();
 
     if (!Array.isArray(data)) {
       console.log("⚠️ Unexpected response");
+      tbody.innerHTML = "⚠️ Unexpected response";
       return;
     }
 
     if (data.length === 0) {
       console.log("No scores yet.");
+      tbody.innerHTML = "No scores yet.";
       return;
     }
 
     console.log(data);
-    leaderboardData = data;
-    filteredData = [...data];
-    currentPage = 1;
-    renderTable();
+    localleaderboardData = data;
+    localfilteredData = [...data];
+    localcurrentPage = 1;
+    localrenderTable();
 }
 
-function renderTable() {
+function localrenderTable() {
   const tbody = document.getElementById("localleaderboardTableBody");
-  const start = (currentPage - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  const currentItems = filteredData.slice(start, end);
+  const start = (localcurrentPage - 1) * localitemsPerPage;
+  const end = start + localitemsPerPage;
+  const currentItems = localfilteredData.slice(start, end);
   console.log("currentItems", currentItems);
   console.log("start", start, end);
 
@@ -291,23 +293,23 @@ function renderTable() {
     .map(
       row => `
       <tr>
-        <td>${sNo++}</td>
-        <td>${row.player_name}</td>
-        <td>${row.player_looser}</td>
-        <td>${row.game_id}</td>
+        <td>${localsNo++}</td>
+        <td>${row.name}</td>
+        <td>${row.opponent}</td>
         <td>${row.size}</td>
         <td>${row.difficulty}</td>
-        <td>${row.moves}</td>
+        <td>${row.game}</td>
         <td>${row.score}</td>
         <td>${row.elapsed}</td>
-        <td>${new Date(row.created_at).toLocaleString()}</td>
+        <td>${row.moves}</td>
+        <td>${row.time}</td>
       </tr>
     `
     )
     .join("");
 
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  document.getElementById("localpageInfo").textContent = `Page ${currentPage} of ${totalPages}`;
+  const totalPages = Math.ceil(localfilteredData.length / localitemsPerPage);
+  document.getElementById("localpageInfo").textContent = `Page ${localcurrentPage} of ${totalPages}`;
 }
 
 // function renderTable() {
@@ -344,12 +346,12 @@ function renderTable() {
 // }
 
 // 🔼🔽 Sorting logic
-export function sortTable(colIndex, order) {
-  if (!filteredData || filteredData.length === 0) return;
+export function localsortTable(colIndex, order) {
+  if (!localfilteredData || localfilteredData.length === 0) return;
   currentSortColumn = colIndex;
   currentSortOrder = order;
 
-  filteredData.sort((a, b) => {
+  localfilteredData.sort((a, b) => {
     let valA, valB;
     switch (colIndex) {
       case 0:
@@ -357,8 +359,8 @@ export function sortTable(colIndex, order) {
         valB = (b.player_name || "Guest").toLowerCase();
         break;
       case 1:
-        valA = (a.player_looser || "Guest").toLowerCase();
-        valB = (b.player_looser || "Guest").toLowerCase();
+        valA = (a.player_opponent || "Guest").toLowerCase();
+        valB = (b.player_opponent || "Guest").toLowerCase();
         break;
       case 2:
         valA = (a.game_id).toLowerCase();
@@ -394,11 +396,11 @@ export function sortTable(colIndex, order) {
     return 0;
   });
 
-  updateIndicators(colIndex, order);
-  renderTable();
+  localupdateIndicators(colIndex, order);
+  localrenderTable();
 }
 
-function updateIndicators(activeCol, order) {
+function localupdateIndicators(activeCol, order) {
   const headers = document.querySelectorAll("#localleaderboardTable thead th");
   headers.forEach((th, i) => {
     const arrows = th.querySelectorAll(".arrow");
@@ -418,10 +420,10 @@ const localsearchInput = document.getElementById("localsearchInput");
 if (localsearchInput) {
   localsearchInput.addEventListener("input", e => {
     const q = e.target.value.toLowerCase();
-    const filtered = currentData.filter(row =>
+    const filtered = localcurrentData.filter(row =>
       (row.player_name || "Guest").toLowerCase().includes(q)
     );
-    renderTable(filtered);
+    localrenderTable(filtered);
   });
 }
 

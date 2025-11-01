@@ -91,10 +91,10 @@
     <div style="margin-top:12px">
       <button id="reset" class="chip">Reset</button>
       <button id="local-toggle-leaderboard" class="chip">Local Leaderboard</button>
-      <button id="global-toggle-leaderboard" class="chip">Global Leaderboard</button>
+      <button id="toggle-leaderboard" class="chip">Global Leaderboard</button>
     </div>
   </div>
-  <aside id="sidebar">
+  <!-- <aside id="sidebar">
     <h1>🏆 Global Leaderboard</h1>
 
     <div class="search-container" style="margin-bottom:10px;">
@@ -126,12 +126,11 @@
         </tr>
       </tbody>
     </table>
-    <!--  -->
     </section>
 
-  </aside>
+  </aside> -->
 
-  <aside id="sidebarLocal">
+  <!-- <aside id="sidebarLocal">
     <h1>🏆 Local Leaderboard</h1>
 
     <div class="search-container" style="margin-bottom:10px;">
@@ -163,23 +162,213 @@
         </tr>
       </tbody>
     </table>
-    <!--  -->
     </section>
 
-  </aside>
+  </aside> -->
+    <!-- Local Leaderboard Popup -->
+    <div id="localleaderboardPopup" class="popupWindow">
+      <div class="popupHeadeer">
+          <!-- <h3>🏆Local Leaderboard</h3>
+          <button class="primary" id="local-hide-leaderboard">Hide Leaderboard</button>
+          <button class="primary" id="clear-leaderboard">Clear Leaderboard</button> -->
 
+          <div class="controls">
+              <h3>🏆Local Leaderboard</h3>
+              <button class="chip" id="local-hide-leaderboard">Hide Leaderboard</button>
+              <button class="primary" id="clear-leaderboard">Clear Leaderboard</button>
+              <a href="../auth/login.html" class="chip">Sign in</a>
+          </div>
+          <div class="search-container" style="margin-bottom:10px;">
+              <label>Filter game: </label>
+              <select id="localgameFilter">
+                  <option value="all">All</option>
+                  <option value="tictactoe">Tic Tac Toe</option>
+                  <option value="mastermind">Mastermind</option>
+              </select>
+              <label>Per page:
+                  <select id="localtopSelect">
+                      <option value="5">5</option>
+                      <option value="10" selected>10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                  </select>
+              </label>
+              <input type="text" id="localsearchInput" placeholder="🔍 Search player..." />
+          </div>
+      </div>
+      <div class="popupContent">
+          <!-- <ul id="local-leaderboardList"></ul> -->
+
+          <section style="margin-top:12px">
+              <div>
+                  <table id="localleaderboardTable" border="1" cellspacing="0" cellpadding="6"
+                      style="width:100%;border-collapse:collapse;text-align:left;">
+                      <thead style="background:#222;color:#fff;">
+                          <tr>
+                              <th>#</th>
+                              <th class="sortable">Game
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Winner
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Looser
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Size
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Difficulty
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Moves
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Score
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Elapsed time
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Date
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                          </tr>
+                      </thead>
+                      <tbody id="localleaderboardTableBody">
+                          <tr>
+                              <td colspan="4" style="text-align:center;">Loading...</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+              <div class="pagination">
+                  <button id="localprevPage">⬅ Prev</button>
+                  <span id="localpageInfo"></span>
+                  <button id="localnextPage">Next ➡</button>
+              </div>
+          </section>
+      </div>
+  </div>
+
+  <!-- Global Leaderboard Popup -->
+  <div id="leaderboardPopup" class="popupWindow">
+      <div class="popupHeadeer">
+          <div class="controls">
+              <h3>🏆Global Leaderboard</h3>
+              <button class="chip" id="hide-leaderboard">Hide Leaderboard</button>
+              <!-- <button class="primary" id="clear-leaderboard">Clear Leaderboard</button> -->
+              <a href="../auth/login.html" class="chip">Sign in</a>
+          </div>
+          <div class="search-container" style="margin-bottom:10px;">
+              <label>Filter game: </label>
+              <select id="gameFilter">
+                  <option value="all">All</option>
+                  <option value="tictactoe">Tic Tac Toe</option>
+                  <option value="mastermind">Mastermind</option>
+              </select>
+              <label>Show Top:
+                  <select id="topSelect">
+                      <option value="5">5</option>
+                      <option value="10" selected>10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                  </select>
+              </label>
+              <input type="text" id="searchInput" placeholder="🔍 Search player..." />
+          </div>
+          <div id="err-text">Error text</div>
+      </div>
+      <div class="popupContent">
+          <!-- <ul id="leaderboardList"></ul> -->
+          <section style="margin-top:12px">
+              <div>
+                  <table id="leaderboardTable" border="1" cellspacing="0" cellpadding="6"
+                      style="width:100%;border-collapse:collapse;text-align:left;">
+                      <thead style="background:#222;color:#fff;">
+                          <tr>
+                              <th>#</th>
+                              <th class="sortable">Game
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Winner
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Looser
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Size
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Difficulty
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Moves
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Score
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Elapsed time
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Date
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                              </th>
+                          </tr>
+                      </thead>
+                      <tbody id="leaderboardTableBody">
+                          <tr>
+                              <td colspan="4" style="text-align:center;">Loading...</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+              <div class="pagination">
+                  <button id="prevPage">⬅ Prev</button>
+                  <span id="pageInfo"></span>
+                  <button id="nextPage">Next ➡</button>
+              </div>
+          </section>
+      </div>
+  </div>
+
+
+  <script type="module" src="../../leaderboard/localleaderboard.js"></script>
+  <!-- <script type="module">
+    import { saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
+
+</script> -->
   <script type="module">
-    // import { renderLeaderboard, saveScore, sortTable } from './leaderboard/leaderboard.js';
+    import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
     // make sortTable global so onclick in <th> works
     window.sortTable = sortTable;
     const game_id = 'tictactoe';
 
     // expose submitScore as global for your game to call
-    window.submitScore = async function (game_id, score) {
+    window.submitScore = async function (name, opponent, email, size, difficulty, game,  score, elapsed, moves) {
       try {
-        await saveScore(game_id, score);
-        console.log('Score saved and leaderboard refreshed', game_id, score);
+        await saveScore(name, opponent, email, size, difficulty, game,  score, elapsed, moves);
+        console.log('Score saved and leaderboard refreshed', name, opponent, email, size, difficulty, game,  score, elapsed, moves);
       } catch (e) {
         console.error('Error saving score from index:', e);
       }
@@ -190,8 +379,6 @@
       renderLeaderboard('tictactoe');
     });
   </script>
-  <script type="module" src="../../leaderboard/localleaderboard.js"></script>
-  <script type="module" src="../../leaderboard/leaderboard.js"></script>
 
 
   <script>
@@ -201,58 +388,63 @@
     function render() {
       boardEl.innerHTML = board.map((c, i) => `<button class="cell">${c || ''}</button>`).join(''); document.querySelectorAll('.cell').forEach((el, i) => el.addEventListener('click', () => play(i)));
     }
-    function play(i) { 
+    function play(i) {
       if (moves == 0) { let d = new Date(); startms = d.getTime(); }
-      if (over || board[i]) return; 
-      board[i] = turn; moves++; check(); if (!over) { aiMove(); } render(); }
+      if (over || board[i]) return;
+      board[i] = turn; moves++; check(); if (!over) { aiMove(); } render();
+    }
     function aiMove() { const empties = board.map((v, i) => v ? null : i).filter(x => x !== null); if (empties.length === 0) return; const pick = empties[Math.floor(Math.random() * empties.length)]; board[pick] = 'O'; moves++; check(); }
     function check() {
-      const wins = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]; 
-      for (const w of wins) { 
-        const [a, b, c] = w; 
-        if (board[a] && board[a] === board[b] && board[a] === board[c]) { 
-          over = true; 
-          const winner = board[a]; 
-          setTimeout(() => onGameOver(winner, winner === 'X' ? 100 : 50), 100); 
-          return; 
-        } 
+      const wins = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+      for (const w of wins) {
+        const [a, b, c] = w;
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+          over = true;
+          const winner = board[a];
+          setTimeout(() => onGameOver(winner, winner === 'X' ? 100 : 50), 100);
+          return;
+        }
       }
-      if (board.every(Boolean)) { 
-        over = true; 
+      if (board.every(Boolean)) {
+        over = true;
         d = new Date();
         elapsed = (d.getTime() - startms) / 1000;
-        setTimeout(() => onGameOver(20), 100); 
+        setTimeout(() => onGameOver(20), 100);
       }
     }
     function onGameOver(winner, finalScore) { // higher better
       // score: X win 100, O win 50, tie 20
       // window.submitScore && window.submitScore('tictactoe', finalScore, 'player'); alert('Game over — score: ' + finalScore);
-      
-      
+
+
       if (winner === 'draw') return;
+      player_name = localStorage.getItem('player_name') || 'Guest';
       let name = player_name.toUpperCase();
-      let opponent = winner.toUpperCase() + " " + turn;
+      email = localStorage.getItem('email') || '';
+      let opponent = winner.toUpperCase();
       let game = 'tictactoe';
       let size = '3x3';
       // let elapsed = 0;
-      let moves = 0;
+      // let moves = 0;
       let score = finalScore;
       let difficulty = '-';
       const time = new Date().toLocaleString();
-      
-      const entry = { name, opponent, game, size, difficulty, moves, score, elapsed };
+
+      const entry = { name, opponent, email, size, difficulty, game, score, elapsed, moves };
       console.log(entry);
       const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
       boardData.push(entry);
       localStorage.setItem("leaderboard", JSON.stringify(boardData));
-      
-      window.submitScore && window.submitScore(name, opponent, game, size, difficulty, moves, score, elapsed); alert('Game over — score: ' + finalScore);
-      saveToLeaderboard(name, opponent, game, size, difficulty, moves, score, elapsed);
-      
+
+      window.submitScore && window.submitScore(name, opponent, email, size, difficulty, game,  score, elapsed, moves); alert('Game over — score: ' + finalScore);
+      // saveToLeaderboard(name, opponent, email, size, difficulty, game, score, elapsed, moves);
+
     }
     document.getElementById('reset').addEventListener('click', () => { board = Array(9).fill(null); over = false; moves = 0; render(); });
     render();
   </script>
+
+<!-- <script type="module" src="../../leaderboard/localleaderboard.js"></script> -->
 
 
 

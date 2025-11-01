@@ -67,7 +67,7 @@ export function toggleLeaderboard() {
     return;
   }
   // const data = JSON.parse(localStorage.getItem('leaderboard') || '[]');
-  // document.getElementById("toggle-leaderboard").textContent = "Hide Globa Leaderboard";
+  document.getElementById("toggle-leaderboard").textContent = "Hide  Leaderboard";
   // if (data.length === 0) {
   //   list.innerHTML = '<p>No entries yet.</p>';
   // } else {
@@ -81,7 +81,7 @@ export function toggleLeaderboard() {
 document.getElementById("hide-leaderboard").addEventListener("click", () => {
   textToSpeechEng('Close Leaderboard');
   document.getElementById("leaderboardPopup").style.display = "none";
-  document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+  document.getElementById("hide-leaderboard").textContent = "Global Leaderboard";
 })
 // code for popupleaderboard
 
@@ -313,3 +313,32 @@ document.addEventListener("DOMContentLoaded", () => {
     down.addEventListener("click", e => { e.stopPropagation(); sortTable(i, 'desc'); });
   });
 });
+
+export async function saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, time) {
+  player_name = localStorage.getItem('player_name') || 'Guest';
+  email = localStorage.getItem('email') || '';
+
+  const EDGE_FUNCTION_URL = ""; 
+  try {
+    if (EDGE_FUNCTION_URL) {
+      const res = await fetch(EDGE_FUNCTION_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, time })
+      });
+      const json = await res.json();
+      // after save, refresh
+      await renderLeaderboard(game_id);
+      return json;
+    } else {
+      // direct insert (uses anon key, ensure policies allow insert if doing client-side)
+      const { data, error } = await supabase.from(TABLE_NAME).insert([{ player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves  }]);
+      if (error) throw error;
+      await renderLeaderboard(game_id);
+      return data;
+    }
+  } catch (err) {
+    console.error('saveScore error:', err);
+    throw err;
+  }
+}
