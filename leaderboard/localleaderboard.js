@@ -181,6 +181,7 @@ document.getElementById("local-hide-leaderboard").addEventListener("click", () =
   textToSpeechEng('Close Leaderboard');
   document.getElementById("localleaderboardPopup").style.display = "none";
   document.getElementById("local-hide-leaderboard").textContent = "Local Leaderboard";
+  document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
 })
 
 // clear leaderboard data

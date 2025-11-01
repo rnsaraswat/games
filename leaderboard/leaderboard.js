@@ -82,6 +82,7 @@ document.getElementById("hide-leaderboard").addEventListener("click", () => {
   textToSpeechEng('Close Leaderboard');
   document.getElementById("leaderboardPopup").style.display = "none";
   document.getElementById("hide-leaderboard").textContent = "Global Leaderboard";
+  document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
 })
 // code for popupleaderboard
 
