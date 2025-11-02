@@ -81,7 +81,7 @@ export function toggleLeaderboard() {
 document.getElementById("hide-leaderboard").addEventListener("click", () => {
   textToSpeechEng('Close Leaderboard');
   document.getElementById("leaderboardPopup").style.display = "none";
-  document.getElementById("hide-leaderboard").textContent = "Global Leaderboard";
+  document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
   document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
 })
 // code for popupleaderboard
@@ -156,7 +156,7 @@ export async function renderLeaderboard() {
     if (!res.ok) {
       let errText;
       try { errText = await res.json(); } catch (e) { errText = await res.text(); }
-      document.getElementById("err-text").textContent = "Leaderboard fetch error: " + res.status + errText;
+      document.getElementById("leaderboardTableBody").textContent = "Leaderboard fetch error: " + res.status + errText;
       // console.error("Leaderboard fetch error:", res.status, errText);
       return;
     }
@@ -165,13 +165,13 @@ export async function renderLeaderboard() {
 
     if (!Array.isArray(data)) {
       // console.log("⚠️ Unexpected response");
-      document.getElementById("err-text").textContent = "⚠️ Unexpected response";
+      document.getElementById("leaderboardTableBody").textContent = "⚠️ Unexpected response";
       return;
     }
 
     if (data.length === 0) {
       // console.log("No scores yet.");
-      document.getElementById("err-text").textContent = "No scores yet.";
+      document.getElementById("leaderboardTableBody").textContent = "No scores yet.";
       return;
     }
 
@@ -182,7 +182,7 @@ export async function renderLeaderboard() {
 
   } catch (err) {
     // console.error("❌ Error loading leaderboard:", err);
-      document.getElementById("err-text").textContent = "❌ Error loading leaderboard: " + err;
+    document.getElementById("leaderboardTableBody").textContent = "❌ Error loading leaderboard: " + err;
   }
 }
 
@@ -204,16 +204,21 @@ function renderTable() {
     .map(
       row => `
       <tr>
-        <td>${sNo++}</td>
-        <td>${row.player_name}</td>
-        <td>${row.player_looser}</td>
-        <td>${row.game_id}</td>
+        <td>${localsNo++}</td>
+        <td>${row.name}</td>
+        <td>${row.opponent}</td>
+        <td>${row.email}</td>
         <td>${row.size}</td>
         <td>${row.difficulty}</td>
-        <td>${row.moves}</td>
+        <td>${row.game}</td>
         <td>${row.score}</td>
         <td>${row.elapsed}</td>
-        <td>${new Date(row.created_at).toLocaleString()}</td>
+        <td>${row.moves}</td>
+        <td>${row.field1}</td>
+        <td>${row.field2}</td>
+        <td>${row.field3}</td>
+        <td>${row.field4}</td>
+        <td>${new Date(row.time).toLocaleString()}</td>
       </tr>
     `
     )
@@ -237,32 +242,52 @@ export function sortTable(colIndex, order) {
         valB = (b.player_name || "Guest").toLowerCase();
         break;
       case 1:
-        valA = (a.player_looser || "Guest").toLowerCase();
-        valB = (b.player_looser || "Guest").toLowerCase();
+        valA = (a.player_opponent || "Guest").toLowerCase();
+        valB = (b.player_opponent || "Guest").toLowerCase();
         break;
       case 2:
         valA = (a.game_id).toLowerCase();
         valB = (b.game_id).toLowerCase();
         break;
       case 3:
+        valA = (a.email).toLowerCase();
+        valB = (b.email).toLowerCase();
+        break;
+      case 4:
         valA = (a.size).toLowerCase();
         valB = (b.size).toLowerCase();
         break;
-      case 4:
+      case 5:
         valA = (a.difficulty).toLowerCase();
         valB = (b.difficulty).toLowerCase();
         break;
-      case 5:
+      case 6:
         valA = a.moves || 0;
         valB = b.moves || 0;
         break;
-      case 6:
+      case 7:
         valA = a.score || 0;
         valB = b.score || 0;
         break;
-      case 7:
+      case 8:
         valA = a.elapsed || 0;
         valB = b.elapsed || 0;
+        break;
+      case 9:
+        valA = (a.field1) || 0;
+        valB = (b.field1) || 0;
+        break;
+      case 10:
+        valA = (a.field2) || 0;
+        valB = (b.field2) || 0;
+        break;
+      case 11:
+        valA = (a.field3).toLowerCase();
+        valB = (b.field3).toLowerCase();
+        break;
+      case 12:
+        valA = (a.field4).toLowerCase();
+        valB = (b.field4).toLowerCase();
         break;
       default:
         valA = new Date(a.created_at);
@@ -314,8 +339,7 @@ document.addEventListener("DOMContentLoaded", () => {
     down.addEventListener("click", e => { e.stopPropagation(); sortTable(i, 'desc'); });
   });
 });
-
-export async function saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, time) {
+export async function saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, field1, field2, field3, field4, time) {
   player_name = localStorage.getItem('player_name') || 'Guest';
   email = localStorage.getItem('email') || '';
 
@@ -325,7 +349,7 @@ export async function saveScore(player_name, player_opponent, email, size, diffi
       const res = await fetch(EDGE_FUNCTION_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, time })
+        body: JSON.stringify({ player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, field1, field2, field3, field4, time })
       });
       const json = await res.json();
       // after save, refresh
@@ -333,7 +357,7 @@ export async function saveScore(player_name, player_opponent, email, size, diffi
       return json;
     } else {
       // direct insert (uses anon key, ensure policies allow insert if doing client-side)
-      const { data, error } = await supabase.from(TABLE_NAME).insert([{ player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves  }]);
+      const { data, error } = await supabase.from(TABLE_NAME).insert([{ player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, field1, field2, field3, field4, moves  }]);
       if (error) throw error;
       await renderLeaderboard(game_id);
       return data;

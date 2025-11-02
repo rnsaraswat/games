@@ -286,7 +286,6 @@
               </label>
               <input type="text" id="searchInput" placeholder="🔍 Search player..." />
           </div>
-          <div id="err-text">Error text</div>
       </div>
       <div class="popupContent">
           <!-- <ul id="leaderboardList"></ul> -->
@@ -389,7 +388,8 @@
       boardEl.innerHTML = board.map((c, i) => `<button class="cell">${c || ''}</button>`).join(''); document.querySelectorAll('.cell').forEach((el, i) => el.addEventListener('click', () => play(i)));
     }
     function play(i) {
-      if (moves == 0) { let d = new Date(); startms = d.getTime(); }
+      if (moves == 0) { let d = new Date(); startms = d.getTime(); 
+      console.log(d, startms);}
       if (over || board[i]) return;
       board[i] = turn; moves++; check(); if (!over) { aiMove(); } render();
     }
@@ -409,6 +409,7 @@
         over = true;
         d = new Date();
         elapsed = (d.getTime() - startms) / 1000;
+        console.log(d, startms, elapsed);
         setTimeout(() => onGameOver(20), 100);
       }
     }
@@ -421,22 +422,22 @@
       player_name = localStorage.getItem('player_name') || 'Guest';
       let name = player_name.toUpperCase();
       email = localStorage.getItem('email') || '';
-      let opponent = winner.toUpperCase();
+      let opponent = localStorage.getItem('player_opponent') || 'computer';
       let game = 'tictactoe';
       let size = '3x3';
       // let elapsed = 0;
       // let moves = 0;
       let score = finalScore;
-      let difficulty = '-';
+      let difficulty = 'easy';
       const time = new Date().toLocaleString();
 
-      const entry = { name, opponent, email, size, difficulty, game, score, elapsed, moves };
+      const entry = { name, opponent, email, size, difficulty, game, score, elapsed, moves, time };
       console.log(entry);
       const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
       boardData.push(entry);
       localStorage.setItem("leaderboard", JSON.stringify(boardData));
-
-      window.submitScore && window.submitScore(name, opponent, email, size, difficulty, game,  score, elapsed, moves); alert('Game over — score: ' + finalScore);
+      alert('Game over — saved in local storage score: ' + finalScore);
+      window.submitScore && window.submitScore(name, opponent, email, size, difficulty, game,  score, elapsed, moves, time); alert('Game over — score: ' + finalScore);
       // saveToLeaderboard(name, opponent, email, size, difficulty, game, score, elapsed, moves);
 
     }

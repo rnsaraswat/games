@@ -180,7 +180,7 @@ export function localtoggleLeaderboard() {
 document.getElementById("local-hide-leaderboard").addEventListener("click", () => {
   textToSpeechEng('Close Leaderboard');
   document.getElementById("localleaderboardPopup").style.display = "none";
-  document.getElementById("local-hide-leaderboard").textContent = "Local Leaderboard";
+  document.getElementById("local-hide-leaderboard").textContent = "Hide Leaderboard";
   document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
 })
 
@@ -257,14 +257,14 @@ export async function localrenderLeaderboard() {
     // const data = await res.json();
 
     if (!Array.isArray(data)) {
-      console.log("⚠️ Unexpected response");
-      tbody.innerHTML = "⚠️ Unexpected response";
+      // console.log("⚠️ Unexpected response");
+      document.getElementById("localleaderboardTableBody").innerHTML = "⚠️ Unexpected response";
       return;
     }
 
     if (data.length === 0) {
-      console.log("No scores yet.");
-      tbody.innerHTML = "No scores yet.";
+      // console.log("No scores yet.");
+      document.getElementById("localleaderboardTableBody").innerHTML = "No scores yet.";
       return;
     }
 
@@ -297,13 +297,18 @@ function localrenderTable() {
         <td>${localsNo++}</td>
         <td>${row.name}</td>
         <td>${row.opponent}</td>
+        <td>${row.email}</td>
         <td>${row.size}</td>
         <td>${row.difficulty}</td>
         <td>${row.game}</td>
         <td>${row.score}</td>
         <td>${row.elapsed}</td>
         <td>${row.moves}</td>
-        <td>${row.time}</td>
+        <td>${row.field1}</td>
+        <td>${row.field2}</td>
+        <td>${row.field3}</td>
+        <td>${row.field4}</td>
+        <td>${new Date(row.time).toLocaleString()}</td>
       </tr>
     `
     )
@@ -368,24 +373,44 @@ export function localsortTable(colIndex, order) {
         valB = (b.game_id).toLowerCase();
         break;
       case 3:
+        valA = (a.email).toLowerCase();
+        valB = (b.email).toLowerCase();
+        break;
+      case 4:
         valA = (a.size).toLowerCase();
         valB = (b.size).toLowerCase();
         break;
-      case 4:
+      case 5:
         valA = (a.difficulty).toLowerCase();
         valB = (b.difficulty).toLowerCase();
         break;
-      case 5:
+      case 6:
         valA = a.moves || 0;
         valB = b.moves || 0;
         break;
-      case 6:
+      case 7:
         valA = a.score || 0;
         valB = b.score || 0;
         break;
-      case 7:
+      case 8:
         valA = a.elapsed || 0;
         valB = b.elapsed || 0;
+        break;
+      case 9:
+        valA = (a.field1) || 0;
+        valB = (b.field1) || 0;
+        break;
+      case 10:
+        valA = (a.field2) || 0;
+        valB = (b.field2) || 0;
+        break;
+      case 11:
+        valA = (a.field3).toLowerCase();
+        valB = (b.field3).toLowerCase();
+        break;
+      case 12:
+        valA = (a.field4).toLowerCase();
+        valB = (b.field4).toLowerCase();
         break;
       default:
         valA = new Date(a.created_at);
