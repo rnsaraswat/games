@@ -18,7 +18,7 @@
         <header>
             <div class="brand">
                 <div class="logo">RG</div>
-                <div>
+                <div class="title">
                     <h1>Ravindra Games Hub</h1>
                     <p class="lead">Quick browser games — PWA-ready</p>
                 </div>
@@ -94,7 +94,7 @@
 
             <section style="margin-top:12px">
                 <div>
-                    <table id="localleaderboardTable" border="1" cellspacing="0" cellpadding="6"
+                    <table id="leaderboardTable" border="1" cellspacing="0" cellpadding="6"
                         style="width:100%;border-collapse:collapse;text-align:left;">
                         <thead style="background:#222;color:#fff;">
                             <tr>
@@ -119,19 +119,35 @@
                                     <span class="arrow asc">🔼</span>
                                     <span class="arrow desc">🔽</span>
                                 </th>
+                                <th class="sortable">Score
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Elapsed time
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Date
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                                </th>
                                 <th class="sortable">Moves
                                     <span class="arrow asc">🔼</span>
                                     <span class="arrow desc">🔽</span>
                                 </th>
-                                <th class="sortable">Score
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
+                                <th class="sortable">Field1
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
                                 </th>
-                                <th class="sortable">Elapsed time
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
+                                <th class="sortable">Field2
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
                                 </th>
-                                <th class="sortable">Date
+                                <th class="sortable">Field3
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Field4
                                     <span class="arrow asc">🔼</span>
                                     <span class="arrow desc">🔽</span>
                                 </th>
@@ -179,7 +195,6 @@
                 </label>
                 <input type="text" id="searchInput" placeholder="🔍 Search player..." />
             </div>
-            <div id="err-text">Error text</div>
         </div>
         <div class="popupContent">
             <!-- <ul id="leaderboardList"></ul> -->
@@ -210,19 +225,35 @@
                                     <span class="arrow asc">🔼</span>
                                     <span class="arrow desc">🔽</span>
                                 </th>
+                                <th class="sortable">Score
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Elapsed time
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Date
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                                </th>
                                 <th class="sortable">Moves
                                     <span class="arrow asc">🔼</span>
                                     <span class="arrow desc">🔽</span>
                                 </th>
-                                <th class="sortable">Score
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
+                                <th class="sortable">Field1
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
                                 </th>
-                                <th class="sortable">Elapsed time
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
+                                <th class="sortable">Field2
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
                                 </th>
-                                <th class="sortable">Date
+                                <th class="sortable">Field3
+                                  <span class="arrow asc">🔼</span>
+                                  <span class="arrow desc">🔽</span>
+                                </th>
+                                <th class="sortable">Field4
                                     <span class="arrow asc">🔼</span>
                                     <span class="arrow desc">🔽</span>
                                 </th>
@@ -271,7 +302,7 @@
             const card = document.createElement('article');
             card.className = 'game-card';
             card.dataset = g.id;
-            card.innerHTML = `<h3>${g.title}</h3><p>${g.desc}</p><div class='actions'><a href='${g.href}' class='play-btn'>Play</a><button class='localLeaderboardBtn' id="local-toggle-leaderboard">Local Leaderboard</button></div>`;
+            card.innerHTML = `<h3>${g.title}</h3><p>${g.desc}</p><div class='actions'><a href='${g.href}' class='play-btn'>Play</a></div>`;
             grid.appendChild(card);
         });
 

@@ -93,6 +93,7 @@
       <button id="local-toggle-leaderboard" class="chip">Local Leaderboard</button>
       <button id="toggle-leaderboard" class="chip">Global Leaderboard</button>
     </div>
+    <p id="msg">Click in BOX to play</p>
   </div>
   <!-- <aside id="sidebar">
     <h1>🏆 Global Leaderboard</h1>
@@ -226,19 +227,35 @@
                                   <span class="arrow asc">🔼</span>
                                   <span class="arrow desc">🔽</span>
                               </th>
+                              <th class="sortable">Score
+                                <span class="arrow asc">🔼</span>
+                                <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Elapsed time
+                                <span class="arrow asc">🔼</span>
+                                <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Date
+                                <span class="arrow asc">🔼</span>
+                                <span class="arrow desc">🔽</span>
+                              </th>
                               <th class="sortable">Moves
                                   <span class="arrow asc">🔼</span>
                                   <span class="arrow desc">🔽</span>
                               </th>
-                              <th class="sortable">Score
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
+                              <th class="sortable">Field1
+                                <span class="arrow asc">🔼</span>
+                                <span class="arrow desc">🔽</span>
                               </th>
-                              <th class="sortable">Elapsed time
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
+                              <th class="sortable">Field2
+                                <span class="arrow asc">🔼</span>
+                                <span class="arrow desc">🔽</span>
                               </th>
-                              <th class="sortable">Date
+                              <th class="sortable">Field3
+                                <span class="arrow asc">🔼</span>
+                                <span class="arrow desc">🔽</span>
+                              </th>
+                              <th class="sortable">Field4
                                   <span class="arrow asc">🔼</span>
                                   <span class="arrow desc">🔽</span>
                               </th>
@@ -295,44 +312,59 @@
                       style="width:100%;border-collapse:collapse;text-align:left;">
                       <thead style="background:#222;color:#fff;">
                           <tr>
-                              <th>#</th>
-                              <th class="sortable">Game
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                              </th>
-                              <th class="sortable">Winner
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                              </th>
-                              <th class="sortable">Looser
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                              </th>
-                              <th class="sortable">Size
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                              </th>
-                              <th class="sortable">Difficulty
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                              </th>
-                              <th class="sortable">Moves
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                              </th>
-                              <th class="sortable">Score
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                              </th>
-                              <th class="sortable">Elapsed time
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                              </th>
-                              <th class="sortable">Date
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                              </th>
-                          </tr>
+                            <th>#</th>
+                            <th class="sortable">Game
+                                <span class="arrow asc">🔼</span>
+                                <span class="arrow desc">🔽</span>
+                            </th>
+                            <th class="sortable">Winner
+                                <span class="arrow asc">🔼</span>
+                                <span class="arrow desc">🔽</span>
+                            </th>
+                            <th class="sortable">Looser
+                                <span class="arrow asc">🔼</span>
+                                <span class="arrow desc">🔽</span>
+                            </th>
+                            <th class="sortable">Size
+                                <span class="arrow asc">🔼</span>
+                                <span class="arrow desc">🔽</span>
+                            </th>
+                            <th class="sortable">Difficulty
+                                <span class="arrow asc">🔼</span>
+                                <span class="arrow desc">🔽</span>
+                            </th>
+                            <th class="sortable">Score
+                              <span class="arrow asc">🔼</span>
+                              <span class="arrow desc">🔽</span>
+                            </th>
+                            <th class="sortable">Elapsed time
+                              <span class="arrow asc">🔼</span>
+                              <span class="arrow desc">🔽</span>
+                            </th>
+                            <th class="sortable">Date
+                              <span class="arrow asc">🔼</span>
+                              <span class="arrow desc">🔽</span>
+                            </th>
+                            <th class="sortable">Moves
+                                <span class="arrow asc">🔼</span>
+                                <span class="arrow desc">🔽</span>
+                            </th>
+                            <th class="sortable">Field1
+                              <span class="arrow asc">🔼</span>
+                              <span class="arrow desc">🔽</span>
+                            </th>
+                            <th class="sortable">Field2
+                              <span class="arrow asc">🔼</span>
+                              <span class="arrow desc">🔽</span>
+                            </th>
+                            <th class="sortable">Field3
+                              <span class="arrow asc">🔼</span>
+                              <span class="arrow desc">🔽</span>
+                            </th>
+                            <th class="sortable">Field4
+                                <span class="arrow asc">🔼</span>
+                                <span class="arrow desc">🔽</span>
+                            </th>
                       </thead>
                       <tbody id="leaderboardTableBody">
                           <tr>
@@ -351,25 +383,24 @@
   </div>
 
 
-  <script type="module" src="../../leaderboard/localleaderboard.js"></script>
+  <!-- <script type="module" src="../../leaderboard/localleaderboard.js"></script> -->
   <!-- <script type="module">
-    import { saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
-
-</script> -->
+    
+  </script> -->
   <script type="module">
+    // import { saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
     import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
     // make sortTable global so onclick in <th> works
     window.sortTable = sortTable;
-    const game_id = 'tictactoe';
-
     // expose submitScore as global for your game to call
-    window.submitScore = async function (name, opponent, email, size, difficulty, game,  score, elapsed, moves) {
+    window.submitScore = async function (name, opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
+      console.log(name, opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
       try {
-        await saveScore(name, opponent, email, size, difficulty, game,  score, elapsed, moves);
-        console.log('Score saved and leaderboard refreshed', name, opponent, email, size, difficulty, game,  score, elapsed, moves);
+        await saveScore(name, opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+        // console.log('Score saved and leaderboard refreshed', name, opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
       } catch (e) {
-        console.error('Error saving score from index:', e);
+        document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
       }
     };
 
@@ -383,13 +414,12 @@
   <script>
     // Minimal TicTacToe: human vs AI (random)
     const boardEl = document.getElementById('board');
-    let board = Array(9).fill(null), turn = 'X', over = false, moves = 0, startms = 0, elapsed = 0;
+    let board = Array(9).fill(null), turn = 'X', over = false, moves = 0, startTime, currenttime, elapsed = 0;
     function render() {
       boardEl.innerHTML = board.map((c, i) => `<button class="cell">${c || ''}</button>`).join(''); document.querySelectorAll('.cell').forEach((el, i) => el.addEventListener('click', () => play(i)));
     }
     function play(i) {
-      if (moves == 0) { let d = new Date(); startms = d.getTime(); 
-      console.log(d, startms);}
+      if (moves < 1) { startTime = new Date();}
       if (over || board[i]) return;
       board[i] = turn; moves++; check(); if (!over) { aiMove(); } render();
     }
@@ -400,17 +430,23 @@
         const [a, b, c] = w;
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
           over = true;
+          currenttime = new Date(); 
+        elapsed = Math.floor((currenttime - startTime) / 1000);
+        console.log(startTime, currenttime, elapsed);
           const winner = board[a];
+        document.getElementById("msg").textContent = "winner is " + winner;
           setTimeout(() => onGameOver(winner, winner === 'X' ? 100 : 50), 100);
           return;
         }
       }
       if (board.every(Boolean)) {
         over = true;
-        d = new Date();
-        elapsed = (d.getTime() - startms) / 1000;
-        console.log(d, startms, elapsed);
-        setTimeout(() => onGameOver(20), 100);
+        currenttime = new Date(); 
+        elapsed = Math.floor((currenttime - startTime) / 1000);
+        console.log(startTime, currenttime, elapsed);
+        winner = 'draw';
+        document.getElementById("msg").textContent = "its a Draw"
+        setTimeout(() => onGameOver(winner, 0), 100);
       }
     }
     function onGameOver(winner, finalScore) { // higher better
@@ -419,26 +455,33 @@
 
 
       if (winner === 'draw') return;
-      player_name = localStorage.getItem('player_name') || 'Guest';
-      let name = player_name.toUpperCase();
+      player_name = localStorage.getItem('player_name') || winner;
       email = localStorage.getItem('email') || '';
-      let opponent = localStorage.getItem('player_opponent') || 'computer';
-      let game = 'tictactoe';
+      player_opponent = localStorage.getItem('player_opponent') || 'computer';
+      let game_id = 'tictactoe';
       let size = '3x3';
       // let elapsed = 0;
       // let moves = 0;
+      let filed1 = 0;
+      let filed2 = 0
+      let filed3 = "-";
+      let filed4 = "-";
       let score = finalScore;
       let difficulty = 'easy';
-      const time = new Date().toLocaleString();
+      const created_at = new Date().toLocaleString();
 
-      const entry = { name, opponent, email, size, difficulty, game, score, elapsed, moves, time };
+      const entry = { player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at };
       console.log(entry);
       const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
       boardData.push(entry);
       localStorage.setItem("leaderboard", JSON.stringify(boardData));
-      alert('Game over — saved in local storage score: ' + finalScore);
-      window.submitScore && window.submitScore(name, opponent, email, size, difficulty, game,  score, elapsed, moves, time); alert('Game over — score: ' + finalScore);
-      // saveToLeaderboard(name, opponent, email, size, difficulty, game, score, elapsed, moves);
+      // alert('Game over — saved in local storage score: ' + finalScore);
+      document.getElementById("msg").textContent = 'Game over — saved in local storage score: ' + player_name + " " + player_opponent + " " + email + " " + size + " " + difficulty + " " + game_id + " " + score + " " + elapsed + " " + moves + " " + filed1 + " " + filed2 + " " + filed3 + " " + filed4 + " " + created_at;
+      window.submitScore && window.submitScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at); 
+      // saveToLeaderboard(name, opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+
+      console.log(JSON.parse(localStorage.getItem('leaderboard') || '[]'));
+
 
     }
     document.getElementById('reset').addEventListener('click', () => { board = Array(9).fill(null); over = false; moves = 0; render(); });

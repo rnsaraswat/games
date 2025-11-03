@@ -1,3 +1,20 @@
+import { saveToLeaderboard, localtoggleLeaderboard } from '../../leaderboard/localleaderboard.js';
+import { saveScore } from '../../leaderboard/leaderboard.js';
+
+// expose submitScore as global for your game to call
+window.submitScore = async function (winnerName, opponent, email, size, difficulty, game, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at) {
+    try {
+        await saveScore(winnerName, opponent, email, size, difficulty, game, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+        console.log('Score saved and leaderboard refreshed', winnerName, opponent, email, size, difficulty, game, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+        alert("Error saving score from index: " + winnerName + " " + opponent + " " + email + " " + size + " " + difficulty + " " + game + " " + finalScore + " " + elapsed + " " + gameCount + " " + filed1 + " " + filed2 + " " + filed3 + " " + filed4 + " " + created_at);
+        document.getElementById("message").textContent = "Error saving score from index: " + winnerName + " " + opponent + " " + email + " " + size + " " + difficulty + " " + game + " " + finalScore + " " + elapsed + " " + gameCount + " " + filed1 + " " + filed2 + " " + filed3 + " " + filed4 + " " + created_at
+    } catch (e) {
+        alert("Error saving score from index: " + e);
+        console.error('Error saving score from index:', e);
+        document.getElementById("message").textContent = "Error saving score in global leaderboard: " + e;
+    }
+    };
+
 window.addEventListener('load', function () {
     const loading = document.getElementById('loading');
     loading.style.display = 'none';
@@ -33,6 +50,7 @@ window.addEventListener('load', function () {
     let winnerName;
     let player1;
     let player2;
+    let difficulty = difficultyEl.value;
 
     //toggle theme
     document.getElementById("toggle-theme").addEventListener("click", () => {
@@ -122,34 +140,56 @@ window.addEventListener('load', function () {
 
         if (checkWin(x, y)) {
             winnerName = currentPlayer === 'x' ? player1 : player2;
-            saveToLeaderboard(winnerName);
+            // saveToLeaderboard(winnerName);
             let finalScore = 0;
+            let opponent = "";
+            let game_id = 'tictactoe';
+            let size = '3x3';
+            let elapsed = hours * 3600 + minutes * 60 + seconds;
+            gameCount = history.length;
+            // let moves = 0;
+            let filed1 = 0;
+            let filed2 = 0
+            let filed3 = "-";
+            let filed4 = "-";
+            let email = localStorage.getItem('email') || '';
+            const created_at = new Date().toLocaleString();
             if (modeEl.value === 'pvc' && currentPlayer === 'o') {
-                messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;
-                finalScore = 50;
+                messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;                    
+                filed3 = 'Player vs Player';
+                winnerName = 'Computer';
+                opponent = player1;
+                finalScore = 50; 
             } else {
                 messageEl.textContent = `${currentPlayer === 'x' ? player1 : player2} ${currentPlayer.toUpperCase()} wins!`;
+                winnerName = currentPlayer === 'x' ? player1 : player2;
+                opponent = currentPlayer !== 'x' ? player1 : player2;
+                filed3 = 'Player vs Computer';
                 finalScore = 100;
             }
+
+            // const entry = { winnerName, opponent, email, size, difficulty, game, finalScore, elapsed, gameCount, field1, field2, field3, field4, time };
+            // console.log(entry);
+            // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+            // boardData.push(entry);
+            // localStorage.setItem("leaderboard", JSON.stringify(boardData));
+
+            saveToLeaderboard(winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+
             window.submitScore &&
-                window.submitScore('tictactoe', finalScore, 'player'); alert('Game over — score: ' + finalScore);
+                window.submitScore(winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
 
-            const player_name = localStorage.getItem("player_name") || "Guest";
-            const email = localStorage.getItem("email") || null;
-            const game_id = "tictactoe"; // या mastermind आदि
-            const score = finalScore; // अपनी गेम की स्कोर variable डालें
-
-            fetch("https://lzaubusgcfgjxiyyfuof.supabase.co/functions/v1/submit-score", {
-                method: "POST",
-                headers: {
-                    "Authorization": "Bearer YOUR_SUPABASE_ANON_KEY",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ player_name, email, game_id, score })
-            })
-                .then(res => res.json())
-                .then(data => console.log("✅ Score saved:", data))
-                .catch(err => console.error("❌ Error saving score:", err));
+            // fetch("https://lzaubusgcfgjxiyyfuof.supabase.co/functions/v1/submit-score", {
+            //     method: "POST",
+            //     headers: {
+            //         "Authorization": "Bearer YOUR_SUPABASE_ANON_KEY",
+            //         "Content-Type": "application/json"
+            //     },
+            //     body: JSON.stringify({ player_name, email, game_id, score })
+            // })
+            //     .then(res => res.json())
+            //     .then(data => console.log("✅ Score saved:", data))
+            //     .catch(err => console.error("❌ Error saving score:", err));
 
             timer = false;
             gameOver = true;
@@ -493,6 +533,10 @@ window.addEventListener('load', function () {
         startingPlayer = startingPlayer === 'x' ? 'o' : 'x';
     }
 
+    document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+        localtoggleLeaderboard();
+    });
+
     document.getElementById("toggle-leaderboard").addEventListener("click", () => {
         toggleLeaderboard();
     });
@@ -531,44 +575,44 @@ window.addEventListener('load', function () {
     });
 
     // save score to leaderboard
-    function saveToLeaderboard(winner) {
-        if (winner === 'draw') return;
-        // let name = winner.toUpperCase();
-        let elapsed = `${hrs}:${min}:${sec.toString()}`;
-        const mode = modeEl.value;
-        const difficulty = difficultyEl.value;
-        const time = new Date().toLocaleString();
+    // function saveToLeaderboard(winner) {
+    //     if (winner === 'draw') return;
+    //     // let name = winner.toUpperCase();
+    //     let elapsed = `${hrs}:${min}:${sec.toString()}`;
+    //     const mode = modeEl.value;
+    //     const difficulty = difficultyEl.value;
+    //     const time = new Date().toLocaleString();
 
-        const entry = { winner, mode, difficulty, time, elapsed };
-        const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-        boardData.push(entry);
-        localStorage.setItem("leaderboard", JSON.stringify(boardData));
-    }
+    //     const entry = { winner, mode, difficulty, time, elapsed };
+    //     const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+    //     boardData.push(entry);
+    //     localStorage.setItem("leaderboard", JSON.stringify(boardData));
+    // }
 
-    // toggle leaderboard
-    function toggleLeaderboard() {
-        if (leaderboardEl.style.display === 'block') {
-            document.getElementById("toggle-leaderboard").textContent = "View Leaderboard";
-            leaderboardEl.style.display = 'none';
-            return;
-        }
-        const data = JSON.parse(localStorage.getItem('leaderboard') || '[]');
-        document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
-        if (data.length === 0) {
-            leaderboardEl.innerHTML = '<h3>🏆 Leaderboard</h3><p>No entries yet.</p>';
-        } else {
-            leaderboardEl.innerHTML = `<h3>🏆 Leaderboard</h3><table><thead><tr><th>Winner</th><th>Mode</th><th>Difficulty</th><th>Time</th><th>Elapsed</th></tr></thead><tbody>${data.map(entry => `<tr><td>${entry.winner}</td><td>${entry.mode}</td><td>${entry.difficulty}</td><td>${entry.time}</td><td>${entry.elapsed}</td></tr>`).join('')}</tbody></table>`;
-        }
-        leaderboardEl.style.display = 'block';
-    }
+    // // toggle leaderboard
+    // function toggleLeaderboard() {
+    //     if (leaderboardEl.style.display === 'block') {
+    //         document.getElementById("toggle-leaderboard").textContent = "View Leaderboard";
+    //         leaderboardEl.style.display = 'none';
+    //         return;
+    //     }
+    //     const data = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+    //     document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+    //     if (data.length === 0) {
+    //         leaderboardEl.innerHTML = '<h3>🏆 Leaderboard</h3><p>No entries yet.</p>';
+    //     } else {
+    //         leaderboardEl.innerHTML = `<h3>🏆 Leaderboard</h3><table><thead><tr><th>Winner</th><th>Mode</th><th>Difficulty</th><th>Time</th><th>Elapsed</th></tr></thead><tbody>${data.map(entry => `<tr><td>${entry.winner}</td><td>${entry.mode}</td><td>${entry.difficulty}</td><td>${entry.time}</td><td>${entry.elapsed}</td></tr>`).join('')}</tbody></table>`;
+    //     }
+    //     leaderboardEl.style.display = 'block';
+    // }
 
-    // clear leaderboard data
-    function clearLeaderboard() {
-        if (confirm("Do you realy Want to Remove Leaderboard data?")) {
-            localStorage.removeItem('leaderboard');
-            alert("Leaderboard Data is Cleared");
-        }
-    }
+    // // clear leaderboard data
+    // function clearLeaderboard() {
+    //     if (confirm("Do you realy Want to Remove Leaderboard data?")) {
+    //         localStorage.removeItem('leaderboard');
+    //         alert("Leaderboard Data is Cleared");
+    //     }
+    // }
 
     // display timer
     // import { timer } from './script.js';

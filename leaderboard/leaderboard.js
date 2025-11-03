@@ -11,8 +11,7 @@ const TABLE_NAME = "scores";
 let currentData = [];
 let currentSortColumn = null;
 let currentSortOrder = 'asc';
-let gameId = document.getElementById("gameFilter").value || "tictactoe";
-
+// let gameId = document.getElementById("gameFilter").value || "tictactoe";
 let leaderboardData = [];
 let filteredData = [];
 let currentPage = 1;
@@ -204,21 +203,21 @@ function renderTable() {
     .map(
       row => `
       <tr>
-        <td>${localsNo++}</td>
-        <td>${row.name}</td>
-        <td>${row.opponent}</td>
-        <td>${row.email}</td>
-        <td>${row.size}</td>
-        <td>${row.difficulty}</td>
-        <td>${row.game}</td>
-        <td>${row.score}</td>
-        <td>${row.elapsed}</td>
-        <td>${row.moves}</td>
-        <td>${row.field1}</td>
-        <td>${row.field2}</td>
-        <td>${row.field3}</td>
-        <td>${row.field4}</td>
-        <td>${new Date(row.time).toLocaleString()}</td>
+        <td>${sNo++}</td>
+        <td>${row.game_id}</td>
+        <td>${row.player_name}</td>
+        <td>${!row.player_opponent ? "-" : row.player_opponent}</td>
+        <td>${!row.size ? "-" : row.size}</td>
+        <td>${!row.difficulty ? "-" : row.difficulty}</td>
+        <td>${!row.score ? 0 : row.score}</td>
+        <td>${!row.elapsed ? "-" : row.elapsed}</td>
+        <td>${new Date(row.created_at).toLocaleString()}</td>
+        <td>${!row.moves ? "-" : row.moves}</td>
+        <td>${!row.email ? "-" : row.email}</td>
+        <td>${!row.filed1 ? "-" : row.filed1}</td>
+        <td>${!row.filed2 ? "-" : row.filed2}</td>
+        <td>${!row.filed3 ? "-" : row.filed3}</td>
+        <td>${!row.filed4 ? "-" : row.filed4}</td>
       </tr>
     `
     )
@@ -238,54 +237,58 @@ export function sortTable(colIndex, order) {
     let valA, valB;
     switch (colIndex) {
       case 0:
-        valA = (a.player_name || "Guest").toLowerCase();
-        valB = (b.player_name || "Guest").toLowerCase();
-        break;
-      case 1:
-        valA = (a.player_opponent || "Guest").toLowerCase();
-        valB = (b.player_opponent || "Guest").toLowerCase();
-        break;
-      case 2:
         valA = (a.game_id).toLowerCase();
         valB = (b.game_id).toLowerCase();
         break;
-      case 3:
-        valA = (a.email).toLowerCase();
-        valB = (b.email).toLowerCase();
+      case 1:
+        valA = (a.player_name || "Guest").toLowerCase();
+        valB = (b.player_name || "Guest").toLowerCase();
         break;
-      case 4:
+      case 2:
+        valA = (a.player_opponent || "Guest").toLowerCase();
+        valB = (b.player_opponent || "Guest").toLowerCase();
+        break;
+      case 3:
         valA = (a.size).toLowerCase();
         valB = (b.size).toLowerCase();
         break;
-      case 5:
+      case 4:
         valA = (a.difficulty).toLowerCase();
         valB = (b.difficulty).toLowerCase();
         break;
-      case 6:
-        valA = a.moves || 0;
-        valB = b.moves || 0;
-        break;
-      case 7:
+      case 5:
         valA = a.score || 0;
         valB = b.score || 0;
         break;
-      case 8:
+      case 6:
         valA = a.elapsed || 0;
         valB = b.elapsed || 0;
         break;
+      case 7:
+        valA = new Date(a.created_at);
+        valB = new Date(b.created_at);
+        break;
+      case 8:
+        valA = a.moves || 0;
+        valB = b.moves || 0;
+        break;
       case 9:
+        valA = (a.email).toLowerCase();
+        valB = (b.email).toLowerCase();
+        break;
+      case 10:
         valA = (a.field1) || 0;
         valB = (b.field1) || 0;
         break;
-      case 10:
+      case 11:
         valA = (a.field2) || 0;
         valB = (b.field2) || 0;
         break;
-      case 11:
+      case 12:
         valA = (a.field3).toLowerCase();
         valB = (b.field3).toLowerCase();
         break;
-      case 12:
+      case 13:
         valA = (a.field4).toLowerCase();
         valB = (b.field4).toLowerCase();
         break;
@@ -339,7 +342,7 @@ document.addEventListener("DOMContentLoaded", () => {
     down.addEventListener("click", e => { e.stopPropagation(); sortTable(i, 'desc'); });
   });
 });
-export async function saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, field1, field2, field3, field4, time) {
+export async function saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
   player_name = localStorage.getItem('player_name') || 'Guest';
   email = localStorage.getItem('email') || '';
 
@@ -349,7 +352,7 @@ export async function saveScore(player_name, player_opponent, email, size, diffi
       const res = await fetch(EDGE_FUNCTION_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, field1, field2, field3, field4, time })
+        body: JSON.stringify({ player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at })
       });
       const json = await res.json();
       // after save, refresh
@@ -357,7 +360,7 @@ export async function saveScore(player_name, player_opponent, email, size, diffi
       return json;
     } else {
       // direct insert (uses anon key, ensure policies allow insert if doing client-side)
-      const { data, error } = await supabase.from(TABLE_NAME).insert([{ player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, field1, field2, field3, field4, moves  }]);
+      const { data, error } = await supabase.from(TABLE_NAME).insert([{ player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at }]);
       if (error) throw error;
       await renderLeaderboard(game_id);
       return data;

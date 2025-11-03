@@ -4,7 +4,7 @@
 import { textToSpeechEng } from './speak.js';
 
 let localcurrentData = [];
-let gameId = "tictactoe";
+// let gameId = "tictactoe";
 let localleaderboardData = [];
 let localfilteredData = [];
 let localcurrentPage = 1;
@@ -96,17 +96,17 @@ let localsNo = 1;
 
 
 //toggle local leaderboard Listener
-document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
-  if (document.getElementById("local-toggle-leaderboard").textContent === "Local Leaderboard") {
-    document.getElementById("local-toggle-leaderboard").textContent = "Hide Local Leaderboard";
-    textToSpeechEng('Open Local Leaderboard');
-    localtoggleLeaderboard();
-  } else {
-    document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard"
-    textToSpeechEng('Close Local Leaderboard');
-    document.getElementById("localleaderboardPopup").style.display = "none";
-  }
-});
+// document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+//   if (document.getElementById("local-toggle-leaderboard").textContent === "Local Leaderboard") {
+//     document.getElementById("local-toggle-leaderboard").textContent = "Hide Local Leaderboard";
+//     textToSpeechEng('Open Local Leaderboard');
+//     localtoggleLeaderboard();
+//   } else {
+//     document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard"
+//     textToSpeechEng('Close Local Leaderboard');
+//     document.getElementById("localleaderboardPopup").style.display = "none";
+//   }
+// });
 
 // //toggle leaderboard Listener
 // document.getElementById("global-toggle-leaderboard").addEventListener("click", () => {
@@ -122,15 +122,18 @@ document.getElementById("local-toggle-leaderboard").addEventListener("click", ()
 // });
 
 // save score to leaderboard
-export function saveToLeaderboard(name, opponent, email, size, difficulty, game, score, elapsed, moves) {
-  if (winner === 'draw') return;
+export function saveToLeaderboard(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
+  // if (winner === 'draw') return;
   // let name = winner.toUpperCase();
   // let elapsed = `${hrs}:${min}:${sec}`;
   // const mode = modeEl.value;
   // const difficulty = difficultyEl.value;
-  const time = new Date().toLocaleString();
+  // const time = new Date().toLocaleString();
 
-  const entry = { name, opponent, email, size, difficulty, game, score, elapsed, moves, time };
+
+
+
+  const entry = { player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at };
   console.log(entry);
   const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
   boardData.push(entry);
@@ -162,7 +165,7 @@ export function localtoggleLeaderboard() {
   // filteredData = [...data];
   // currentPage = 1;
 
-  document.getElementById("local-toggle-leaderboard").textContent = "Hide Leaderboard";
+  // document.getElementById("local-toggle-leaderboard").textContent = "Hide Leaderboard";
   // if (data.length === 0) {
   //   list.innerHTML = '<p>No entries yet.</p>';
   // } else {
@@ -295,20 +298,20 @@ function localrenderTable() {
       row => `
       <tr>
         <td>${localsNo++}</td>
-        <td>${row.name}</td>
-        <td>${row.opponent}</td>
-        <td>${row.email}</td>
-        <td>${row.size}</td>
-        <td>${row.difficulty}</td>
-        <td>${row.game}</td>
-        <td>${row.score}</td>
-        <td>${row.elapsed}</td>
-        <td>${row.moves}</td>
-        <td>${row.field1}</td>
-        <td>${row.field2}</td>
-        <td>${row.field3}</td>
-        <td>${row.field4}</td>
-        <td>${new Date(row.time).toLocaleString()}</td>
+        <td>${row.game_id}</td>
+        <td>${row.player_name}</td>
+        <td>${!row.player_opponent ? "-" : row.player_opponent}</td>
+        <td>${!row.size ? "-" : row.size}</td>
+        <td>${!row.difficulty ? "-" : row.difficulty}</td>
+        <td>${!row.score ? 0 : row.score}</td>
+        <td>${!row.elapsed ? "-" : row.elapsed}</td>
+        <td>${new Date(row.created_at).toLocaleString()}</td>
+        <td>${!row.moves ? "-" : row.moves}</td>
+        <td>${!row.email ? "-" : row.email}</td>
+        <td>${!row.filed1 ? "-" : row.filed1}</td>
+        <td>${!row.filed2 ? "-" : row.filed2}</td>
+        <td>${!row.filed3 ? "-" : row.filed3}</td>
+        <td>${!row.filed4 ? "-" : row.filed4}</td>
       </tr>
     `
     )
@@ -358,69 +361,73 @@ export function localsortTable(colIndex, order) {
   currentSortOrder = order;
 
   localfilteredData.sort((a, b) => {
-    let valA, valB;
-    switch (colIndex) {
-      case 0:
-        valA = (a.player_name || "Guest").toLowerCase();
-        valB = (b.player_name || "Guest").toLowerCase();
-        break;
-      case 1:
-        valA = (a.player_opponent || "Guest").toLowerCase();
-        valB = (b.player_opponent || "Guest").toLowerCase();
-        break;
-      case 2:
-        valA = (a.game_id).toLowerCase();
-        valB = (b.game_id).toLowerCase();
-        break;
-      case 3:
-        valA = (a.email).toLowerCase();
-        valB = (b.email).toLowerCase();
-        break;
-      case 4:
-        valA = (a.size).toLowerCase();
-        valB = (b.size).toLowerCase();
-        break;
-      case 5:
-        valA = (a.difficulty).toLowerCase();
-        valB = (b.difficulty).toLowerCase();
-        break;
-      case 6:
-        valA = a.moves || 0;
-        valB = b.moves || 0;
-        break;
-      case 7:
-        valA = a.score || 0;
-        valB = b.score || 0;
-        break;
-      case 8:
-        valA = a.elapsed || 0;
-        valB = b.elapsed || 0;
-        break;
-      case 9:
-        valA = (a.field1) || 0;
-        valB = (b.field1) || 0;
-        break;
-      case 10:
-        valA = (a.field2) || 0;
-        valB = (b.field2) || 0;
-        break;
-      case 11:
-        valA = (a.field3).toLowerCase();
-        valB = (b.field3).toLowerCase();
-        break;
-      case 12:
-        valA = (a.field4).toLowerCase();
-        valB = (b.field4).toLowerCase();
-        break;
-      default:
-        valA = new Date(a.created_at);
-        valB = new Date(b.created_at);
-    }
-
-    if (valA < valB) return order === 'asc' ? -1 : 1;
-    if (valA > valB) return order === 'asc' ? 1 : -1;
-    return 0;
-  });
+      let valA, valB;
+      switch (colIndex) {
+        case 0:
+          valA = (a.game_id).toLowerCase();
+          valB = (b.game_id).toLowerCase();
+          break;
+        case 1:
+          valA = (a.player_name || "Guest").toLowerCase();
+          valB = (b.player_name || "Guest").toLowerCase();
+          break;
+        case 2:
+          valA = (a.player_opponent || "Guest").toLowerCase();
+          valB = (b.player_opponent || "Guest").toLowerCase();
+          break;
+        case 3:
+          valA = (a.size).toLowerCase();
+          valB = (b.size).toLowerCase();
+          break;
+        case 4:
+          valA = (a.difficulty).toLowerCase();
+          valB = (b.difficulty).toLowerCase();
+          break;
+        case 5:
+          valA = a.score || 0;
+          valB = b.score || 0;
+          break;
+        case 6:
+          valA = a.elapsed || 0;
+          valB = b.elapsed || 0;
+          break;
+        case 7:
+          valA = new Date(a.created_at);
+          valB = new Date(b.created_at);
+          break;
+        case 8:
+          valA = a.moves || 0;
+          valB = b.moves || 0;
+          break;
+        case 9:
+          valA = (a.email).toLowerCase();
+          valB = (b.email).toLowerCase();
+          break;
+        case 10:
+          valA = (a.filed1) || 0;
+          valB = (b.filed1) || 0;
+          break;
+        case 11:
+          valA = (a.filed2) || 0;
+          valB = (b.filed2) || 0;
+          break;
+        case 12:
+          valA = (a.filed3).toLowerCase();
+          valB = (b.filed3).toLowerCase();
+          break;
+        case 13:
+          valA = (a.filed4).toLowerCase();
+          valB = (b.filed4).toLowerCase();
+          break;
+        default:
+          valA = new Date(a.created_at);
+          valB = new Date(b.created_at);
+      }
+  
+      if (valA < valB) return order === 'asc' ? -1 : 1;
+      if (valA > valB) return order === 'asc' ? 1 : -1;
+      return 0;
+    });
 
   localupdateIndicators(colIndex, order);
   localrenderTable();
