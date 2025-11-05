@@ -9,7 +9,7 @@ let localleaderboardData = [];
 let localfilteredData = [];
 let localcurrentPage = 1;
 let localitemsPerPage = 10;
-let localsNo = 1;
+let sNo = 1;
 
 // window.sortTable = sortTable;
 
@@ -95,7 +95,7 @@ let localsNo = 1;
 // ------display leaderboard without table and without sort---
 
 
-//toggle local leaderboard Listener
+// toggle local leaderboard Listener
 // document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
 //   if (document.getElementById("local-toggle-leaderboard").textContent === "Local Leaderboard") {
 //     document.getElementById("local-toggle-leaderboard").textContent = "Hide Local Leaderboard";
@@ -141,40 +141,40 @@ export function saveToLeaderboard(player_name, player_opponent, email, size, dif
 }
 
 // toggle leaderboard
-export function localtoggleLeaderboard() {
-  // let list = document.getElementById("localleaderboardPopup");
-  if (document.getElementById("localleaderboardPopup").style.display === 'block') {
-    document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
-    document.getElementById("localleaderboardPopup").style.display = 'none';
-    return;
-  }
-  // const data = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+// export function localtoggleLeaderboard() {
+//   // let list = document.getElementById("localleaderboardPopup");
+//   if (document.getElementById("localleaderboardPopup").style.display === 'block') {
+//     document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+//     document.getElementById("localleaderboardPopup").style.display = 'none';
+//     return;
+//   }
+//   // const data = JSON.parse(localStorage.getItem('leaderboard') || '[]');
 
-  // if (!Array.isArray(data)) {
-  //   console.log("⚠️ Unexpected response");
-  //   return;
-  // }
+//   // if (!Array.isArray(data)) {
+//   //   console.log("⚠️ Unexpected response");
+//   //   return;
+//   // }
 
-  // if (data.length === 0) {
-  //   console.log("No scores yet.");
-  //   return;
-  // }
+//   // if (data.length === 0) {
+//   //   console.log("No scores yet.");
+//   //   return;
+//   // }
 
-  // console.log(data);
-  // leaderboardData = data;
-  // filteredData = [...data];
-  // currentPage = 1;
+//   // console.log(data);
+//   // leaderboardData = data;
+//   // filteredData = [...data];
+//   // currentPage = 1;
 
-  // document.getElementById("local-toggle-leaderboard").textContent = "Hide Leaderboard";
-  // if (data.length === 0) {
-  //   list.innerHTML = '<p>No entries yet.</p>';
-  // } else {
-  //   list.innerHTML = `<table><thead><tr><th>Winner</th><th>Mode</th><th>Difficulty</th><th>Time</th><th>Elapsed</th></tr></thead><tbody>${data.map(entry => `<tr><td>${entry.winner}</td><td>${entry.mode}</td><td>${entry.difficulty}</td><td>${entry.time}</td><td>${entry.elapsed}</td></tr>`).join('')}</tbody></table>`;
-  // }
-  document.getElementById("localleaderboardPopup").style.display = 'block';
-  // renderTable();
-  localrenderLeaderboard();
-}
+//   // document.getElementById("local-toggle-leaderboard").textContent = "Hide Leaderboard";
+//   // if (data.length === 0) {
+//   //   list.innerHTML = '<p>No entries yet.</p>';
+//   // } else {
+//   //   list.innerHTML = `<table><thead><tr><th>Winner</th><th>Mode</th><th>Difficulty</th><th>Time</th><th>Elapsed</th></tr></thead><tbody>${data.map(entry => `<tr><td>${entry.winner}</td><td>${entry.mode}</td><td>${entry.difficulty}</td><td>${entry.time}</td><td>${entry.elapsed}</td></tr>`).join('')}</tbody></table>`;
+//   // }
+//   document.getElementById("localleaderboardPopup").style.display = 'block';
+//   // renderTable();
+//   localrenderLeaderboard();
+// }
 
 
 
@@ -209,7 +209,7 @@ document.querySelectorAll("#localleaderboardTable th").forEach(th => {
   th.addEventListener("click", () => handleSort(th.dataset.column));
 });
 
-function localhandleSearch(e) {
+export function localhandleSearch(e) {
   const searchTerm = e.target.value.toLowerCase();
   localfilteredData = localleaderboardData.filter(row =>
     row.player_name?.toLowerCase().includes(searchTerm)
@@ -297,7 +297,7 @@ function localrenderTable() {
     .map(
       row => `
       <tr>
-        <td>${localsNo++}</td>
+        <td>${sNo++}</td>
         <td>${row.game_id}</td>
         <td>${row.player_name}</td>
         <td>${!row.player_opponent ? "-" : row.player_opponent}</td>

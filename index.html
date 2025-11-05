@@ -241,6 +241,10 @@
                                     <span class="arrow asc">🔼</span>
                                     <span class="arrow desc">🔽</span>
                                 </th>
+                                <th class="sortable">Email
+                                    <span class="arrow asc">🔼</span>
+                                    <span class="arrow desc">🔽</span>
+                                </th>
                                 <th class="sortable">Field1
                                   <span class="arrow asc">🔼</span>
                                   <span class="arrow desc">🔽</span>
@@ -276,8 +280,43 @@
     </div>
 
     <script src="leaderboard/submit-helper.js"></script>
-    <script type="module" src="leaderboard/localleaderboard.js"></script>
-    <script type="module" src="leaderboard/leaderboard.js"></script>
+    <!-- <script type="module" src="leaderboard/localleaderboard.js"></script> -->
+    <script type="module">
+        import { renderLeaderboard } from './leaderboard/leaderboard.js';
+
+        document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+            if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
+                document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'none';
+                return;
+            }
+            document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
+            document.getElementById("leaderboardPopup").style.display = 'block';
+            renderLeaderboard();
+        });
+
+        document.getElementById("hide-leaderboard").addEventListener("click", () => {
+            document.getElementById("leaderboardPopup").style.display = "none";
+            document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
+            document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+        });
+    </script>
+    <!-- <script type="module" src="leaderboard/leaderboard.js"></script> -->
+    <script type="module">
+        import { localrenderLeaderboard } from './leaderboard/localleaderboard.js';
+
+            //toggle Local leaderboard
+            document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+            if (document.getElementById("leaderboardPopup").style.display === 'block') {
+                document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'none';
+                return;
+            }
+            document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+            document.getElementById("leaderboardPopup").style.display = 'block';
+            localrenderLeaderboard();
+        });
+    </script>
     <script>
         const games = [
             { id: 'tictactoe', name: 'tictactoe', title: 'Tic Tac Toe', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe/index.html' },
@@ -327,6 +366,7 @@
             }
         }
         toggleTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+
     </script>
     <script>
         // Lazy register SW

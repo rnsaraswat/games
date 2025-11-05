@@ -404,11 +404,46 @@
       }
     };
 
+    document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+      if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
+          document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+          document.getElementById("leaderboardPopup").style.display = 'none';
+          return;
+      }
+      document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
+      document.getElementById("leaderboardPopup").style.display = 'block';
+      renderLeaderboard();
+  });
+
+  document.getElementById("hide-leaderboard").addEventListener("click", () => {
+      document.getElementById("leaderboardPopup").style.display = "none";
+      document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
+      document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+  });
+
     // initial render
     document.addEventListener('DOMContentLoaded', () => {
       renderLeaderboard('tictactoe');
     });
   </script>
+
+
+<!-- <script type="module" src="leaderboard/leaderboard.js"></script> -->
+<script type="module">
+  import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
+
+      //toggle Local leaderboard
+      document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+      if (document.getElementById("leaderboardPopup").style.display === 'block') {
+          document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+          document.getElementById("leaderboardPopup").style.display = 'none';
+          return;
+      }
+      document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+      document.getElementById("leaderboardPopup").style.display = 'block';
+      localrenderLeaderboard();
+  });
+</script>
 
 
   <script>
@@ -486,6 +521,8 @@
     }
     document.getElementById('reset').addEventListener('click', () => { board = Array(9).fill(null); over = false; moves = 0; render(); });
     render();
+
+
   </script>
 
 <!-- <script type="module" src="../../leaderboard/localleaderboard.js"></script> -->

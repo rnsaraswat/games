@@ -28,18 +28,18 @@ let sNo = 1;
 
 //code for toggle leaderbaord in popup box
 //toggle Global leaderboard Listener
-document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-  if (document.getElementById("toggle-leaderboard").textContent === "Global Leaderboard") {
-    document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
-    textToSpeechEng('Open Global Leaderboard');
-    toggleLeaderboard();
-    // renderLeaderboard();
-  } else {
-    document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard"
-    textToSpeechEng('Close Global Leaderboard');
-    document.getElementById("leaderboardPopup").style.display = "none";
-  }
-});
+// document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+//   if (document.getElementById("toggle-leaderboard").textContent === "Global Leaderboard") {
+//     document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
+//     textToSpeechEng('Open Global Leaderboard');
+//     toggleLeaderboard();
+//     // renderLeaderboard();
+//   } else {
+//     document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard"
+//     textToSpeechEng('Close Global Leaderboard');
+//     document.getElementById("leaderboardPopup").style.display = "none";
+//   }
+// });
 
 // save score to leaderboard
 // export function saveToLeaderboard(game, winner) {
@@ -66,7 +66,7 @@ export function toggleLeaderboard() {
     return;
   }
   // const data = JSON.parse(localStorage.getItem('leaderboard') || '[]');
-  document.getElementById("toggle-leaderboard").textContent = "Hide  Leaderboard";
+  document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
   // if (data.length === 0) {
   //   list.innerHTML = '<p>No entries yet.</p>';
   // } else {
@@ -77,12 +77,12 @@ export function toggleLeaderboard() {
 }
 
 //hide leaderbaord
-document.getElementById("hide-leaderboard").addEventListener("click", () => {
-  textToSpeechEng('Close Leaderboard');
-  document.getElementById("leaderboardPopup").style.display = "none";
-  document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
-  document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
-})
+// document.getElementById("hide-leaderboard").addEventListener("click", () => {
+//   textToSpeechEng('Close Leaderboard');
+//   document.getElementById("leaderboardPopup").style.display = "none";
+//   document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
+//   document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+// })
 // code for popupleaderboard
 
 
@@ -155,7 +155,7 @@ export async function renderLeaderboard() {
     if (!res.ok) {
       let errText;
       try { errText = await res.json(); } catch (e) { errText = await res.text(); }
-      document.getElementById("leaderboardTableBody").textContent = "Leaderboard fetch error: " + res.status + errText;
+      document.getElementById("leaderboardTableBody").textContent = "Global Leaderboard fetch error: " + res.status + errText;
       // console.error("Leaderboard fetch error:", res.status, errText);
       return;
     }
@@ -181,7 +181,7 @@ export async function renderLeaderboard() {
 
   } catch (err) {
     // console.error("❌ Error loading leaderboard:", err);
-    document.getElementById("leaderboardTableBody").textContent = "❌ Error loading leaderboard: " + err;
+    document.getElementById("leaderboardTableBody").textContent = "❌ Error loading global leaderboard: " + err;
   }
 }
 
@@ -241,12 +241,12 @@ export function sortTable(colIndex, order) {
         valB = (b.game_id).toLowerCase();
         break;
       case 1:
-        valA = (a.player_name || "Guest").toLowerCase();
-        valB = (b.player_name || "Guest").toLowerCase();
+        valA = (a.player_name).toLowerCase();
+        valB = (b.player_name).toLowerCase();
         break;
       case 2:
-        valA = (a.player_opponent || "Guest").toLowerCase();
-        valB = (b.player_opponent || "Guest").toLowerCase();
+        valA = (a.player_opponent).toLowerCase();
+        valB = (b.player_opponent).toLowerCase();
         break;
       case 3:
         valA = (a.size).toLowerCase();
@@ -277,20 +277,20 @@ export function sortTable(colIndex, order) {
         valB = (b.email).toLowerCase();
         break;
       case 10:
-        valA = (a.field1) || 0;
-        valB = (b.field1) || 0;
+        valA = (a.filed1) || 0;
+        valB = (b.filed1) || 0;
         break;
       case 11:
-        valA = (a.field2) || 0;
-        valB = (b.field2) || 0;
+        valA = (a.filed2) || 0;
+        valB = (b.filed2) || 0;
         break;
       case 12:
-        valA = (a.field3).toLowerCase();
-        valB = (b.field3).toLowerCase();
+        valA = (a.filed3).toLowerCase();
+        valB = (b.filed3).toLowerCase();
         break;
       case 13:
         valA = (a.field4).toLowerCase();
-        valB = (b.field4).toLowerCase();
+        valB = (b.filed4).toLowerCase();
         break;
       default:
         valA = new Date(a.created_at);
@@ -314,7 +314,7 @@ function updateIndicators(activeCol, order) {
       arrow.style.opacity = "1";
     });
 
-    if (i === activeCol + 1) {
+    if (i === activeCol + 2) {
       const arrow = th.querySelector(`.arrow.${order}`);
       if (arrow) arrow.style.opacity = "0.3";
     }
@@ -342,9 +342,9 @@ document.addEventListener("DOMContentLoaded", () => {
     down.addEventListener("click", e => { e.stopPropagation(); sortTable(i, 'desc'); });
   });
 });
+
 export async function saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
-  player_name = localStorage.getItem('player_name') || 'Guest';
-  email = localStorage.getItem('email') || '';
+  console.log(name, opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
 
   const EDGE_FUNCTION_URL = ""; 
   try {
@@ -367,6 +367,7 @@ export async function saveScore(player_name, player_opponent, email, size, diffi
     }
   } catch (err) {
     console.error('saveScore error:', err);
+    document.getElementById("leaderboardTableBody").textContent = "Score save error in global leaderboard" + err;
     throw err;
   }
 }

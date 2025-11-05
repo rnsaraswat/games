@@ -355,8 +355,8 @@ h1 {
         border-radius: 1vw;
         display: none;
         z-index: 10;
-        width: 80%;
-        height: 60%;
+        width: 95%;
+        height: 95%;
         overflow-y: auto;
         text-align: center;
         border: 0.2vw solid var(--cell-border);
