@@ -91,9 +91,10 @@ function redirectAfterLogin() {
 
 // 🔹 Save user info to localStorage
 function saveUserLocally(user) {
-  localStorage.setItem("player_name", user.name || "Guest");
-  localStorage.setItem("email", user.email || "");
-  localStorage.setItem("user_id", user.id || "");
+  console.log(user);
+  localStorage.setItem("player_name", user.name);
+  localStorage.setItem("email", user.email);
+  localStorage.setItem("id", user.id);
 }
 
 // 🔹 Google Login
@@ -147,14 +148,14 @@ emailForm.addEventListener("submit", async e => {
 
     if (error) throw error;
 
-    saveUserLocally({ name: name || "Guest", email });
+    saveUserLocally({ name: name || "Guest", email: email, id: `${name}${Math.floor(Math.random() * 10000)}` });
     showStatus("Login link sent to your email. Check inbox!", true);
   } catch (err) {
     showStatus("Email login failed: " + err.message, false);
   }
 });
 
-// 🔹 Guest Login
+// 🔹 Guest Login with email
 guestForm.addEventListener("submit", async e => {
   e.preventDefault();
   const gemail = document.getElementById("gemail").value.trim();
@@ -171,10 +172,21 @@ guestForm.addEventListener("submit", async e => {
     return;
   } 
 
-    saveUserLocally({ name: gname || "Guest", gemail });
+    saveUserLocally({ name: gname || "Guest", email: gemail, id: `${gname}${Math.floor(Math.random() * 10000)}` });
 
   showStatus(`Welcome, ${gname}! Logging in as Guest...`);
   setTimeout(redirectAfterLogin, 1000);
+});
+
+
+// --- 4️⃣ Guest Login without email ---
+guestBtn?.addEventListener('click', () => {
+  const rand = Math.floor(Math.random() * 10000);
+  const guestName = `Guest_${rand}`;
+  localStorage.setItem('username', guestName);
+  localStorage.setItem('email', '-');
+  localStorage.setItem('id', guestName);
+  statusDiv.textContent = `Welcome, ${guestName}!`;
 });
 
 // 🔹 Check current session (if already logged in)
@@ -182,7 +194,7 @@ guestForm.addEventListener("submit", async e => {
   const { data: { session } } = await supabase.auth.getSession();
   if (session?.user) {
     saveUserLocally({
-      name: session.user.user_metadata.full_name || "User",
+      name: session.user.user_metadata.full_name,
       email: session.user.email,
       id: session.user.id,
     });
