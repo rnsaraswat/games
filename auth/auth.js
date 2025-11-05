@@ -187,6 +187,7 @@ guestF.addEventListener('click', () => {
   localStorage.setItem('username', guestName);
   localStorage.setItem('email', '-');
   localStorage.setItem('id', guestName);
+  saveUserLocally({ name: gname || "Guest", email: gemail, id: `${gname}${Math.floor(Math.random() * 10000)}` });
   statusDiv.textContent = `Welcome, ${guestName}!`;
   setTimeout(redirectAfterLogin, 1000);
 });
