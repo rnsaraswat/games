@@ -2,44 +2,44 @@
 <html lang="hi">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Sign in — Ravindra Games Hub</title>
-    <link rel="stylesheet" href="./style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sign in — Ravindra Games Hub</title>
+  <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-    <div class="container">
-        <div id="auth-section">
-            <h2>Login to save your score</h2>
-            
-            <button id="google-login" class="btn">Login with Google</button>
-            <button id="facebook-login" class="btn">Login with Facebook</button>
-            <!-- <button id="guest-login" class="btn">Continue as Guest</button> -->
-            
-            <form id="email-login">
-              <input type="email" id="email" placeholder="Email (required)" required>
-              <input type="text" id="name" placeholder="Name (required)" required>
-              <button type="submit" class="btn">Login with Email</button>
-            </form>
-            <form id="guest-login">
-              <input type="email" id="gemail" placeholder="Email (required)" required>
-              <input type="text" id="gname" placeholder="Name (required)" required>
-              <button type="submit" class="btn">Login as Guest with email</button>
-            </form>
-            <form id="guest">
-              <input type="text" id="gname" placeholder="Name (Optional) Default Guest####">
-              <button type="submit" class="btn">Login as Guest</button>
-            </form>
-            <div id="auth-status"></div>
-          </div>
+  <div class="container">
+    <div id="auth-section">
+      <h2>Login to save your score</h2>
 
-          
-        <!-- <h2>Sign in with Google</h2>
-        <button id="googleSign" class="btn">Sign in with Google</button> -->
-        <p style="margin-top:12px;color:var(--muted)">After login you will be redirected back</p>
+      <button id="google-login" class="btn">Login with Google</button>
+      <button id="facebook-login" class="btn">Login with Facebook</button>
+      <!-- <button id="guest-login" class="btn">Continue as Guest</button> -->
+
+      <form id="email-login">
+        <input type="email" id="email" placeholder="Email (required)" required>
+        <input type="text" id="name" placeholder="Name (required)" required>
+        <button type="submit" class="btn">Login with Email</button>
+      </form>
+      <form id="guest-login">
+        <input type="email" id="gemail" placeholder="Email (required)" required>
+        <input type="text" id="gname" placeholder="Name (required)" required>
+        <button type="submit" class="btn">Login as Guest with email</button>
+      </form>
+      <form id="guest">
+        <input type="text" id="gname" placeholder="Name (Optional) Default Guest####">
+        <button type="submit" class="btn">Login as Guest</button>
+      </form>
+      <div id="auth-status"></div>
     </div>
-    <script type="module" src="./auth.js"></script>
+
+
+    <!-- <h2>Sign in with Google</h2>
+        <button id="googleSign" class="btn">Sign in with Google</button> -->
+    <p style="margin-top:12px;color:var(--muted)">After login you will be redirected back</p>
+  </div>
+  <script type="module" src="./auth.js"></script>
 </body>
 
 </html>

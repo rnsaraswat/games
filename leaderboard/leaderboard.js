@@ -344,7 +344,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 export async function saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
-  console.log(name, opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+  console.log(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
 
   const EDGE_FUNCTION_URL = ""; 
   try {

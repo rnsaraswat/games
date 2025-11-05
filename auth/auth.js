@@ -75,6 +75,7 @@ import { supabase } from "../supabaseClient.js";
 const googleBtn = document.getElementById("google-login");
 const facebookBtn = document.getElementById("facebook-login");
 const guestForm = document.getElementById("guest-login");
+const guestF = document.getElementById("guest");
 const emailForm = document.getElementById("email-login");
 const statusDiv = document.getElementById("auth-status");
 
@@ -180,13 +181,14 @@ guestForm.addEventListener("submit", async e => {
 
 
 // --- 4️⃣ Guest Login without email ---
-guestBtn?.addEventListener('click', () => {
+guestF.addEventListener('click', () => {
   const rand = Math.floor(Math.random() * 10000);
   const guestName = `Guest_${rand}`;
   localStorage.setItem('username', guestName);
   localStorage.setItem('email', '-');
   localStorage.setItem('id', guestName);
   statusDiv.textContent = `Welcome, ${guestName}!`;
+  setTimeout(redirectAfterLogin, 1000);
 });
 
 // 🔹 Check current session (if already logged in)

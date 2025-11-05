@@ -490,9 +490,10 @@
 
 
       if (winner === 'draw') return;
-      player_name = localStorage.getItem('player_name') || winner;
-      email = localStorage.getItem('email') || '';
-      player_opponent = localStorage.getItem('player_opponent') || 'computer';
+      let !player_name ? localStorage.getItem('player_name') : player_name; 
+      let !email ? localStorage.getItem('email') : email;
+      let !player_opponent ? 'computer' : localStorage.getItem('player_opponent');
+      console.log(player_name, email, player_opponent);
       let game_id = 'tictactoe';
       let size = '3x3';
       // let elapsed = 0;
