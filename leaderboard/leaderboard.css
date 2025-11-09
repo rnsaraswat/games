@@ -1,0 +1,173 @@
+        /* theme light  */
+        :root {
+            --bg: #121212;
+            --text: #eee;
+            --cell-border: #d9d8d8;
+            --box-shadow: rgba(255, 255, 255, 0.5);
+            --bg-hover: #454545;
+        }
+
+        body.dark {
+            --bg: #f0f0f0;
+            --text: #111;
+            --cell-border: #333;
+            --box-shadow: rgba(0, 0, 0, 0.2);
+            --bg-hover: #d1d1d1;
+        }
+
+        button.Pry, button.ClearPry {
+            gap: 0.8vw;
+            align-items: center;
+            flex-wrap: wrap;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            padding: 1vw 1.2vw;
+            margin: 1vw 0.2vw 0.5vw 0.2vw;
+            font-size: 1.6vw;
+            display: inline-block;
+            margin-top: 0.1vh;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+            border-radius: 0.5vw;
+            color: #fff;
+            border-color: transparent;
+            background: linear-gradient(180deg, #10b981, #059669);
+            border: none;
+            box-shadow: 0 1vw 4vw var(--box-shadow);
+        }
+        
+        button.Pry:hover, button.ClearPry:hover {
+            opacity: 0.6;
+        }
+
+        button.Pry {
+            background: linear-gradient(90deg, #9c6eeb, #7c3aed);
+        }
+        button.ClearPry {
+            background: linear-gradient(90deg, #ec7777, #ed3a3a);
+        }
+
+        .leaderboard {
+            padding: 0.4vw 0.3vw;
+            font-size: 1.6vw;
+            margin-top: 0.1vh;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+            cursor: pointer;
+            background: var(--bg);
+            color: var(--text);
+            border: 0.2vw solid var(--cell-border);
+            border-radius: 0.5vw;
+        }
+
+        .leaderboardSelect {
+            padding: 0.1vw 0.2vw;
+        }
+
+        .chip {
+            background: var(--bg);
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(0, 0, 0, .06);
+            cursor: pointer
+        }
+
+        select:hover {
+            background: var(--bg-hover);
+        }
+
+        input:hover {
+            background: var(--bg-hover);
+        }
+
+        button:hover {
+            background: var(--bg-hover);
+        }
+
+        /* leaderboard Table */
+        table,
+        td {
+            border: 0.1vw solid var(--cell-border);
+            box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+            margin: auto;
+            text-align: center;
+            padding: 0.1vw;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* for sticky header of table */
+        th {
+            position: sticky;
+            top: 0;
+            /* Sticks to the top of the scroll container */
+            background-color: var(--bg);
+            z-index: 1;
+            /* Keeps header above scrolling content */
+            padding: 10px;
+            text-align: left;
+            border-bottom: 0.2vw solid var(--cell-border);
+        }
+
+        /* Leaderboard Popup */
+        #leaderboardPopup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 2vw;
+            border-radius: 1vw;
+            display: none;
+            z-index: 10;
+            width: 95%;
+            height: 95%;
+            overflow-y: auto;
+            text-align: center;
+            border: 0.2vw solid var(--cell-border);
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* leaderboard heading */
+        h3 {
+            display: inline;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* popup window with sicky haed */
+        .popupWindow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 2vw;
+            border-radius: 1vw;
+            display: none;
+            z-index: 10;
+            width: 95%;
+            height: 95%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            text-align: center;
+            border: 0.2vw solid var(--cell-border);
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .popupHeadeer {
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            top: 0;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .popupContent {
+            margin-top: 5vw;
+            height: calc(100% - 5vw);
+            overflow-y: auto;
+        }

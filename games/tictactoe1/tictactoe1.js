@@ -1,38 +1,15 @@
-import { saveToLeaderboard, localtoggleLeaderboard } from '../../leaderboard/localleaderboard.js';
-import { saveScore } from '../../leaderboard/leaderboard.js';
-
-// expose submitScore as global for your game to call
-window.submitScore = async function (winnerName, opponent, email, size, difficulty, game, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at) {
-    try {
-        await saveScore(winnerName, opponent, email, size, difficulty, game, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
-        console.log('Score saved and leaderboard refreshed', winnerName, opponent, email, size, difficulty, game, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
-        alert("Error saving score from index: " + winnerName + " " + opponent + " " + email + " " + size + " " + difficulty + " " + game + " " + finalScore + " " + elapsed + " " + gameCount + " " + filed1 + " " + filed2 + " " + filed3 + " " + filed4 + " " + created_at);
-        document.getElementById("message").textContent = "Error saving score from index: " + winnerName + " " + opponent + " " + email + " " + size + " " + difficulty + " " + game + " " + finalScore + " " + elapsed + " " + gameCount + " " + filed1 + " " + filed2 + " " + filed3 + " " + filed4 + " " + created_at
-    } catch (e) {
-        alert("Error saving score from index: " + e);
-        console.error('Error saving score from index:', e);
-        document.getElementById("message").textContent = "Error saving score in global leaderboard: " + e;
-    }
-    };
-
 window.addEventListener('load', function () {
     const loading = document.getElementById('loading');
     loading.style.display = 'none';
 
     const boardEl = document.getElementById("board");
-    // const statusElem = document.querySelector(".status");
-    // const humanScoreElem = document.getElementById("humanScore");
-    // const aiScoreElem = document.getElementById("ComputerScore");
-    // const drawsElem = document.getElementById("draws");
     const difficultyEl = document.getElementById("difficulty");
     const toggleThemeBtn = document.getElementById("toggle-theme");
     const messageEl = document.getElementById('message');
     const modeEl = document.getElementById('mode');
     const leaderboardEl = document.getElementById('leaderboard');
-    // const timerDisplay = document.getElementById('timer');
     const canvas = document.getElementById('fireworksCanvas');
 
-    // let board = Array(9).fill("");
     let board = [];
     let gridSize = 3;
     let history = [];
@@ -46,18 +23,22 @@ window.addEventListener('load', function () {
     let humanScore = 0;
     let aiScore = 0;
     let draws = 0;
+    let score = 0;
     let gameCount = 0;
     let winnerName;
     let player1;
     let player2;
     let difficulty = difficultyEl.value;
 
+    document.getElementById("difficulty").addEventListener("click", () => {
+        difficulty = difficultyEl.value;
+    });
+
     //toggle theme
     document.getElementById("toggle-theme").addEventListener("click", () => {
         toggleTheme();
     });
 
-    // change theme
     function toggleTheme() {
         document.body.classList.toggle("dark");
         if (document.body.classList.contains("dark")) {
@@ -69,25 +50,18 @@ window.addEventListener('load', function () {
         }
     }
 
-    //start game
     document.getElementById("startGame").addEventListener("click", () => {
         startGame();
     });
 
-    // grid setup and start new game
     function startGame() {
-        // Ask Player Name
         if (modeEl.value === 'pvc') {
-            player1 = "Human";
+            player1 = localStorage.getItem('player_name') || "Human";
             player2 = "Computer";
-            // player1 = prompt("Player Name (default Human) (Red)?") || player1;
         } else if (modeEl.value === 'pvp') {
-            player1 = "Human 1";
-            player2 = "Human 2";
-            // player1 = prompt("Player 1 Name (default Human 1) (Red)?") || player1;
-            // player2 = prompt("Player 2 Name (default Human 2) (Yellow)?") || player2;
+            player1 = localStorage.getItem('player_name') || "Human1";
+            player2 = localStorage.getItem('player_opponent') || "Human";
         }
-        // createBoard();
         board = Array(gridSize).fill().map(() => Array(gridSize).fill(''));
         boardEl.innerHTML = '';
         boardEl.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
@@ -97,7 +71,6 @@ window.addEventListener('load', function () {
         gameOver = false;
         timer = true;
 
-        // grid setup
         for (let y = 0; y < gridSize; y++) {
             for (let x = 0; x < gridSize; x++) {
                 const cell = document.createElement('div');
@@ -118,15 +91,11 @@ window.addEventListener('load', function () {
         }
     }
 
-    function createBoard() {
-    }
-
     function onCellClick(e) {
         if (gameOver) return;
 
         const x = +e.target.dataset.x;
         const y = +e.target.dataset.y;
-        // click on filled cell
         if (board[y][x]) {
             playSound('error');
             return;
@@ -139,59 +108,9 @@ window.addEventListener('load', function () {
         e.target.classList.add(currentPlayer);
 
         if (checkWin(x, y)) {
-            winnerName = currentPlayer === 'x' ? player1 : player2;
-            // saveToLeaderboard(winnerName);
-            let finalScore = 0;
-            let opponent = "";
-            let game_id = 'tictactoe';
-            let size = '3x3';
-            let elapsed = hours * 3600 + minutes * 60 + seconds;
-            gameCount = history.length;
-            // let moves = 0;
-            let filed1 = 0;
-            let filed2 = 0
-            let filed3 = "-";
-            let filed4 = "-";
-            let email = localStorage.getItem('email') || '';
-            const created_at = new Date().toLocaleString();
-            if (modeEl.value === 'pvc' && currentPlayer === 'o') {
-                messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;                    
-                filed3 = 'Player vs Player';
-                winnerName = 'Computer';
-                opponent = player1;
-                finalScore = 50; 
-            } else {
-                messageEl.textContent = `${currentPlayer === 'x' ? player1 : player2} ${currentPlayer.toUpperCase()} wins!`;
-                winnerName = currentPlayer === 'x' ? player1 : player2;
-                opponent = currentPlayer !== 'x' ? player1 : player2;
-                filed3 = 'Player vs Computer';
-                finalScore = 100;
-            }
-
-            // const entry = { winnerName, opponent, email, size, difficulty, game, finalScore, elapsed, gameCount, field1, field2, field3, field4, time };
-            // console.log(entry);
-            // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-            // boardData.push(entry);
-            // localStorage.setItem("leaderboard", JSON.stringify(boardData));
-
-            saveToLeaderboard(winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
-
-            window.submitScore &&
-                window.submitScore(winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
-
-            // fetch("https://lzaubusgcfgjxiyyfuof.supabase.co/functions/v1/submit-score", {
-            //     method: "POST",
-            //     headers: {
-            //         "Authorization": "Bearer YOUR_SUPABASE_ANON_KEY",
-            //         "Content-Type": "application/json"
-            //     },
-            //     body: JSON.stringify({ player_name, email, game_id, score })
-            // })
-            //     .then(res => res.json())
-            //     .then(data => console.log("✅ Score saved:", data))
-            //     .catch(err => console.error("❌ Error saving score:", err));
-
+            updateleaderboard()
             timer = false;
+            clearInterval(timerInterval);
             gameOver = true;
             switchStartingPlayer();
             playSound('win');
@@ -199,7 +118,6 @@ window.addEventListener('load', function () {
             return;
         }
 
-        //check draw
         if (isBoardFull()) {
             messageEl.textContent = `It's a draw!`;
             timer = false;
@@ -218,17 +136,14 @@ window.addEventListener('load', function () {
         }
     }
 
-    // check board is full for draw
     function isBoardFull() {
         return board.every(row => row.every(cell => cell));
     }
 
-    // Change First player after game over
     function switchStartingPlayer() {
         startingPlayer = startingPlayer === 'x' ? 'o' : 'x';
     }
 
-    // Computer Turn
     function computerMove() {
         const difficulty = difficultyEl.value;
         let move = null;
@@ -247,7 +162,8 @@ window.addEventListener('load', function () {
             move = findMediumMove();
 
         } else {
-            move = findBestMove(); // hard mode
+            move = findBestMove();
+            // move = getBestMove();
         }
 
         if (move) {
@@ -256,7 +172,6 @@ window.addEventListener('load', function () {
         }
     }
 
-    // check for winner
     function checkWin(x, y) {
         const dirs = [
             { dx: 1, dy: 0 },
@@ -294,17 +209,13 @@ window.addEventListener('load', function () {
         return false;
     }
 
-    // medium level
     function findMediumMove() {
-        // Try to win
         let move = findStrategicMove('o');
         if (move) return move;
 
-        // Try to block opponent
         move = findStrategicMove('x');
         if (move) return move;
 
-        // Fallback: pick first empty
         for (let y = 0; y < gridSize; y++) {
             for (let x = 0; x < gridSize; x++) {
                 if (!board[y][x]) return { x, y };
@@ -313,7 +224,6 @@ window.addEventListener('load', function () {
         return null;
     }
 
-    // medium level (try to win or stop to win opponent)
     function findStrategicMove(player) {
         const directions = [
             { dx: 1, dy: 0 },
@@ -348,7 +258,6 @@ window.addEventListener('load', function () {
         return null;
     }
 
-    // Hard level
     function findBestMove() {
         let bestScore = -Infinity;
         let bestMove = null;
@@ -356,9 +265,9 @@ window.addEventListener('load', function () {
         for (let y = 0; y < gridSize; y++) {
             for (let x = 0; x < gridSize; x++) {
                 if (!board[y][x]) {
-                    let scoreO = getScore(x, y, 'o'); // computer's score
-                    let scoreX = getScore(x, y, 'x'); // Player's score
-                    let totalScore = scoreO + scoreX * 1.1; // defensive + offensive
+                    let scoreO = getScore(x, y, 'o'); 
+                    let scoreX = getScore(x, y, 'x'); 
+                    let totalScore = scoreO + scoreX * 1.1; 
 
                     if (totalScore > bestScore) {
                         bestScore = totalScore;
@@ -370,14 +279,13 @@ window.addEventListener('load', function () {
         return bestMove || getRandomMove();
     }
 
-    // hard level
     function getScore(x, y, player) {
         let score = 0;
         const directions = [
-            { dx: 1, dy: 0 },   // Horizontal
-            { dx: 0, dy: 1 },   // Vertical
-            { dx: 1, dy: 1 },   // Diagonal \
-            { dx: 1, dy: -1 }   // Diagonal /
+            { dx: 1, dy: 0 },   
+            { dx: 0, dy: 1 },   
+            { dx: 1, dy: 1 },   
+            { dx: 1, dy: -1 } 
         ];
 
         for (const { dx, dy } of directions) {
@@ -399,7 +307,6 @@ window.addEventListener('load', function () {
         return score;
     }
 
-    // for random mobve after not found any best move in hard level
     function getRandomMove() {
         const moves = [];
         for (let y = 0; y < gridSize; y++) {
@@ -410,13 +317,11 @@ window.addEventListener('load', function () {
         return moves.length ? moves[Math.floor(Math.random() * moves.length)] : null;
     }
 
-    // undo move
     document.getElementById("undo-last").addEventListener("click", () => {
         textToSpeechEng('Undo');
         undoLast();
     });
 
-    // undo move
     function undoLast() {
         if (history.length === 0 || gameOver) return;
         let undoCount = (modeEl.value === 'pvc') ? 2 : 1;
@@ -436,31 +341,44 @@ window.addEventListener('load', function () {
         }
     }
 
-
-    function checkGameOver() {
-        const winner = getWinner(board);
-        if (winner) {
-            gameOver = true;
-            if (winner === human) {
-                humanScore++;
-                statusElem.innerText = "You Win! 😊";
-            } else if (winner === ai) {
-                aiScore++;
-                statusElem.innerText = "Computer Wins! 🤖";
-            } else {
-                draws++;
-                statusElem.innerText = "It's a Draw!";
-            }
-            updateScore();
+    function updateleaderboard() {
+        winnerName = currentPlayer === 'x' ? player1 : player2;
+        let finalScore = score;
+        let opponent = player2;
+        let game_id = 'tictactoe';
+        let size = '3x3';
+        let elapsed = hours * 3600 + minutes * 60 + seconds;
+        gameCount = history.length;
+        // let moves = 0;
+        let filed1 = 0;
+        let filed2 = 0
+        let filed3 = "-";
+        let filed4 = "-";
+        let email = localStorage.getItem('email') || '-';
+        const created_at = new Date();
+        if (modeEl.value === 'pvc' && currentPlayer === 'o') {
+            messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;                    
+            filed3 = 'Player vs Player';
+            filed4 = currentPlayer.toUpperCase();
+            winnerName = 'Computer';
+            opponent = player1;
+            finalScore = score + 50; 
         } else {
-            statusElem.innerText = "Your Turn (X)";
+            messageEl.textContent = `${currentPlayer === 'x' ? player1 : player2} ${currentPlayer.toUpperCase()} wins!`;
+            winnerName = currentPlayer === 'x' ? player1 : player2;
+            opponent = currentPlayer !== 'x' ? player1 : player2;
+            filed3 = 'Player vs Computer';
+            filed4 = currentPlayer.toUpperCase();
+            finalScore = score + 100;
         }
-    }
 
-    function updateScore() {
-        humanScoreElem.innerText = humanScore;
-        aiScoreElem.innerText = aiScore;
-        drawsElem.innerText = draws;
+        const entry = {winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at};
+        const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+        boardData.push(entry);
+        localStorage.setItem("leaderboard", JSON.stringify(boardData));
+        
+        window.submitScore &&
+            window.submitScore(winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
     }
 
     function getWinner(b) {
@@ -502,7 +420,7 @@ window.addEventListener('load', function () {
         }
 
         if ((level === "easy" && depth >= 1) || (level === "medium" && depth >= 2)) {
-            return 0; // simulate bad or random move
+            return 0; 
         }
 
         if (isMax) {
@@ -528,30 +446,19 @@ window.addEventListener('load', function () {
         }
     }
 
-    // Change First player after game over
     function switchStartingPlayer() {
         startingPlayer = startingPlayer === 'x' ? 'o' : 'x';
     }
 
-    document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
-        localtoggleLeaderboard();
-    });
-
-    document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-        toggleLeaderboard();
-    });
-
-    // Sound objects
     const sounds = {
-        click: new Audio('../../sound/tap-sound.mp3'),
-        error: new Audio('../../sound/error-sound.mp3'),
-        win: new Audio('../../sound/winner-trumpets.mp3'),
-        draw: new Audio('../../sound/game-over-classic.mp3'),
-        bg: new Audio('../../sound/bg-music.mp3'),
-        fire: new Audio('../../sound/fireworks.mp3')
+        click: new Audio('../../assets/sound/tap-sound.mp3'),
+        error: new Audio('../../assets/sound/error-sound.mp3'),
+        win: new Audio('../../assets/sound/winner-trumpets.mp3'),
+        draw: new Audio('../../assets/sound/game-over-classic.mp3'),
+        bg: new Audio('../../assets/sound/bg-music.mp3'),
+        fire: new Audio('../../assets/sound/fireworks.mp3')
     };
 
-    // sounds.bg.loop = true;
     let soundEnabled = false;
 
     document.getElementById("toggle-sound").addEventListener("click", () => {
@@ -561,7 +468,6 @@ window.addEventListener('load', function () {
         else sounds.bg.pause();
     });
 
-    // Play sound helper
     function playSound(type) {
         if (sounds[type]) {
             sounds[type].currentTime = 0;
@@ -569,89 +475,39 @@ window.addEventListener('load', function () {
         }
     }
 
-    // background music during page load and play
     window.addEventListener("load", () => {
         if (soundEnabled) playSound('bg');
     });
 
-    // save score to leaderboard
-    // function saveToLeaderboard(winner) {
-    //     if (winner === 'draw') return;
-    //     // let name = winner.toUpperCase();
-    //     let elapsed = `${hrs}:${min}:${sec.toString()}`;
-    //     const mode = modeEl.value;
-    //     const difficulty = difficultyEl.value;
-    //     const time = new Date().toLocaleString();
-
-    //     const entry = { winner, mode, difficulty, time, elapsed };
-    //     const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-    //     boardData.push(entry);
-    //     localStorage.setItem("leaderboard", JSON.stringify(boardData));
-    // }
-
-    // // toggle leaderboard
-    // function toggleLeaderboard() {
-    //     if (leaderboardEl.style.display === 'block') {
-    //         document.getElementById("toggle-leaderboard").textContent = "View Leaderboard";
-    //         leaderboardEl.style.display = 'none';
-    //         return;
-    //     }
-    //     const data = JSON.parse(localStorage.getItem('leaderboard') || '[]');
-    //     document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
-    //     if (data.length === 0) {
-    //         leaderboardEl.innerHTML = '<h3>🏆 Leaderboard</h3><p>No entries yet.</p>';
-    //     } else {
-    //         leaderboardEl.innerHTML = `<h3>🏆 Leaderboard</h3><table><thead><tr><th>Winner</th><th>Mode</th><th>Difficulty</th><th>Time</th><th>Elapsed</th></tr></thead><tbody>${data.map(entry => `<tr><td>${entry.winner}</td><td>${entry.mode}</td><td>${entry.difficulty}</td><td>${entry.time}</td><td>${entry.elapsed}</td></tr>`).join('')}</tbody></table>`;
-    //     }
-    //     leaderboardEl.style.display = 'block';
-    // }
-
-    // // clear leaderboard data
-    // function clearLeaderboard() {
-    //     if (confirm("Do you realy Want to Remove Leaderboard data?")) {
-    //         localStorage.removeItem('leaderboard');
-    //         alert("Leaderboard Data is Cleared");
-    //     }
-    // }
-
     // display timer
-    // import { timer } from './script.js';
     let seconds = 0;
     let minutes = 0;
     let hours = 0;
-    let sec = 0;
-    let min = 0;
-    let hrs = 0;
     let timerInterval;
+    let startTime;
+    let elapsedTime = 0;
     const timerDisplay = document.getElementById('timer-display');
 
     function startTimer() {
         clearInterval(timerInterval);
-        seconds = 0;
-        updateTimerDisplay();
-        timerInterval = setInterval(() => {
-            if (timer) {
-                seconds++;
-                if (seconds >= 60) {
-                    seconds = 0;
-                    minutes++;
-                    if (minutes >= 60) {
-                        minutes = 0;
-                        hours++;
-                    }
-                }
-            }
-            updateTimerDisplay();
-        }, 1000);
+        elapsedTime = 0;
+        if (timer) {
+            startTime = Date.now();
+            timerInterval = setInterval(updateTimerDisplay, 1000);
+        }
     }
 
     function updateTimerDisplay() {
-        hrs = String(hours).padStart(2, '0');
-        min = String(minutes).padStart(2, '0');
-        sec = String(seconds % 60).padStart(2, '0');
-        timerDisplay.textContent = `⏱️ ${hrs}:${min}:${sec}`;
+        elapsedTime = Date.now() - startTime;
+        const totalSeconds = Math.floor(elapsedTime / 1000);
+        hours = Math.floor(totalSeconds / 3600);
+        minutes = Math.floor((totalSeconds % 3600) / 60);
+        seconds = totalSeconds % 60;
+
+        const pad = (num) => String(num).padStart(2, '0');
+        timerDisplay.textContent  = `⏱️ ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
     }
-    // speeach in english
+
     function textToSpeechEng(text) {
         let speechSynthesis = window.speechSynthesis;
         let utterance = new SpeechSynthesisUtterance();
@@ -661,8 +517,6 @@ window.addEventListener('load', function () {
         speechSynthesis.speak(utterance);
     }
 
-    // class used in launch Fireworks
-    //   import { winnerName } from './script.js';
     class FireParticle {
         constructor(x, y, color, dx, dy, shape) {
             this.x = x;
@@ -695,11 +549,9 @@ window.addEventListener('load', function () {
             ctx.closePath();
         }
 
-        // drawStar1(ctx, x, y, outerRadius, innerRadius, points, rotation = 0) {
         drawStar1(ctx, x, y, points, rotation = 0) {
             ctx.beginPath();
             for (let i = 0; i < points * 2; i++) {
-                // const radius = i % 2 === 0 ? outerRadius : innerRadius;
                 const radius = i % 2 === 0 ? this.size : this.size * 0.5;
                 const angle = rotation + (i * Math.PI / points);
                 const currentX = x + radius * Math.cos(angle);
@@ -711,7 +563,7 @@ window.addEventListener('load', function () {
                 }
             }
             ctx.closePath();
-            ctx.stroke(); // or ctx.fill()
+            ctx.stroke(); 
         }
 
         update(ctx) {
@@ -723,7 +575,6 @@ window.addEventListener('load', function () {
             ctx.save();
             ctx.globalAlpha = this.alpha;
             ctx.fillStyle = this.color;
-            // for neon display
             ctx.shadowBlur = 20;
             ctx.shadowColor = this.color;
             ctx.strokeStyle = this.color;
@@ -791,7 +642,6 @@ window.addEventListener('load', function () {
         }
     }
 
-    // class used in launch Fireworks
     class GroundCracker {
         constructor(x, y) {
             this.particles = [];
@@ -825,7 +675,6 @@ window.addEventListener('load', function () {
         }
     }
 
-    // show wining text using canvas
     function drawNeonText(ctx, canvas) {
         ctx.save();
         ctx.font = "bold 4vw EnglishFontBangers";
@@ -842,7 +691,6 @@ window.addEventListener('load', function () {
         ctx.shadowOffsetX = 2;
         ctx.shadowOffsetY = 2;
         ctx.shadowBlur = 5;
-        // ctx.fillText(`🎉 ${winnerName} Won! 🎉`, canvas.width / 2, canvas.height / 2);
         if (document.body.classList.contains("dark")) {
             ctx.shadowColor = 'rgb(128, 0, 128)';
             ctx.fillText(`🎉 ${winnerName} Won! 🎉`, canvas.width / 2, canvas.height / 2);
@@ -853,7 +701,6 @@ window.addEventListener('load', function () {
         ctx.restore();
     }
 
-    // launch Fireworks
     function launchFireworks() {
         const canvas = document.createElement('canvas');
         canvas.style.position = 'fixed';
@@ -868,27 +715,22 @@ window.addEventListener('load', function () {
         const ctx = canvas.getContext('2d');
         const crackers = [];
 
-        // Edges only - top, bottom, left, right (not center)
         const edgeCrackers = 8;
         const padding = 60;
 
         for (let i = 0; i < edgeCrackers; i++) {
-            // Top
             crackers.push(new GroundCracker(
                 padding + i * (window.innerWidth - 2 * padding) / (edgeCrackers - 1),
                 padding
             ));
-            // Bottom
             crackers.push(new GroundCracker(
                 padding + i * (window.innerWidth - 2 * padding) / (edgeCrackers - 1),
                 window.innerHeight - padding
             ));
-            // Left
             crackers.push(new GroundCracker(
                 padding,
                 padding + i * (window.innerHeight - 2 * padding) / (edgeCrackers - 1)
             ));
-            // Right
             crackers.push(new GroundCracker(
                 window.innerWidth - padding,
                 padding + i * (window.innerHeight - 2 * padding) / (edgeCrackers - 1)
@@ -903,7 +745,6 @@ window.addEventListener('load', function () {
             }
 
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            // show wining text using canvas
             drawNeonText(ctx, canvas);
             crackers.forEach(c => c.update(ctx));
             for (let i = crackers.length - 1; i >= 0; i--) {

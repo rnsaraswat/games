@@ -1,0 +1,99 @@
+    <div class="popupHeadeer">
+      <div class="controls">
+        <h3>🏆Global Leaderboard</h3>
+        <button class="Pry" id="hide-leaderboard">Hide Leaderboard</button>
+        <a href="../auth/login.html" class="leaderboard">Sign in</a>
+      </div>
+      <div class="search-container" style="margin-bottom:10px;">
+        <label class="leaderboard">Filter game: </label>
+        <select class="leaderboard" id="gameFilter">
+          <option value="all">All</option>
+          <option value="tictactoe">Tic Tac Toe</option>
+          <option value="mastermind">Mastermind</option>
+        </select>
+        <label class="leaderboard">Show per page:
+          <select class="leaderboardSelect" id="topSelect">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+        </label>
+        <input type="text" class="leaderboard" id="searchInput" placeholder="🔍 Search player..." />
+      </div>
+    </div>
+    <div class="popupContent">
+      <section style="margin-top:12px">
+        <div>
+          <table id="leaderboardTable" border="1" cellspacing="0" cellpadding="6"
+            style="width:100%;border-collapse:collapse;text-align:left;">
+            <thead style="background:#222;color:#fff;">
+              <tr>
+                <th>#</th>
+                <th class="sortable">Game
+                  <span class="arrow asc">🔼</span>
+                  <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Winner
+                  <span class="arrow asc">🔼</span>
+                  <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Looser
+                  <span class="arrow asc">🔼</span>
+                  <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Size
+                  <span class="arrow asc">🔼</span>
+                  <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Difficulty
+                  <span class="arrow asc">🔼</span>
+                  <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Score
+                  <span class="arrow asc">🔼</span>
+                  <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Elapsed time
+                  <span class="arrow asc">🔼</span>
+                  <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Date
+                  <span class="arrow asc">🔼</span>
+                  <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Moves
+                  <span class="arrow asc">🔼</span>
+                  <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Field1
+                  <span class="arrow asc">🔼</span>
+                  <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Field2
+                  <span class="arrow asc">🔼</span>
+                  <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Field3
+                  <span class="arrow asc">🔼</span>
+                  <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Field4
+                  <span class="arrow asc">🔼</span>
+                  <span class="arrow desc">🔽</span>
+                </th>
+            </thead>
+            <tbody id="leaderboardTableBody">
+              <tr>
+                <td colspan="4" style="text-align:center;">Loading...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <button class="leaderboard" id="prevPage">⬅ Prev</button>
+          <span id="pageInfo"></span>
+          <button class="leaderboard" id="nextPage">Next ➡</button>
+        </div>
+      </section>
+    </div>

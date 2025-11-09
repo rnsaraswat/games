@@ -1,9 +1,9 @@
 // display timer
 import { timer } from './script.js';
 
-let seconds = 0;
-let minutes = 0;
-let hours = 0;
+export let seconds = 0;
+export let minutes = 0;
+export let hours = 0;
 export let sec = 0;
 export let min = 0;
 export let hrs = 0;

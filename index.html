@@ -58,13 +58,8 @@
 
         <footer style="margin-top:20px;color:var(--muted)">© 2025 Ravindra</footer>
     </div>
-    <!-- Local Leaderboard Popup -->
     <div id="localleaderboardPopup" class="popupWindow">
         <div class="popupHeadeer">
-            <!-- <h3>🏆Local Leaderboard</h3>
-            <button class="primary" id="local-hide-leaderboard">Hide Leaderboard</button>
-            <button class="primary" id="clear-leaderboard">Clear Leaderboard</button> -->
-
             <div class="controls">
                 <h3>🏆Local Leaderboard</h3>
                 <button class="chip" id="local-hide-leaderboard">Hide Leaderboard</button>
@@ -74,7 +69,7 @@
             <div class="search-container" style="margin-bottom:10px;">
                 <label>Filter game: </label>
                 <select id="localgameFilter">
-                    <option value="all">All</option>
+                    <option value="all" selected>All</option>
                     <option value="tictactoe">Tic Tac Toe</option>
                     <option value="mastermind">Mastermind</option>
                 </select>
@@ -90,8 +85,6 @@
             </div>
         </div>
         <div class="popupContent">
-            <!-- <ul id="local-leaderboardList"></ul> -->
-
             <section style="margin-top:12px">
                 <div>
                     <table id="leaderboardTable" border="1" cellspacing="0" cellpadding="6"
@@ -175,13 +168,12 @@
             <div class="controls">
                 <h3>🏆Global Leaderboard</h3>
                 <button class="chip" id="hide-leaderboard">Hide Leaderboard</button>
-                <!-- <button class="primary" id="clear-leaderboard">Clear Leaderboard</button> -->
                 <a href="../auth/login.html" class="chip">Sign in</a>
             </div>
             <div class="search-container" style="margin-bottom:10px;">
                 <label>Filter game: </label>
                 <select id="gameFilter">
-                    <option value="all">All</option>
+                    <option value="all" selected>All</option>
                     <option value="tictactoe">Tic Tac Toe</option>
                     <option value="mastermind">Mastermind</option>
                 </select>
@@ -280,7 +272,6 @@
     </div>
 
     <script src="leaderboard/submit-helper.js"></script>
-    <!-- <script type="module" src="leaderboard/localleaderboard.js"></script> -->
     <script type="module">
         import { renderLeaderboard } from './leaderboard/leaderboard.js';
 
@@ -301,7 +292,6 @@
             document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
         });
     </script>
-    <!-- <script type="module" src="leaderboard/leaderboard.js"></script> -->
     <script type="module">
         import { localrenderLeaderboard } from './leaderboard/localleaderboard.js';
 
@@ -319,6 +309,12 @@
     </script>
     <script>
         const games = [
+            { id: '4inARow', name: '4inarow', title: '4 in A Row', desc: 'Classic X vs O — human or AI', href: 'games/4inARow/index.html' },
+            { id: '5inARow', name: '5inarow', title: '5 in A Row', desc: 'Classic X vs O — human or AI', href: 'games/5inARow/index.html' },
+            { id: 'connect3', name: 'connect3', title: 'Connect 3', desc: 'Classic X vs O — human or AI', href: 'games/connect_3/index.html' },
+            { id: 'connect4', name: 'connect4', title: 'Connect 4', desc: 'Classic X vs O — human or AI', href: 'games/connect_4/index.html' },
+            { id: 'sudoku', name: 'sudoku', title: 'Sudoku', desc: 'Solve logic puzzles of various sizes', href: 'games/sudoku/index.html' },
+            { id: 'sudokusolver', name: 'sudokusolver', title: 'Sudoku Solver', desc: 'Solve your sudoku Puzzle', href: 'games/sudoku_solver/index.html' },
             { id: 'tictactoe', name: 'tictactoe', title: 'Tic Tac Toe', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe/index.html' },
             { id: 'tictactoe1', name: 'tictactoe', title: 'Tic Tac Toe New', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe1/index.html' },
             { id: 'tictactoe2', name: 'tictactoe', title: 'Tic Tac Toe simple', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe2/index.html' },
@@ -345,30 +341,22 @@
             grid.appendChild(card);
         });
 
-        //toggle theme
-        document.getElementById("themeToggle").addEventListener("click", () => {
-            toggleTheme();
-        });
-
-        // change theme
-        function toggleTheme() {
-            document.body.classList.toggle("dark");
-            if (document.body.classList.contains("dark")) {
-                document.documentElement.setAttribute('data-theme', 'light');
-                themeToggle.innerText = "☀️ Light";
-                localStorage.setItem('rg_theme', 'dark');
-                // textToSpeechEng('Theme Dark');
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                themeToggle.innerText = "🌙 Dark";
-                localStorage.setItem('rg_theme', 'light');
-                // textToSpeechEng('Theme Light');
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        function setTheme(t) {
+            if (t === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark'); 
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '🌙 Dark'
+            }
+            if (t === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light'); 
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '☀️ Light'
             }
         }
-        toggleTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
-
-    </script>
-    <script>
+        if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+        setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
         // Lazy register SW
         if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').then(() => console.log('sw registered')); }
     </script>

@@ -57,7 +57,7 @@
     <style>
         /* theme light  */
         :root {
-            --bg-color: #121212;
+            --bg: #121212;
             --text-color: #eee;
             --cell-bg: #1e1e1e;
             --cell-bg-hover: #5f5f5f;
@@ -67,7 +67,7 @@
         }
 
         body.dark {
-            --bg-color: #f0f0f0;
+            --bg: #f0f0f0;
             --text-color: #111;
             --cell-bg: #fff;
             --cell-bg-hover: #c1c1c1;
@@ -78,12 +78,12 @@
 
         @font-face {
             font-family: 'EnglishFontBangers';
-            src: url('../../font/Bangers-Regular.ttf') format('truetype');
+            src: url('../../assets/font/Bangers-Regular.ttf') format('truetype');
         }
 
         @font-face {
             font-family: 'Digital';
-            src: url('../../font/digital-italic.ttf') format('truetype');
+            src: url('../../assets/font/digital-italic.ttf') format('truetype');
         }
 
         * {
@@ -102,7 +102,7 @@
             font-family: Arial, sans-serif;
             box-sizing: border-box;
             /* overflow: hidden; */
-            background: var(--bg-color);
+            background: var(--bg);
             color: var(--text-color);
             transition: background 0.3s, color 0.3s;
             flex-wrap: wrap;
@@ -124,7 +124,7 @@
         }
 
         #left {
-            background: var(--bg-color);
+            background: var(--bg);
             padding: 0.1vw;
             flex: 0 0 auto;
             display: flex;
@@ -162,7 +162,7 @@
             margin: 0;
             margin: 0.4vw;
             padding: 0.5vw;
-            background: var(--bg-color);
+            background: var(--bg);
             color: var(--text-color);
         }
 
@@ -185,7 +185,7 @@
             transition: background-color 0.3s, transform 0.2s;
             box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
             cursor: pointer;
-            background: var(--bg-color);
+            background: var(--bg);
             color: var(--text-color);
             border: 0.2vw solid var(--cell-border);
         }
@@ -215,7 +215,7 @@
             transition: background-color 0.3s, transform 0.2s;
             box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
             cursor: pointer;
-            background: var(--bg-color);
+            background: var(--bg);
             color: var(--text-color);
             border: 0.2vw solid var(--cell-border);
         }
@@ -230,7 +230,7 @@
         #message {
             width: 100%;
             text-align: center;
-            background: var(--bg-color);
+            background: var(--bg);
             margin-top: 1vh;
             margin-bottom: 1vh;
             padding: 1vw;
@@ -242,7 +242,7 @@
         }
 
         #right {
-            background: var(--bg-color);
+            background: var(--bg);
             flex: 1;
             display: flex;
             align-items: center;
@@ -369,15 +369,15 @@
                     <option value="pvc">😊Player vs 🤖Computer</option>
                 </select>
                 <select id="difficulty">
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="hard">Hard</option>
+                    <option value="easy">😀 Easy</option>
+                    <option value="medium">😐 Medium</option>
+                    <option value="hard">😩 Hard</option>
                 </select>
                 <button id="toggle-theme">☀️ Light</button>
                 <!-- to background music on / off button -->
                 <button id="toggle-sound">🔇 Music:Off"</button>
-                <button id="local-toggle-leaderboard">Local Leaderboard</button>
-                <button id="toggle-leaderboard">Global Leaderboard</button>
+                <button id="local-toggle-leaderboard">🏆Local Leaderboard</button>
+                <button id="toggle-leaderboard">🌍 Global Leaderboard</button>
                 <div id="timer-display">⏱️ 00:00:00</div>
             </div>
             <div id="message"><br>Click New Game to play</div>
@@ -386,8 +386,8 @@
                 <p>🤖 Computer: <span id="ComputerScore">0</span></p>
                 <p>🤝 Draws: <span id="draws">0</span></p>
             </div> -->
-            <!-- <p id="loading">Loading...</p>
-            <div id="leaderboard">
+            <p id="loading">Loading...</p>
+            <!-- <div id="leaderboard">
                 <h3>🏆 Leaderboard</h3>
                 <ul id="score-list"></ul>
             </div> -->
@@ -397,10 +397,119 @@
             <div id="board"></div>
         </div>
     </div>
-    <script  type="module" src="tictactoe1.js"></script>
+    <!-- to load leaderboard popup html code -->
+    <div id="leaderboardPopup" class="popupWindow">
+    </div>
+    <div id="localleaderboardPopup" class="popupWindow">
+    </div>
 
+    <script type="module" src="tictactoe1.js"></script>
+    <script type="module">
+        // import { saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
+        import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
+        // make sortTable global so onclick in <th> works
+        window.sortTable = sortTable;
+        // expose submitScore as global for your game to call
+        window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
+            // console.log(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+            try {
+                await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+                // console.log('Score saved and leaderboard refreshed', name, opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+            } catch (e) {
+                document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
+            }
+        };
 
+        // document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+        //     if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
+        //         document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+        //         document.getElementById("leaderboardPopup").style.display = 'none';
+        //         return;
+        //     }
+        //     document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
+        //     document.getElementById("leaderboardPopup").style.display = 'block';
+        //     renderLeaderboard();
+        // });
+
+        // document.getElementById("hide-leaderboard").addEventListener("click", () => {
+        //     document.getElementById("leaderboardPopup").style.display = "none";
+        //     document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
+        //     document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+        // });
+
+        // initial render
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLeaderboard('tictactoe');
+        });
+    </script>
+
+    <!-- <script type="module" src="leaderboard/leaderboard.js"></script> -->
+    <script type="module">
+        import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
+
+        // //toggle Local leaderboard
+        // document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+        //     if (document.getElementById("leaderboardPopup").style.display === 'block') {
+        //         document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+        //         document.getElementById("leaderboardPopup").style.display = 'none';
+        //         return;
+        //     }
+        //     document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+        //     document.getElementById("leaderboardPopup").style.display = 'block';
+        //     localrenderLeaderboard();
+        // });
+    </script>
+
+    <script>
+        fetch('../../leaderboard/leaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('leaderboardPopup').innerHTML = htmlText;
+            });
+
+        fetch('../../leaderboard/localleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('localleaderboardPopup').innerHTML = htmlText;
+            });
+        document.getElementById("leaderboardPopup").style.display = 'none';
+        document.getElementById("localleaderboardPopup").style.display = 'none';
+
+        document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+            if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
+                document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'block';
+                loadCSS()
+            }
+        });
+
+        document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+            if (document.getElementById("leaderboardPopup").style.display === 'block') {
+                document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'block';
+                loadCSS();
+            }
+        });
+
+        function loadCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '../../leaderboard/leaderboard.css'; // आपकी CSS फ़ाइल का नाम
+            head.appendChild(link);
+        }
+
+    </script>
 </body>
 
 </html>

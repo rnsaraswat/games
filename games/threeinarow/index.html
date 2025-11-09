@@ -4,54 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tic Tac Toe</title>
-    <!-- /tic_tac_toe-project/
-│
-└── /project/
-    ├── index.html
-    ├── style.css
-    ├── /js/
-    │   ├── script.js
-    │   ├── fireworks.js
-    │   ├── randomFireWorks.js
-    │   ├── leaderboard.js
-    │   ├── speak.js
-    │   ├── timer.js
-    │   └── sound.js
-    └── /assets/
-        ├── /font/
-        │   ├── Bangears-Regular.ttf
-        │   └── digital-italic.ttf
-        ├── /images/
-        │   └── tic_tac_toe_X_O.png
-        └── /sound/
-            ├── bg-music.mp3
-            ├── Clock-Ticking-one.mp3
-            ├── error-sound.mp3
-            ├── fireworks.mp3
-            ├── game-over-classic.mp3
-            ├── winner-trumpets.mp3
-            └── tap-sound.mp3      -->
-
-    <!-- tic_tac_toe
-      with seperate liberary files
-      with responsive layout
-      with 2 downloaded font
-      with player vs player and player vs computer
-      with computer 3 lavel (easy/medium/hard)
-      with grid size of 3 to 20 (default 6) 
-      with last plaed cell blink for indication
-      with dark/light theme
-      with undo button 
-      with play time display 
-      with sound of different type 
-      with background music (on and off)
-      with ladderboard may be view/hide 
-      with clear ladderboard button 
-      with display winning text in center
-      with crackers display randomly 
-      with crackers spread all shapes like star, triangle, squre, rectangle, polygone etc
-      with sound of crackers -->
+    <title>3 in a Row</title>
     <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -59,7 +12,7 @@
     <div id="container">
         <!-- Left Panel -->
         <div id="left" class="section">
-            <h1>TIC TAC TOE</h1>
+            <h1>3 IN A ROW</h1>
             <div class="button-group">
                 <label for="gridSize">Grid Size:</label>
                 <input type="number" id="gridSize" min="3" max="20" value="5">
@@ -77,8 +30,10 @@
                 <button id="toggle-theme">☀️ Light</button>
                 <!-- to background music on / off button -->
                 <button id="toggle-sound">🔇 Music:Off"</button>
-                <button id="toggle-leaderboard">View Leaderboard</button>
-                <button onclick="clearLeaderboard()">Clear Leaderboard</button>
+                <!-- <button id="toggle-leaderboard">View Leaderboard</button>
+                <button onclick="clearLeaderboard()">Clear Leaderboard</button> -->
+                <button id="local-toggle-leaderboard">Local Leaderboard</button>
+                <button id="toggle-leaderboard">Global Leaderboard</button>
                 <div id="timer-display">⏱️ 00:00:00</div>
             </div>
             <div id="message">Select grid size <br>Click New Game to play</div>
@@ -88,18 +43,128 @@
                 <p>🤝 Draws: <span id="draws">0</span></p>
             </div> -->
             <p id="loading">Loading...</p>
-            <div id="leaderboard">
+            <!-- <div id="leaderboard">
                 <h3>🏆 Leaderboard</h3>
                 <ul id="score-list"></ul>
-            </div>
+            </div> -->
         </div>
         <!-- Right Grid -->
         <div id="right">
             <div id="board"></div>
         </div>
+        <div id="leaderboardPopup" class="popupWindow">
+        </div>
+        <div id="localleaderboardPopup" class="popupWindow">
+        </div>
     </div>
 
-    <script type="module" src="js/script.js"></script>
+    <script type="module" src="./js/script.js"></script>
+    <script type="module">
+        // import { saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
+        import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
+
+        // make sortTable global so onclick in <th> works
+        window.sortTable = sortTable;
+        // expose submitScore as global for your game to call
+        window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
+            // console.log(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+            try {
+                await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+                // console.log('Score saved and leaderboard refreshed', name, opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+            } catch (e) {
+                document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
+            }
+        };
+
+        // document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+        //     if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
+        //         document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+        //         document.getElementById("leaderboardPopup").style.display = 'none';
+        //         return;
+        //     }
+        //     document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
+        //     document.getElementById("leaderboardPopup").style.display = 'block';
+        //     renderLeaderboard();
+        // });
+
+        // document.getElementById("hide-leaderboard").addEventListener("click", () => {
+        //     document.getElementById("leaderboardPopup").style.display = "none";
+        //     document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
+        //     document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+        // });
+
+        // initial render
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLeaderboard('3inarow');
+        });
+    </script>
+
+    <!-- <script type="module" src="leaderboard/leaderboard.js"></script> -->
+    <script type="module">
+        import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
+
+        // //toggle Local leaderboard
+        // document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+        //     if (document.getElementById("leaderboardPopup").style.display === 'block') {
+        //         document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+        //         document.getElementById("leaderboardPopup").style.display = 'none';
+        //         return;
+        //     }
+        //     document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+        //     document.getElementById("leaderboardPopup").style.display = 'block';
+        //     localrenderLeaderboard();
+        // });
+    </script>
+
+    <script>
+        fetch('../../leaderboard/leaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('leaderboardPopup').innerHTML = htmlText;
+            });
+
+        fetch('../../leaderboard/localleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('localleaderboardPopup').innerHTML = htmlText;
+            });
+        document.getElementById("leaderboardPopup").style.display = 'none';
+        document.getElementById("localleaderboardPopup").style.display = 'none';
+
+        document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+            if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
+                document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'block';
+                loadCSS()
+            }
+        });
+
+        document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+            if (document.getElementById("leaderboardPopup").style.display === 'block') {
+                document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'block';
+                loadCSS();
+            }
+        });
+
+        function loadCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '../../leaderboard/leaderboard.css';
+            head.appendChild(link);
+        }
+
+    </script>
 </body>
 
 </html>

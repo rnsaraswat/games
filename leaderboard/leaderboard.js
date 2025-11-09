@@ -3,88 +3,34 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { supabase } from '../supabaseClient.js';
 import { textToSpeechEng } from './speak.js';
 
-// const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co";
-// const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ"; 
-
 const TABLE_NAME = "scores";
 
 let currentData = [];
 let currentSortColumn = null;
 let currentSortOrder = 'asc';
-// let gameId = document.getElementById("gameFilter").value || "tictactoe";
 let leaderboardData = [];
 let filteredData = [];
 let currentPage = 1;
 let itemsPerPage = 10;
 let sNo = 1;
 
-// window.sortTable = sortTable;
-
-// const gameid = document.getElementById("gameFilter").value;
-
-// window.addEventListener("DOMContentLoaded", () => {
-//     renderLeaderboard();
-// });
-
-//code for toggle leaderbaord in popup box
-//toggle Global leaderboard Listener
-// document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-//   if (document.getElementById("toggle-leaderboard").textContent === "Global Leaderboard") {
-//     document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
-//     textToSpeechEng('Open Global Leaderboard');
-//     toggleLeaderboard();
-//     // renderLeaderboard();
-//   } else {
-//     document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard"
-//     textToSpeechEng('Close Global Leaderboard');
-//     document.getElementById("leaderboardPopup").style.display = "none";
-//   }
-// });
-
-// save score to leaderboard
-// export function saveToLeaderboard(game, winner) {
-//   if (winner === 'draw') return;
-//   // let name = winner.toUpperCase();
-//   let elapsed = `${hrs}:${min}:${sec}`;
-//   const mode = modeEl.value;
-//   const difficulty = difficultyEl.value;
-//   const time = new Date().toLocaleString();
-
-//   const entry = { winner, game, mode, difficulty, time, elapsed };
-//   console.log(entry);
-//   const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-//   boardData.push(entry);
-//   localStorage.setItem("leaderboard", JSON.stringify(boardData));
-// }
-
-// toggle leaderboard
 export function toggleLeaderboard() {
-  // let list = document.getElementById("leaderboardList");
   if (document.getElementById("leaderboardPopup").style.display === 'block') {
     document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
     document.getElementById("leaderboardPopup").style.display = 'none';
     return;
   }
-  // const data = JSON.parse(localStorage.getItem('leaderboard') || '[]');
   document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
-  // if (data.length === 0) {
-  //   list.innerHTML = '<p>No entries yet.</p>';
-  // } else {
-  //   list.innerHTML = `<table><thead><tr><th>Winner</th><th>Mode</th><th>Difficulty</th><th>Time</th><th>Elapsed</th></tr></thead><tbody>${data.map(entry => `<tr><td>${entry.winner}</td><td>${entry.mode}</td><td>${entry.difficulty}</td><td>${entry.time}</td><td>${entry.elapsed}</td></tr>`).join('')}</tbody></table>`;
-  // }
   document.getElementById("leaderboardPopup").style.display = 'block';
     renderLeaderboard();
 }
 
-//hide leaderbaord
-// document.getElementById("hide-leaderboard").addEventListener("click", () => {
-//   textToSpeechEng('Close Leaderboard');
-//   document.getElementById("leaderboardPopup").style.display = "none";
-//   document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
-//   document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
-// })
-// code for popupleaderboard
-
+document.getElementById("hide-leaderboard").addEventListener("click", () => {
+  textToSpeechEng('Close Leaderboard');
+  document.getElementById("leaderboardPopup").style.display = "none";
+  document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
+  document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+})
 
 document.getElementById("searchInput").addEventListener("input", handleSearch);
 document.getElementById("topSelect").addEventListener("change", handleTopSelect);
@@ -113,7 +59,6 @@ function handleTopSelect(e) {
 function prevPage() {
   if (currentPage > 1) {
     currentPage--;
-    // sNo = currentPage * itemsPerPage;
     renderTable();
   }
 }
@@ -121,7 +66,6 @@ function prevPage() {
 function nextPage() {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   if (currentPage < totalPages) {
-    // sNo = currentPage * itemsPerPage;
     currentPage++;
     renderTable();
   }
@@ -156,20 +100,17 @@ export async function renderLeaderboard() {
       let errText;
       try { errText = await res.json(); } catch (e) { errText = await res.text(); }
       document.getElementById("leaderboardTableBody").textContent = "Global Leaderboard fetch error: " + res.status + errText;
-      // console.error("Leaderboard fetch error:", res.status, errText);
       return;
     }
 
     const data = await res.json();
 
     if (!Array.isArray(data)) {
-      // console.log("⚠️ Unexpected response");
       document.getElementById("leaderboardTableBody").textContent = "⚠️ Unexpected response";
       return;
     }
 
     if (data.length === 0) {
-      // console.log("No scores yet.");
       document.getElementById("leaderboardTableBody").textContent = "No scores yet.";
       return;
     }
@@ -180,7 +121,6 @@ export async function renderLeaderboard() {
     renderTable();
 
   } catch (err) {
-    // console.error("❌ Error loading leaderboard:", err);
     document.getElementById("leaderboardTableBody").textContent = "❌ Error loading global leaderboard: " + err;
   }
 }
@@ -190,7 +130,6 @@ function renderTable() {
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage;
   const currentItems = filteredData.slice(start, end);
-  // console.log("start", start, end);
 
   if (currentItems.length === 0) {
     tbody.innerHTML = `<tr><td colspan="4">No results found.</td></tr>`;
@@ -198,7 +137,6 @@ function renderTable() {
     return;
   }
 
-  // sNo = 1;
   tbody.innerHTML = currentItems
     .map(
       row => `
@@ -210,7 +148,7 @@ function renderTable() {
         <td>${!row.size ? "-" : row.size}</td>
         <td>${!row.difficulty ? "-" : row.difficulty}</td>
         <td>${!row.score ? 0 : row.score}</td>
-        <td>${!row.elapsed ? "-" : row.elapsed}</td>
+        <td>${Math.floor(row.elapsed / 3600)}:${Math.floor((row.elapsed % 3600) / 60)}:${row.elapsed % 60}</td>
         <td>${new Date(row.created_at).toLocaleString()}</td>
         <td>${!row.moves ? "-" : row.moves}</td>
         <td>${!row.email ? "-" : row.email}</td>
@@ -227,7 +165,6 @@ function renderTable() {
   document.getElementById("pageInfo").textContent = `Page ${currentPage} of ${totalPages}`;
 }
 
-// 🔼🔽 Sorting logic
 export function sortTable(colIndex, order) {
   if (!filteredData || filteredData.length === 0) return;
   currentSortColumn = colIndex;
@@ -314,14 +251,13 @@ function updateIndicators(activeCol, order) {
       arrow.style.opacity = "1";
     });
 
-    if (i === activeCol + 2) {
+    if (i === activeCol + 1) {
       const arrow = th.querySelector(`.arrow.${order}`);
       if (arrow) arrow.style.opacity = "0.3";
     }
   });
 }
 
-// 🔍 Search
 const searchInput = document.getElementById("searchInput");
 if (searchInput) {
   searchInput.addEventListener("input", e => {
@@ -355,11 +291,9 @@ export async function saveScore(player_name, player_opponent, email, size, diffi
         body: JSON.stringify({ player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at })
       });
       const json = await res.json();
-      // after save, refresh
       await renderLeaderboard(game_id);
       return json;
     } else {
-      // direct insert (uses anon key, ensure policies allow insert if doing client-side)
       const { data, error } = await supabase.from(TABLE_NAME).insert([{ player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at }]);
       if (error) throw error;
       await renderLeaderboard(game_id);

@@ -1,0 +1,32 @@
+// Sound objects
+const sounds = {
+    click: new Audio('assets/sound/tap-sound.mp3'),
+    error: new Audio('assets/sound/error-sound.mp3'),
+    win: new Audio('assets/sound/winner-trumpets.mp3'),
+    draw: new Audio('assets/sound/game-over-classic.mp3'),
+    bg: new Audio('assets/sound/bg-music.mp3'),
+    fire: new Audio('assets/sound/fireworks.mp3')
+  };
+  
+  // sounds.bg.loop = true;
+  let soundEnabled = false;
+  
+  document.getElementById("toggle-sound").addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    document.getElementById("toggle-sound").textContent = soundEnabled ? "🔊 Music:On" : "🔇 Music:Off";
+    if (soundEnabled) sounds.bg.play();
+    else sounds.bg.pause();
+  });
+  
+  // Play sound helper
+  export function playSound(type) {
+    if (sounds[type]) {
+      sounds[type].currentTime = 0;
+      sounds[type].play();
+    }
+  }
+  
+  // background music during page load and play
+  window.addEventListener("load", () => {
+    if (soundEnabled) playSound('bg');
+  });

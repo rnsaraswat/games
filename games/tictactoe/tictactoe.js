@@ -5,6 +5,8 @@
 // import { saveToLeaderboard, toggleLeaderboard, clearLeaderboard } from './leaderboard.js';
 
 let timer = false;
+let player1;
+let player2;
 let winnerName;
 const modeEl = document.getElementById('mode');
 const difficultyEl = document.getElementById("difficulty");
@@ -28,6 +30,13 @@ window.addEventListener('load', function () {
     let currentPlayer = 'X';
     let turn = "X";
     let gameCount = 0;
+    let score = 0;
+    let difficulty = difficultyEl.value;
+
+    document.getElementById("difficulty").addEventListener("click", () => {
+        difficulty = difficultyEl.value;
+        createBoard();
+    });
 
     //start game
     document.getElementById("startGame").addEventListener("click", () => {
@@ -40,6 +49,8 @@ window.addEventListener('load', function () {
 
     function createBoard() {
         boardEl.innerHTML = "";
+        timer = true;
+        startTimer();
         board.forEach((val, i) => {
             const cell = document.createElement("div");
             cell.classList.add("cell");
@@ -125,14 +136,17 @@ window.addEventListener('load', function () {
         const winner = getWinner(board);
         if (winner) {
             gameOver = true;
-            const score = Math.max(0, 100 - gameCount * 10); 
+            timer = false;
+            clearInterval(timerInterval);
+            score = Math.max(0, 100 - gameCount * 10); 
             window.submitScore && window.submitScore('tictactoe', score, 'player'); 
-            alert('You cracked it! Score: ' + score);
+            // alert('You cracked it! Score: ' + score);
             if (winner === human) {
                 winnerName = winner;
                 playSound('win');
                 launchFireworks();
                 messageEl.innerText = "You Win! 😊";
+                updateleaderboard();
             } else if (winner === ai) {
                 winnerName = winner;
                 playSound('win');
@@ -265,38 +279,60 @@ window.addEventListener('load', function () {
     let seconds = 0;
     let minutes = 0;
     let hours = 0;
-    let sec = 0;
-    let min = 0;
-    let hrs = 0;
+    // let sec = 0;
+    // let min = 0;
+    // let hrs = 0;
     let timerInterval;
+    let startTime;
+    let elapsedTime = 0;
     const timerDisplay = document.getElementById('timer-display');
 
     function startTimer() {
         clearInterval(timerInterval);
-        seconds = 0;
-        updateTimerDisplay();
-        timerInterval = setInterval(() => {
-            if (timer) {
-                seconds++;
-                if (seconds >= 60) {
-                    seconds = 0;
-                    minutes++;
-                    if (minutes >= 60) {
-                        minutes = 0;
-                        hours++;
-                    }
-                }
-            }
-            updateTimerDisplay();
-        }, 1000);
+        elapsedTime = 0;
+        if (timer) {
+            startTime = Date.now();
+            timerInterval = setInterval(updateTimerDisplay, 1000);
+        }
     }
 
     function updateTimerDisplay() {
-        hrs = String(hours).padStart(2, '0');
-        min = String(minutes).padStart(2, '0');
-        sec = String(seconds % 60).padStart(2, '0');
-        timerDisplay.textContent = `⏱️ ${hrs}:${min}:${sec}`;
+        elapsedTime = Date.now() - startTime;
+        const totalSeconds = Math.floor(elapsedTime / 1000);
+        hours = Math.floor(totalSeconds / 3600);
+        minutes = Math.floor((totalSeconds % 3600) / 60);
+        seconds = totalSeconds % 60;
+
+        const pad = (num) => String(num).padStart(2, '0');
+        timerDisplay.textContent  = `⏱️ ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
     }
+
+    // function startTimer() {
+    //     clearInterval(timerInterval);
+    //     seconds = 0;
+    //     updateTimerDisplay();
+    //     timerInterval = setInterval(() => {
+    //         if (timer) {
+    //             seconds++;
+    //             if (seconds >= 60) {
+    //                 seconds = 0;
+    //                 minutes++;
+    //                 if (minutes >= 60) {
+    //                     minutes = 0;
+    //                     hours++;
+    //                 }
+    //             }
+    //         }
+    //         updateTimerDisplay();
+    //     }, 1000);
+    // }
+
+    // function updateTimerDisplay() {
+    //     hrs = String(hours).padStart(2, '0');
+    //     min = String(minutes).padStart(2, '0');
+    //     sec = String(seconds % 60).padStart(2, '0');
+    //     timerDisplay.textContent = `⏱️ ${hrs}:${min}:${sec}`;
+    // }
 
     // para to speeach in english
     function textToSpeechEng(text) {
@@ -309,12 +345,12 @@ window.addEventListener('load', function () {
     }
     // Sound objects
     const sounds = {
-        click: new Audio('../../sound/tap-sound.mp3'),
-        error: new Audio('../../sound/error-sound.mp3'),
-        win: new Audio('../../sound/winner-trumpets.mp3'),
-        draw: new Audio('../../sound/game-over-classic.mp3'),
-        bg: new Audio('../../sound/bg-music.mp3'),
-        fire: new Audio('../../sound/fireworks.mp3')
+        click: new Audio('../../assets/sound/tap-sound.mp3'),
+        error: new Audio('../../assets/sound/error-sound.mp3'),
+        win: new Audio('../../assets/sound/winner-trumpets.mp3'),
+        draw: new Audio('../../assets/sound/game-over-classic.mp3'),
+        bg: new Audio('../../assets/sound/bg-music.mp3'),
+        fire: new Audio('../../assets/sound/fireworks.mp3')
     };
 
     // sounds.bg.loop = true;
@@ -335,50 +371,130 @@ window.addEventListener('load', function () {
         }
     }
 
-    const leaderboardEl = document.getElementById('leaderboard');
-    // import { sec, min, hrs } from './timer.js';
-    // import { modeEl, difficultyEl } from './script.js';
+    function updateleaderboard() {
+        winnerName = currentPlayer === 'x' ? player1 : player2;
+        let finalScore = score;
+        let opponent = player2;
+        let game_id = 'tictactoe';
+        let size = '3x3';
+        let elapsed = hours * 3600 + minutes * 60 + seconds;
+        gameCount = history.length;
+        // let moves = 0;
+        let filed1 = 0;
+        let filed2 = 0
+        let filed3 = "-";
+        let filed4 = "-";
+        let email = localStorage.getItem('email') || '-';
+        const created_at = new Date();
+        if (modeEl.value === 'pvc' && currentPlayer === 'o') {
+            messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;                    
+            filed3 = 'Player vs Player';
+            filed4 = currentPlayer.toUpperCase();
+            winnerName = 'Computer';
+            opponent = player1;
+            finalScore = score + 50; 
+        } else {
+            messageEl.textContent = `${currentPlayer === 'x' ? player1 : player2} ${currentPlayer.toUpperCase()} wins!`;
+            winnerName = currentPlayer === 'x' ? player1 : player2;
+            opponent = currentPlayer !== 'x' ? player1 : player2;
+            filed3 = 'Player vs Computer';
+            filed4 = currentPlayer.toUpperCase();
+            finalScore = score + 100;
+        }
 
-    // save score to leaderboard
-    function saveToLeaderboard(winner) {
-        if (winner === 'draw') return;
-        // let name = winner.toUpperCase();
-        let elapsed = `${hrs}:${min}:${sec}`;
-        const mode = modeEl.value;
-        const difficulty = difficultyEl.value;
-        const time = new Date().toLocaleString();
-
-        const entry = { winner, mode, difficulty, time, elapsed };
-        console.log(entry);
+        const entry = {winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at};
         const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
         boardData.push(entry);
         localStorage.setItem("leaderboard", JSON.stringify(boardData));
+        
+        window.submitScore &&
+            window.submitScore(winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+    }
+
+    // const leaderboardEl = document.getElementById('leaderboard');
+    // // import { sec, min, hrs } from './timer.js';
+    // // import { modeEl, difficultyEl } from './script.js';
+
+    // // save score to leaderboard
+    // function saveToLeaderboard(winner) {
+    //     if (winner === 'draw') return;
+    //     // let name = winner.toUpperCase();
+    //     let elapsed = `${hrs}:${min}:${sec}`;
+    //     const mode = modeEl.value;
+    //     const difficulty = difficultyEl.value;
+    //     const time = new Date().toLocaleString();
+
+    //     const entry = { winner, mode, difficulty, time, elapsed };
+    //     console.log(entry);
+    //     const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+    //     boardData.push(entry);
+    //     localStorage.setItem("leaderboard", JSON.stringify(boardData));
+    // }
+
+    function updateleaderboard() {
+        winnerName = currentPlayer === 'x' ? player1 : player2;
+        let finalScore = 0;
+        let opponent = player2;
+        let game_id = 'tictactoe';
+        let size = '3x3';
+        let elapsed = hours * 3600 + minutes * 60 + seconds;
+        gameCount = history.length;
+        // let moves = 0;
+        let filed1 = 0;
+        let filed2 = 0
+        let filed3 = "-";
+        let filed4 = "-";
+        let email = localStorage.getItem('email') || '-';
+        const created_at = new Date();
+        if (modeEl.value === 'pvc' && currentPlayer === 'o') {
+            messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;                    
+            filed3 = 'Player vs Player';
+            filed4 = currentPlayer.toUpperCase();
+            winnerName = 'Computer';
+            opponent = player1;
+            finalScore = 50; 
+        } else {
+            messageEl.textContent = `${currentPlayer === 'x' ? player1 : player2} ${currentPlayer.toUpperCase()} wins!`;
+            winnerName = currentPlayer === 'x' ? player1 : player2;
+            opponent = currentPlayer !== 'x' ? player1 : player2;
+            filed3 = 'Player vs Computer';
+            filed4 = currentPlayer.toUpperCase();
+            finalScore = 100;
+        }
+
+        const entry = {winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at};
+        const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+        boardData.push(entry);
+        localStorage.setItem("leaderboard", JSON.stringify(boardData));
+        
+        window.submitScore &&
+            window.submitScore(winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
     }
 
     // toggle leaderboard
-    function toggleLeaderboard() {
-        if (leaderboardEl.style.display === 'block') {
-            document.getElementById("toggle-leaderboard").textContent = "View Leaderboard";
-            leaderboardEl.style.display = 'none';
-            return;
-        }
-        const data = JSON.parse(localStorage.getItem('leaderboard') || '[]');
-        document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
-        if (data.length === 0) {
-            leaderboardEl.innerHTML = '<h3>🏆 Leaderboard</h3><p>No entries yet.</p>';
-        } else {
-            leaderboardEl.innerHTML = `<h3>🏆 Leaderboard</h3><table><thead><tr><th>Winner</th><th>Mode</th><th>Difficulty</th><th>Time</th><th>Elapsed</th></tr></thead><tbody>${data.map(entry => `<tr><td>${entry.winner}</td><td>${entry.mode}</td><td>${entry.difficulty}</td><td>${entry.time}</td><td>${entry.elapsed}</td></tr>`).join('')}</tbody></table>`;
-        }
-        leaderboardEl.style.display = 'block';
-    }
+    // function toggleLeaderboard() {
+    //     if (leaderboardEl.style.display === 'block') {
+    //         document.getElementById("toggle-leaderboard").textContent = "View Leaderboard";
+    //         leaderboardEl.style.display = 'none';
+    //         return;
+    //     }
+    //     const data = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+    //     document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+    //     if (data.length === 0) {
+    //         leaderboardEl.innerHTML = '<h3>🏆 Leaderboard</h3><p>No entries yet.</p>';
+    //     } else {
+    //         leaderboardEl.innerHTML = `<h3>🏆 Leaderboard</h3><table><thead><tr><th>Winner</th><th>Mode</th><th>Difficulty</th><th>Time</th><th>Elapsed</th></tr></thead><tbody>${data.map(entry => `<tr><td>${entry.winner}</td><td>${entry.mode}</td><td>${entry.difficulty}</td><td>${entry.time}</td><td>${entry.elapsed}</td></tr>`).join('')}</tbody></table>`;
+    //     }
+    //     leaderboardEl.style.display = 'block';
+    // }
 
-    // clear leaderboard data
-    function clearLeaderboard() {
-        if (confirm("Do you realy Want to Remove Leaderboard data?")) {
-            localStorage.removeItem('leaderboard');
-            alert("Leaderboard Data is Cleared");
-        }
-    }
+    // // clear leaderboard data
+    // function clearLeaderboard() {
+    //     if (confirm("Do you realy Want to Remove Leaderboard data?")) {
+    //         localStorage.removeItem('leaderboard');
+    //         alert("Leaderboard Data is Cleared");
+    //     }
+    // }
 
     // import { winnerName } from './script.js';
     class FireParticle {

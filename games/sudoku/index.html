@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="hi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sudoku — Multi-size (Rectangular blocks)</title>
+    <!-- sudoku/
+
+    │── index.html
+    │── style.css
+    │── script.js
+    ├── js/
+    |    │── script.js
+    ├── assets/
+        │── font/
+        |    │── Bangers-Regular.ttf
+        |    │── BowlbyOne-Regulat.ttf
+        |    │── Digital-italic.ttf
+        │── sounds/
+        │   └── flip.mp3
+        │── images/
+        │   ├── fruits/
+        │   │   ├── apple.png
+        │   │   └── ...
+        │   ├── animals/
+        │   │   ├── lion.png
+        │   │   └── ...
+        │   └── Shape/
+        │       ├── shape3.png
+        │       └── ... -->
+
+    <!-- Sudoku
+        with seperate liberary files
+        with responsive layout
+        with 3 downloaded font
+        with dark/light theme 
+        with speak in english
+        with timer display
+        with ledder board in popup window  with sticky header 
+        with rules in popup window with sticky header 
+        with best score for all levels and Difficulties seperate
+        with best score cover time
+        with different sound 
+        with wining confetti crackers
+        with different size of sudoku
+            1 Board Size 25x25 [sub grid 5x5]
+            2 Board Size 24x24 [sub grid 4x6]
+            3 Board Size 22x22 [sub grid 11x2]
+            4 Board Size 21x21 [sub grid 7x3]
+            5 Board Size 20x20 [sub grid 5x4]
+            6 Board Size 18x18 [sub grid 6x6]
+            7 Board Size 16x16 [sub grid 4x4]
+            8 Board Size 15x15 [sub grid 5x3]
+            9 Board Size 14x14 [sub grid 7x2]
+            10 Board Size 12x12 [sub grid 4x3]
+            11 Board Size 10x10 [sub grid 5x2]
+            12 Board Size 9x9 [sub grid 3x3]
+            13 Board Size 8x8 [sub grid 4x2]
+            14 Board Size 6x6 [sub grid 3x2]
+            15 Board Size 4x4 [sub grid 2x2]
+        with different levels
+            Learner
+            Easy
+            Medium
+            Hard
+            Expert -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app">
+        <div class="main">
+            <aside class="controls">
+                <h1>Sudoku</h1>
+                <div style="display: inline-block;">
+                    <label>Board (N × N)
+                        <select id="sizeSel">
+                            <!-- standard ones -->
+                            <option value="4|2|2">4×4 [2×2]</option>
+                            <option value="6|2|3">6×6 [2x3]</option>
+                            <option value="8|2|4">8×8 [2x4]</option>
+                            <option value="9|3|3" selected>9×9 [3×3]</option>
+                            <option value="10|2|5">10×10 [2x5]</option>
+                            <option value="12|3|4">12×12 [3x4]</option>
+                            <option value="14|2|7">14×14 [2x7]</option>
+                            <option value="15|3|5">15×15 [3x5]</option>
+                            <option value="16|4|4">16×16 [4×4]</option>
+                            <option value="18|3|6">18×18 [3x6]</option>
+                            <option value="20|4|5">20×20 [4x5]</option>
+                            <option value="21|3|7">21×21 [3x7]</option>
+                            <option value="22|2|11">22×22 [2x11]</option>
+                            <option value="24|4|6">24×24 [4x6]</option>
+                            <option value="25|5|5">25×25 [5×5]</option>
+                        </select>
+                    </label>
+                    <label>Difficulty
+                        <select id="diffSel">
+                            <option value="learner">Learner</option>
+                            <option value="easy">Easy</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="hard">Hard</option>
+                            <option value="expert">Expert</option>
+                        </select>
+                    </label>
+                </div>
+                <div style="display: inline-block;">
+                    <label><input type="checkbox" id="notesToggle"> Notes ✎</label>
+
+                    <button id="newBtn" class="primary">New Game</button>
+                    <button id="pauseBtn" class="btn">⏸ Pause</button>
+                    <button id="resetBtn" class="btn">🔄 Reset</button>
+                    <button id="undoBtn" class="btn">↶ Undo</button>
+                    <button id="redoBtn" class="btn">↷ Redo</button>
+                    <button id="hintBtn" class="btn">💡 Hint</button>
+                    <button id="checkBtn" class="btn">✔ Check</button>
+                    <button id="errorBtn" class="btn">Error Off</button>
+                    <button id="solveBtn" class="btn">🔓 Solve</button>
+                    <button id="themeBtn" class="btn">☀️light</button>
+                    <button class="primary" id="toggle-leaderboard">View Leaderboard</button>
+                    <button class="primary" id="toggle-rules">View Rules</button>
+                    <button class="primary" id="toggle-sound">🔇 Music:Off"</button>
+                    <div id="info">
+                        <div id="timerInfo">⏱ 00:00</div>
+                        <div id="mistakeInfo">❌ 0</div>
+                        <div id="filledInfo">Filled: 0</div>
+                        <div id="remainInfo">Empty: 0</div>
+                        <div>🏆 Best: <b id="best">—</b></div>
+                    </div>
+                    <div id="numpad" class="numpad"></div>
+                    <div id="statusText">Ready</div>
+                </div>
+            </aside>
+            <section class="board-wrap">
+                <div id="gridContainer" class="grid"></div>
+            </section>
+        </div>
+    </div>
+    <!-- Leaderboard Popup -->
+    <div id="leaderboardPopup"  class="popupWindow">
+        <div class="popupHeadeer">
+            <h3>🏆Leaderboard</h3>
+            <button class="primary" id="hide-leaderboard">Hide Leaderboard</button>
+            <button class="primary" id="clear-leaderboard">Clear Leaderboard</button>
+        </div>
+        <div class="popupContent">
+            <ul id="leaderboardList"></ul>
+        </div>
+    </div>
+
+    <!-- Rules Popup -->
+    <div id="rulesPopup" class="popupWindow">
+        <div class="popupHeadeer">
+            <h3>Game Rules</h3>
+            <button class="primary" id="hide-rules">Hide Rules</button>
+        </div>
+        <div class="popupContent">
+            <ul id="RulesBox"></ul>
+        </div>
+    </div>
+
+    <!-- Display winning text -->
+    <div id="winText"></div>
+    <!-- fire crackers canvas -->
+    <canvas id="confettiCanvas"></canvas>
+    <!-- Name asking popup windo -->
+    <div class="namebar" id="namebar" aria-live="polite">
+        <div class="row">
+            <label for="nameInput">Player Name :
+                <input type="text" id="nameInput" placeholder="ABC" value="ABC">
+            </label>
+            <button id="name" class="primary">Ok</button>
+        </div>
+    </div>
+    <script type="module" src="js/script.js"></script>
+    <script type="module" src="js/script.js"></script>
+</body>
+
+</html>

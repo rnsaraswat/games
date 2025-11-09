@@ -181,13 +181,16 @@ guestForm.addEventListener("submit", async e => {
 
 
 // --- 4️⃣ Guest Login without email ---
-guestF.addEventListener('click', () => {
+guestF.addEventListener("submit", async e => {
+  e.preventDefault();
+  const guname = document.getElementById("guname").value.trim();
   const rand = Math.floor(Math.random() * 10000);
-  const guestName = `Guest_${rand}`;
-  localStorage.setItem('username', guestName);
-  localStorage.setItem('email', '-');
-  localStorage.setItem('id', guestName);
-  saveUserLocally({ name: gname || "Guest", email: gemail, id: `${gname}${Math.floor(Math.random() * 10000)}` });
+  const guestName = `${guname}${rand}` || `Gust${rand}`;
+  const guemail = "-";
+  // localStorage.setItem('username', guestName);
+  // localStorage.setItem('email', '-');
+  // localStorage.setItem('id', guestName);
+  saveUserLocally({ name: guname || "Guest", email: guemail, id: `${guname}${Math.floor(Math.random() * 10000)}` });
   statusDiv.textContent = `Welcome, ${guestName}!`;
   setTimeout(redirectAfterLogin, 1000);
 });

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sudoku Solver</title>
+    <!-- sudoku solver/
+
+    │── index.html
+    │── style.css
+    │── script.js
+    ├── js/
+    |    │── script.js
+    ├── assets/
+        │── font/
+        |    │── Bangers-Regular.ttf
+        |    │── BowlbyOne-Regulat.ttf
+        |    │── Digital-italic.ttf
+        │── sounds/
+        |    │── bg-music.mp3
+        |    │── winner-trumpets.mp3
+        |    │── single-key-press.mp3
+        │    └── tap-sound.mp3
+        │── images/
+        │   ├── fruits/
+        │   │   ├── apple.png
+        │   │   └── ...
+        │   ├── animals/
+        │   │   ├── lion.png
+        │   │   └── ...
+        │   └── Shape/
+        │       ├── shape3.png
+        │       └── ... -->
+
+    <!-- Sudoku
+        with seperate liberary files
+        with responsive layout
+        with 3 downloaded font
+        with dark/light theme 
+        with speak in english
+        with timer display
+        with popup window with conform buttons 
+        with different sound 
+        with different size of sudoku
+            1 Board Size 25x25 [sub grid 5x5]
+            2 Board Size 24x24 [sub grid 4x6]
+            3 Board Size 22x22 [sub grid 11x2]
+            4 Board Size 21x21 [sub grid 7x3]
+            5 Board Size 20x20 [sub grid 5x4]
+            6 Board Size 18x18 [sub grid 6x6]
+            7 Board Size 16x16 [sub grid 4x4]
+            8 Board Size 15x15 [sub grid 5x3]
+            9 Board Size 14x14 [sub grid 7x2]
+            10 Board Size 12x12 [sub grid 4x3]
+            11 Board Size 10x10 [sub grid 5x2]
+            12 Board Size 9x9 [sub grid 3x3]
+            13 Board Size 8x8 [sub grid 4x2]
+            14 Board Size 6x6 [sub grid 3x2]
+            15 Board Size 4x4 [sub grid 2x2] -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body data-theme="light">
+    <div class="app">
+        <div class="main">
+            <aside class="controls">
+                <h1>Sudoku Solver</h1>
+                    <label>Size</label>
+                    <select id="sizeSelect"></select>
+                    <!-- <button class="btn" id="newBtn">New Game</button> -->
+                    <!-- <button class="btn" id="startBtn">Start / Fill</button> -->
+                    <label id="lebelMaxSol" for="maxSolutions">Max Solutions <input id="maxSolutions" class="lebelMaxSolVal" type="number" value="1" min="1" max="100"/></label>
+                    
+                    <button class="primary" id="solveBtn">🔓 Solve</button>
+                    <button class="btn" id="unsolveBtn">🔒Unsolve</button>
+                    <button class="btn" id="resetBtn">🔄 Reset</button>
+                    <button class="btn" id="undoBtn">↶ Undo</button>
+                    <button class="btn" id="themeToggle">🌙 Dark</button>
+                    <button class="btn" id="toggle-sound">🔇 Music:Off"</button>
+                <div id="info">
+                    <!-- <label><input type="checkbox" id="altBgToggle"> Alternate subgrid bg</label> -->
+                    <!-- <label><input type="checkbox" id="notesToggle" checked> Notes</label> -->
+
+                <div class="info">
+                        <!-- <div>Timer</div> -->
+                        <div id="timer">⏱ 00:00:00</div>
+                        <button class="btn" id="pauseBtn">⏸Pause</button>
+                        <div id="filledInfo">Filled: 0</div>
+                        <div id="remainInfo">Empty: 0</div>
+                        <div id="totalInfo">Total: 0</div>
+                </div>
+
+                <div id="numpad" class="numpad"></div>
+                
+                <div class="info">
+                        <div class="small">Solutions</div>
+                        <button class="btn" id="prevSol">Prev</button>
+                        <div id="solIndex">0 / 0</div>
+                        <button class="btn" id="nextSol">Next</button>
+                </div>
+                <div class="status" id="status">Ready — select size and click Start</div>
+            </aside>
+
+            <section class="board-wrap">
+                <div id="boardContainer" class="board" aria-label="Sudoku board"></div>
+            </section>
+        </div>
+    </div>
+    <!-- Warning popup window -->
+    <div class="warnbar" id="warnbar" aria-live="polite">
+        <div class="row">
+            <label id="warntext">Bigger the grid size and higher the no of solution may slow the solving process
+            </label>
+            <button id="warn" class="primary">Ok</button>
+        </div>
+    </div>
+    <!-- Conformation popup window -->
+    <div class="warnbar" id="conformbar">
+        <div class="row">
+            <p>Your filled data will be lost, are you sure?</p>
+            <button id="confirmYes" class="primary">Yes</button>
+            <button id="confirmNo" class="primary">No</button>
+        </div>
+    </div>
+    <script type="module" src="js/script.js"></script>
+</body>
+
+</html>

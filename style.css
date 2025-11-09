@@ -254,6 +254,27 @@ h1 {
     header {
         flex-direction: column;
     }
+    h1 {
+        font-size: 5vw;
+    }
+    .game-card > h3 {
+        font-size: 4vw;
+    }
+    .play-btn {
+        font-size: 2.5vw;
+        width: 100%;
+        margin: 0.5vw;
+    }
+    .chip {
+        border-radius: 0.5vw;
+        padding: 0.2vw 1vw;
+        font-size: 2.5vw;
+        margin-top: 0.1vh;
+        margin: 0.2vw;
+    }
+    .lead {
+        font-size: 2.5vw;
+    }
     .brand {
         width: 100%;
         justify-content: center;
