@@ -26,11 +26,11 @@
             <div class="hdrbtns">
                 <div class="hdr-child-div">
                     <!-- <a class="chip" id="toggle-leaderboard" href="leaderboard/index.html">Global Leaderboard</a> -->
-                    <a class="chip" id="toggle-leaderboard">Global Leaderboard</a>
+                    <a class="chip" id="toggle-leaderboard">🌍 Global Leaderboard</a>
                     <a class="chip" href="auth/login.html">Sign in</a>
                 </div>
                 <div class="hdr-child-div">
-                    <button class="chip" id="local-toggle-leaderboard">Local Leaderboard</button>
+                    <button class="chip" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
                     <button class="chip" id="themeToggle">Light</button>
                 </div>
                 <p id="welcom" class="lead">Welcome</p>
@@ -58,7 +58,12 @@
 
         <footer style="margin-top:20px;color:var(--muted)">© 2025 Ravindra</footer>
     </div>
+    <div id="leaderboardPopup" class="popupWindow">
+    </div>
     <div id="localleaderboardPopup" class="popupWindow">
+    </div>
+
+    <!-- <div id="localleaderboardPopup" class="popupWindow">
         <div class="popupHeadeer">
             <div class="controls">
                 <h3>🏆Local Leaderboard</h3>
@@ -162,7 +167,6 @@
         </div>
     </div>
 
-    <!-- Global Leaderboard Popup -->
     <div id="leaderboardPopup" class="popupWindow">
         <div class="popupHeadeer">
             <div class="controls">
@@ -189,7 +193,6 @@
             </div>
         </div>
         <div class="popupContent">
-            <!-- <ul id="leaderboardList"></ul> -->
             <section style="margin-top:12px">
                 <div>
                     <table id="leaderboardTable" border="1" cellspacing="0" cellpadding="6"
@@ -269,10 +272,33 @@
                 </div>
             </section>
         </div>
-    </div>
+    </div> -->
 
     <script src="leaderboard/submit-helper.js"></script>
+
     <script type="module">
+        import { renderLeaderboard, saveScore, sortTable } from './leaderboard/leaderboard.js';
+        window.sortTable = sortTable;
+        window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
+            try {
+                await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+            } catch (e) {
+                document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
+            }
+        };
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLeaderboard();
+        });
+    </script>
+
+    <script type="module">
+        import { localrenderLeaderboard } from './leaderboard/localleaderboard.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            localrenderLeaderboard();
+        });
+    </script>
+
+    <!-- <script type="module">
         import { renderLeaderboard } from './leaderboard/leaderboard.js';
 
         document.getElementById("toggle-leaderboard").addEventListener("click", () => {
@@ -306,7 +332,7 @@
             document.getElementById("leaderboardPopup").style.display = 'block';
             localrenderLeaderboard();
         });
-    </script>
+    </script> -->
     <script>
         const games = [
             { id: '4inARow', name: '4inarow', title: '4 in A Row', desc: 'Classic X vs O — human or AI', href: 'games/4inARow/index.html' },
@@ -345,12 +371,12 @@
         const themeToggle = document.getElementById('themeToggle');
         function setTheme(t) {
             if (t === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark'); 
+                document.documentElement.setAttribute('data-theme', 'dark');
                 localStorage.setItem('rg_theme', t);
                 themeToggle.textContent = '🌙 Dark'
             }
             if (t === 'light') {
-                document.documentElement.setAttribute('data-theme', 'light'); 
+                document.documentElement.setAttribute('data-theme', 'light');
                 localStorage.setItem('rg_theme', t);
                 themeToggle.textContent = '☀️ Light'
             }
@@ -359,6 +385,59 @@
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
         // Lazy register SW
         if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').then(() => console.log('sw registered')); }
+
+
+        fetch('./leaderboard/leaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('leaderboardPopup').innerHTML = htmlText;
+            });
+
+        fetch('./leaderboard/localleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('localleaderboardPopup').innerHTML = htmlText;
+            });
+        document.getElementById("leaderboardPopup").style.display = 'none';
+        document.getElementById("localleaderboardPopup").style.display = 'none';
+
+        document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+            // if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
+            if (document.getElementById("leaderboardPopup").style.display === 'block') {
+                document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'block';
+                // loadCSS()
+            }
+        });
+
+        document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+            if (document.getElementById("leaderboardPopup").style.display === 'block') {
+                document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+                document.getElementById("localleaderboardPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+                document.getElementById("localleaderboardPopup").style.display = 'block';
+                // loadCSS();
+            }
+        });
+
+        function loadCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = './leaderboard/leaderboard.css'; // आपकी CSS फ़ाइल का नाम
+            head.appendChild(link);
+        }
+
+        window.onload = function() {
+            loadCSS();
+        };
     </script>
 </body>
 

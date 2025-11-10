@@ -4,67 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Sudoku — Multi-size (Rectangular blocks)</title>
-    <!-- sudoku/
-
-    │── index.html
-    │── style.css
-    │── script.js
-    ├── js/
-    |    │── script.js
-    ├── assets/
-        │── font/
-        |    │── Bangers-Regular.ttf
-        |    │── BowlbyOne-Regulat.ttf
-        |    │── Digital-italic.ttf
-        │── sounds/
-        │   └── flip.mp3
-        │── images/
-        │   ├── fruits/
-        │   │   ├── apple.png
-        │   │   └── ...
-        │   ├── animals/
-        │   │   ├── lion.png
-        │   │   └── ...
-        │   └── Shape/
-        │       ├── shape3.png
-        │       └── ... -->
-
-    <!-- Sudoku
-        with seperate liberary files
-        with responsive layout
-        with 3 downloaded font
-        with dark/light theme 
-        with speak in english
-        with timer display
-        with ledder board in popup window  with sticky header 
-        with rules in popup window with sticky header 
-        with best score for all levels and Difficulties seperate
-        with best score cover time
-        with different sound 
-        with wining confetti crackers
-        with different size of sudoku
-            1 Board Size 25x25 [sub grid 5x5]
-            2 Board Size 24x24 [sub grid 4x6]
-            3 Board Size 22x22 [sub grid 11x2]
-            4 Board Size 21x21 [sub grid 7x3]
-            5 Board Size 20x20 [sub grid 5x4]
-            6 Board Size 18x18 [sub grid 6x6]
-            7 Board Size 16x16 [sub grid 4x4]
-            8 Board Size 15x15 [sub grid 5x3]
-            9 Board Size 14x14 [sub grid 7x2]
-            10 Board Size 12x12 [sub grid 4x3]
-            11 Board Size 10x10 [sub grid 5x2]
-            12 Board Size 9x9 [sub grid 3x3]
-            13 Board Size 8x8 [sub grid 4x2]
-            14 Board Size 6x6 [sub grid 3x2]
-            15 Board Size 4x4 [sub grid 2x2]
-        with different levels
-            Learner
-            Easy
-            Medium
-            Hard
-            Expert -->
+    <title>Sudoku</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -96,18 +36,18 @@
                     </label>
                     <label>Difficulty
                         <select id="diffSel">
-                            <option value="learner">Learner</option>
-                            <option value="easy">Easy</option>
-                            <option value="medium" selected>Medium</option>
-                            <option value="hard">Hard</option>
-                            <option value="expert">Expert</option>
+                            <option value="learner">📖 Learner</option>
+                            <option value="easy">😊 Easy</option>
+                            <option value="medium" selected>🤔 Medium</option>
+                            <option value="hard">🤯 Hard</option>
+                            <option value="expert">🧑‍🔬 Expert</option>
                         </select>
                     </label>
                 </div>
                 <div style="display: inline-block;">
                     <label><input type="checkbox" id="notesToggle"> Notes ✎</label>
 
-                    <button id="newBtn" class="primary">New Game</button>
+                    <button id="newBtn" class="primary">🔄 New Game</button>
                     <button id="pauseBtn" class="btn">⏸ Pause</button>
                     <button id="resetBtn" class="btn">🔄 Reset</button>
                     <button id="undoBtn" class="btn">↶ Undo</button>
@@ -116,8 +56,9 @@
                     <button id="checkBtn" class="btn">✔ Check</button>
                     <button id="errorBtn" class="btn">Error Off</button>
                     <button id="solveBtn" class="btn">🔓 Solve</button>
-                    <button id="themeBtn" class="btn">☀️light</button>
-                    <button class="primary" id="toggle-leaderboard">View Leaderboard</button>
+                    <button id="themeBtn" class="btn">☀️ Light</button>
+                    <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
+                    <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
                     <button class="primary" id="toggle-rules">View Rules</button>
                     <button class="primary" id="toggle-sound">🔇 Music:Off"</button>
                     <div id="info">
@@ -125,10 +66,11 @@
                         <div id="mistakeInfo">❌ 0</div>
                         <div id="filledInfo">Filled: 0</div>
                         <div id="remainInfo">Empty: 0</div>
-                        <div>🏆 Best: <b id="best">—</b></div>
+                        <!-- <div>🏆 Best: <b id="best">—</b></div> -->
                     </div>
                     <div id="numpad" class="numpad"></div>
                     <div id="statusText">Ready</div>
+                    <p id="loading">Loading...</p>
                 </div>
             </aside>
             <section class="board-wrap">
@@ -136,17 +78,13 @@
             </section>
         </div>
     </div>
-    <!-- Leaderboard Popup -->
-    <div id="leaderboardPopup"  class="popupWindow">
-        <div class="popupHeadeer">
-            <h3>🏆Leaderboard</h3>
-            <button class="primary" id="hide-leaderboard">Hide Leaderboard</button>
-            <button class="primary" id="clear-leaderboard">Clear Leaderboard</button>
-        </div>
-        <div class="popupContent">
-            <ul id="leaderboardList"></ul>
-        </div>
+
+    <div id="leaderboardPopup" class="popupWindow">
     </div>
+    <div id="localleaderboardPopup" class="popupWindow">
+    </div>
+    <div id="winText">🎉 Completed 🎉</div>
+    <canvas id="confettiCanvas"></canvas>
 
     <!-- Rules Popup -->
     <div id="rulesPopup" class="popupWindow">
@@ -159,21 +97,78 @@
         </div>
     </div>
 
-    <!-- Display winning text -->
-    <div id="winText"></div>
-    <!-- fire crackers canvas -->
-    <canvas id="confettiCanvas"></canvas>
-    <!-- Name asking popup windo -->
-    <div class="namebar" id="namebar" aria-live="polite">
-        <div class="row">
-            <label for="nameInput">Player Name :
-                <input type="text" id="nameInput" placeholder="ABC" value="ABC">
-            </label>
-            <button id="name" class="primary">Ok</button>
-        </div>
-    </div>
     <script type="module" src="js/script.js"></script>
-    <script type="module" src="js/script.js"></script>
+    <script type="module" src="js/rules.js"></script>
+    <script type="module">
+        import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
+        window.sortTable = sortTable;
+        window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
+            try {
+                await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+            } catch (e) {
+                document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
+            }
+        };
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLeaderboard();
+        });
+        </script>
+
+<script type="module">
+    import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
+    document.addEventListener('DOMContentLoaded', () => {
+        localrenderLeaderboard();
+    });
+    </script>
+
+    <script>
+        fetch('../../leaderboard/leaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('leaderboardPopup').innerHTML = htmlText;
+            });
+
+        fetch('../../leaderboard/localleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('localleaderboardPopup').innerHTML = htmlText;
+            });
+        document.getElementById("leaderboardPopup").style.display = 'none';
+        document.getElementById("localleaderboardPopup").style.display = 'none';
+
+        document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+            if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
+                document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'block';
+                loadCSS()
+            }
+        });
+
+        document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+            if (document.getElementById("leaderboardPopup").style.display === 'block') {
+                document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+                document.getElementById("localleaderboardPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+                document.getElementById("localleaderboardPopup").style.display = 'block';
+                loadCSS();
+            }
+        });
+
+        function loadCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '../../leaderboard/leaderboard.css'; 
+            head.appendChild(link);
+        }
+    </script>
 </body>
 
 </html>

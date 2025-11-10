@@ -1,14 +1,16 @@
 import { textToSpeechEng } from './speak.js';
-import { loadBest, saveBest } from './best_score.js';
-import { startTimer, stopTimer, pauseResumeTimer, hrs, min, sec } from './timer.js';
+// import { loadBest, saveBest } from './best_score.js';
+import { startTimer, stopTimer, pauseResumeTimer, seconds, minutes, hours } from './timer_date.js';
 import { launchConfetti } from './confetti.js';
 import { playSound } from './sound.js';
-import { saveToLeaderboard } from './leaderboard.js';
+// import { saveToLeaderboard } from './leaderboard.js';
 
 export const sizeSel = document.getElementById('sizeSel');
 export const diffSel = document.getElementById('diffSel');
+export let timer = false;
+export let winnerName;
 
-export let player1 = "ABC";
+// export let player1 = "ABC";
 export const state = {
     N: 9,
     blockRows: 3,   // R
@@ -34,14 +36,22 @@ export const state = {
     conflitMode: false
 };
 
-(() => {
+// (() => {
+    window.addEventListener('load', function () {
+        const loading = document.getElementById('loading');
+        loading.style.display = 'none';
+
     let board;
     // let sec = 0;
     // let min = 0;
     // let hrs = 0;
     let fix = 0, empty = 0, wrg = 0, rgt = 0;
-    let player1 = "ABC";
-    let bestScore = JSON.parse(localStorage.getItem("bestScore") || "[]");
+    let theme = localStorage.getItem('rg_theme') || 'dark';
+    let player1 = localStorage.getItem('player_name') || 'Human1';
+    let score = 0;
+    let difficulty = diffSel.value;
+    // let player1 = "ABC";
+    // let bestScore = JSON.parse(localStorage.getItem("bestScore") || "[]");
 
     // theme images used directly
     const size = {
@@ -92,6 +102,12 @@ export const state = {
     const remainInfo = document.getElementById('remainInfo');
     const statusText = document.getElementById('statusText');
     updateHint();
+
+    // this.document.getElementById("player1").textContent = player1;
+
+    document.getElementById("diffSel").addEventListener("click", () => {
+      difficulty = diffSel.value;
+    });
 
 
     // helpers
@@ -307,8 +323,9 @@ export const state = {
 
         for (let i = 0; i < state.N * state.N; i++) {
             const el = grid.children[i];
-            el.className = 'cell';
-            const r = rowOf(i), c = colOf(i);
+            // el.className = 'cell';
+                el.classList.add("cell");
+                const r = rowOf(i), c = colOf(i);
             //   if (r % state.blockRows === 0) el.classList.add('top-border');
             //   if (c % state.blockCols === 0) el.classList.add('left-border');
             let subgridRows = Math.floor(r / state.blockRows);
@@ -662,14 +679,15 @@ export const state = {
             }
         }
         state.revealMode = true;
+        updateleaderboard();
         drawBoard();
         stopTimer();
-        saveBest();
-        loadBest();
-        statusText.textContent = `🎉${player1} Won!🎉(⏱️${hrs}:${min}:${sec})`;
-        wintxt.innerHTML = `🎉${player1} Won!🎉(⏱️${hrs}:${min}:${sec})`;
+        // saveBest();
+        // loadBest();
+        statusText.textContent = `🎉${player1} Won!🎉(⏱️${hours * 3600}:${minutes * 60}:${seconds})`;
+        wintxt.innerHTML = `🎉${player1} Won!🎉(⏱️${hours * 3600}:${minutes * 60}:${seconds})`;
         playSound('win');
-        saveToLeaderboard(hrs, min, sec);
+        // saveToLeaderboard(hrs, min, sec);
         flash(statusText, 'ok');
         launchConfetti();
         return true;
@@ -703,8 +721,8 @@ export const state = {
 
     //create new game puzzle
     function newGame() {
-        player1 = document.getElementById("nameInput").value;
-        namebar.classList.remove('show');
+        // player1 = document.getElementById("nameInput").value;
+        // namebar.classList.remove('show');
         const parsed = parseSizeValue(sizeSel.value);
         state.N = parsed.N;
         state.blockRows = parsed.R;
@@ -730,7 +748,7 @@ export const state = {
             statusText.textContent = 'Good luck!, click numpad number then click cell to fill';
             startTimer();
         }, 8);
-        loadBest();
+        // loadBest();
         updateHint();
     }
 
@@ -780,13 +798,39 @@ export const state = {
         statusText.textContent = 'Enter Name and click <ok>/<new game> Button to start';
     }
 
+    function updateleaderboard() {
+        winnerName = player1;
+        // let score = 0;
+        let opponent = "-"
+        let game_id = 'sudoku';
+        let gsize = `${state.N}x${state.N}`;
+        let elapsed = hours * 3600 + minutes * 60 + seconds;
+        let gameCount = history.length;
+        // let moves = 0;
+        let filed1 = 0;
+        let filed2 = 0
+        let filed3 = "-";
+        let filed4 = "-";
+        let email = localStorage.getItem('email') || '-';
+        const created_at = new Date();
+        score = (state.N * state.N - state.hintCount - state.undo.length - state.redo.length) * 10;
+      
+        const entry = { winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
+        const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+        boardData.push(entry);
+        localStorage.setItem("leaderboard", JSON.stringify(boardData));
+      
+        window.submitScore &&
+          window.submitScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+      }
+
     // get player name
-    const namebar = document.getElementById('namebar');
-    namebar.classList.add('show');
-    document.getElementById('name').addEventListener('click', () => {
-        player1 = document.getElementById("nameInput").value;
-        namebar.classList.remove('show');
-    });
+    // const namebar = document.getElementById('namebar');
+    // namebar.classList.add('show');
+    // document.getElementById('name').addEventListener('click', () => {
+    //     player1 = document.getElementById("nameInput").value;
+    //     namebar.classList.remove('show');
+    // });
 
     // // Rules Toggle 
     // document.getElementById("toggle-rules").addEventListener("click", () => {
@@ -898,11 +942,11 @@ export const state = {
 
 
     //best score
-    function storageKey() {
-        return `mm_best_${state.N}_${diffSel.value}`;
-    }
+    // function storageKey() {
+    //     return `mm_best_${state.N}_${diffSel.value}`;
+    // }
 
     // run
     init();
 
-})();
+});

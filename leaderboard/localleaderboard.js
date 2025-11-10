@@ -11,7 +11,6 @@ let sNo = 1;
 
 export function saveToLeaderboard(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
   const entry = { player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at };
-  console.log(entry);
   const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
   boardData.push(entry);
   localStorage.setItem("leaderboard", JSON.stringify(boardData));
@@ -98,7 +97,6 @@ export async function localrenderLeaderboard() {
       return;
     }
 
-    console.log(data);
     localleaderboardData = data;
     localfilteredData = [...data];
     localcurrentPage = 1;
@@ -110,8 +108,6 @@ function localrenderTable() {
   const start = (localcurrentPage - 1) * localitemsPerPage;
   const end = start + localitemsPerPage;
   const currentItems = localfilteredData.slice(start, end);
-  console.log("currentItems", currentItems);
-  console.log("start", start, end);
 
   if (currentItems.length === 0) {
     tbody.innerHTML = `<tr><td colspan="4">No results found.</td></tr>`;
