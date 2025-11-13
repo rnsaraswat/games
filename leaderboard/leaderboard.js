@@ -20,7 +20,7 @@ export function toggleLeaderboard() {
     document.getElementById("leaderboardPopup").style.display = 'none';
     return;
   }
-  document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+  // document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
   document.getElementById("leaderboardPopup").style.display = 'block';
     renderLeaderboard();
 }
@@ -28,8 +28,8 @@ export function toggleLeaderboard() {
 document.getElementById("hide-leaderboard").addEventListener("click", () => {
   textToSpeechEng('Close Leaderboard');
   document.getElementById("leaderboardPopup").style.display = "none";
-  document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
-  document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+  // document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
+  // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
 })
 
 document.getElementById("searchInput").addEventListener("input", handleSearch);
@@ -178,20 +178,20 @@ export function sortTable(colIndex, order) {
         valB = (b.game_id).toLowerCase();
         break;
       case 1:
-        valA = (a.player_name).toLowerCase();
-        valB = (b.player_name).toLowerCase();
+        valA = (a.player_name || "Guest").toLowerCase();
+        valB = (b.player_name || "Guest").toLowerCase();
         break;
       case 2:
-        valA = (a.player_opponent).toLowerCase();
-        valB = (b.player_opponent).toLowerCase();
+        valA = (a.player_opponent || "Guest").toLowerCase();
+        valB = (b.player_opponent || "Guest").toLowerCase();
         break;
       case 3:
-        valA = (a.size).toLowerCase();
-        valB = (b.size).toLowerCase();
+        valA = (a.size || "Nil").toLowerCase();
+        valB = (b.size || "Nil").toLowerCase();
         break;
       case 4:
-        valA = (a.difficulty).toLowerCase();
-        valB = (b.difficulty).toLowerCase();
+        valA = (a.difficulty || "Nil").toLowerCase();
+        valB = (b.difficulty || "Nil").toLowerCase();
         break;
       case 5:
         valA = a.score || 0;
@@ -210,8 +210,8 @@ export function sortTable(colIndex, order) {
         valB = b.moves || 0;
         break;
       case 9:
-        valA = (a.email).toLowerCase();
-        valB = (b.email).toLowerCase();
+        valA = (a.email || "Nil").toLowerCase();
+        valB = (b.email || "Nil").toLowerCase();
         break;
       case 10:
         valA = (a.filed1) || 0;
@@ -222,12 +222,12 @@ export function sortTable(colIndex, order) {
         valB = (b.filed2) || 0;
         break;
       case 12:
-        valA = (a.filed3).toLowerCase();
-        valB = (b.filed3).toLowerCase();
+        valA = (a.filed3 || "Nil").toLowerCase();
+        valB = (b.filed3 || "Nil").toLowerCase();
         break;
       case 13:
-        valA = (a.field4).toLowerCase();
-        valB = (b.filed4).toLowerCase();
+        valA = (a.field4 || "Nil").toLowerCase();
+        valB = (b.filed4 || "Nil").toLowerCase();
         break;
       default:
         valA = new Date(a.created_at);

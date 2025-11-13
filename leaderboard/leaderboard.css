@@ -1,157 +1,221 @@
-        button.Pry, button.ClearPry {
-            gap: 0.8vw;
-            align-items: center;
-            flex-wrap: wrap;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            padding: 1vw 1.2vw;
-            margin: 1vw 0.2vw 0.5vw 0.2vw;
-            font-size: 1.6vw;
-            display: inline-block;
-            margin-top: 0.1vh;
-            transition: background-color 0.3s, transform 0.2s;
-            box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-            border-radius: 0.5vw;
-            color: #fff;
-            border-color: transparent;
-            background: linear-gradient(180deg, #10b981, #059669);
-            border: none;
-            box-shadow: 0 1vw 4vw var(--box-shadow);
-        }
-        
-        button.Pry:hover, button.ClearPry:hover {
-            opacity: 0.6;
-        }
+:root {
+    --ld-bg: #f0f0f0;
+    --ld-bg-hover: #9d9d9d;
+    --ld-text: #111;
+    --ld-cell-border: #333;
+    --ld-box-shadow: rgba(0, 0, 0, 0.2);
+    --ld-btn-shadow: rgba(0, 0, 0, 0.2);
+}
 
-        button.Pry {
-            background: linear-gradient(90deg, #9c6eeb, #7c3aed);
-        }
-        button.ClearPry {
-            background: linear-gradient(90deg, #ec7777, #ed3a3a);
-        }
+[data-theme='dark'] {
+    --ld-bg: #121212;
+    --ld-bg-hover: #5a5a5a;
+    --ld-text: #eee;
+    --ld-cell-border: #d9d8d8;
+    --ld-box-shadow: rgba(255, 255, 255, 0.5);
+    --ld-btn-shadow: rgba(0, 0, 0, 0.2);
+}
 
-        .leaderboard {
-            padding: 0.4vw 0.3vw;
-            font-size: 1.6vw;
-            margin-top: 0.1vh;
-            transition: background-color 0.3s, transform 0.2s;
-            box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-            cursor: pointer;
-            background: var(--bg);
-            color: var(--text);
-            border: 0.2vw solid var(--cell-border);
-            border-radius: 0.5vw;
-        }
+.ldPry,
+.ldClearPry {
+    gap: 0.8vw;
+    align-items: center;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 1vw 1.2vw;
+    margin: 1vw 0.2vw 0.5vw 0.2vw;
+    font-size: 1.6vw;
+    display: inline-block;
+    margin-top: 0.1vh;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 0.5vw 2.5vw 0 var(--ld-box-shadow);
+    border-radius: 0.5vw;
+    color: var(--ld-text);;
+    border-color: transparent;
+    border: none;
+    box-shadow: 0 1vw 4vw var(--ld-box-shadow);
+}
 
-        .leaderboardSelect {
-            padding: 0.1vw 0.2vw;
-        }
+.ldPry:hover,
+.ldClearPry:hover {
+    background: linear-gradient(90deg, #6eeb7f, #3aed3a);
+    /* opacity: 2; */
+}
 
-        .chip {
-            background: var(--bg);
-            padding: 8px 12px;
-            border-radius: 999px;
-            border: 1px solid rgba(0, 0, 0, .06);
-            cursor: pointer
-        }
+.ldPry {
+    background: linear-gradient(90deg, #9c6eeb, #7c3aed);
+}
 
-        select:hover {
-            background: var(--bg-hover);
-        }
+.ldClearPry {
+    background: linear-gradient(90deg, #ec7777, #ed3a3a);
+}
 
-        input:hover {
-            background: var(--bg-hover);
-        }
+.ldlogin {
+    background: var(--ld-bg);
+    border-radius: 1vw;
+    border: 1px solid rgba(0, 0, 0, .06);
+    padding: 0.2vw 1vw;
+    font-size: 1.6vw;
+    margin-top: 0.1vh;
+    margin: 0.2vw;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 0.5vw 2.5vw 0 var(--ld-box-shadow);
+    cursor: pointer;
+    color: var(--text);
+    border: 0.2vw solid var(--ld-cell-border);
+    text-decoration: none;
+}
 
-        button:hover {
-            background: var(--bg-hover);
-        }
+.ldlogin:hover {
+    background: var(--ld-bg-hover);
+}
 
-        /* leaderboard Table */
-        table,
-        td {
-            border: 0.1vw solid var(--cell-border);
-            box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-            margin: auto;
-            text-align: center;
-            padding: 0.1vw;
-            background: var(--bg);
-            color: var(--text);
-        }
+.leaderboard {
+    padding: 0.4vw 0.3vw;
+    font-size: 1.6vw;
+    margin-top: 0.1vh;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+    cursor: pointer;
+    background: var(--ld-bg);
+    color: var(--ld-text);
+    border: 0.2vw solid var(--ld-cell-border);
+    border-radius: 0.5vw;
+}
 
-        /* for sticky header of table */
-        th {
-            position: sticky;
-            top: 0;
-            /* Sticks to the top of the scroll container */
-            background-color: var(--bg);
-            color: var(--text);
-            z-index: 1;
-            /* Keeps header above scrolling content */
-            padding: 10px;
-            text-align: left;
-            border-bottom: 0.2vw solid var(--cell-border);
-        }
+.leaderboardSelect {
+    padding: 0.1vw 0.2vw;
+}
 
-        /* Leaderboard Popup */
-        #leaderboardPopup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 2vw;
-            border-radius: 1vw;
-            display: none;
-            z-index: 10;
-            width: 95%;
-            height: 95%;
-            overflow-y: auto;
-            text-align: center;
-            border: 0.2vw solid var(--cell-border);
-            background: var(--bg);
-            color: var(--text);
-        }
+.leaderboardSelect :hover {
+    background: var(--ld-bg-hover);
+}
 
-        /* leaderboard heading */
-        h3 {
-            display: inline;
-            background: var(--bg);
-            color: var(--text);
-        }
+.leaderboardinput:hover {
+    background: var(--ld-bg-hover);
+}
 
-        /* popup window with sicky haed */
-        .popupWindow {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 2vw;
-            border-radius: 1vw;
-            display: none;
-            z-index: 10;
-            width: 95%;
-            height: 95%;
-            overflow-x: hidden;
-            overflow-y: auto;
-            text-align: center;
-            border: 0.2vw solid var(--cell-border);
-            background: var(--bg);
-            color: var(--text);
-        }
+button.leaderboard:hover {
+    background: var(--ld-bg-hover);
+}
 
-        .popupHeadeer {
-            position: fixed;
-            display: flex;
-            flex-direction: column;
-            top: 0;
-            width: 100%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-        }
+/* leaderboard Table */
+.leaderboardTable {
+    /* border: 0.1vw solid var(--cell-border); */
+    box-shadow: 0 0.5vw 2.5vw 0 var(--ld-box-shadow);
+    margin: auto;
+    text-align: center;
+    padding: 0.1vw;
+    background: var(--ld-bg);
+    color: var(--ld-text);
+    overflow: auto;
+}
 
-        .popupContent {
-            margin-top: 5vw;
-            height: calc(100% - 5vw);
-            overflow-y: auto;
-        }
+.leaderboardTable td,  .leaderboardTable th{
+    /* border: 0.1vw solid var(--cell-border); */
+    border: 0.1vw solid var(--ld-cell-border);
+}
+
+/* for sticky header of table */
+.sortable {
+    position: sticky;
+    top: 0;
+    /* Sticks to the top of the scroll container */
+    background-color: var(--ld-bg);
+    color: var(--text);
+    z-index: 1;
+    /* Keeps header above scrolling content */
+    padding: 10px;
+    text-align: left;
+    border-bottom: 0.2vw solid var(--ld-cell-border);
+}
+
+/* Leaderboard Popup */
+#leaderboardPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2vw;
+    border-radius: 1vw;
+    display: none;
+    z-index: 10;
+    width: 95%;
+    height: 95%;
+    overflow-y: auto;
+    text-align: center;
+    border: 0.2vw solid var(--ld-cell-border);
+    background: var(--ld-bg);
+    color: var(--ld-text);
+}
+
+/* leaderboard heading */
+.ldh3 {
+    display: inline;
+    background: var(--ld-bg);
+    color: var(--ld-text);
+}
+
+.ldcontrols {
+    flex: 0 0 auto;
+
+    background: var(--ld-bg);
+    padding: 0.2vw;
+    border-radius: 1vw;
+    overflow: auto;
+}
+
+/* popup window with sicky haed */
+.popupWindow {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2vw;
+    border-radius: 1vw;
+    display: none;
+    z-index: 10;
+    width: 95%;
+    height: 95%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align: center;
+    border: 0.2vw solid var(--ld-cell-border);
+    background: var(--ld-bg);
+    color: var(--ld-text);
+}
+
+.ldpopupHeadeer {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 0;
+    width: 95%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.ldpopupContent {
+    margin-top: 9vw;
+    height: calc(100% - 6vw);
+    overflow-y: auto;
+}
+
+.ldsearch-container {
+    font-size: 1.4vw;
+}
+
+/* .leaderboardTable {  */
+/* border="1";
+            cellspacing="0";
+            cellpadding="6"; */
+/* width:100%;
+            border-collapse:collapse;
+            text-align:left;
+        } */
+.ldthead {
+    background: #222;
+    color: #fff;
+}

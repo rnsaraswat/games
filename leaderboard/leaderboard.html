@@ -1,10 +1,10 @@
-    <div class="popupHeadeer">
-      <div class="controls">
-        <h3>🌍 Global Leaderboard</h3>
-        <button class="Pry" id="hide-leaderboard">Hide Leaderboard</button>
-        <a href="../auth/login.html" class="leaderboard">Sign in</a>
+    <div class="ldpopupHeadeer">
+      <div class="ldcontrols">
+        <h3 class="ldh3">🌍 Global Leaderboard</h3>
+        <button class="ldPry" id="hide-leaderboard">Hide Leaderboard</button>
+        <a href="../auth/login.html" class="ldlogin">Sign in</a>
       </div>
-      <div class="search-container" style="margin-bottom:10px;">
+      <div class="ldsearch-container">
         <label class="leaderboard">Filter game: </label>
         <select class="leaderboard" id="gameFilter">
           <option value="all">All</option>
@@ -22,14 +22,13 @@
         <input type="text" class="leaderboard" id="searchInput" placeholder="🔍 Search player..." />
       </div>
     </div>
-    <div class="popupContent">
-      <section style="margin-top:12px">
+    <div class="ldpopupContent">
+      <section>
         <div>
-          <table id="leaderboardTable" border="1" cellspacing="0" cellpadding="6"
-            style="width:100%;border-collapse:collapse;text-align:left;">
-            <thead style="background:#222;color:#fff;">
+          <table  class="leaderboardTable" id="leaderboardTable">
+            <thead class="ldthaed">
               <tr>
-                <th>#</th>
+                <th class="sortable">#</th>
                 <th class="sortable">Game
                   <span class="arrow asc">🔼</span>
                   <span class="arrow desc">🔽</span>
@@ -66,6 +65,10 @@
                   <span class="arrow asc">🔼</span>
                   <span class="arrow desc">🔽</span>
                 </th>
+                <th class="sortable">Email
+                  <span class="arrow asc">🔼</span>
+                  <span class="arrow desc">🔽</span>
+                </th>
                 <th class="sortable">Field1
                   <span class="arrow asc">🔼</span>
                   <span class="arrow desc">🔽</span>
@@ -90,7 +93,7 @@
             </tbody>
           </table>
         </div>
-        <div class="pagination">
+        <div class="ldpagination">
           <button class="leaderboard" id="prevPage">⬅ Prev</button>
           <span id="pageInfo"></span>
           <button class="leaderboard" id="nextPage">Next ➡</button>

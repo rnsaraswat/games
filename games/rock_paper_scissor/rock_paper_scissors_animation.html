@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <style>
+        :root {
+            --bg: #121212;
+            --bg-hover: #5a5a5a;
+            --card: #ae6903;
+            --card-hover: #a26202;
+            --text: #eee;
+            --muted: #475569;
+            --accent: #0ea5a3;
+            --accent-hover: #018f8d;
+            --cell-border: #d9d8d8;
+            --box-shadow: rgba(255, 255, 255, 0.5);
+            --btn-shadow: rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme='dark'] {
+            --bg: #f0f0f0;
+            --bg-hover: #9d9d9d;
+            --card: #f6e9d5;
+            --card-hover: #f5d6a8;
+            --text: #111;
+            --muted: #9fb3c8;
+            --accent: #22c1c3;
+            --accent-hover: #01a6a8;
+            --box-shadow: rgba(0, 0, 0, 0.2);
+            --btn-shadow: rgba(0, 0, 0, 0.2);
+            --cell-border: #333;
+        }
+
+        @font-face {
+            font-family: 'EnglishFontBangers';
+            src: url('../../assets/font/Bangers-Regular.ttf') format('truetype');
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            width: 100vw;
+            cursor: not-allowed;
+            overflow: hidden;
+        }
+
+        .grid-container {
+            width: 100vw;
+            text-align: center;
+            padding: 0.1vw 0.1vw 0.1vw 0.1vw;
+            margin: 0.1vw 0.1vw 0.1vw 0.1vw;
+            background-color: var(--bg);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .brand {
+            display: flex;
+            gap: 1.2vw;
+            width: 60%;
+            align-items: center;
+            margin: 0vw;
+        }
+
+        .main {
+            /* flex: 0 0 45%; */
+
+            display: flex;
+            width: 50% 50%;
+            gap: 1vw;
+            padding: 0.5vw;
+            align-items: stretch;
+            overflow: hidden;
+        }
+
+        .hdrbtns {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hdr-child-div {
+            display: flex;
+        }
+
+        .chip {
+            background: var(--bg);
+            border-radius: 1vw;
+            border: 1px solid rgba(0, 0, 0, .06);
+            padding: 0.2vw 1vw;
+            font-size: 1.6vw;
+            margin-top: 0.1vh;
+            margin: 0.2vw;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+            cursor: pointer;
+            color: var(--text);
+            border: 0.2vw solid var(--cell-border);
+            text-decoration: none;
+        }
+
+        .chip:hover {
+            background: var(--bg-hover);
+        }
+
+        .lead {
+            font-size: 1.6vw;
+            margin: 0.2vw;
+        }
+
+        .message {
+            font-size: 4vw;
+        }
+
+        #grid-message {
+            font-family: cursive;
+            background-color: white;
+            padding: 0.1vw;
+            width: 100%;
+            font-size: 2vw;
+            text-align: center;
+        }
+
+        #grid-image {
+            width: 100%;
+        }
+
+        h1 {
+            margin: 0vw;
+            text-align: center;
+            font-size: 6vw;
+            font-family: 'EnglishFontBangers', Arial, Helvetica, sans-serif;
+            color: var(--text-color);
+            letter-spacing: .8vw;
+            text-shadow: 0 1px 0 #030303,
+                0 2px 0 #c9c9c9,
+                0 3px 0 #bbb,
+                0 4px 0 #b9b9b9,
+                0 5px 0 #aaa,
+                0 6px 1px var(--box-shadow),
+                0 0 5px var(--box-shadow),
+                0 1px 3px var(--box-shadow),
+                0 3px 5px var(--box-shadow),
+                0 5px 10px var(--box-shadow),
+                0 10px 10px var(--box-shadow),
+                0 20px 20px var(--box-shadow);
+            margin-bottom: 0.3vw;
+        }
+
+        .grid-item {
+            font-family: cursive;
+            background-color: white;
+            padding: 0.1vw;
+            width: 50%;
+            font-size: 2vw;
+            text-align: center;
+        }
+
+        .score {
+            padding: 0.1vw;
+            background-color: black;
+            color: white;
+        }
+
+        .iconimage {
+            /* cursor: pointer; */
+            margin: 0.1vw 0.1vw;
+            padding: 0.1vw 0.1vw;
+            width: 15vw;
+            height: 15vw;
+            border-radius: 50%;
+            opacity: .8;
+        }
+
+        .iconimage:hover {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }
+
+        .playerdiv,
+        .computerdiv {
+            text-align: center;
+            align-items: center;
+            align-content: center;
+        }
+
+        .playerdiv>img,
+        .computerdiv>img {
+            width: 30vw;
+            height: 30vw;
+        }
+
+        .button {
+            float: right;
+            margin: 0.2vw 0.2vw;
+            padding: 0.5vw 1vw;
+            font-size: 1.5vw;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: #04AA6D;
+            border: none;
+            border-radius: 1vw;
+            box-shadow: 0 0.4vw #999;
+        }
+
+        .button:hover {
+            background-color: #3e8e41
+        }
+
+        .button:active {
+            background-color: #3e8e41;
+            box-shadow: 0 0.5vw #666;
+            transform: translateY(0.3vw);
+        }
+
+        /* for shaking of item class shake */
+        .shake {
+            animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+            transform: translate3d(0, 0, 0);
+        }
+
+        @keyframes shake {
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(4px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+        }
+
+        .sectionplayer {
+            animation: zoom-in-zoom-out 2s ease 1;
+        }
+
+        .sectioncomputer {
+            animation: zoom-out-zoom-in 2s ease 1;
+        }
+
+        @keyframes zoom-out-zoom-in {
+            0% {
+                transform: scale(1, 1);
+            }
+
+            50% {
+                transform: scale(.8, .8);
+            }
+
+            100% {
+                transform: scale(1, 1);
+            }
+        }
+
+        @keyframes zoom-in-zoom-out {
+            0% {
+                transform: scale(1, 1);
+            }
+
+            50% {
+                transform: scale(1.2, 1.2);
+            }
+
+            100% {
+                transform: scale(1, 1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid-container">
+        <header>
+            <div class="brand">
+                <div class="title">
+                    <h1>Rock Paper Scissors</h1>
+                </div>
+            </div>
+            <div class="hdrbtns">
+                <div class="hdr-child-div">
+                    <!-- <a class="chip" id="toggle-leaderboard" href="leaderboard/index.html">Global Leaderboard</a> -->
+                    <a class="chip" id="toggle-leaderboard">🌍 Global Leaderboard</a>
+                    <a class="chip" href="auth/login.html">Sign in</a>
+                </div>
+                <div class="hdr-child-div">
+                    <button class="chip" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
+                    <button class="chip" id="themeToggle">Light</button>
+                </div>
+                <p id="welcom" class="lead">Welcome</p>
+            </div>
+        </header>
+        <div class="main">
+            <div class="grid-item" id="players">
+                <div class="score">
+                    <span>You : </span><span id="yourscore">0</span>
+                </div>
+                <div class="playerdiv" id="playerdiv" class="center"><img src="../../assets/images/question_mark3.png"></div>
+            </div>
+            <div class="grid-item" id="computer">
+                <div class="score">
+                    <span>Computer : </span><span id="compscore">0</span>
+                </div>
+                <div class="computerdiv" id="computerdiv" class="center"><img src="../../assets/images/question_mark2.png" </div>
+                </div>
+            </div>
+        </div>
+        <div class="message"> <span id="message">Click on Any One & try your luck</span><button class="button" id="try"
+                onclick="tryAgain()">Try Again</button></div>
+        <div class="img-icon">
+            <img src="../../assets/images/rock.png" alt="Rock" onclick="check('rock')" id="rock" class="iconimage">
+            <img src="../../assets/images/paper.png" alt="Paper" onclick="check('paper')" id="paper" class="iconimage">
+            <img src="../../assets/images/scissors.png" alt="Sciccors" onclick="check('scissors')" id="scissors"
+                class="iconimage">
+        </div>
+    </div>
+    </div>
+    <script>
+        const rockPaperScissors = ["rock", "paper", "scissors"];
+        let computerChoice = Math.floor(Math.random() * rockPaperScissors.length);
+        let scorecomp = 0;
+        let scoreyour = 0;
+        let synth = speechSynthesis;
+        const gridMessage = document.getElementById('message');
+        const compscore = document.getElementById('compscore');
+        const yourscore = document.getElementById('yourscore');
+        const playerdiv = document.getElementById('playerdiv');
+        const computerdiv = document.getElementById('computerdiv');
+        const rockicon = document.getElementById('rock');
+        const papericon = document.getElementById('paper');
+        const scissorsicon = document.getElementById('scissors');
+        const try1 = document.getElementById('try');
+        try1.style.display = "none";
+        console.log(computerChoice);
+
+        function check(text) {
+            console.log(text);
+            if (text == rockPaperScissors[computerChoice]) {
+                // scoreyour++;
+                // yourscore.innerHTML = scoreyour;
+                if (rockPaperScissors[computerChoice] == 'paper') {
+                    computerdiv.innerHTML = "<img src=\"../../assets/images/paper.png>";
+                } else if (rockPaperScissors[computerChoice] == 'rock') {
+                    computerdiv.innerHTML = "<img src=\"../../assets/images/rock.png>";
+                } else if (rockPaperScissors[computerChoice] == 'scissors') {
+                    computerdiv.innerHTML = "<img src=\"../../assets/images/scissors.png>";
+                }
+                if (text == 'paper') {
+                    playerdiv.innerHTML = "<img src=\"../../assets/images/paper.png>";
+                } else if (text == 'rock') {
+                    playerdiv.innerHTML = "<img src=\"../../assets/images/rock.png>";
+                } else if (text == 'scissors') {
+                    playerdiv.innerHTML = "<img src=\"../../assets/images/scissors.png>";
+                }
+                try1.innerHTML = "Try Again";
+                try1.style.display = "block";
+                rockicon.removeAttribute("onclick");
+                papericon.removeAttribute("onclick");
+                scissorsicon.removeAttribute("onclick");
+                rockicon.style.cursor = "not-Allowed";
+                papericon.style.cursor = "not-Allowed";
+                scissorsicon.style.cursor = "not-Allowed";
+                playerdiv.classList.add("shake");
+                setTimeout(() => { playerdiv.classList.remove("shake") }, 1000);
+                computerdiv.classList.add("shake");
+                setTimeout(() => { computerdiv.classList.remove("shake") }, 1000);
+                gridMessage.innerHTML = "It's a Tie";
+                textToSpeechEng("It's a Tie");
+            } else if ((text == 'rock' && rockPaperScissors[computerChoice] == 'paper') || (text == 'paper' && rockPaperScissors[computerChoice] == 'scissors') || (text == 'scissors' && rockPaperScissors[computerChoice] == 'rock')) {
+                scorecomp++;
+                compscore.innerHTML = scorecomp;
+                if (rockPaperScissors[computerChoice] == 'paper') {
+                    computerdiv.innerHTML = "<img src=\"../../assets/images/paper.png>";
+                } else if (rockPaperScissors[computerChoice] == 'rock') {
+                    computerdiv.innerHTML = "<img src=\"../../assets/images/rock.png>";
+                } else if (rockPaperScissors[computerChoice] == 'scissors') {
+                    computerdiv.innerHTML = "<img src=\"../../assets/images/scissors.png>";
+                }
+                if (text == 'paper') {
+                    playerdiv.innerHTML = "<img src=\"../../assets/images/paper.png>";
+                } else if (text == 'rock') {
+                    playerdiv.innerHTML = "<img src=\"../../assets/images/rock.png>";
+                } else if (text == 'scissors') {
+                    playerdiv.innerHTML = "<img src=\"../../assets/images/scissors.png";
+                }
+                try1.innerHTML = "Try Again";
+                try1.style.display = "block";
+                rockicon.removeAttribute("onclick");
+                papericon.removeAttribute("onclick");
+                scissorsicon.removeAttribute("onclick");
+                rockicon.style.cursor = "not-Allowed";
+                papericon.style.cursor = "not-Allowed";
+                scissorsicon.style.cursor = "not-Allowed";
+
+                computerdiv.classList.add("sectionplayer");
+                setTimeout(() => { computerdiv.classList.remove("sectionplayer") }, 1000);
+                playerdiv.classList.add("sectioncomputer");
+                setTimeout(() => { playerdiv.classList.remove("sectioncomputer") }, 1000);
+
+                gridMessage.innerHTML = "Computer win ";
+                textToSpeechEng("Computer win");
+            } else if ((rockPaperScissors[computerChoice] == 'rock' && text == 'paper') || (rockPaperScissors[computerChoice] == 'paper' && text == 'scissors') || (rockPaperScissors[computerChoice] == 'scissors' && text == 'rock')) {
+                scoreyour++;
+                yourscore.innerHTML = scoreyour;
+                if (rockPaperScissors[computerChoice] == 'paper') {
+                    computerdiv.innerHTML = "<img src=\"../../assets/images/paper.png>";
+                } else if (rockPaperScissors[computerChoice] == 'rock') {
+                    computerdiv.innerHTML = "<img src=\"../../assets/images/rock.png>";
+                } else if (rockPaperScissors[computerChoice] == 'scissors') {
+                    computerdiv.innerHTML = "<img src=\"../../assets/images/scissors.png>";
+                }
+                if (text == 'paper') {
+                    playerdiv.innerHTML = "<img src=\"../../assets/images/paper.png>";
+                } else if (text == 'rock') {
+                    playerdiv.innerHTML = "<img src=\"../../assets/images/rock.png>";
+                } else if (text == 'scissors') {
+                    playerdiv.innerHTML = "<img src=\"../../assets/images/scissors.png>";
+                }
+                try1.innerHTML = "Play Again";
+                try1.style.display = "block";
+                rockicon.removeAttribute("onclick");
+                papericon.removeAttribute("onclick");
+                scissorsicon.removeAttribute("onclick");
+                rockicon.style.cursor = "not-Allowed";
+                papericon.style.cursor = "not-Allowed";
+                scissorsicon.style.cursor = "not-Allowed";
+
+                playerdiv.classList.add("sectionplayer");
+                setTimeout(() => { playerdiv.classList.remove("sectionplayer") }, 1000);
+                computerdiv.classList.add("sectioncomputer");
+                setTimeout(() => { computerdiv.classList.remove("sectioncomputer") }, 1000);
+
+                gridMessage.innerHTML = "You win ";
+                textToSpeechEng("You win");
+            } else {
+                gridMessage.innerHTML = "Error (computer choice is " + rockPaperScissors[computerChoice] + ")";
+            }
+        }
+
+        function tryAgain() {
+            computerChoice = Math.floor(Math.random() * rockPaperScissors.length);
+            try1.style.display = "none";
+            playerdiv.innerHTML = "<img src=\"../../assets/images/question_mark3.png";
+            computerdiv.innerHTML = "<img src=\"../../assets/images/question_mark2.png>";
+            rockicon.setAttribute("onclick", "check('rock')");
+            papericon.setAttribute("onclick", "check('paper')");
+            scissorsicon.setAttribute("onclick", "check('scissors')");
+            rockicon.style.cursor = "pointer";
+            papericon.style.cursor = "pointer";
+            scissorsicon.style.cursor = "pointer";
+            gridMessage.innerHTML = "Click on Any One & try your luck";
+        }
+
+        function textToSpeechEng(text) {
+            let utterance = new SpeechSynthesisUtterance(text);
+            utterance.name = "Google US English";
+            utterance.lang = "en-US";
+            // utterance.vioce = voiceEng;
+            utterance.vioce = "Google US English";
+            synth.speak(utterance);
+        }
+
+        // window.addEventListener('resize', () => { computeCellSize(); drawBoard(); });
+
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        function setTheme(t) {
+            if (t === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '🌙 Dark'
+            }
+            if (t === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '☀️ Light'
+            }
+        }
+        if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+        setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+
+    </script>
+</body>
+
+</html>

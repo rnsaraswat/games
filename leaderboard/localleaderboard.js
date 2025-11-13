@@ -1,26 +1,30 @@
 import { textToSpeechEng } from './speak.js';
 
 let localcurrentData = [];
-let currentSortColumn = null;
-let currentSortOrder = 'asc';
+let localcurrentSortColumn = null;
+let localcurrentSortOrder = 'asc';
 let localleaderboardData = [];
 let localfilteredData = [];
 let localcurrentPage = 1;
 let localitemsPerPage = 10;
 let sNo = 1;
 
-export function saveToLeaderboard(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
-  const entry = { player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at };
-  const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-  boardData.push(entry);
-  localStorage.setItem("leaderboard", JSON.stringify(boardData));
+export function localtoggleLeaderboard() {
+  if (document.getElementById("leaderboardPopup").style.display === 'block') {
+    document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+    document.getElementById("leaderboardPopup").style.display = 'none';
+    return;
+  }
+  // document.getElementById("local-toggle-leaderboard").textContent = "Hide Leaderboard";
+  document.getElementById("leaderboardPopup").style.display = 'block';
+    localrenderLeaderboard();
 }
 
 document.getElementById("local-hide-leaderboard").addEventListener("click", () => {
   textToSpeechEng('Close Leaderboard');
   document.getElementById("localleaderboardPopup").style.display = "none";
-  document.getElementById("local-hide-leaderboard").textContent = "Hide Leaderboard";
-  document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+  // document.getElementById("local-hide-leaderboard").textContent = "Hide Leaderboard";
+  // document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
 })
 
 document.getElementById("clear-leaderboard").addEventListener("click", () => {
@@ -31,7 +35,7 @@ document.getElementById("clear-leaderboard").addEventListener("click", () => {
   }
 })
 
-document.getElementById("localsearchInput").addEventListener("input", localhandleSearch);
+// document.getElementById("localsearchInput").addEventListener("input", localhandleSearch);
 document.getElementById("localtopSelect").addEventListener("change", localhandleTopSelect);
 document.getElementById("localprevPage").addEventListener("click", localprevPage);
 document.getElementById("localnextPage").addEventListener("click", localnextPage);
@@ -45,8 +49,8 @@ export function localhandleSearch(e) {
   localfilteredData = localleaderboardData.filter(row =>
     row.player_name?.toLowerCase().includes(searchTerm)
   );
-  currentPage = 1;
-  renderTable();
+  localcurrentPage = 1;
+  localrenderTable();
 }
 
 function localhandleTopSelect(e) {
@@ -146,8 +150,8 @@ function localrenderTable() {
 
 export function localsortTable(colIndex, order) {
   if (!localfilteredData || localfilteredData.length === 0) return;
-  currentSortColumn = colIndex;
-  currentSortOrder = order;
+  localcurrentSortColumn = colIndex;
+  localcurrentSortOrder = order;
 
   localfilteredData.sort((a, b) => {
       let valA, valB;
@@ -165,12 +169,12 @@ export function localsortTable(colIndex, order) {
           valB = (b.player_opponent || "Guest").toLowerCase();
           break;
         case 3:
-          valA = (a.size).toLowerCase();
-          valB = (b.size).toLowerCase();
+          valA = (a.size || "Nil").toLowerCase();
+          valB = (b.size || "Nil").toLowerCase();
           break;
         case 4:
-          valA = (a.difficulty).toLowerCase();
-          valB = (b.difficulty).toLowerCase();
+          valA = (a.difficulty || "Nil").toLowerCase();
+          valB = (b.difficulty || "Nil").toLowerCase();
           break;
         case 5:
           valA = a.score || 0;
@@ -189,8 +193,8 @@ export function localsortTable(colIndex, order) {
           valB = b.moves || 0;
           break;
         case 9:
-          valA = (a.email).toLowerCase();
-          valB = (b.email).toLowerCase();
+          valA = (a.email || "Nil").toLowerCase();
+          valB = (b.email || "Nil").toLowerCase();
           break;
         case 10:
           valA = (a.filed1) || 0;
@@ -201,8 +205,8 @@ export function localsortTable(colIndex, order) {
           valB = (b.filed2) || 0;
           break;
         case 12:
-          valA = (a.filed3).toLowerCase();
-          valB = (b.filed3).toLowerCase();
+          valA = (a.filed3 || "Nil").toLowerCase();
+          valB = (b.filed3 || "Nil").toLowerCase();
           break;
         case 13:
           valA = (a.filed4).toLowerCase();
@@ -253,7 +257,14 @@ document.addEventListener("DOMContentLoaded", () => {
   headers.forEach((th, i) => {
     const up = th.querySelector(".arrow.asc");
     const down = th.querySelector(".arrow.desc");
-    up.addEventListener("click", e => { e.stopPropagation(); sortTable(i, 'asc'); });
-    down.addEventListener("click", e => { e.stopPropagation(); sortTable(i, 'desc'); });
+    up.addEventListener("click", e => { e.stopPropagation(); localsortTable(i, 'asc'); });
+    down.addEventListener("click", e => { e.stopPropagation(); localsortTable(i, 'desc'); });
   });
 });
+
+export function saveToLeaderboard(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
+  const entry = { player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at };
+  const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+  boardData.push(entry);
+  localStorage.setItem("leaderboard", JSON.stringify(boardData));
+}

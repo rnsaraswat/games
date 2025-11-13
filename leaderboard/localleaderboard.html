@@ -1,11 +1,11 @@
-<div class="popupHeadeer">
-    <div class="controls">
-      <h3>🏆 Local Leaderboard</h3>
-      <button class="Pry" id="local-hide-leaderboard">Hide Leaderboard</button>
-      <button class="ClearPry" id="clear-leaderboard">Clear Leaderboard</button>
-      <a href="../auth/login.html" class="leaderboard">Sign in</a>
+<div class="ldpopupHeadeer">
+    <div class="ldcontrols">
+      <h3 class="ldh3">🏆 Local Leaderboard</h3>
+      <button class="ldPry" id="local-hide-leaderboard">Hide Leaderboard</button>
+      <button class="ldClearPry" id="clear-leaderboard">Clear Leaderboard</button>
+      <a href="../auth/login.html" class="ldlogin">Sign in</a>
     </div>
-    <div class="search-container" style="margin-bottom:10px;">
+    <div class="ldsearch-container">
       <label class="leaderboard">Filter game: </label>
       <select class="leaderboard" id="localgameFilter">
         <option value="all">All</option>
@@ -23,14 +23,13 @@
       <input type="text" class="leaderboard" id="localsearchInput" placeholder="🔍 Search player..." />
     </div>
   </div>
-  <div class="popupContent">
-    <section style="margin-top:12px">
+  <div class="ldpopupContent">
+    <section>
       <div>
-        <table id="localleaderboardTable" border="1" cellspacing="0" cellpadding="6"
-          style="width:100%;border-collapse:collapse;text-align:left;">
-          <thead style="background:#222;color:#fff;">
+        <table class="leaderboardTable" id="localleaderboardTable">
+          <thead class="ldthaed">
             <tr>
-              <th>#</th>
+              <th class="sortable">#</th>
               <th class="sortable">Game
                 <span class="arrow asc">🔼</span>
                 <span class="arrow desc">🔽</span>
@@ -67,6 +66,10 @@
                 <span class="arrow asc">🔼</span>
                 <span class="arrow desc">🔽</span>
               </th>
+              <th class="sortable">Email
+                <span class="arrow asc">🔼</span>
+                <span class="arrow desc">🔽</span>
+              </th>
               <th class="sortable">Field1
                 <span class="arrow asc">🔼</span>
                 <span class="arrow desc">🔽</span>
@@ -92,7 +95,7 @@
           </tbody>
         </table>
       </div>
-      <div class="pagination">
+      <div class="ldpagination">
         <button class="leaderboard" id="localprevPage">⬅ Prev</button>
         <span id="localpageInfo"></span>
         <button class="leaderboard" id="localnextPage">Next ➡</button>

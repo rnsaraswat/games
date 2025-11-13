@@ -31,7 +31,7 @@
                 </div>
                 <div class="hdr-child-div">
                     <button class="chip" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
-                    <button class="chip" id="themeToggle">Light</button>
+                    <button class="chip" id="themeToggle">☀️ Light</button>
                 </div>
                 <p id="welcom" class="lead">Welcome</p>
             </div>
@@ -62,218 +62,6 @@
     </div>
     <div id="localleaderboardPopup" class="popupWindow">
     </div>
-
-    <!-- <div id="localleaderboardPopup" class="popupWindow">
-        <div class="popupHeadeer">
-            <div class="controls">
-                <h3>🏆Local Leaderboard</h3>
-                <button class="chip" id="local-hide-leaderboard">Hide Leaderboard</button>
-                <button class="primary" id="clear-leaderboard">Clear Leaderboard</button>
-                <a href="../auth/login.html" class="chip">Sign in</a>
-            </div>
-            <div class="search-container" style="margin-bottom:10px;">
-                <label>Filter game: </label>
-                <select id="localgameFilter">
-                    <option value="all" selected>All</option>
-                    <option value="tictactoe">Tic Tac Toe</option>
-                    <option value="mastermind">Mastermind</option>
-                </select>
-                <label>Per page:
-                    <select id="localtopSelect">
-                        <option value="5">5</option>
-                        <option value="10" selected>10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                    </select>
-                </label>
-                <input type="text" id="localsearchInput" placeholder="🔍 Search player..." />
-            </div>
-        </div>
-        <div class="popupContent">
-            <section style="margin-top:12px">
-                <div>
-                    <table id="leaderboardTable" border="1" cellspacing="0" cellpadding="6"
-                        style="width:100%;border-collapse:collapse;text-align:left;">
-                        <thead style="background:#222;color:#fff;">
-                            <tr>
-                                <th>#</th>
-                                <th class="sortable">Game
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Winner
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Looser
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Size
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Difficulty
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Score
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Elapsed time
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Date
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Moves
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Field1
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Field2
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Field3
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Field4
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody id="localleaderboardTableBody">
-                            <tr>
-                                <td colspan="4" style="text-align:center;">Loading...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="pagination">
-                    <button id="localprevPage">⬅ Prev</button>
-                    <span id="localpageInfo"></span>
-                    <button id="localnextPage">Next ➡</button>
-                </div>
-            </section>
-        </div>
-    </div>
-
-    <div id="leaderboardPopup" class="popupWindow">
-        <div class="popupHeadeer">
-            <div class="controls">
-                <h3>🏆Global Leaderboard</h3>
-                <button class="chip" id="hide-leaderboard">Hide Leaderboard</button>
-                <a href="../auth/login.html" class="chip">Sign in</a>
-            </div>
-            <div class="search-container" style="margin-bottom:10px;">
-                <label>Filter game: </label>
-                <select id="gameFilter">
-                    <option value="all" selected>All</option>
-                    <option value="tictactoe">Tic Tac Toe</option>
-                    <option value="mastermind">Mastermind</option>
-                </select>
-                <label>Show Top:
-                    <select id="topSelect">
-                        <option value="5">5</option>
-                        <option value="10" selected>10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                    </select>
-                </label>
-                <input type="text" id="searchInput" placeholder="🔍 Search player..." />
-            </div>
-        </div>
-        <div class="popupContent">
-            <section style="margin-top:12px">
-                <div>
-                    <table id="leaderboardTable" border="1" cellspacing="0" cellpadding="6"
-                        style="width:100%;border-collapse:collapse;text-align:left;">
-                        <thead style="background:#222;color:#fff;">
-                            <tr>
-                                <th>#</th>
-                                <th class="sortable">Game
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Winner
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Looser
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Size
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Difficulty
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Score
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Elapsed time
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Date
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Moves
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Email
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Field1
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Field2
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Field3
-                                  <span class="arrow asc">🔼</span>
-                                  <span class="arrow desc">🔽</span>
-                                </th>
-                                <th class="sortable">Field4
-                                    <span class="arrow asc">🔼</span>
-                                    <span class="arrow desc">🔽</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody id="leaderboardTableBody">
-                            <tr>
-                                <td colspan="4" style="text-align:center;">Loading...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="pagination">
-                    <button id="prevPage">⬅ Prev</button>
-                    <span id="pageInfo"></span>
-                    <button id="nextPage">Next ➡</button>
-                </div>
-            </section>
-        </div>
-    </div> -->
-
     <script src="leaderboard/submit-helper.js"></script>
 
     <script type="module">
@@ -298,63 +86,27 @@
         });
     </script>
 
-    <!-- <script type="module">
-        import { renderLeaderboard } from './leaderboard/leaderboard.js';
 
-        document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-            if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
-                document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
-                document.getElementById("leaderboardPopup").style.display = 'none';
-                return;
-            }
-            document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
-            document.getElementById("leaderboardPopup").style.display = 'block';
-            renderLeaderboard();
-        });
-
-        document.getElementById("hide-leaderboard").addEventListener("click", () => {
-            document.getElementById("leaderboardPopup").style.display = "none";
-            document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
-            document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
-        });
-    </script>
-    <script type="module">
-        import { localrenderLeaderboard } from './leaderboard/localleaderboard.js';
-
-            //toggle Local leaderboard
-            document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
-            if (document.getElementById("leaderboardPopup").style.display === 'block') {
-                document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
-                document.getElementById("leaderboardPopup").style.display = 'none';
-                return;
-            }
-            document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
-            document.getElementById("leaderboardPopup").style.display = 'block';
-            localrenderLeaderboard();
-        });
-    </script> -->
     <script>
         const games = [
-            { id: '4inARow', name: '4inarow', title: '4 in A Row', desc: 'Classic X vs O — human or AI', href: 'games/4inARow/index.html' },
-            { id: '5inARow', name: '5inarow', title: '5 in A Row', desc: 'Classic X vs O — human or AI', href: 'games/5inARow/index.html' },
-            { id: 'connect3', name: 'connect3', title: 'Connect 3', desc: 'Classic X vs O — human or AI', href: 'games/connect_3/index.html' },
-            { id: 'connect4', name: 'connect4', title: 'Connect 4', desc: 'Classic X vs O — human or AI', href: 'games/connect_4/index.html' },
+            { id: 'rockpaperscissor', name: 'rockpaperscissor', title: 'Rock Paper Scissor', desc: 'Classic & Action-Oriented X vs O', href: 'games/rock_paper_scissor/RPS.html' },
+            { id: '4inARow', name: '4inarow', title: '4 in A Row', desc: 'Classic & Action-Oriented X vs O', href: 'games/4inARow/index.html' },
+            { id: '5inARow', name: '5inarow', title: '5 in A Row', desc: "It's not just luck, it's strategy", href: 'games/5inARow/index.html' },
+            { id: 'connect3', name: 'connect3', title: 'Connect 3', desc: 'Connect Three Classic X vs O', href: 'games/connect_3/index.html' },
+            { id: 'connect4', name: 'connect4', title: 'Connect 4', desc: 'Endless ways to connect four X vs O', href: 'games/connect_4/index.html' },
             { id: 'sudoku', name: 'sudoku', title: 'Sudoku', desc: 'Solve logic puzzles of various sizes', href: 'games/sudoku/index.html' },
             { id: 'sudokusolver', name: 'sudokusolver', title: 'Sudoku Solver', desc: 'Solve your sudoku Puzzle', href: 'games/sudoku_solver/index.html' },
-            { id: 'tictactoe', name: 'tictactoe', title: 'Tic Tac Toe', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe/index.html' },
-            { id: 'tictactoe1', name: 'tictactoe', title: 'Tic Tac Toe New', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe1/index.html' },
+            { id: 'tictactoe', name: 'tictactoe', title: 'Tic Tac Toe', desc: 'Simple to learn, tough to master X vs O', href: 'games/tictactoe/index.html' },
+            { id: 'tictactoe1', name: 'tictactoe', title: 'Tic Tac Toe New', desc: "One wrong move, and it's over X vs O", href: 'games/tictactoe1/index.html' },
             { id: 'tictactoe2', name: 'tictactoe', title: 'Tic Tac Toe simple', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe2/index.html' },
-            { id: 'tictactoe3', name: 'tictactoe', title: 'Tic Tac Toe', desc: 'Classic X vs O — human or AI', href: 'games/tictactoe3/index.html' },
-            { id: 'threeinarow', name: 'threeinarow', title: '3 in Row (Tic Tac Toe)', desc: 'Classic X vs O — human or AI', href: 'games/threeinarow/index.html' },
-            { id: 'mastermind', name: 'mastermind', title: 'Mastermind', desc: 'Guess the color code', href: 'games/mastermind/index.html' },
-            { id: 'mastermind1', name: 'mastermind', title: 'Mastermind', desc: 'Guess the color code', href: 'games/mastermindtext/mastermind_text.html' }
-            // { id: 'memory', title: 'Memory Game', desc: 'Find pairs before timer ends', href: '/games/memory/index.html' },
-            // { id: 'gomoku', title: 'Gomoku (5 in a Row)', desc: 'Beat computer with smart AI', href: '/games/gomoku/index.html' },
-            // { id: 'sudoku', title: 'Sudoku', desc: 'Solve logic puzzles of various sizes', href: '/games/sudoku/index.html' },
-            // { id: 'slitherlink', title: 'Slitherlink', desc: 'Create a single loop puzzle', href: '/games/slitherlink/index.html' }
+            { id: 'tictactoe3', name: 'tictactoe', title: 'Tic Tac Toe', desc: 'Think ahead. Connect three to Win X vs O', href: 'games/tictactoe3/index.html' },
+            { id: 'threeinarow', name: 'threeinarow', title: '3 in Row (Tic Tac Toe)', desc: "It's not just luck, it's strategy X vs O", href: 'games/threeinarow/index.html' },
+            { id: 'mastermind', name: 'mastermind', title: 'Mastermind', desc: 'Where great minds converge', href: 'games/mastermind/index.html' },
+            { id: 'mastermind1', name: 'mastermind', title: 'Mastermind', desc: 'Thinking without limits', href: 'games/mastermindtext/mastermind_text.html' }
         ];
 
         const player_name = localStorage.getItem('player_name') || 'Guest';
+        // let theme = localStorage.getItem('rg_theme') || 'dark';
 
         document.getElementById("welcom").textContent = `Welcome ${player_name}`;
         document.getElementById("welcom").style.alignContent = "center";
@@ -383,7 +135,7 @@
         }
         if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
-        // Lazy register SW
+
         if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').then(() => console.log('sw registered')); }
 
 
@@ -402,27 +154,26 @@
         document.getElementById("localleaderboardPopup").style.display = 'none';
 
         document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-            // if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
-            if (document.getElementById("leaderboardPopup").style.display === 'block') {
-                document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+            if (document.getElementById("toggle-leaderboard").style.display === 'block') {
+                // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
                 document.getElementById("leaderboardPopup").style.display = 'none';
                 return;
             } else {
-                document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
+                // document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
                 document.getElementById("leaderboardPopup").style.display = 'block';
-                // loadCSS()
+                loadCSS()
             }
         });
 
         document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
             if (document.getElementById("leaderboardPopup").style.display === 'block') {
-                document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+                // document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
                 document.getElementById("localleaderboardPopup").style.display = 'none';
                 return;
             } else {
-                document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+                // document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
                 document.getElementById("localleaderboardPopup").style.display = 'block';
-                // loadCSS();
+                loadCSS();
             }
         });
 
@@ -431,11 +182,11 @@
             var link = document.createElement('link');
             link.rel = 'stylesheet';
             link.type = 'text/css';
-            link.href = './leaderboard/leaderboard.css'; // आपकी CSS फ़ाइल का नाम
+            link.href = './leaderboard/leaderboard.css';
             head.appendChild(link);
         }
 
-        window.onload = function() {
+        window.onload = function () {
             loadCSS();
         };
     </script>

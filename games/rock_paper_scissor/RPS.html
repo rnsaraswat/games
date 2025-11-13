@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="hi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app">
+        <div class="main">
+            <aside class="controls">
+                <h1>Rock Paper Scissors</h1>
+                <div class="inlinewidth">
+                    <div>
+                        <label class="label" for="match-length">Match Length</label>
+                        <select id="match-length" aria-controls="score result">
+                            <option value="3">Best of 3</option>
+                            <option value="5" selected>Best of 5</option>
+                            <option value="7">Best of 7</option>
+                            <option value="9">Best of 9</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="label" for="difficulty">Difficulty</label>
+                        <select id="difficulty">
+                            <option value="easy">😊 Easy</option>
+                            <option value="medium">🤔 Medium</option>
+                            <option value="hard">🤯 Hard</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <button id="reset" class="primaryColor">🔄 New Game</button>
+                    <button id="themeToggle" class="primary">☀️ Light</button>
+                    <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
+                    <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
+                    <button class="primary" id="toggle-sound">🔇 Music:Off"</button>
+                </div>
+                <div class="result-box">
+                    <div id="statusText">Best of 5 — who wins the first 3 will win</div>
+                    <div id="result" class="result muted">Click Rock, Paper and Scissors button for your choice</div>
+                    <div id="match-winner" style="margin-top:8px;font-weight:700"></div>
+                </div>
+                <p id="loading">Loading...</p>
+            </aside>
+            <section class="board-wrap">
+                <div class="arena" role="group" aria-label="Play area">
+                    <div class="choice-box">
+                        <div class="choice-label">Your Choice</div>
+                        <div id="player-pick" class="choice-emoji">❓</div>
+                        <div class="choice-label" id="player-pick-name">-</div>
+                    </div>
+
+                    <div class="vs">VS</div>
+
+                    <div class="choice-box">
+                        <div class="choice-label">Computer Choice</div>
+                        <div id="computer-pick" class="choice-emoji">❔</div>
+                        <div class="choice-label" id="computer-pick-name">-</div>
+                    </div>
+                </div>
+
+                <div class="pick-row" role="toolbar" aria-label="Moves">
+                    <button class="btn btn-primary pick" data-move="rock">🪨 Rock</button>
+                    <button class="btn btn-primary pick" data-move="paper">📄 Paper</button>
+                    <button class="btn btn-primary pick" data-move="scissors">✂️ Scissors</button>
+                </div>
+                <div class="controls-top">
+                    <div class="scoreboard">
+                        <div class="score">
+                            <div class="small">You
+                                <div>
+                                    <div class="small" id="player-score">0
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="score">
+                            <div class="small">Computer</ div>
+                                <div class="small" id="computer-score">0
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div id="leaderboardPopup" class="popupWindow">
+    </div>
+    <div id="localleaderboardPopup" class="popupWindow">
+    </div>
+    <div class="confetti-container">
+        <div id="winText">🎉 Completed 🎉</div>
+
+    </div>
+    <script type="module" src="js/script1.js"></script>
+    <script type="module">
+        import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
+        window.sortTable = sortTable;
+        window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
+            try {
+                await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+            } catch (e) {
+                document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
+            }
+        };
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLeaderboard();
+        });
+    </script>
+
+    <script type="module">
+        import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            localrenderLeaderboard();
+        });
+    </script>
+
+    <script>
+        fetch('../../leaderboard/leaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('leaderboardPopup').innerHTML = htmlText;
+            });
+
+        fetch('../../leaderboard/localleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('localleaderboardPopup').innerHTML = htmlText;
+            });
+        document.getElementById("leaderboardPopup").style.display = 'none';
+        document.getElementById("localleaderboardPopup").style.display = 'none';
+
+        document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+            if (document.getElementById("toggle-leaderboard").style.display === 'block') {
+                document.getElementById("leaderboardPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("leaderboardPopup").style.display = 'block';
+                loadCSS()
+            }
+        });
+
+        document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+            if (document.getElementById("leaderboardPopup").style.display === 'block') {
+                document.getElementById("localleaderboardPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("localleaderboardPopup").style.display = 'block';
+                loadCSS();
+            }
+        });
+
+        function loadCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '../../leaderboard/leaderboard.css';
+            head.appendChild(link);
+        }
+    </script>
+</body>
+
+</html>
