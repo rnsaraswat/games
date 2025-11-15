@@ -1,9 +1,10 @@
 :root {
-  --bg: #121212;
-  --text: #eee;
-  --cell-bg: #1e1e1e;
-  --border: #d9d8d8;
-  --box-shadow: rgba(255, 255, 255, 0.5);
+  --bg: #f0f0f0;
+  --text: #222;
+  --cell-bg: #fff;
+  --border: #333;
+  --box-shadow: rgba(0, 0, 0, 0.2);
+
 
   --win-text: gold;
   --accent: #4457b5;
@@ -19,11 +20,11 @@
 }
 
 [data-theme='dark'] {
-  --bg: #f0f0f0;
-  --text: #222;
-  --cell-bg: #fff;
-  --border: #333;
-  --box-shadow: rgba(0, 0, 0, 0.2);
+  --bg: #121212;
+  --text: #eee;
+  --cell-bg: #1e1e1e;
+  --border: #d9d8d8;
+  --box-shadow: rgba(255, 255, 255, 0.5);
 }
 
 * {
@@ -443,5 +444,6 @@ h1 {
     opacity: 0;
   }
 }
+
 
 

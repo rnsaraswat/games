@@ -34,13 +34,18 @@
 import { textToSpeechEng } from './speak.js';
 
 //toggle theme
-document.getElementById("dark").addEventListener("click", () => {
-    document.body.classList.toggle("dark");
-    if (document.body.classList.contains("dark")) {
-        document.getElementById("dark").innerText = "☀️ Light";
-        textToSpeechEng('Theme Dark');
-    } else {
-        document.getElementById("dark").innerText = "🌙 Dark";
-        textToSpeechEng('Theme Light');
-    }
-});
+const themeToggle = document.getElementById('toggle-theme');
+function setTheme(t) {
+  if (t === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    localStorage.setItem('rg_theme', t);
+    themeToggle.textContent = '☀️ Light'
+  }
+  if (t === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('rg_theme', t);
+    themeToggle.textContent = '🌙 Dark'
+  }
+}
+if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');

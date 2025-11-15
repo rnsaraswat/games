@@ -3,32 +3,27 @@ import { timer } from './script.js';
 export let seconds = 0;
 export let minutes = 0;
 export let hours = 0;
-export let hrdsec = 0;
+export let timerInterval;
+let startTime;
+let elapsedTime = 0;
+const timerDisplay = document.getElementById('timer-display');
 
-// display upadted time of game play
-function displayTime() {
-    document.getElementById('timer-display').textContent = '⏱️' + ((hours < 10) ? '0' + hours : hours) + ':' + ((minutes < 10) ? '0' + minutes : minutes) + ':' + ((seconds < 10) ? '0' + seconds : seconds);
+export function startTimer() {
+    clearInterval(timerInterval);
+    elapsedTime = 0;
+    if (timer) {
+        startTime = Date.now();
+        timerInterval = setInterval(updateTimerDisplay, 1000);
+    }
 }
 
-// update of time para
-export function updateTimer() {
-    displayTime();
-    setInterval(() => {
-        if (timer) {
-            hrdsec++
-            if (hrdsec >= 100) {
-                hrdsec = 0;
-                seconds++;
-                if (seconds >= 60) {
-                    seconds = 0;
-                    minutes++;
-                    if (minutes >= 60) {
-                        minutes = 0;
-                        hours++;
-                    }
-                }
-            }
-        }
-        displayTime();
-    }, 10);
+function updateTimerDisplay() {
+    elapsedTime = Date.now() - startTime;
+    const totalSeconds = Math.floor(elapsedTime / 1000);
+    hours = Math.floor(totalSeconds / 3600);
+    minutes = Math.floor((totalSeconds % 3600) / 60);
+    seconds = totalSeconds % 60;
+
+    const pad = (num) => String(num).padStart(2, '0');
+    timerDisplay.textContent  = `⏱️ ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastermind Solver by Computer Automatic</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="container">
+        <!-- Left Panel -->
+        <div id="left" class="section">
+            <h1>Mastermind Solver</h1>
+            <div class="button-group">
+                <div class="button-group" style="border: 0.1vw solid var(--border);">
+                    <label for="slots">No of Slots:
+                        <input type="number" id="slots" min="1" max="12" value="4">
+                    </label>
+                    <label for="colors">No of Colors:
+                        <input type="number" id="colors" min="1" max="20" value="6">
+
+                    </label>
+                    <label id="allowedDuplicates">Allow Duplicate Colors
+                        <input type="checkbox" id="buttonDuplicate" checked>
+                    </label>
+                    <button id="resetSecret" class="btn ghost">Reset secret</button>
+                    <button id="randomSecret" class="btn">Random secret</button>
+                </div>
+                <button id="startSolve" class="btn">Start solver</button>
+                <button id="toggle-theme">☀️ Light</button>
+                <button id="toggle-sound">🔇 Music:Off"</button>
+                <div id="timer-display">⏱️ 00:00:00</div>
+                <div class="message" id="output">
+                    Please Click on slot to select/change your secreate colors and press Start solver
+                </div>
+            </div>
+        </div>
+        <!-- Right Grid -->
+        <div id="right">
+            <div class="board" id="secretBoard"></div>
+            <div>
+                <div class="small">Color palette (click on slot to select/change secreate colors)</div>
+                <div class="palette" id="palette"></div>
+            </div>
+            <div id="visualGuesses"></div>
+
+            <div class="log" id="log"></div>
+        </div>
+    </div>
+    <script type="module" src="js/script.js"></script>
+</body>
+
+</html>

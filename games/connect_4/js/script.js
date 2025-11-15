@@ -1,13 +1,20 @@
-import { startTimer } from './timer.js';
+import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
 import { launchFireworks } from './edgeFireWorks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
-import { saveToLeaderboard, toggleLeaderboard, clearLeaderboard } from './leaderboard.js';
+// import { saveToLeaderboard, toggleLeaderboard, clearLeaderboard } from './leaderboard.js';
+
+export const modeEl = document.getElementById('mode');
+export const difficultyEl = document.getElementById('difficulty');
+export let timer = false;
+export let winnerName;
+
+window.addEventListener('load', function () {
+  const loading = document.getElementById('loading');
+  loading.style.display = 'none';
 
 const boardEl = document.getElementById('board');
 const messageEl = document.getElementById('message');
-export const modeEl = document.getElementById('mode');
-export const difficultyEl = document.getElementById('difficulty');
 const toggleThemeBtn = document.getElementById("toggle-theme");
 
 
@@ -17,27 +24,64 @@ let currentPlayer = 'x';
 let startingPlayer = 'x';
 let gameOver = false;
 let history = [];
-export let timer = false;
-export let winnerName;
-let player1;
-let player2;
+let theme = localStorage.getItem('rg_theme') || 'dark';
+let player1 = localStorage.getItem('player_name') || 'Human1';
+let player2 = localStorage.getItem('player_opponent') || 'Human2';
+let score = 0;
+let gameCount = 0;
+let difficulty = difficultyEl.value;
+let mode = modeEl.value;
 
-//toggle theme
-document.getElementById("toggle-theme").addEventListener("click", () => {
-  toggleTheme();
+
+document.getElementById("difficulty").addEventListener("click", () => {
+  difficulty = difficultyEl.value;
 });
 
-// change theme
-function toggleTheme() {
-  document.body.classList.toggle("dark");
-  if (document.body.classList.contains("dark")) {
-    toggleThemeBtn.innerText = "☀️ Light";
-    textToSpeechEng('Theme Dark');
+modeEl.addEventListener('change', function (e) {
+  mode = e.target.value;
+  document.getElementById("nameInput").placeholder = player2 || 'Human2';
+  player2 = localStorage.getItem('player_opponent') || 'Human2';
+  document.getElementById("nameInput").value = player2 || 'Human2';
+  // namebar.classList.add('show');
+  if (mode == 'pvp') {
+    namebar.classList.add('show');
   } else {
-    toggleThemeBtn.innerText = "🌙 Dark";
-    textToSpeechEng('Theme Light');
+    namebar.classList.remove('show');
+  }
+});
+
+//toggle theme
+// document.getElementById("toggle-theme").addEventListener("click", () => {
+//   toggleTheme();
+// });
+
+// // change theme
+// function toggleTheme() {
+//   document.body.classList.toggle("dark");
+//   if (document.body.classList.contains("dark")) {
+//     toggleThemeBtn.innerText = "☀️ Light";
+//     textToSpeechEng('Theme Dark');
+//   } else {
+//     toggleThemeBtn.innerText = "🌙 Dark";
+//     textToSpeechEng('Theme Light');
+//   }
+// }
+
+const themeToggle = document.getElementById('toggle-theme');
+function setTheme(t) {
+  if (t === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    localStorage.setItem('rg_theme', t);
+    themeToggle.textContent = '☀️ Light'
+  }
+  if (t === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('rg_theme', t);
+    themeToggle.textContent = '🌙 Dark'
   }
 }
+if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
 //start game
 document.getElementById("startGame").addEventListener("click", () => {
@@ -48,14 +92,11 @@ document.getElementById("startGame").addEventListener("click", () => {
 function startGame() {
   // Ask Player Name
   if (modeEl.value === 'pvc') {
-      player1 = "Human";
-      player2 = "Computer";
-      player1 = prompt("Player (default Human) का नाम (X)?") || player1;
+    player1 = localStorage.getItem('player_name') || "Human";
+    player2 = "Computer";
   } else if (modeEl.value === 'pvp') {
-      player1 = "Human 1";
-      player2 = "Human 2";
-      player1 = prompt("Player 1 (default Human 1) का नाम (X)?") || player1;
-      player2 = prompt("Player 1 (default Human 2) का नाम (O)?") || player2;
+    player1 = localStorage.getItem('player_name') || "Human1";
+    player2 = localStorage.getItem('player_opponent') || "Human";
   }
   gridSize = parseInt(document.getElementById('gridSize').value);
   board = Array(gridSize).fill().map(() => Array(gridSize).fill(''));
@@ -127,15 +168,10 @@ function handleMove(col) {
   updateCell(row, col);
 
   if (checkWin(row, col)) {
-        winnerName = currentPlayer === 'x' ? player1 : player2;
-      saveToLeaderboard(winnerName);
-      if (modeEl.value === 'pvc' && currentPlayer === 'o') {
-          messageEl.textContent = `Computer (${currentPlayer === 'x' ? 'Red' : 'Yellow'}) wins!`;
-      } else {
-          messageEl.textContent = `${currentPlayer === 'x' ? player1 : player2} (${currentPlayer === 'x' ? 'Red' : 'Yellow'}) wins!`;
-      }
+    updateleaderboard();
       timer = false;
       gameOver = true;
+      clearInterval(timerInterval);
       switchStartingPlayer();
       playSound('win');
       launchFireworks();
@@ -375,12 +411,57 @@ function switchStartingPlayer() {
   startingPlayer = startingPlayer === 'x' ? 'o' : 'x';
 }
 
-let soundEnabled = false;
-
-document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-  toggleLeaderboard();
+const namebar = document.getElementById('namebar');
+if (mode == 'pvp') {
+  document.getElementById("nameInput").placeholder = player2 || 'Human2';
+  document.getElementById("nameInput").value = player2 || 'Human2';
+  namebar.classList.add('show');
+}
+document.getElementById('name').addEventListener('click', () => {
+  player2 = document.getElementById("nameInput").value;
+  namebar.classList.remove('show');
 });
 
-document.getElementById("clear-leaderboard").addEventListener("click", () => {
-    clearLeaderboard();
-  });
+function updateleaderboard() {
+  winnerName = currentPlayer === 'x' ? player1 : player2;
+  // let score = 0;
+  let opponent = player2;
+  let game_id = 'connect4';
+  let gsize = `${gridSize}x${gridSize}`;
+  let elapsed = hours * 3600 + minutes * 60 + seconds;
+  gameCount = history.length;
+  // let moves = 0;
+  let filed1 = 0;
+  let filed2 = 0
+  let filed3 = "-";
+  let filed4 = "-";
+  let email = localStorage.getItem('email') || '-';
+  const created_at = new Date();
+  if (modeEl.value === 'pvc' && currentPlayer === 'o') {
+    messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;
+    filed3 = 'Player vs Computer';
+    filed4 = currentPlayer.toUpperCase();
+    winnerName = 'Computer';
+    opponent = player1;
+    score = (gridSize * gridSize - history.length) * 10 + 100;
+  } else {
+    messageEl.textContent = `${currentPlayer === 'x' ? player1 : player2} ${currentPlayer.toUpperCase()} wins!`;
+    winnerName = currentPlayer === 'x' ? player1 : player2;
+    opponent = currentPlayer !== 'x' ? player1 : player2;
+    filed3 = 'Player vs Player';
+    filed4 = currentPlayer.toUpperCase();
+    score = (gridSize * gridSize - history.length) * 10 + 50;
+  }
+  if(difficulty == 'hard') { score = score + 500} else if(difficulty == 'medium') { score = score + 200 }
+  let player_name = winnerName;
+  let player_opponent = opponent;
+
+  const entry = { player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
+  const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+  boardData.push(entry);
+  localStorage.setItem("leaderboard", JSON.stringify(boardData));
+
+  window.submitScore &&
+    window.submitScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+}
+});

@@ -42,12 +42,12 @@ window.addEventListener('load', function () {
     if (t === 'dark') {
       document.documentElement.setAttribute('data-theme', 'dark');
       localStorage.setItem('rg_theme', t);
-      themeToggle.textContent = '🌙 Dark'
+      themeToggle.textContent = '☀️ Light'
     }
     if (t === 'light') {
       document.documentElement.setAttribute('data-theme', 'light');
       localStorage.setItem('rg_theme', t);
-      themeToggle.textContent = '☀️ Light'
+      themeToggle.textContent = '🌙 Dark'
     }
   }
   if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));

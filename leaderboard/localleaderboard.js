@@ -11,7 +11,7 @@ let sNo = 1;
 
 export function localtoggleLeaderboard() {
   if (document.getElementById("leaderboardPopup").style.display === 'block') {
-    document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+    // document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
     document.getElementById("leaderboardPopup").style.display = 'none';
     return;
   }
@@ -35,12 +35,12 @@ document.getElementById("clear-leaderboard").addEventListener("click", () => {
   }
 })
 
-// document.getElementById("localsearchInput").addEventListener("input", localhandleSearch);
+document.getElementById("localsearchInput").addEventListener("input", localhandleSearch);
 document.getElementById("localtopSelect").addEventListener("change", localhandleTopSelect);
 document.getElementById("localprevPage").addEventListener("click", localprevPage);
 document.getElementById("localnextPage").addEventListener("click", localnextPage);
 
-document.querySelectorAll("#localleaderboardTable th").forEach(th => {
+document.querySelectorAll("#localleaderboardTable thead th").forEach(th => {
   th.addEventListener("click", () => handleSort(th.dataset.column));
 });
 
@@ -227,7 +227,7 @@ export function localsortTable(colIndex, order) {
 }
 
 function localupdateIndicators(activeCol, order) {
-  const headers = document.querySelectorAll("#localleaderboardTable thead th");
+  const headers = document.querySelectorAll("#localleaderboardTable ldthead th");
   headers.forEach((th, i) => {
     const arrows = th.querySelectorAll(".arrow");
     arrows.forEach(arrow => {

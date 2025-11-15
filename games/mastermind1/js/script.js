@@ -1,8 +1,8 @@
-import { updateTimer } from './timer.js';
+import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
 import { launchFireworks } from './edgeFireWorks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
-import { saveToLeaderboard, toggleLeaderboard, clearLeaderboard } from './leaderboard.js';
+// import { saveToLeaderboard, toggleLeaderboard, clearLeaderboard } from './leaderboard.js';
 
 // define variables
 export let timer = false;
@@ -14,12 +14,19 @@ export let slotCount = 4;
 export let colorCount = 6;
 export let maxAttempts = 10;
 export let attemptsLeft = 0;
+export let allowDuplicates = true;
+let theme = localStorage.getItem('rg_theme') || 'dark';
+export let player1 = localStorage.getItem('player_name') || 'Human1';
+
+window.addEventListener('load', function () {
+    const loading = document.getElementById('loading');
+    loading.style.display = 'none';
+
 let colors = [];
 let secretCode = [];
 let currentGuess = [];
 let guesses = [];
 let gameOver = false;
-export let allowDuplicates = true;
 
 const colorList = ["#FF0000", "#8b0000", "#fa8072", "#00FF00",
     "#008000", "#006400", "#9acd32", "#008080", "#0000FF", "#000080",
@@ -36,12 +43,11 @@ const visualEl = document.getElementById('visualGuesses');
 // const toggleThemeBtn = document.getElementById("toggleTheme");
 const secretBoardEl = document.getElementById('secretBoard');
 // const leaderboardEl = document.getElementById('leaderboard');
-document.getElementById("clearleaderboard").style.display = 'none';
+// document.getElementById("clearleaderboard").style.display = 'none';
 const canvas = document.getElementById('fireworksCanvas');
 const ctx = canvas.getContext('2d');
 
 // set default Player Name or ask player name
-export let player1 = "Human";
 player1 = prompt("Enter Player Name (default Human?") || player1;
 
 document.getElementById("buttonDuplicate").onchange = (e) => {
@@ -118,10 +124,12 @@ function startGame() {
     guesses = [];
     gameOver = false;
     selectedIndex = null;
-    if (!timer) {
-        timer = true;
-        updateTimer();
-    }
+    timer = true;
+    startTimer();
+    // if (!timer) {
+    //     timer = true;
+    //     updateTimer();
+    // }
     updateScoreboard();
     renderGame();
 }
@@ -342,14 +350,18 @@ function checkGuess() {
 
     if (black === slotCount) {
         gameOver = true;
-        updateScoreboard("🎉 You cracked the code!");
-        saveToLeaderboard(player1);
+      clearInterval(timerInterval);
+      updateScoreboard("🎉 You cracked the code!");
+        updateleaderboard()
+        // saveToLeaderboard(player1);
+        clearInterval(timerInterval);
         timer = false;
         playSound('win');
         launchFireworks();
     } else if (attemptsLeft <= 0) {
         gameOver = true;
         updateScoreboard("💥 Out of attempts! Code was revealed.");
+        clearInterval(timerInterval);
         timer = false;
         playSound('loose');
         textToSpeechEng(`Out of attempts`);
@@ -390,6 +402,7 @@ function endGameManually() {
     });
     visualEl.appendChild(secretRow);
     updateScoreboard("💥 End game! Code was revealed.");
+    clearInterval(timerInterval);
     timer = false;
     playSound('loose');
     disableGame();
@@ -404,22 +417,59 @@ function disableGame() {
     document.getElementById("colorPopup").style.display = "none";
 }
 
-//toggle theme
-document.getElementById("dark").addEventListener("click", () => {
-    document.body.classList.toggle("dark");
-    if (document.body.classList.contains("dark")) {
-        document.getElementById("dark").innerText = "☀️ Light";
-        textToSpeechEng('Theme Dark');
-    } else {
-        document.getElementById("dark").innerText = "🌙 Dark";
-        textToSpeechEng('Theme Light');
+function updateleaderboard() {
+    let player_name = player1;
+    let player_opponent = "-";
+    let game_id = 'mastermind';
+    let gsize = `${slotCount}x${colorCount}`;
+    let elapsed = hours * 3600 + minutes * 60 + seconds;
+    let score = (slotCount * 10) + (colorCount * 10) - history.length * 2 - elapsed;
+    let moves = guesses.length;
+    let filed1 = 0;
+    let filed2 = 0
+    let filed3 = `slots:${slotCount}`;
+    let filed4 =  `colors:${colorCount}`;
+    let email = localStorage.getItem('email') || '-';
+    const created_at = new Date();
+
+    let difficulty = "-";
+    if (slotCount < 3) {
+        if (colorCount < 4) {difficulty == 'very easy';}
+        else if (colorCount < 7) {difficulty == 'easy'; score = score + 100;}
+        else if (colorCount < 9) {difficulty == 'medium'; score = score + 200;}
+        else if (colorCount < 11) {difficulty == 'hard'; score = score + 300;}
+        else if (colorCount < 16) {difficulty == 'very hard'; score = score + 400;}
+        else {difficulty == 'expert'; score = score + 500;}
     }
-});
-
-document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-    toggleLeaderboard();
-});
-
-document.getElementById("clearleaderboard").addEventListener("click", () => {
-    clearLeaderboard();
+    else if (slotCount < 5) {
+        if (colorCount < 7) {difficulty == 'easy'; score = score + 100;}
+        else if (colorCount < 9) {difficulty == 'medium'; score = score + 200;}
+        else if (colorCount < 11) {difficulty == 'hard'; score = score + 300;}
+        else if (colorCount < 16) {difficulty == 'very hard'; score = score + 400;}
+        else {difficulty == 'expert'; score = score + 500;}
+    }
+    else if (slotCount < 7) {
+        if (colorCount < 9) {difficulty == 'medium'; score = score + 200;}
+        else if (colorCount < 11) {difficulty == 'hard'; score = score + 300;}
+        else if (colorCount < 16) {difficulty == 'very hard'; score = score + 400;}
+        else {difficulty == 'expert'; score = score + 500;}
+    }
+    else if (slotCount < 9) {
+        if (colorCount < 11) {difficulty == 'hard'; score = score + 300;}
+        else if (colorCount < 16) {difficulty == 'very hard'; score = score + 400;}
+        else {difficulty == 'expert'; score = score + 500;}
+    }
+    else if (slotCount < 11) {
+        if (colorCount < 16) {difficulty == 'very hard'; score = score + 400;}
+        else {difficulty == 'expert'; score = score + 500;}
+    } else {difficulty == 'expert'; score = score + 500;}
+  
+    const entry = { player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at };
+    const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+    boardData.push(entry);
+    localStorage.setItem("leaderboard", JSON.stringify(boardData));
+  
+    window.submitScore &&
+      window.submitScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+  }
 });

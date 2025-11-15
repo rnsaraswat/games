@@ -119,12 +119,12 @@ button.leaderboard:hover {
 }
 
 /* for sticky header of table */
-.sortable {
+thead {
     position: sticky;
     top: 0;
     /* Sticks to the top of the scroll container */
     background-color: var(--ld-bg);
-    color: var(--text);
+    color: var(--ld-text);
     z-index: 1;
     /* Keeps header above scrolling content */
     padding: 10px;

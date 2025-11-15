@@ -1,15 +1,5 @@
 /* theme light  */
 :root {
-  --bg-color: #121212;
-  --text-color: #eee;
-  --cell-bg: #1e1e1e;
-  --cell-bg-hover: #5f5f5f;
-  --cell-border: #d9d8d8;
-  --box-shadow: rgba(255, 255, 255, 0.5);
-  --bg-hover: #454545;
-}
-
-body.dark {
   --bg-color: #f0f0f0;
   --text-color: #111;
   --cell-bg: #fff;
@@ -17,6 +7,16 @@ body.dark {
   --cell-border: #333;
   --box-shadow: rgba(0, 0, 0, 0.2);
   --bg-hover: #d1d1d1;
+}
+
+[data-theme='dark'] {
+  --bg-color: #121212;
+  --text-color: #eee;
+  --cell-bg: #1e1e1e;
+  --cell-bg-hover: #5f5f5f;
+  --cell-border: #d9d8d8;
+  --box-shadow: rgba(255, 255, 255, 0.5);
+  --bg-hover: #454545;
 }
 
 @font-face {
@@ -131,6 +131,7 @@ button {
   background: var(--bg-color);
   color: var(--text-color);
   border: 0.2vw solid var(--cell-border);
+  border-radius: 1vw;
 }
 
 select:hover {
@@ -144,6 +145,8 @@ input:hover {
 button:hover {
   border: 0.23vw solid var(--cell-border);
 }
+
+
 
 table,
 th,

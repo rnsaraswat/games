@@ -1,11 +1,22 @@
 
 // main javascript file 
-import { startTimer, hrs, min, sec, timerDisplay, timerInterval } from './timer.js';
-import { launchConfetti, stopConfetti } from './confetti.js';
+import { startTimer,seconds, minutes, hours, timerInterval } from './timer.js';
+// import { launchConfetti, stopConfetti } from './confetti.js';
 import { playSound } from './sound.js';
-import { loadBest, saveBest } from './best_score.js';
+// import { loadBest, saveBest } from './best_score.js';
 import { textToSpeechEng } from './speak.js';
-import { saveToLeaderboard } from './leaderboard.js';
+// import { saveToLeaderboard } from './leaderboard.js';
+// import { timer } from './script.js';
+
+export const levelSel = document.getElementById('level');
+export const themeSel = document.getElementById('theme');
+export let timer = false;
+export let moves = 0; 
+export let totalTiles = 0;
+
+window.addEventListener('load', function () {
+    const loading = document.getElementById('loading');
+    loading.style.display = 'none';
 
 // theme images used directly
 const themes = {
@@ -63,24 +74,25 @@ const themes = {
 /* ---------- Game state ---------- */
 const board = document.getElementById('board');
 const hdr = document.getElementById('hdr');
-export const levelSel = document.getElementById('level');
-export const themeSel = document.getElementById('theme');
+
 const startBtn = document.getElementById('startBtn');
 // const timerDisplay = document.getElementById('time');
 const movesEl = document.getElementById('moves');
 // const bestEl = document.getElementById('best');
 // const leaderboardEl = document.getElementById('leaderboardList');
 // best score
-let bestScore = JSON.parse(localStorage.getItem("bestScore") || "[]");
+// let bestScore = JSON.parse(localStorage.getItem("bestScore") || "[]");
 
 let first = null, second = null, lock = false;
-export let moves = 0; 
+
 let matched = 0, totalPairs = 0;
 let gameArray = [];
-export let totalTiles = 0;
 
 // set default Player Name or ask player name
-export let player1 = "Human";
+let theme = localStorage.getItem('rg_theme') || 'dark';
+let player1 = localStorage.getItem('player_name') || 'Human1';
+
+// export let player1 = "Human";
 // player1 = prompt("Enter Player Name (default Human?") || player1;
 
 /* ---------- Tiles count per level ---------- */
@@ -89,7 +101,8 @@ function tilesForLevel(lvl) {
 }
 
 /* ---------- Choose best rows/cols to match screen aspect ---------- */
-export function bestGrid(total) {
+// export function bestGrid(total) {
+function bestGrid(total) {
     const W = window.innerWidth, H = window.innerHeight - hdr.offsetHeight - 8; // exact header height
     const target = Math.max(0.3, Math.min(3, W / H)); // sane clamp
     const portrait = H > W;
@@ -195,14 +208,15 @@ function startGame() {
     // reset confetti & winbar
     wintxt.innerHTML = '';
     namebar.classList.remove('show');
-    stopConfetti();
+    // stopConfetti();
     // winbar.classList.remove('show');
 
     totalTiles = tilesForLevel(levelSel.value);
     totalPairs = totalTiles / 2;
     matched = 0; moves = 0;
     movesEl.textContent = '0';
-    timerDisplay.textContent = '00:00:00';
+    // timerDisplay.textContent = '00:00:00';
+    timer = true;
     clearInterval(timerInterval);
     startTimer();
 
@@ -239,7 +253,7 @@ function startGame() {
         card.addEventListener('click', () => onFlip(card, img));
         board.appendChild(card);
     });
-    loadBest();
+    // loadBest();
 }
 
 // array a received and return after reshuffle deck
@@ -300,14 +314,17 @@ const wintxt = document.getElementById('winText');
 function onWin() {
     clearInterval(timerInterval);
     document.getElementById("startBtn").textContent = "Start";
-    saveBest();
-    loadBest();
-    wintxt.innerHTML = `🎉${player1} Won!🎉(⏱️${hrs}:${min}:${sec}, Moves:${moves})`;
+    // updateleaderboard()
+    updateleaderboard();
+    timer = false;
+    // saveBest();
+    // loadBest();
+    wintxt.innerHTML = `🎉${player1} Won!🎉(⏱️${hours}:${minutes}:${seconds}, Moves:${moves})`;
     // wintxt.textContent = `(⏱️${hrs}:${min}:${sec}`;
     // winbar.classList.add('show');
     // singleColorRow.style.display = colorModeSel.value === 'single' ? 'flex' : 'none';
-    launchConfetti();
-    saveToLeaderboard(moves, hrs, min, sec);
+    // launchConfetti();
+    // saveToLeaderboard(moves, hrs, min, sec);
 }
 
 // get player name
@@ -317,3 +334,36 @@ document.getElementById('name').addEventListener('click', () => {
     player1 = document.getElementById("nameInput").value;
     namebar.classList.remove('show');
 });
+
+function updateleaderboard() {
+    let player_name = player1;
+    // let score = 0;
+    let player_opponent = "-";
+    let game_id = 'memory';
+    let gsize = totalTiles;
+    let elapsed = hours * 3600 + minutes * 60 + seconds;
+    // gameCount = moves;
+    let difficulty = levelSel.value;
+    // let moves = 0;
+    let filed1 = 0;
+    let filed2 = 0;
+    let filed3 = "-";
+    let filed4 = "-";
+    let email = localStorage.getItem('email') || '-';
+    const created_at = new Date();
+    let score = totalTiles * 100 - moves * 10;
+    if(difficulty == 'expert') { score = score + 500} 
+    else if(difficulty == 'hard') { score = score + 400} 
+    else if(difficulty == 'medium') { score = score + 300 }
+    else if(difficulty == 'easy') { score = score + 200 }
+    else if(difficulty == 'veryeasy') { score = score + 100 }
+  
+    const entry = { player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at };
+    const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+    boardData.push(entry);
+    localStorage.setItem("leaderboard", JSON.stringify(boardData));
+  
+    window.submitScore &&
+      window.submitScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+  }
+  });

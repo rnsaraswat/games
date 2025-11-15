@@ -52,22 +52,38 @@ let history = [];
 
 
 //toggle theme
-document.getElementById("toggle-theme").addEventListener("click", () => {
-  toggleTheme();
-});
+// document.getElementById("toggle-theme").addEventListener("click", () => {
+//   toggleTheme();
+// });
 
-// change theme
-function toggleTheme() {
-  document.body.classList.toggle(theme);
-  if (document.body.classList.contains("dark")) {
-      localStorage.setItem('rg_theme')
-      toggleThemeBtn.innerText = "☀️ Light";
-    textToSpeechEng('Theme Dark');
-  } else {
-    toggleThemeBtn.innerText = "🌙 Dark";
-    textToSpeechEng('Theme Light');
+// // change theme
+// function toggleTheme() {
+//   document.body.classList.toggle(theme);
+//   if (document.body.classList.contains("dark")) {
+//       localStorage.setItem('rg_theme')
+//       toggleThemeBtn.innerText = "☀️ Light";
+//     textToSpeechEng('Theme Dark');
+//   } else {
+//     toggleThemeBtn.innerText = "🌙 Dark";
+//     textToSpeechEng('Theme Light');
+//   }
+// }
+const themeToggle = document.getElementById('toggle-theme');
+function setTheme(t) {
+  if (t === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    localStorage.setItem('rg_theme', t);
+    themeToggle.textContent = '☀️ Light'
+  }
+  if (t === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('rg_theme', t);
+    themeToggle.textContent = '🌙 Dark'
   }
 }
+if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+
 
 //start game
 document.getElementById("startGame").addEventListener("click", () => {
@@ -164,6 +180,7 @@ function onCellClick(e) {
     updateleaderboard();
     timer = false;
     gameOver = true;
+    clearInterval(timerInterval);
     switchStartingPlayer();
     playSound('win');
     launchFireworks();
@@ -397,7 +414,7 @@ function updateleaderboard() {
   winnerName = currentPlayer === 'x' ? player1 : player2;
   // let score = 0;
   let opponent = player2;
-  let game_id = '4inarow';
+  let game_id = '5inarow';
   let gsize = `${size}x${size}`;
   let elapsed = hours * 3600 + minutes * 60 + seconds;
   gameCount = history.length;
@@ -423,13 +440,14 @@ function updateleaderboard() {
     filed4 = currentPlayer.toUpperCase();
     score = (size * size - history.length) * 10 + 50;
   }
-
-  const entry = { winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
+  let player_name = winnerName;
+  let player_opponent = opponent;
+  const entry = { player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
   const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
   boardData.push(entry);
   localStorage.setItem("leaderboard", JSON.stringify(boardData));
 
   window.submitScore &&
-    window.submitScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+    window.submitScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
 }
 });

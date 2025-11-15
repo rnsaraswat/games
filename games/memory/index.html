@@ -5,113 +5,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Memory Game — Fullscreen Fit + Win Controls</title>
-    <!-- memory-game/
-
-    │── index.html
-    │── style.css
-    │── script.js
-    ├── js/
-    |    │── script.js
-    ├── assets/
-        │── font/
-        |    │── Bangers-Regular.ttf
-        |    │── BowlbyOne-Regulat.ttf
-        |    │── Digital-italic.ttf
-        │── sounds/
-        │   └── flip.mp3
-        │── images/
-        │   ├── fruits/
-        │   │   ├── apple.png
-        │   │   ├── banana.png
-        │   │   ├── cherry.png
-        │   │   └── ...
-        │   ├── animals/
-        │   │   ├── cat.png
-        │   │   ├── dog.png
-        │   │   ├── lion.png
-        │   │   └── ...
-        │   ├── Amusement/
-        │   ├── Activity/
-        │   ├── Bathroom/
-        │   ├── Beach/
-        │   ├── Badroom/
-        │   ├── Bird/
-        │   ├── Body Parts/
-        │   ├── City Item/
-        │   ├── Cloth/
-        │   ├── Colors/
-        │   ├── Country Flags/
-        │   ├── Placess/
-        │   ├── Dianosaur/
-        │   ├── Drink/
-        │   ├── Emoji/
-        │   ├── Farm Animals/
-        │   ├── Feelings/
-        │   ├── Food/
-        │   ├── Forest/
-        │   ├── Hallween/
-        │   ├── Health/
-        │   ├── House item/
-        │   ├── Actress/
-        │   ├── Insects/
-        │   ├── Jungle Animals/
-        │   ├── Kitchen/
-        │   ├── Living room/
-        │   ├── Month/
-        │   ├── Number/
-        │   ├── Occupations/
-        │   ├── Ocen Animals/
-        │   ├── Party Item/
-        │   ├── Plant/
-        │   ├── Playground/
-        │   ├── Past tense/
-        │   ├── Prepositions/
-        │   ├── Savanna Animals/
-        │   ├── Sea Animals/
-        │   ├── Sports/
-        │   ├── Solar System/
-        │   ├── Social Skill/
-        │   ├── Toy/
-        │   ├── Transportation/
-        │   └── Shape/
-        │       ├── shape1.png
-        │       ├── shape2.png
-        │       ├── shape3.png
-        │       └── ... -->
-
-    <!-- Memory
-        with seperate liberary files
-        with responsive layout
-        with 3 downloaded font
-        with dark/light theme 
-        with speak in english
-        with timer display
-        with ledder board in popup window
-        with rules in popup window
-        with best score for all levels seperate
-        with best score for all theme seperate
-        with best score cover time and moves
-        with different sound 
-        with speak
-        with web audio (not used)
-        with wining confetti crackers
-        with 5 levels
-            1 very easy 4x4 (16 cards)
-            2 easy 6x6 (36 cards)
-            3 medium 8x8 (64 cards)
-            4 hard 10x10 (100 cards)
-            5 expert 16x16 (144 cards)
-        with different theme picture
-            Fruits, Animals, Amusement, Activity, Bathroom,
-            Beach, Badroom, Bird, Body Parts, City Item,
-            Cloath, Colors, Country Flags, Placess, Dianosaur,
-            Drink, Emoji, Farm Animals, Feelings, Food, Forest,
-            Hallween, Health, House item, Actress, Insects, 
-            Jungle Animals, Kitchen, Living room, Month, Number, 
-            Occupations, Ocen Animals, Party Item, Plant, Playground, 
-            Past tense, Prepositions, Savanna Animals, Sea Animals, 
-            Shape, Sports, Solar System, Social Skill, Toy, Transportation,
-            Vegitable, Weathers, Wild Animals -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="rules.css">
 </head>
@@ -123,53 +16,55 @@
             <!-- <div class="controls"> -->
             <label>Level
                 <select id="level">
-                    <option value="veryeasy">Very Easy (4×4)</option>
-                    <option value="easy">Easy (6×6)</option>
-                    <option value="medium">Medium (8×8)</option>
-                    <option value="hard">Hard (10×10)</option>
-                    <option value="expert">Expert (12×12)</option>
+                    <option value="veryeasy">👶 Very Easy (4×4)</option>
+                    <option value="easy">🙂 Easy (6×6)</option>
+                    <option value="medium">🤔 Medium (8×8)</option>
+                    <option value="hard">😥 Hard (10×10)</option>
+                    <option value="expert">🎓Expert (12×12)</option>
                 </select>
             </label>
             <label>Theme
                 <select id="theme">
-                    <option value="animals">Animals</option>
-                    <option value="beach">Beach</option>
-                    <option value="bird">bird</option>
-                    <option value="city">City Item</option>
-                    <option value="clothing">Cloath</option>
-                    <option value="country">Flags</option>
+                    <option value="animals">🦁Animals</option>
+                    <option value="beach">🏖️ Beach</option>
+                    <option value="bird">🐦 Bird</option>
+                    <option value="city">🏙️ City Item</option>
+                    <option value="clothing">👕 Cloath</option>
+                    <option value="country">🏳️ Flags</option>
                     <option value="Emoji">Emoji</option>
-                    <option value="food">Food</option>
-                    <option value="hall">Hallween</option>
-                    <option value="hero">Actor</option>
-                    <option value="houses">House item</option>
-                    <option value="heroin">Actress</option>
-                    <option value="items">Items</option>
-                    <option value="Number">Number</option>
-                    <option value="occu">Occupations</option>
-                    <option value="ocen">Ocen Animals</option>
+                    <option value="food">🍎 Food</option>
+                    <option value="hall">🎃 Hallween</option>
+                    <option value="hero">🎭 Actor</option>
+                    <option value="houses">📺 House item</option>
+                    <option value="heroin">🎭 Actress</option>
+                    <option value="items">📦 Items</option>
+                    <option value="Number">0️⃣ Number</option>
+                    <option value="occu">🧑‍🍳 Occupations</option>
+                    <option value="ocen">🦈 Ocen Animals</option>
                     <option value="past">Past tense</option>
-                    <option value="planet">Solar System</option>
-                    <option value="plant">Plant</option>
-                    <option value="playground">playground</option>
-                    <option value="social">Social</option>
-                    <option value="toy">Toy</option>
-                    <option value="transport">Transportation</option>
-                    <option value="vegetable">Vegitable</option>
+                    <option value="planet">🪐 Solar System</option>
+                    <option value="plant">🌱 Plant</option>
+                    <option value="playground">🛝 playground</option>
+                    <option value="social">🤝 Social</option>
+                    <option value="toy">🧸 Toy</option>
+                    <option value="transport">🚗 Transportation</option>
+                    <option value="vegetable">🍅 Vegitable</option>
                 </select>
             </label>
             <button id="startBtn" class="primary">Start</button>
             <!-- </div> -->
             <!-- <div class="stats"> -->
-            <div>⏱ Time: <b id="timer-display">00:00:00</b></div>
             <div>🌀 Moves: <b id="moves">0</b></div>
-            <div>🏆 Best: <b id="best">—</b></div>
+            <!-- <div>🏆 Best: <b id="best">—</b></div> -->
             <!-- </div> -->
             <!-- <div> -->
-            <button class="primary" id="toggle-leaderboard">View Leaderboard</button>
+                <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
+                <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
+                <div id="timer-display">⏱️ 00:00:00</div>
             <button class="primary" id="toggle-rules">View Rules</button>
             <button class="primary" id="dark">☀️ Light</button>
             <button class="primary" id="toggle-sound">🔇 Music:Off"</button>
+            <p id="loading">Loading...</p>
             <!-- </div> -->
         </header>
     </div>
@@ -177,13 +72,9 @@
     <div class="board-wrap">
         <main class="board" id="board" aria-label="Game board"></main>
     </div>
-
-    <!-- Leaderboard Popup -->
-    <div id="leaderboardPopup">
-        <h3>🏆Leaderboard</h3>
-        <button class="primary" id="hide-leaderboard">Hide Leaderboard</button>
-        <button class="primary" id="clear-leaderboard">Clear Leaderboard</button>
-        <ul id="leaderboardList"></ul>
+    <div id="leaderboardPopup" class="popupWindow">
+    </div>
+    <div id="localleaderboardPopup" class="popupWindow">
     </div>
 
     <!-- Rules Popup -->
@@ -194,7 +85,7 @@
     </div>
 
     <!-- Display winning text -->
-    <div id="winText"></div>
+    <div id="winText">🎉 You Won! 🎉</div>
     <!-- fire crackers canvas -->
     <canvas id="confettiCanvas"></canvas>
     <div class="namebar" id="namebar" aria-live="polite">
@@ -207,7 +98,76 @@
     </div>
     <script type="module" src="js/script.js"></script>
     <script type="module" src="js/rules.js"></script>
-    <script type="module" src="js/theme.js"></script>
+    <script type="module">
+        import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
+        window.sortTable = sortTable;
+        window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
+            try {
+                await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+            } catch (e) {
+                document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
+            }
+        };
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLeaderboard('connect3');
+        });
+    </script>
+  
+    <script type="module">
+        import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
+        document.addEventListener('DOMContentLoaded', () => {
+              localrenderLeaderboard();
+          });
+    </script>
+  
+    <script>
+        fetch('../../leaderboard/leaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('leaderboardPopup').innerHTML = htmlText;
+            });
+  
+        fetch('../../leaderboard/localleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('localleaderboardPopup').innerHTML = htmlText;
+            });
+        document.getElementById("leaderboardPopup").style.display = 'none';
+        document.getElementById("localleaderboardPopup").style.display = 'none';
+  
+        document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+          if (document.getElementById("toggle-leaderboard").style.display === 'block')  {
+                // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'none';
+                return;
+            } else {
+                // document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
+                document.getElementById("leaderboardPopup").style.display = 'block';
+                loadCSS()
+            }
+        });
+  
+        document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+            if (document.getElementById("leaderboardPopup").style.display === 'block') {
+                // document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+                document.getElementById("localleaderboardPopup").style.display = 'none';
+                return;
+            } else {
+                // document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+                document.getElementById("localleaderboardPopup").style.display = 'block';
+                loadCSS();
+            }
+        });
+  
+        function loadCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '../../leaderboard/leaderboard.css'; // आपकी CSS फ़ाइल का नाम
+            head.appendChild(link);
+        }
+    </script>
 </body>
 
 </html>

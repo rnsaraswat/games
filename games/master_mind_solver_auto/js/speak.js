@@ -5,5 +5,4 @@ export function textToSpeechEng(text) {
     utterance.voice = speechSynthesis.getVoices().find(voice => voice.lang === 'en-US');
     utterance.text = text;
     speechSynthesis.speak(utterance);
-}
-
+  }

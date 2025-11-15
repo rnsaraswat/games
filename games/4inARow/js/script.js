@@ -51,23 +51,40 @@ window.addEventListener('load', function () {
     }
   });
 
-  document.getElementById("toggle-theme").addEventListener("click", () => {
-    toggleTheme();
-  });
+  // document.getElementById("toggle-theme").addEventListener("click", () => {
+  //   toggleTheme();
+  // });
 
-  window.addEventListener('resize', () => { computeCellSize(); buildGrid(); });
+  // window.addEventListener('resize', () => { computeCellSize(); buildGrid(); });
 
-  function toggleTheme() {
-    document.body.classList.toggle(theme);
-    if (document.body.classList.contains("dark")) {
-      localStorage.setItem('rg_theme')
-      toggleThemeBtn.innerText = "☀️ Light";
-      textToSpeechEng('Theme Dark');
-    } else {
-      toggleThemeBtn.innerText = "🌙 Dark";
-      textToSpeechEng('Theme Light');
+  // function toggleTheme() {
+  //   document.body.classList.toggle(theme);
+  //   if (document.body.classList.contains("dark")) {
+  //     localStorage.setItem('rg_theme')
+  //     toggleThemeBtn.innerText = "☀️ Light";
+  //     textToSpeechEng('Theme Dark');
+  //   } else {
+  //     toggleThemeBtn.innerText = "🌙 Dark";
+  //     textToSpeechEng('Theme Light');
+  //   }
+  // }
+
+  const themeToggle = document.getElementById('toggle-theme');
+  function setTheme(t) {
+    if (t === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('rg_theme', t);
+      themeToggle.textContent = '☀️ Light'
+    }
+    if (t === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('rg_theme', t);
+      themeToggle.textContent = '🌙 Dark'
     }
   }
+  if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+  setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+
 
   document.getElementById("startGame").addEventListener("click", () => {
     startGame();

@@ -11,7 +11,7 @@
     --shadow: 0 6px 20px rgba(0,0,0,.08);
 }
 
-body.dark {
+[data-theme='dark'] {
     --bg: #454545;
     --text: #eee;
     --cell-border: #d9d8d8;
@@ -24,17 +24,17 @@ body.dark {
 
 @font-face {
     font-family: 'HindiFontGajraj';
-    src: url('assets/font/GajrajOne-Regular.ttf') format('truetype');
+    src: url('../../assets/font/GajrajOne-Regular.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'EnglishFontBangers';
-    src: url('assets/font/Bangers-Regular.ttf') format('truetype');
+    src: url('../../assets/font/Bangers-Regular.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Digital';
-    src: url('assets/font/digital-italic.ttf') format('truetype');
+    src: url('../../assets/font/digital-italic.ttf') format('truetype');
 }
 
 * {
@@ -152,6 +152,33 @@ button:hover {
     background: var(--bg-hover);
 }
 
+button.primary {
+    gap: 0.8vw;
+    align-items: center;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 1vw 1.2vw;
+    margin: 1vw 0.2vw 0.5vw 0.2vw;
+    font-size: 1.6vw;
+    display: inline-block;
+    margin-top: 0.1vh;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+    border-radius: 0.5vw;
+    background: linear-gradient(90deg, #9762f1, #7c3aed);
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(180deg, #10b981, #059669);
+    border: none;
+    box-shadow: 0 1vw 4vw var(--box-shadow);
+  }
+  
+  button.primary:hover {
+    opacity: 0.6;
+  }
+  
 .message {
     width: 100%;
     text-align: center;
@@ -320,7 +347,7 @@ button {
     font-size: 1.3vw
 }
 
-.timer {
+/* .timer {
     font-family: 'Digital', Arial, Helvetica, sans-serif;
     display: grid;
     align-items: center;
@@ -328,7 +355,7 @@ button {
     font-weight: bold;
     color: var(--text-color);
     /* font-variant-numeric: tabular-nums; */
-}
+} */
 
 /* Portrait (Top-Bottom layout) */
 @media (max-aspect-ratio: 1/1) {
@@ -358,15 +385,12 @@ td {
     padding: 0.1vw;
 }
 
-#displayTime {
+#timer-display  {
     font-family: 'Digital', Arial, Helvetica, sans-serif;
+    font-size: 2.5vw;
     text-align: center;
-    width: auto;
-    height: auto;
-    font-size: 1.5vw;
-    padding: 1vw 1vw;
+    font-weight: bold;
     color: var(--text);
-    border: none;
 }
 
 /* submenu display css */
@@ -425,3 +449,51 @@ td {
     transition: opacity 0.5s ease, transform 0.5s ease;
     pointer-events: none;
 }
+
+.namebar {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    height: 27%;
+    bottom: 1vw;
+    background: var(--bg);
+    color: var(--text);
+    border: 0.1vw solid var(--cell-border);
+    border-radius: 1.4vw;
+    padding: 1vw;
+    z-index: 10001;
+    display: none;
+    gap: 1vw;
+    align-items: center;
+    flex-wrap: wrap;
+    box-shadow: 0 1vw 4vw rgba(0, 0, 0, .45);
+  }
+  
+  .namebar.show {
+    display: flex;
+  }
+  
+  .namebar .row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8vw;
+    background: var(--bg);
+    padding: 0.6vh 0.8vw;
+    border-radius: 1vw;
+  }
+  
+  .namebar label {
+    color: var(--text);
+    font-size: 1.2vw;
+  }
+  
+  .namebar input[type="text"] {
+    border: 0.1vw solid var(--cell-border);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: 0.8vw;
+    padding: 0.4vh 0.6vw;
+  }

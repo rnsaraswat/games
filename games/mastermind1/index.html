@@ -5,45 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mastermind game by Player</title>
-    <!-- /Mastermind/
-    │
-    └── /project/
-        ├── index.html
-        ├── style.css
-        ├── /js/
-        │   ├── script.js
-        │   ├── speak.js
-        │   └── sound.js
-        └── /assets/
-            ├── /font/
-            │   ├── Bangears-Regular.ttf
-            │   ├── GajrajOne-Regular.ttf.ttf
-            └── /sound/
-                ├── inhalation-and-exhalation.mp3
-                ├── Clock-Ticking-one.mp3
-                ├── fireworks.mp3
-                ├── Looser.mp3
-                ├── winner-trumpets.mp3
-                └── tap-sound.mp3      -->
-    <!-- Mastermind
-        with seperate liberary files
-        with responsive layout
-        with 2 downloaded font
-        with dark/light theme 
-        with speak in english
-        with timer display
-        with ledder board
-        with 1 to 8 no slots choose (default 3)
-            1 slot no coice
-            8 slot very hard
-        with 1 to 12 no slots choose (default 12)
-            min colors equal to number of slots
-            colors equal to slots easy
-            12 colors harder
-            12 colors and 8 slots hardest 
-        colors with number for color blind persion -->
-        <link rel="stylesheet" href="style.css">
+    <title>Mastermind game</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -53,9 +16,8 @@
             <h1>🎯Mastermind</h1>
             <div class="button-group">
                 <div class="button-group" style="border: 0.1vw solid var(--cell-border);">
-                    <label for="slotInput">No of Slots:
+                    <label for="slotInput">No of Slots:</label>
                         <input type="number" id="slotInput" min="1" max="12" value="3">
-                    </label>
                     <label for="colorInput">No of Colors:
                         <input type="number" id="colorInput" min="1" max="20" value="4">
 
@@ -73,12 +35,12 @@
                 <button id="dark">☀️ Light</button>
                 <button id="toggle-sound">🔇 Music:Off"</button>
                 <div id="timer-display" class="timer">⏱️ 00:00:00</div>
-                <button id="toggle-leaderboard">View Leaderboard</button>
-                <button id="clearleaderboard">Clear Leaderboard</button>
+                <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
+                <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
                 <div class="message" id="output">
                     Please Click on Circle to select your secreate colors and press Start
                 </div>
-                <div id="leaderboard"></div>
+                <p id="loading">Loading...</p>
             </div>
         </div>
         <!-- Right Grid -->
@@ -91,13 +53,87 @@
             <div class="log" id="log"></div>
         </div>
     </div>
-
+    <div id="leaderboardPopup" class="popupWindow">
+    </div>
+    <div id="localleaderboardPopup" class="popupWindow">
+    </div>
     <!-- Display winning text -->
     <div id="winText">🎉 You Won! 🎉</div>
     <!-- fire crackers canvas -->
     <canvas id="fireworksCanvas"></canvas>
     <!-- <script type="module" src="js/script.js"></script> -->
     <script type="module" src="js/script.js"></script>
+    <script type="module">
+        import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
+    
+        window.sortTable = sortTable;
+        window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
+          try {
+            await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+          } catch (e) {
+            document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
+          }
+        };
+        document.addEventListener('DOMContentLoaded', () => {
+          renderLeaderboard('5inarow');
+        });
+      </script>
+    
+      <script type="module">
+        import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
+        document.addEventListener('DOMContentLoaded', () => {
+                localrenderLeaderboard();
+            });
+      </script>
+    
+      <script>
+        fetch('../../leaderboard/leaderboard.html')
+          .then(response => response.text())
+          .then(htmlText => {
+            document.getElementById('leaderboardPopup').innerHTML = htmlText;
+          });
+    
+        fetch('../../leaderboard/localleaderboard.html')
+          .then(response => response.text())
+          .then(htmlText => {
+            document.getElementById('localleaderboardPopup').innerHTML = htmlText;
+          });
+        document.getElementById("leaderboardPopup").style.display = 'none';
+        document.getElementById("localleaderboardPopup").style.display = 'none';
+    
+        document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+          if (document.getElementById("toggle-leaderboard").style.display === 'block') {
+            // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+            document.getElementById("leaderboardPopup").style.display = 'none';
+            return;
+          } else {
+            // document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
+            document.getElementById("leaderboardPopup").style.display = 'block';
+            loadCSS()
+          }
+        });
+    
+        document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+          if (document.getElementById("leaderboardPopup").style.display === 'block') {
+            // document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+            document.getElementById("localleaderboardPopup").style.display = 'none';
+            return;
+          } else {
+            // document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+            document.getElementById("localleaderboardPopup").style.display = 'block';
+            loadCSS();
+          }
+        });
+    
+        function loadCSS() {
+          var head = document.head;
+          var link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.type = 'text/css';
+          link.href = '../../leaderboard/leaderboard.css';
+          head.appendChild(link);
+        }
+      </script>
 </body>
 
 </html>

@@ -52,22 +52,37 @@ modeEl.addEventListener('change', function (e) {
 });
 
 //toggle theme
-document.getElementById("toggle-theme").addEventListener("click", () => {
-  toggleTheme();
-});
+// document.getElementById("toggle-theme").addEventListener("click", () => {
+//   toggleTheme();
+// });
 
-// change theme
-function toggleTheme() {
-  document.body.classList.toggle(theme);
-  if (document.body.classList.contains("dark")) {
-      localStorage.setItem('rg_theme')
-      toggleThemeBtn.innerText = "☀️ Light";
-    textToSpeechEng('Theme Dark');
-  } else {
-    toggleThemeBtn.innerText = "🌙 Dark";
-    textToSpeechEng('Theme Light');
+// // change theme
+// function toggleTheme() {
+//   document.body.classList.toggle(theme);
+//   if (document.body.classList.contains("dark")) {
+//       localStorage.setItem('rg_theme')
+//       toggleThemeBtn.innerText = "☀️ Light";
+//     textToSpeechEng('Theme Dark');
+//   } else {
+//     toggleThemeBtn.innerText = "🌙 Dark";
+//     textToSpeechEng('Theme Light');
+//   }
+// }
+const themeToggle = document.getElementById('toggle-theme');
+function setTheme(t) {
+  if (t === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    localStorage.setItem('rg_theme', t);
+    themeToggle.textContent = '☀️ Light'
+  }
+  if (t === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('rg_theme', t);
+    themeToggle.textContent = '🌙 Dark'
   }
 }
+if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
 //start game
 document.getElementById("startGame").addEventListener("click", () => {
@@ -157,6 +172,7 @@ function handleMove(col) {
     updateleaderboard();
       timer = false;
       gameOver = true;
+      clearInterval(timerInterval);
       switchStartingPlayer();
       playSound('win');
       launchFireworks();
@@ -437,6 +453,7 @@ function updateleaderboard() {
     filed4 = currentPlayer.toUpperCase();
     score = (gridSize * gridSize - history.length) * 10 + 50;
   }
+  if(difficulty == 'hard') { score = score + 500} else if(difficulty == 'medium') { score = score + 200 }
 
   const entry = { winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
   const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");

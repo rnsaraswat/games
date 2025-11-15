@@ -16,7 +16,7 @@ let sNo = 1;
 
 export function toggleLeaderboard() {
   if (document.getElementById("leaderboardPopup").style.display === 'block') {
-    document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+    // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
     document.getElementById("leaderboardPopup").style.display = 'none';
     return;
   }
@@ -37,7 +37,7 @@ document.getElementById("topSelect").addEventListener("change", handleTopSelect)
 document.getElementById("prevPage").addEventListener("click", prevPage);
 document.getElementById("nextPage").addEventListener("click", nextPage);
 
-document.querySelectorAll("#leaderboardTable th").forEach(th => {
+document.querySelectorAll("#leaderboardTable thead th").forEach(th => {
   th.addEventListener("click", () => handleSort(th.dataset.column));
 });
 
@@ -131,8 +131,11 @@ function renderTable() {
   const end = start + itemsPerPage;
   const currentItems = filteredData.slice(start, end);
 
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
   if (currentItems.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="4">No results found.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="4">No records found.</td></tr>`;
     document.getElementById("pageInfo").textContent = "";
     return;
   }
