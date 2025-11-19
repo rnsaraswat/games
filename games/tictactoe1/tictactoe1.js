@@ -1,4 +1,4 @@
-import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
+import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
 
 window.addEventListener('load', function () {
     const loading = document.getElementById('loading');
@@ -11,6 +11,7 @@ window.addEventListener('load', function () {
     const modeEl = document.getElementById('mode');
     const leaderboardEl = document.getElementById('leaderboard');
     const canvas = document.getElementById('fireworksCanvas');
+    const namebar = document.getElementById('namebar');
 
     let board = [];
     let gridSize = 3;
@@ -28,42 +29,75 @@ window.addEventListener('load', function () {
     let score = 0;
     let gameCount = 0;
     let winnerName;
-    let player1;
-    let player2;
+    let theme = localStorage.getItem('rg_theme') || 'dark';
+    let player1 = localStorage.getItem('player_name') || 'Human1';
+    let player2 = localStorage.getItem('player_opponent') || 'Human2';
     let difficulty = difficultyEl.value;
 
     document.getElementById("difficulty").addEventListener("click", () => {
         difficulty = difficultyEl.value;
     });
 
-    //toggle theme
-    document.getElementById("toggle-theme").addEventListener("click", () => {
-        toggleTheme();
-    });
-
-    function toggleTheme() {
-        document.body.classList.toggle("dark");
-        if (document.body.classList.contains("dark")) {
-            toggleThemeBtn.innerText = "☀️ Light";
-            textToSpeechEng('Theme Dark');
+    namebar.classList.remove('show');
+    modeEl.addEventListener('change', function (e) {
+        mode = e.target.value;
+        document.getElementById("nameInput").placeholder = player2 || 'Human2';
+        player2 = localStorage.getItem('player_opponent') || 'Human2';
+        document.getElementById("nameInput").value = player2 || 'Human2';
+        // namebar.classList.add('show');
+        if (mode == 'pvp') {
+          namebar.classList.add('show');
         } else {
-            toggleThemeBtn.innerText = "🌙 Dark";
-            textToSpeechEng('Theme Light');
+          namebar.classList.remove('show');
         }
-    }
+      });
 
+    //toggle theme
+    // document.getElementById("toggle-theme").addEventListener("click", () => {
+    //     toggleTheme();
+    // });
+
+    // function toggleTheme() {
+    //     document.body.classList.toggle("dark");
+    //     if (document.body.classList.contains("dark")) {
+    //         toggleThemeBtn.innerText = "☀️ Light";
+    //         textToSpeechEng('Theme Dark');
+    //     } else {
+    //         toggleThemeBtn.innerText = "🌙 Dark";
+    //         textToSpeechEng('Theme Light');
+    //     }
+    // }
+
+    const themeToggle = document.getElementById('toggle-theme');
+    function setTheme(t) {
+      if (t === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('rg_theme', t);
+        themeToggle.textContent = '☀️ Light'
+      }
+      if (t === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('rg_theme', t);
+        themeToggle.textContent = '🌙 Dark'
+      }
+    }
+    if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+    setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+
+    
     document.getElementById("startGame").addEventListener("click", () => {
         startGame();
     });
 
+    // const namebar = document.getElementById('namebar');
     function startGame() {
         if (modeEl.value === 'pvc') {
             player1 = localStorage.getItem('player_name') || "Human";
             player2 = "Computer";
-        } else if (modeEl.value === 'pvp') {
+          } else if (modeEl.value === 'pvp') {
             player1 = localStorage.getItem('player_name') || "Human1";
             player2 = localStorage.getItem('player_opponent') || "Human";
-        }
+          }
         board = Array(gridSize).fill().map(() => Array(gridSize).fill(''));
         boardEl.innerHTML = '';
         boardEl.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
@@ -343,6 +377,17 @@ window.addEventListener('load', function () {
         }
     }
 
+    // const namebar = document.getElementById('namebar');
+    if (mode == 'pvp') {
+      document.getElementById("nameInput").placeholder = player2 || 'Human2';
+      document.getElementById("nameInput").value = player2 || 'Human2';
+      namebar.classList.add('show');
+    }
+    document.getElementById('name').addEventListener('click', () => {
+      player2 = document.getElementById("nameInput").value;
+      namebar.classList.remove('show');
+    });
+
     function updateleaderboard() {
         winnerName = currentPlayer === 'x' ? player1 : player2;
         let finalScore = score;
@@ -374,7 +419,7 @@ window.addEventListener('load', function () {
             finalScore = score + 100;
         }
 
-        saveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
+        saveToLeaderboard(winnerName, opponent, email, size, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
         // const entry = {winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at};
         //     const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
         //     boardData.push(entry);
@@ -522,6 +567,19 @@ window.addEventListener('load', function () {
         utterance.text = text;
         speechSynthesis.speak(utterance);
     }
+
+    // function showWinText(winner) {
+    //     const winText = document.getElementById("winText");
+    //     winText.textContent = `🎉 ${winner} Won! 🎉`;
+    //     winText.style.opacity = 1;
+    //     winText.style.transform = "translate(-50%, -50%) scale(1.2)";
+    
+    //     // Hide text after 3 seconds
+    //     setTimeout(() => {
+    //         winText.style.opacity = 0;
+    //         winText.style.transform = "translate(-50%, -50%) scale(1)";
+    //     }, 3000);
+    // }
 
     class FireParticle {
         constructor(x, y, color, dx, dy, shape) {

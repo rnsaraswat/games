@@ -104,7 +104,7 @@ googleBtn.addEventListener("click", async () => {
     provider: "google",
     options: {
       // redirectTo: window.location.origin + "/auth/redirect.html", 
-      emailRedirectTo: "https://rnsaraswat.github.io/games/auth/redirect.html"
+      redirectTo: "https://rnsaraswat.github.io/games/auth/redirect.html"
 
     },
   });

@@ -21,12 +21,12 @@ body.dark {
 
 @font-face {
     font-family: 'EnglishFontBangers';
-    src: url('assets/font/Bangers-Regular.ttf') format('truetype');
+    src: url('../../assets/font/Bangers-Regular.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Digital';
-    src: url('assets/font/digital-italic.ttf') format('truetype');
+    src: url('../../assets/font/digital-italic.ttf') format('truetype');
 }
 
 * {
@@ -131,6 +131,7 @@ button {
     background: var(--bg-color);
     color: var(--text-color);
     border: 0.2vw solid var(--cell-border);
+    border-radius: 0.5vw;
 }
 
 .scoreboard {

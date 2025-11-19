@@ -15,7 +15,7 @@
             --box-shadow: rgba(0, 0, 0, 0.2);
             --bg-hover: #d1d1d1;
         }
-        
+
         [data-theme='dark'] {
             --bg: #121212;
             --text-color: #eee;
@@ -133,6 +133,7 @@
             background: var(--bg);
             color: var(--text-color);
             border: 0.2vw solid var(--cell-border);
+            border-radius: 0.5vw;
         }
 
         .scoreboard {
@@ -287,6 +288,54 @@
             pointer-events: none;
             z-index: -1;
         }
+
+        .namebar {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40%;
+            height: 27%;
+            bottom: 1vw;
+            background: var(--bg);
+            color: var(--text);
+            border: 0.1vw solid var(--cell-border);
+            border-radius: 1.4vw;
+            padding: 1vw;
+            z-index: 10001;
+            display: none;
+            gap: 1vw;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 1vw 4vw rgba(0, 0, 0, .45);
+        }
+
+        .namebar.show {
+            display: flex;
+        }
+
+        .namebar .row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8vw;
+            background: var(--bg);
+            padding: 0.6vh 0.8vw;
+            border-radius: 1vw;
+        }
+
+        .namebar label {
+            color: var(--text);
+            font-size: 1.2vw;
+        }
+
+        .namebar input[type="text"] {
+            border: 0.1vw solid var(--cell-border);
+            background: var(--bg);
+            color: var(--text);
+            border-radius: 0.8vw;
+            padding: 0.4vh 0.6vw;
+        }
     </style>
     <!-- <link rel="stylesheet" href="style.css" /> -->
 </head>
@@ -303,12 +352,12 @@
                 <button id="undo-last">↩️ Undo</button>
                 <select id="mode">
                     <option value="pvp">😊Player vs 😊Player</option>
-                    <option value="pvc">😊Player vs 🤖Computer</option>
+                    <option value="pvc" selected>😊Player vs 🤖Computer</option>
                 </select>
                 <select id="difficulty">
                     <option value="easy">😀 Easy</option>
                     <option value="medium">😐 Medium</option>
-                    <option value="hard">😩 Hard</option>
+                    <option value="hard" selected>😩 Hard</option>
                 </select>
                 <button id="toggle-theme">☀️ Light</button>
                 <button id="toggle-sound">🔇 Music:Off"</button>
@@ -328,18 +377,18 @@
     </div>
     <div id="localleaderboardPopup" class="popupWindow">
     </div>
-    <div id="winText">🎉 You Won! 🎉</div>
+    <!-- <div id="winText">🎉 You Won! 🎉</div> -->
     <div class="namebar" id="namebar" aria-live="polite">
-      <div class="row">
-        <div>Player Name : <span id="player1"></span></div>
-        <label for="nameInput">Other Player Name :
-          <input type="text" id="nameInput" placeholder="ABC" value="ABC">
-        </label>
-        <button id="name" class="primary">Ok</button>
-      </div>
+        <div class="row">
+            <div>Player Name : <span id="player1"></span></div>
+            <label for="nameInput">Other Player Name :
+                <input type="text" id="nameInput" placeholder="ABC" value="ABC">
+            </label>
+            <button id="name" class="primary">Ok</button>
+        </div>
     </div>
-  
-  
+
+
     <canvas id="fireworksCanvas"></canvas>
     <script type="module" src="tictactoe1.js"></script>
     <script type="module">
@@ -381,7 +430,7 @@
         document.getElementById("localleaderboardPopup").style.display = 'none';
 
         document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-            if (document.getElementById("toggle-leaderboard").style.display === 'block'){
+            if (document.getElementById("toggle-leaderboard").style.display === 'block') {
                 document.getElementById("leaderboardPopup").style.display = 'none';
                 return;
             } else {

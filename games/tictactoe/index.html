@@ -134,6 +134,7 @@
             background: var(--bg-color);
             color: var(--text-color);
             border: 0.2vw solid var(--cell-border);
+            border-radius: 1vw;
         }
 
         .scoreboard {
@@ -431,7 +432,7 @@
 
     <script type="module" src="tictactoe.js"></script>
     <script type="module">
-        import { renderLeaderboard, saveScore, sortTable } from '../leaderboard/leaderboard.js';
+        import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
         window.sortTable = sortTable;
         window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
@@ -442,25 +443,25 @@
             }
         };
         document.addEventListener('DOMContentLoaded', () => {
-            renderLeaderboard('5inarow');
+            renderLeaderboard();
         });
     </script>
 
     <script type="module">
-        import { localrenderLeaderboard } from '../leaderboard/localleaderboard.js';
+        import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
         document.addEventListener('DOMContentLoaded', () => {
             localrenderLeaderboard();
         });
     </script>
 
     <script>
-        fetch('../leaderboard/leaderboard.html')
+        fetch('../../leaderboard/leaderboard.html')
             .then(response => response.text())
             .then(htmlText => {
                 document.getElementById('leaderboardPopup').innerHTML = htmlText;
             });
 
-        fetch('../leaderboard/localleaderboard.html')
+        fetch('../../leaderboard/localleaderboard.html')
             .then(response => response.text())
             .then(htmlText => {
                 document.getElementById('localleaderboardPopup').innerHTML = htmlText;
@@ -493,7 +494,7 @@
             var link = document.createElement('link');
             link.rel = 'stylesheet';
             link.type = 'text/css';
-            link.href = '../leaderboard/leaderboard.css';
+            link.href = '../../leaderboard/leaderboard.css';
             head.appendChild(link);
         }
     </script>

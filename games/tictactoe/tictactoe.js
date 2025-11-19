@@ -3,7 +3,7 @@
 // import { playSound } from './sound.js';
 // import { textToSpeechEng } from './speak.js';
 // import { saveToLeaderboard, toggleLeaderboard, clearLeaderboard } from './leaderboard.js';
-import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
+// import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
 
 let timer = false;
 let player1;

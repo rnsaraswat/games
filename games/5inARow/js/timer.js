@@ -3,10 +3,10 @@ import { timer } from './script.js';
 export let seconds = 0;
 export let minutes = 0;
 export let hours = 0;
-let timerInterval;
+export let timerInterval;
 let startTime;
 let elapsedTime = 0;
-const timerDisplay = document.getElementById('timer-display');
+const timerDisplay = document.getElementById('timerdisplay');
 
 export function startTimer() {
     clearInterval(timerInterval);

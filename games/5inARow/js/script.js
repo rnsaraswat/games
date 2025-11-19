@@ -1,4 +1,4 @@
-import { startTimer, seconds, minutes, hours } from './timer.js';
+import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
 import { launchFireworks, showWinText } from './fireworks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';

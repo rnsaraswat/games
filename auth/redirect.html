@@ -6,7 +6,16 @@
         localStorage.setItem("player_name", user.user_metadata.full_name || "User");
         localStorage.setItem("email", user.email || "");
         localStorage.setItem("user_id", user.id || "");
-        window.location.href = "../index.html";
+        document.body.innerHTML = `
+          <h2>Login Successful!</h2>
+          <p>Welcome, <b>${name}</b></p>
+          <p>Email: <b>${email}</b></p>
+          <a href="../index.html">Go to Home</a>
+        `;
+        // window.location.href = "../index.html";
+        setTimeout(() => {
+          window.location.href = "https://rnsaraswat.github.io/games/index.html";
+        }, 1500);
       } else {
         document.body.innerHTML = "<p>Login failed. Please try again.</p>";
       }
@@ -14,7 +23,7 @@
     completeLogin();
   </script>
 
-<!doctype html>
+<!-- <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -42,5 +51,5 @@
     handleRedirect();
   </script>
 </body>
-</html>
+</html> -->
 
