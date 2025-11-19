@@ -1,0 +1,238 @@
+:root {
+    --fd-bg: #f0f0f0;
+    --fd-bg-hover: #9d9d9d;
+    --fd-text: #111;
+    --muted: #30343c;
+    --fd-cell-border: #333;
+    --fd-box-shadow: rgba(0, 0, 0, 0.2);
+    --fd-btn-shadow: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] {
+    --fd-bg: #121212;
+    --fd-bg-hover: #5a5a5a;
+    --fd-text: #eee;
+    --muted: #baccee;
+    --fd-cell-border: #d9d8d8;
+    --fd-box-shadow: rgba(255, 255, 255, 0.5);
+    --fd-btn-shadow: rgba(0, 0, 0, 0.2);
+}
+
+* {
+    box-sizing: border-box;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Arial;
+}
+
+/* body {
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #04102a, #071428);
+    color: var(--fd-text);
+} */
+
+/* .container {
+    max-width: 98vw;
+    margin: 0 auto
+} */
+
+h1 {
+    margin: 0 0 1.2vw;
+    font-size: 2vw
+}
+
+.fb-card {
+    background: var(--fd-bg);
+    padding: 1.4vw;
+    border-radius: 1.2vw;
+    margin-bottom: 1.4vw;
+    border: 0.1vw solid var(--fd-cell-border);
+}
+
+.fb-label {
+    font-size: 2vw;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 0.6vw;
+    text-align: left;
+    /* color: var(--fd-text); */
+}
+
+.pageInput{
+    width: 5vw;
+    padding: 0.6vw;
+    border-radius: 0.8vw;
+    border:0.1vw solid var(--fd-cell-border);
+    background:transparent;
+    color:inherit"
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 1vw;
+    border-radius: 1vw;
+    border: 0.1vw solid var(--fd-cell-border);
+    background: transparent;
+    color: inherit;
+    font-size: 2vw;
+    color: var(--fd-text);
+}
+
+textarea {
+    min-height: 7.2vw;
+    resize: vertical;
+    font-size: 2vw;
+    color: var(--fd-text);
+}
+
+.controls {
+    display: flex;
+    gap: 0.8vw;
+    align-items: center;
+    margin-top: 1vw;
+    flex-wrap: wrap
+}
+
+button {
+    cursor: pointer;
+    padding: 0.8vw 1.2vw;
+    border-radius: 1vw;
+    border: 0
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, var(--accent), #4f46e5);
+    color: var(--fd-text);
+    /* color: white */
+}
+
+.btn-ghost {
+    background: transparent;
+    border: 0.1vw solid var(--fd-cell-border);
+    color: var(--muted)
+}
+
+.hint {
+    color: var(--muted);
+    margin-left: auto
+}
+
+/* list */
+.list {
+    margin-top: 1.2vw;
+    display: flex;
+    flex-direction: column;
+    gap: 1vw
+}
+
+.item {
+    padding: 1.2vw;
+    border-radius: 1vw;
+    background: var(--fd-bg);
+    border: 0.1vw solid var(--fd-cell-border);
+    overflow: hidden;
+    transform-origin: top;
+    transition: transform .22s cubic-bezier(.2, .9, .3, 1), opacity .22s, box-shadow .22s
+}
+
+.item.enter {
+    transform: translateY(-10px) scale(0.98);
+    opacity: 0
+}
+
+.item.show {
+    transform: none;
+    opacity: 1
+}
+
+.meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.2vw;
+    align-items: center
+}
+
+.who {
+    font-weight: 700;
+    text-align: left;
+}
+
+.time {
+    font-size: 1.2vw;
+    color: var(--muted)
+}
+
+.text {
+    margin: 0.8vw 0;
+    color: var(--fd-text);
+    /* color: #e9f1ff; */
+    line-height: 1.5;
+    text-align: left;
+}
+
+.actions {
+    display: flex;
+    gap: 0.8vw;
+    align-items: center
+}
+
+.pill {
+    padding: 0.6vw 0.8vw;
+    border-radius: 8px;
+    border: 0.1vw solid var(--fd-cell-border);
+    background: transparent;
+    color: var(--muted);
+    display: inline-flex;
+    gap: 0.8vw;
+    align-items: center
+}
+
+.replies {
+    margin-top: 1vw;
+    padding-left: 1.2vw;
+    border-left: 0.2vw dashed var(--fd-cell-border);
+}
+
+.reply {
+    padding: 0.8vw;
+    border-radius: 0.8vw;
+    margin-bottom: 0.6vw;
+    background: var(--fd-bg);
+}
+
+/* pagination */
+.pagination {
+    display: flex;
+    gap: 0.6vw;
+    align-items: center;
+    margin-top: 0.8vw
+}
+
+.small {
+    font-size: 1.3vw;
+    color: var(--muted)
+}
+
+/* animation when deleting */
+.item.removing {
+    transform: translateX(2vw) scale(.98);
+    opacity: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    border: 0
+}
+
+/* responsive */
+@media (max-width:600px) {
+    .controls {
+        flex-direction: column;
+        align-items: stretch
+    }
+
+    .meta {
+        flex-direction: column;
+        align-items: flex-start
+    }
+}

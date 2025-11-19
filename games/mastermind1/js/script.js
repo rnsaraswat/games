@@ -2,7 +2,7 @@ import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
 import { launchFireworks } from './edgeFireWorks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
-// import { saveToLeaderboard, toggleLeaderboard, clearLeaderboard } from './leaderboard.js';
+import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
 
 // define variables
 export let timer = false;
@@ -464,12 +464,16 @@ function updateleaderboard() {
         else {difficulty == 'expert'; score = score + 500;}
     } else {difficulty == 'expert'; score = score + 500;}
   
-    const entry = { player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at };
-    const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-    boardData.push(entry);
-    localStorage.setItem("leaderboard", JSON.stringify(boardData));
+    saveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
+    // const entry = { player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at };
+    // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+    // boardData.push(entry);
+    // localStorage.setItem("leaderboard", JSON.stringify(boardData));
   
     window.submitScore &&
       window.submitScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
   }
+  document.addEventListener('DOMContentLoaded', () => {
+    localrenderLeaderboard();
+});
 });

@@ -1,0 +1,74 @@
+<div class="ldpopupHeadeer">
+    <!-- <div class="container"> -->
+        <div class="ldcontrols">
+            <h3 class="ldh3">Feedback</h3>
+            <button class="ldPry" id="hide-feedback">Hide Leaderboard</button>
+            <a href="../auth/login.html" class="ldlogin">Sign in</a>
+        </div>
+
+        <!-- Form card -->
+        <div class="feed-card" id="form-card">
+            <form id="feedback-form" autocomplete="off">
+                <div>
+                    <label class="fb-label" for="name">Name (optional)</label>
+                    <input id="name" type="text" placeholder="Enter your name" maxlength="60" />
+                </div>
+                <div style="margin-top:1vw">
+                    <label class="fb-label" for="message">Comment / Feedback / Suggestion</label>
+                    <textarea id="message" placeholder="write Comment / Feedback / Suggestio..." required></textarea>
+                </div>
+                <div class="controls">
+                    <button class="btn-primary" type="submit">Submit</button>
+                    <button class="btn-ghost" type="button" id="btn-undo">Undo</button>
+                    <button class="btn-ghost" type="button" id="btn-clear">Clear Local</button>
+                    <div class="hint" id="server-status">Server: checking...</div>
+                </div>
+            </form>
+        </div>
+
+        <!-- List + controls -->
+        <div class="card">
+            <div style="display:flex;align-items:center;gap:1.2vw">
+                <h2 style="font-size:3.6vw;margin:0">Feedback List</h2>
+                <div class="small">— All Comments</div>
+                <div style="margin-left:auto;display:flex;gap:0.8vw;align-items:center">
+                    <label class="small" style="margin:0">Page size:</label>
+                    <select id="page-size">
+                        <option>5</option>
+                        <option>10</option>
+                        <option>20</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="feedback-list" class="list"></div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1vw">
+                <div class="small" id="list-info">—</div>
+                <div class="pagination" aria-label="Pagination controls">
+                    <button class="btn-ghost" id="first-page">First</button>
+                    <button class="btn-ghost" id="prev-page">Prev</button>
+                    <input class="pageInput" id="page-input" type="number" min="1"
+                        value="1" />
+                    <button class="btn-ghost" id="go-page">Go</button>
+                    <button class="btn-ghost" id="next-page">Next</button>
+                    <button class="btn-ghost" id="last-page">Last</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="card small" id="api-spec">
+            <strong>Expected Server API (examples):</strong>
+            <div style="margin-top:6px">
+                GET /api/feedback?page=1&size=10 → returns { items: [...], total: N } <br>
+                POST /api/feedback (body: { name, text }) → returns created item <br>
+                DELETE /api/feedback/:id → delete item (admin) <br>
+                POST /api/feedback/:id/report → report item <br>
+                POST /api/feedback/:id/reply → (body:{name,text}) → add reply <br>
+                POST /api/feedback/undo (body:{actionId}) → optional server undo
+            </div>
+            <div style="margin-top:8px;color:var(--muted)">Client fallback: यदि server unreachable तो localStorage में
+                चलेगा। पर प्रोडक्शन में सर्वर-साइड validation/sanitization ज़रूरी।</div>
+        </div> -->
+    <!-- </div> -->
+</div>

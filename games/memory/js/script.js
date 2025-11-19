@@ -5,6 +5,7 @@ import { startTimer,seconds, minutes, hours, timerInterval } from './timer.js';
 import { playSound } from './sound.js';
 // import { loadBest, saveBest } from './best_score.js';
 import { textToSpeechEng } from './speak.js';
+import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
 // import { saveToLeaderboard } from './leaderboard.js';
 // import { timer } from './script.js';
 
@@ -358,12 +359,17 @@ function updateleaderboard() {
     else if(difficulty == 'easy') { score = score + 200 }
     else if(difficulty == 'veryeasy') { score = score + 100 }
   
-    const entry = { player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at };
-    const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-    boardData.push(entry);
-    localStorage.setItem("leaderboard", JSON.stringify(boardData));
+    saveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
+
+    // const entry = { player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at };
+    // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+    // boardData.push(entry);
+    // localStorage.setItem("leaderboard", JSON.stringify(boardData));
   
     window.submitScore &&
       window.submitScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
   }
+  document.addEventListener('DOMContentLoaded', () => {
+    localrenderLeaderboard();
+});
   });

@@ -1,10 +1,10 @@
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
+import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
 
 
 window.addEventListener('load', function () {
   const loading = document.getElementById('loading');
-  document.getElementById("winText").style.display = 'none';
   loading.style.display = 'none';
 
   const choices = ['rock', 'paper', 'scissors'];
@@ -26,6 +26,8 @@ window.addEventListener('load', function () {
   const difficultySelect = document.getElementById('difficulty');
   const resetBtn = document.getElementById('reset');
   const toggleThemeBtn = document.getElementById('toggle-theme');
+  const winTextel = document.getElementById('winText');
+  winTextel.style.display = 'none';
 
   let playerScore = 0, computerScore = 0, rounds = 0;
   let matchLength = parseInt(matchLengthSelect.value);
@@ -116,8 +118,6 @@ window.addEventListener('load', function () {
 
     const winner = decideWinner(playerMove, computerMove);
     history.push({ winner, playerMove, computerMove });
-    console.log(history);
-    console.log(userMoves);
 
     if (winner === 'draw') {
       resultEl.className = 'result muted';
@@ -152,7 +152,6 @@ window.addEventListener('load', function () {
       if (playerScore > computerScore) {
         matchWinnerEl.style.color = 'var(--success)';
         matchWinnerEl.textContent = `🎉 ${player1} Won! (${playerScore}-${computerScore})`;
-        document.getElementById("winText").textContent = `🎉 ${player1} Won! (${playerScore}-${computerScore}) 🎉`;
         updateleaderboard();
         playSound('win');
         showConfetti(150);
@@ -204,13 +203,12 @@ window.addEventListener('load', function () {
   function updateleaderboard() {
     let score = matchLengthSelect.value * 100 + (history.length - computerScore - playerScore) * 5 - computerScore * 10;
     if (computerScore == 0) { score = score + maxWins * 50 };
+    let winnerName = localStorage.getItem('player_name') || 'Human1';
     let opponent = "Computer"
     let game_id = 'rockpaperscissors';
     let gsize = `Best of ${matchLengthSelect.value}`;
     let elapsed = 0;
-    console.log(history);
     let gameCount = history.length;
-    // let moves = userMoves.length;
     let filed1 = 0;
     let filed2 = 0
     let filed3 = "Player vs Computer";
@@ -218,14 +216,14 @@ window.addEventListener('load', function () {
     let email = localStorage.getItem('email') || '-';
     const created_at = new Date();
 
-    const entry = { player1, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
-    const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-    boardData.push(entry);
-    localStorage.setItem("leaderboard", JSON.stringify(boardData));
-
+    saveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
     window.submitScore &&
       window.submitScore(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
   }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    localrenderLeaderboard();
+  });
 
   function createConfetti(amount = 20) {
     const colors = ["#FF0000", "#8b0000", "#fa8072", "#00FF00",
@@ -254,12 +252,10 @@ window.addEventListener('load', function () {
     const container = document.querySelector('.confetti-container');
     container.innerHTML = '';
     createConfetti(t)
-    // setTimeout(() => (document.getElementById("winText").style.display = 'block'
-    // ), 3000);
     setTimeout(() => {
-      document.getElementById("winText").style.display = 'block'
-      container.innerHTML = '';
-    }, 30000);
+      winTextel.style.textContent = `🎉 ${player1} Won! (${playerScore}-${computerScore}) 🎉`;
+      winTextel.style.display = 'block';
+      }, 30000);
   }
 
   resetMatch();

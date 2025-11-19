@@ -83,8 +83,8 @@ header {
 }
 
 .logo {
-    width: 4.8vw;
-    height: 4.8vw;
+    width: 7vw;
+    height: 7vw;
     border-radius: 1vw;
     background: linear-gradient(135deg, var(--accent), #60a5fa);
     display: grid;
@@ -197,11 +197,11 @@ button.primary {
     gap: 6px
 }
 
-.cell {
+/* .cell {
     width: 80px;
     height: 80px;
     font-size: 28px
-}
+} */
 
 h1, h3 {
     text-align: center;
@@ -224,7 +224,7 @@ h1, h3 {
     margin: 0vw;
 }
 
-h1 {
+.title h1 {
     font-size: 4vw;
 }
 
@@ -270,22 +270,22 @@ h1 {
         grid-template-columns: repeat(3, 60px)
     }
 
-    .cell {
+    /* .cell {
         width: 60px;
         height: 60px
-    }
+    } */
     .hdrbtns {
         display: flex;
         flex-direction: row;
     }
 }
 
-.score-row {
+/* .score-row {
     display: flex;
     justify-content: space-between;
     padding: 8px 6px;
     border-bottom: 1px dashed rgba(0, 0, 0, .06)
-}
+} */
 
 .muted {
     color: var(--muted);
@@ -293,14 +293,14 @@ h1 {
 }
 
 
-.score-row {
+/* .score-row {
     display: flex;
     justify-content: space-between;
     padding: 6px 8px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
+} */
 
-.score-row .rank {
+/* .score-row .rank {
     font-weight: bold;
     color: gold;
 }
@@ -312,4 +312,4 @@ h1 {
 
 .score-row .score {
     font-weight: bold;
-}
+} */

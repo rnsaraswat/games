@@ -5,68 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tic Tac Toe</title>
-    <!-- /tic_tac_toe-project/
-│
-└── /project/
-    ├── index.html
-    ├── style.css
-    ├── /js/
-    │   ├── script.js
-    │   ├── fireworks.js
-    │   ├── edgeFireWorks.js
-    │   ├── leaderboard.js
-    │   ├── speak.js
-    │   ├── timer.js
-    │   └── sound.js
-    └── /assets/
-        ├── /font/
-        │   ├── Bangears-Regular.ttf
-        │   └── digital-italic.ttf
-        ├── /images/
-        │   └── tic_tac_toe_X_O.png
-        └── /sound/
-            ├── bg-music.mp3
-            ├── Clock-Ticking-one.mp3
-            ├── error-sound.mp3
-            ├── fireworks.mp3
-            ├── game-over-classic.mp3
-            ├── winner-trumpets.mp3
-            └── tap-sound.mp3      -->
-
-    <!-- connect 4
-      with seperate liberary files
-      with responsive layout
-      with 2 downloaded font
-      with player vs player and player vs computer
-      with computer 3 lavel (easy/medium/hard)
-      with grid size of 6 to 20 (default 9) 
-      with last plaed cell blink for indication
-      with dark/light theme
-      with undo button 
-      with play time display 
-      with sound of different type 
-      with background music (on and off)
-      with ladderboard may be view/hide 
-      with clear ladderboard button 
-      with display winning text in center
-      with crackers display on all four bounderies 
-      with crackers spread all shapes like star, triangle, squre, rectangle, polygone etc
-      with sound of crackers -->
-    <!-- <link rel="stylesheet" href="style.css"> -->
-
     <style>
-        /* theme light  */
         :root {
-            --bg: #121212;
-            --text-color: #eee;
-            --cell-bg: #1e1e1e;
-            --cell-bg-hover: #5f5f5f;
-            --cell-border: #d9d8d8;
-            --box-shadow: rgba(255, 255, 255, 0.5);
-            --bg-hover: #454545;
-        }
-
-        body.dark {
             --bg: #f0f0f0;
             --text-color: #111;
             --cell-bg: #fff;
@@ -74,6 +14,16 @@
             --cell-border: #333;
             --box-shadow: rgba(0, 0, 0, 0.2);
             --bg-hover: #d1d1d1;
+        }
+        
+        [data-theme='dark'] {
+            --bg: #121212;
+            --text-color: #eee;
+            --cell-bg: #1e1e1e;
+            --cell-bg-hover: #5f5f5f;
+            --cell-border: #d9d8d8;
+            --box-shadow: rgba(255, 255, 255, 0.5);
+            --bg-hover: #454545;
         }
 
         @font-face {
@@ -101,7 +51,6 @@
             width: 100%;
             font-family: Arial, sans-serif;
             box-sizing: border-box;
-            /* overflow: hidden; */
             background: var(--bg);
             color: var(--text-color);
             transition: background 0.3s, color 0.3s;
@@ -113,8 +62,6 @@
             display: flex;
             flex-direction: row;
             padding: 0.1vw;
-            /* height: 100%;
-      width: 100%; */
         }
 
         .section {
@@ -129,8 +76,6 @@
             flex: 0 0 auto;
             display: flex;
             flex-direction: column;
-            /* gap: 1vw; */
-            /* box-sizing: border-box; */
             align-items: center;
             justify-content: center;
             max-width: 40vw;
@@ -271,9 +216,6 @@
             cursor: pointer;
             aspect-ratio: 1/1;
             box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-
-            /* border-radius: 50%; */
-            /* transition: background 0.3s; */
         }
 
         .cell:hover {
@@ -282,20 +224,15 @@
 
         .cell.x {
             color: rgb(255, 0, 0);
-            /* background: red;
-            color: yellow; */
         }
 
         .cell.o {
-            /* background: yellow; */
             color: rgb(0, 0, 255);
         }
 
         .cell.win {
             background: gold !important;
             color: black !important;
-            /* color: white;
-            border: 0.3vw solid rgb(0, 221, 255); */
         }
 
         .cell.blink {
@@ -374,91 +311,58 @@
                     <option value="hard">😩 Hard</option>
                 </select>
                 <button id="toggle-theme">☀️ Light</button>
-                <!-- to background music on / off button -->
                 <button id="toggle-sound">🔇 Music:Off"</button>
                 <button id="local-toggle-leaderboard">🏆Local Leaderboard</button>
                 <button id="toggle-leaderboard">🌍 Global Leaderboard</button>
                 <div id="timer-display">⏱️ 00:00:00</div>
             </div>
             <div id="message"><br>Click New Game to play</div>
-            <!-- <div class="scoreboard">
-                <p>😊 Human: <span id="humanScore">0</span></p>
-                <p>🤖 Computer: <span id="ComputerScore">0</span></p>
-                <p>🤝 Draws: <span id="draws">0</span></p>
-            </div> -->
             <p id="loading">Loading...</p>
-            <!-- <div id="leaderboard">
-                <h3>🏆 Leaderboard</h3>
-                <ul id="score-list"></ul>
-            </div> -->
         </div>
         <!-- Right Grid -->
         <div id="right">
             <div id="board"></div>
         </div>
     </div>
-    <!-- to load leaderboard popup html code -->
     <div id="leaderboardPopup" class="popupWindow">
     </div>
     <div id="localleaderboardPopup" class="popupWindow">
     </div>
-
+    <div id="winText">🎉 You Won! 🎉</div>
+    <div class="namebar" id="namebar" aria-live="polite">
+      <div class="row">
+        <div>Player Name : <span id="player1"></span></div>
+        <label for="nameInput">Other Player Name :
+          <input type="text" id="nameInput" placeholder="ABC" value="ABC">
+        </label>
+        <button id="name" class="primary">Ok</button>
+      </div>
+    </div>
+  
+  
+    <canvas id="fireworksCanvas"></canvas>
     <script type="module" src="tictactoe1.js"></script>
     <script type="module">
-        // import { saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
         import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
-        // make sortTable global so onclick in <th> works
         window.sortTable = sortTable;
-        // expose submitScore as global for your game to call
         window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
-            // console.log(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
             try {
                 await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
-                // console.log('Score saved and leaderboard refreshed', name, opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
             } catch (e) {
                 document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
             }
         };
-
-        // document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-        //     if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
-        //         document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
-        //         document.getElementById("leaderboardPopup").style.display = 'none';
-        //         return;
-        //     }
-        //     document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
-        //     document.getElementById("leaderboardPopup").style.display = 'block';
-        //     renderLeaderboard();
-        // });
-
-        // document.getElementById("hide-leaderboard").addEventListener("click", () => {
-        //     document.getElementById("leaderboardPopup").style.display = "none";
-        //     document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
-        //     document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
-        // });
-
-        // initial render
         document.addEventListener('DOMContentLoaded', () => {
-            renderLeaderboard('tictactoe');
+            renderLeaderboard();
         });
     </script>
 
-    <!-- <script type="module" src="leaderboard/leaderboard.js"></script> -->
     <script type="module">
         import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
-
-        // //toggle Local leaderboard
-        // document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
-        //     if (document.getElementById("leaderboardPopup").style.display === 'block') {
-        //         document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
-        //         document.getElementById("leaderboardPopup").style.display = 'none';
-        //         return;
-        //     }
-        //     document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
-        //     document.getElementById("leaderboardPopup").style.display = 'block';
-        //     localrenderLeaderboard();
-        // });
+        document.addEventListener('DOMContentLoaded', () => {
+            localrenderLeaderboard();
+        });
     </script>
 
     <script>
@@ -477,12 +381,10 @@
         document.getElementById("localleaderboardPopup").style.display = 'none';
 
         document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-            if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
-                document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+            if (document.getElementById("toggle-leaderboard").style.display === 'block'){
                 document.getElementById("leaderboardPopup").style.display = 'none';
                 return;
             } else {
-                document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
                 document.getElementById("leaderboardPopup").style.display = 'block';
                 loadCSS()
             }
@@ -490,12 +392,10 @@
 
         document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
             if (document.getElementById("leaderboardPopup").style.display === 'block') {
-                document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
-                document.getElementById("leaderboardPopup").style.display = 'none';
+                document.getElementById("localleaderboardPopup").style.display = 'none';
                 return;
             } else {
-                document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
-                document.getElementById("leaderboardPopup").style.display = 'block';
+                document.getElementById("localleaderboardPopup").style.display = 'block';
                 loadCSS();
             }
         });
@@ -505,7 +405,7 @@
             var link = document.createElement('link');
             link.rel = 'stylesheet';
             link.type = 'text/css';
-            link.href = '../../leaderboard/leaderboard.css'; // आपकी CSS फ़ाइल का नाम
+            link.href = '../../leaderboard/leaderboard.css'; // 
             head.appendChild(link);
         }
 

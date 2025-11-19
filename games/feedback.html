@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Feedback: Like / Dislike + Reply</title>
+  <style>
+    :root{
+      --bg: #0f172a;
+      --card: #0b1220;
+      --muted: #94a3b8;
+      --accent: #7c3aed;
+      --glass: rgba(255,255,255,0.03);
+      --radius: 12px;
+    }
+    *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial;}
+    body{
+      margin:0;
+      padding:24px;
+      min-height:100vh;
+      background: linear-gradient(180deg,#061021 0%, #071428 60%);
+      color: #e6eef8;
+      -webkit-font-smoothing:antialiased;
+    }
+    h1{font-size:20px;margin:0 0 12px}
+    .container{
+      max-width:900px;margin:0 auto;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: var(--radius);
+      padding:16px;
+      box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+      margin-bottom:16px;
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    form .row{display:flex;gap:12px;flex-wrap:wrap}
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    textarea,input[type="text"]{
+      width:100%;
+      padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);
+      background:transparent;color:inherit;resize:vertical;min-height:68px;
+    }
+    .controls{display:flex;gap:8px;margin-top:8px;align-items:center}
+    button.primary{
+      background:linear-gradient(90deg,var(--accent), #4f46e5);border:0;padding:10px 14px;border-radius:10px;color:white;cursor:pointer;
+      box-shadow: 0 6px 18px rgba(124,58,237,0.18);
+    }
+    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:10px;color:var(--muted);cursor:pointer}
+    .hint{font-size:13px;color:var(--muted)}
+
+    /* feedback list */
+    .list{margin-top:8px}
+    .item{
+      display:block;padding:12px;border-radius:10px;margin-bottom:10px;background:var(--glass);border:1px solid rgba(255,255,255,0.02);
+    }
+    .meta{display:flex;justify-content:space-between;gap:12px;align-items:center}
+    .who{font-weight:600}
+    .time{font-size:12px;color:var(--muted)}
+    .text{margin:8px 0 12px;line-height:1.5;color:#e9f1ff}
+    .actions{display:flex;gap:8px;align-items:center}
+    .btn-like, .btn-dislike, .btn-reply {
+      display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:var(--muted);cursor:pointer;
+    }
+    .count{font-weight:700}
+    .replies{margin-top:12px;padding-left:12px;border-left:2px dashed rgba(255,255,255,0.02)}
+    .reply-item{padding:8px;margin-bottom:8px;border-radius:8px;background:rgba(255,255,255,0.01)}
+    .small{font-size:13px;color:var(--muted)}
+    .reply-form{margin-top:8px;display:flex;gap:8px}
+    .reply-form input{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    .empty{color:var(--muted);padding:12px;text-align:center;border-radius:8px;background:rgba(255,255,255,0.01)}
+
+    /* responsive */
+    @media (max-width:600px){
+      .controls{flex-direction:column;align-items:stretch}
+      .meta{flex-direction:column;align-items:flex-start;gap:6px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>पृष्ठ फ़ीडबैक — Like / Dislike और Reply</h1>
+
+    <div class="card" id="feedback-form-card">
+      <form id="feedback-form" aria-label="Add feedback">
+        <div>
+          <label for="name">नाम (वैकल्पिक)</label>
+          <input id="name" type="text" placeholder="आपका नाम (या छोड़ें)" maxlength="40" />
+        </div>
+        <div style="margin-top:10px;">
+          <label for="message">अपना फ़ीडबैक लिखें</label>
+          <textarea id="message" placeholder="यहाँ अपना फ़ीडबैक लिखें..." required></textarea>
+        </div>
+        <div class="controls">
+          <button class="primary" type="submit">भेजें</button>
+          <button class="ghost" type="button" id="clear-all">सभी हटाएँ</button>
+          <div class="hint" style="margin-left:auto">फ़ीडबैक और लाइक्स लोकल ब्राउज़र में सेव होंगे।</div>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 style="font-size:16px;margin:0 0 8px">सभी फ़ीडबैक</h2>
+      <div id="feedback-list" class="list"></div>
+      <div id="empty-msg" class="empty" style="display:none">कोई फ़ीडबैक अभी नहीं — पहला फ़ीडबैक जोड़ें।</div>
+    </div>
+  </div>
+
+  <script>
+    // -------------------------------------------
+    // Simple Feedback system using localStorage
+    // -------------------------------------------
+
+    // localStorage keys
+    const STORAGE_KEY = 'page_feedback_v1';   // feedback array
+    const VOTES_KEY = 'page_feedback_votes_v1'; // object to track user's votes per item (to prevent multi-like)
+
+    // DOM elements
+    const form = document.getElementById('feedback-form');
+    const nameInput = document.getElementById('name');
+    const msgInput = document.getElementById('message');
+    const listEl = document.getElementById('feedback-list');
+    const emptyMsg = document.getElementById('empty-msg');
+    const clearAllBtn = document.getElementById('clear-all');
+
+    // read saved data from localStorage (या नई मात्रा बनाएं)
+    function readStorage() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      try {
+        return raw ? JSON.parse(raw) : [];
+      } catch(e) {
+        console.error('storage parse error', e);
+        return [];
+      }
+    }
+
+    // save feedback list to localStorage
+    function saveStorage(arr) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    }
+
+    // read votes (object: { [itemId]: 'like' | 'dislike' })
+    function readVotes() {
+      const raw = localStorage.getItem(VOTES_KEY);
+      try {
+        return raw ? JSON.parse(raw) : {};
+      } catch(e) { return {}; }
+    }
+    function saveVotes(obj) {
+      localStorage.setItem(VOTES_KEY, JSON.stringify(obj));
+    }
+
+    // utility to create unique id (simple)
+    function uid() {
+      return 'f_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,7);
+    }
+
+    // format time (सरल)
+    function fmtTime(ts) {
+      const d = new Date(ts);
+      return d.toLocaleString(); // user's locale
+    }
+
+    // initial render
+    renderList();
+
+    // form submit — नया फ़ीडबैक जोड़ें
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const text = msgInput.value.trim();
+      if (!text) return;
+
+      const name = nameInput.value.trim() || 'गैर-नामांकित';
+      const arr = readStorage();
+
+      const item = {
+        id: uid(),
+        name,
+        text,
+        createdAt: Date.now(),
+        likes: 0,
+        dislikes: 0,
+        replies: [] // replies: { id, name, text, createdAt, likes, dislikes }
+      };
+
+      arr.unshift(item); // सबसे ऊपर दिखाएँ
+      saveStorage(arr);
+      msgInput.value = '';
+      nameInput.value = '';
+      renderList();
+    });
+
+    // clear all (dev helper) — चेतावनी के साथ
+    clearAllBtn.addEventListener('click', function(){
+      if (!confirm('सभी फ़ीडबैक और वोट्स स्थायी रूप से हट जाएँगे — आगे बढ़ना है?')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(VOTES_KEY);
+      renderList();
+    });
+
+    // render feedback list
+    function renderList() {
+      const arr = readStorage();
+      listEl.innerHTML = '';
+      if (!arr.length) {
+        emptyMsg.style.display = 'block';
+        return;
+      } else {
+        emptyMsg.style.display = 'none';
+      }
+
+      const votes = readVotes();
+
+      arr.forEach(item => {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'item';
+        itemEl.dataset.id = item.id;
+        itemEl.innerHTML = `
+          <div class="meta">
+            <div>
+              <div class="who">${escapeHtml(item.name)}</div>
+              <div class="time small">${fmtTime(item.createdAt)}</div>
+            </div>
+            <div class="small">ID: ${item.id}</div>
+          </div>
+          <div class="text">${escapeHtml(item.text)}</div>
+
+          <div class="actions">
+            <button class="btn-like" data-action="like" aria-label="Like">
+              👍 <span class="count">${item.likes}</span>
+            </button>
+            <button class="btn-dislike" data-action="dislike" aria-label="Dislike">
+              👎 <span class="count">${item.dislikes}</span>
+            </button>
+            <button class="btn-reply" data-action="reply" aria-label="Reply">💬 Reply</button>
+            <div style="margin-left:auto" class="small">Replies: ${item.replies.length}</div>
+          </div>
+
+          <div class="replies" aria-live="polite">
+            ${renderRepliesHTML(item.replies)}
+            <div class="reply-form" style="display:block;margin-top:6px;">
+              <input aria-label="Reply text" placeholder="Reply लिखें..." data-reply-input />
+              <button class="ghost" data-action="send-reply">Send</button>
+            </div>
+          </div>
+        `;
+
+        // apply vote-highlight if user already voted
+        const voteState = votes[item.id];
+        if (voteState === 'like') {
+          itemEl.querySelector('.btn-like').style.borderColor = 'rgba(124,58,237,0.65)';
+          itemEl.querySelector('.btn-like').style.color = '#fff';
+        } else if (voteState === 'dislike') {
+          itemEl.querySelector('.btn-dislike').style.borderColor = 'rgba(220,38,38,0.6)';
+          itemEl.querySelector('.btn-dislike').style.color = '#fff';
+        }
+
+        // attach event listeners for this item
+        // using event delegation within the item
+        itemEl.addEventListener('click', function(ev){
+          const actionBtn = ev.target.closest('button');
+          if (!actionBtn) return;
+          const action = actionBtn.dataset.action;
+          if (!action) return;
+
+          if (action === 'like' || action === 'dislike') {
+            handleVote(item.id, action);
+          } else if (action === 'reply') {
+            // focus the reply input
+            const rInput = itemEl.querySelector('[data-reply-input]');
+            if (rInput) rInput.focus();
+          } else if (action === 'send-reply') {
+            const rInput = itemEl.querySelector('[data-reply-input]');
+            const replyText = rInput.value.trim();
+            if (!replyText) return;
+            // optional: ask for reply name (simple: use 'Guest')
+            addReply(item.id, {
+              id: uid(),
+              name: 'Guest',
+              text: replyText,
+              createdAt: Date.now(),
+              likes: 0,
+              dislikes: 0
+            });
+            rInput.value = '';
+          }
+        });
+
+        listEl.appendChild(itemEl);
+      });
+    }
+
+    // render replies HTML (simple)
+    function renderRepliesHTML(replies) {
+      if (!replies || replies.length === 0) return '<div class="small" style="margin-bottom:6px;color:var(--muted)">कोई reply नहीं</div>';
+      return replies.map(rep => `
+        <div class="reply-item" data-reply-id="${rep.id}">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+            <div>
+              <div class="who" style="font-size:13px">${escapeHtml(rep.name)}</div>
+              <div class="small">${fmtTime(rep.createdAt)}</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="btn-like" data-action="reply-like" data-reply-id="${rep.id}">👍 <span class="count">${rep.likes}</span></button>
+              <button class="btn-dislike" data-action="reply-dislike" data-reply-id="${rep.id}">👎 <span class="count">${rep.dislikes}</span></button>
+            </div>
+          </div>
+          <div style="margin-top:8px">${escapeHtml(rep.text)}</div>
+        </div>
+      `).join('');
+    }
+
+    // handle like / dislike for main item
+    function handleVote(itemId, action) {
+      // पढ़ें और अपडेट करें
+      const arr = readStorage();
+      const votes = readVotes();
+
+      const idx = arr.findIndex(x => x.id === itemId);
+      if (idx === -1) return;
+
+      const item = arr[idx];
+      const current = votes[itemId] || null;
+
+      // अगर वही action पहले से है → toggle off
+      if (current === action) {
+        // remove vote
+        if (action === 'like') item.likes = Math.max(0, item.likes - 1);
+        else item.dislikes = Math.max(0, item.dislikes - 1);
+        delete votes[itemId];
+      } else {
+        // switch or add new
+        if (action === 'like') {
+          item.likes = item.likes + 1;
+          // अगर पहले dislike थी तो घटाओ
+          if (current === 'dislike') item.dislikes = Math.max(0, item.dislikes - 1);
+        } else {
+          item.dislikes = item.dislikes + 1;
+          if (current === 'like') item.likes = Math.max(0, item.likes - 1);
+        }
+        votes[itemId] = action;
+      }
+
+      saveStorage(arr);
+      saveVotes(votes);
+      renderList();
+    }
+
+    // add a reply to an item
+    function addReply(itemId, replyObj) {
+      const arr = readStorage();
+      const idx = arr.findIndex(x => x.id === itemId);
+      if (idx === -1) return;
+      arr[idx].replies.push(replyObj);
+      saveStorage(arr);
+      renderList();
+    }
+
+    // reply like/dislike handler (we allow voting on replies too)
+    // We'll wire this up by global event listener on listEl for buttons with data-action 'reply-like' or 'reply-dislike'
+    listEl.addEventListener('click', function(ev){
+      const btn = ev.target.closest('button');
+      if (!btn) return;
+      const action = btn.dataset.action;
+      if (!action) return;
+
+      if (action === 'reply-like' || action === 'reply-dislike') {
+        // find parent item id by climbing DOM
+        const replyId = btn.dataset.replyId;
+        const itemEl = btn.closest('.item');
+        if (!itemEl) return;
+        const itemId = itemEl.dataset.id;
+        handleReplyVote(itemId, replyId, action === 'reply-like' ? 'like' : 'dislike');
+      }
+    });
+
+    // handle votes specifically for replies (prevent multi-vote per reply using votes object with key itemId::replyId)
+    function handleReplyVote(itemId, replyId, action) {
+      const arr = readStorage();
+      const votes = readVotes(); // we'll store keys as `${itemId}::${replyId}` for replies
+      const item = arr.find(x => x.id === itemId);
+      if (!item) return;
+      const rep = item.replies.find(r => r.id === replyId);
+      if (!rep) return;
+
+      const voteKey = `${itemId}::${replyId}`;
+      const current = votes[voteKey] || null;
+
+      if (current === action) {
+        // toggle off
+        if (action === 'like') rep.likes = Math.max(0, rep.likes - 1);
+        else rep.dislikes = Math.max(0, rep.dislikes - 1);
+        delete votes[voteKey];
+      } else {
+        if (action === 'like') {
+          rep.likes = rep.likes + 1;
+          if (current === 'dislike') rep.dislikes = Math.max(0, rep.dislikes - 1);
+        } else {
+          rep.dislikes = rep.dislikes + 1;
+          if (current === 'like') rep.likes = Math.max(0, rep.likes - 1);
+        }
+        votes[voteKey] = action;
+      }
+
+      saveStorage(arr);
+      saveVotes(votes);
+      renderList();
+    }
+
+    // utility: escape HTML to avoid XSS when showing user input
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/\n/g, '<br>');
+    }
+
+    // Accessibility: allow pressing Enter on reply input to send
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Enter') {
+        const active = document.activeElement;
+        if (!active) return;
+        if (active.matches('[data-reply-input]')) {
+          // find the send button sibling and click
+          const itemEl = active.closest('.item');
+          if (!itemEl) return;
+          const sendBtn = itemEl.querySelector('button[data-action="send-reply"]');
+          if (sendBtn) sendBtn.click();
+        }
+      }
+    });
+
+    // initial demo data (only if empty)
+    (function seedDemo() {
+      const arr = readStorage();
+      if (arr.length === 0) {
+        const demo = [
+          {
+            id: uid(),
+            name: 'Ravi',
+            text: 'आपका पेज बहुत उपयोगी है — धन्यवाद!',
+            createdAt: Date.now() - 1000*60*60,
+            likes: 2,
+            dislikes: 0,
+            replies: [{
+              id: uid(),
+              name: 'SiteOwner',
+              text: 'धन्यवाद Ravi! आपका सुझाव और भी बेहतर बनाने में काम आएगा।',
+              createdAt: Date.now() - 1000*60*40,
+              likes: 1,
+              dislikes: 0
+            }]
+          },
+          {
+            id: uid(),
+            name: 'Anita',
+            text: 'मोबाइल पर लेआउट थोड़ा ठीक नहीं दिख रहा — कृपया चेक करें।',
+            createdAt: Date.now() - 1000*60*120,
+            likes: 1,
+            dislikes: 0,
+            replies: []
+          }
+        ];
+        saveStorage(demo);
+        // no votes seeded
+        renderList();
+      }
+    })();
+
+  </script>
+</body>
+</html>

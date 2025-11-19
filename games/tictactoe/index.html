@@ -8,16 +8,6 @@
     <!-- <link rel="stylesheet" href="style.css" /> -->
     <style>
         :root {
-            --bg-color: #121212;
-            --text-color: #eee;
-            --cell-bg: #1e1e1e;
-            --cell-bg-hover: #5f5f5f;
-            --cell-border: #d9d8d8;
-            --box-shadow: rgba(255, 255, 255, 0.5);
-            --bg-hover: #454545;
-        }
-
-        body.dark {
             --bg-color: #f0f0f0;
             --text-color: #111;
             --cell-bg: #fff;
@@ -25,6 +15,16 @@
             --cell-border: #333;
             --box-shadow: rgba(0, 0, 0, 0.2);
             --bg-hover: #d1d1d1;
+        }
+
+        [data-theme='dark'] {
+            --bg-color: #121212;
+            --text-color: #eee;
+            --cell-bg: #1e1e1e;
+            --cell-bg-hover: #5f5f5f;
+            --cell-border: #d9d8d8;
+            --box-shadow: rgba(255, 255, 255, 0.5);
+            --bg-hover: #454545;
         }
 
         @font-face {
@@ -52,7 +52,6 @@
             width: 100%;
             font-family: Arial, sans-serif;
             box-sizing: border-box;
-            /* overflow: hidden; */
             background: var(--bg-color);
             color: var(--text-color);
             transition: background 0.3s, color 0.3s;
@@ -64,8 +63,6 @@
             display: flex;
             flex-direction: row;
             padding: 0.1vw;
-            /* height: 100%;
-width: 100%; */
         }
 
         .section {
@@ -80,8 +77,6 @@ width: 100%; */
             flex: 0 0 auto;
             display: flex;
             flex-direction: column;
-            /* gap: 1vw; */
-            /* box-sizing: border-box; */
             align-items: center;
             justify-content: center;
             max-width: 40vw;
@@ -143,7 +138,6 @@ width: 100%; */
 
         .scoreboard {
             margin-top: 1vh;
-
         }
 
         select:hover {
@@ -170,6 +164,34 @@ width: 100%; */
             color: var(--text-color);
             border: 0.2vw solid var(--cell-border);
         }
+
+        button.primary {
+            gap: 0.8vw;
+            align-items: center;
+            flex-wrap: wrap;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            padding: 1vw 1.2vw;
+            margin: 1vw 0.2vw 0.5vw 0.2vw;
+            font-size: 1.6vw;
+            display: inline-block;
+            margin-top: 0.1vh;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+            border-radius: 0.5vw;
+            background: linear-gradient(90deg, #9762f1, #7c3aed);
+            color: #fff;
+            border-color: transparent;
+            background: linear-gradient(180deg, #10b981, #059669);
+            border: none;
+            box-shadow: 0 1vw 4vw var(--box-shadow);
+        }
+
+        button.primary:hover {
+            opacity: 0.6;
+        }
+
 
         table,
         th,
@@ -221,8 +243,7 @@ width: 100%; */
             width: 100px;
             height: 100px;
             background-repeat: no-repeat;
-            background-size: 200% 100%;
-            /* Zoom so that 174px part fills the 100px cell */
+            background-size: 100% 100%;
             font-size: 0;
             background-color: var(--cell-bg);
             background-position: center center;
@@ -231,13 +252,11 @@ width: 100%; */
         .cell.x {
             background-image: url("../../assets/images/tic_tac_toe_X_O.png");
             background-position: 0% 50%;
-            /* left half */
         }
 
         .cell.o {
             background-image: url("../../assets/images/tic_tac_toe_X_O.png");
             background-position: 100% 50%;
-            /* right half */
         }
 
 
@@ -289,6 +308,77 @@ width: 100%; */
             pointer-events: none;
             z-index: -1;
         }
+
+        #timer-display {
+            font-family: 'Digital', Arial, Helvetica, sans-serif;
+            font-size: 2.5vw;
+            text-align: center;
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        #winText {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+            color: gold;
+            text-shadow: 2px 2px 10px #fff;
+            font-weight: bold;
+            opacity: 0;
+            z-index: 2;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            pointer-events: none;
+        }
+
+        .namebar {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40%;
+            height: 27%;
+            bottom: 1vw;
+            background: var(--bg);
+            color: var(--text);
+            border: 0.1vw solid var(--cell-border);
+            border-radius: 1.4vw;
+            padding: 1vw;
+            z-index: 10001;
+            display: none;
+            gap: 1vw;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 1vw 4vw rgba(0, 0, 0, .45);
+        }
+
+        .namebar.show {
+            display: flex;
+        }
+
+        .namebar .row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8vw;
+            background: var(--bg);
+            padding: 0.6vh 0.8vw;
+            border-radius: 1vw;
+        }
+
+        .namebar label {
+            color: var(--text);
+            font-size: 1.2vw;
+        }
+
+        .namebar input[type="text"] {
+            border: 0.1vw solid var(--cell-border);
+            background: var(--bg);
+            color: var(--text);
+            border-radius: 0.8vw;
+            padding: 0.4vh 0.6vw;
+        }
     </style>
 </head>
 
@@ -298,8 +388,6 @@ width: 100%; */
         <div id="left" class="section">
             <h1>TIC TAC TOE</h1>
             <div class="button-group">
-                <!-- <label for="gridSize">Grid Size:</label> -->
-                <!-- <input type="number" id="gridSize" min="6" max="20" value="9"> -->
                 <button id="startGame">🔄 New Game</button>
                 <button id="undo-last">↩️ Undo</button>
                 <select id="mode">
@@ -314,59 +402,101 @@ width: 100%; */
                 <button id="toggle-theme">☀️ Light</button>
                 <!-- to background music on / off button -->
                 <button id="toggle-sound">🔇 Music:Off"</button>
-                <button id="toggle-leaderboard">View Leaderboard</button>
-                <button id="clear-leaderboard">Clear Leaderboard</button>
+                <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
+                <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
                 <div id="timer-display">⏱️ 00:00:00</div>
             </div>
             <div id="message">Select grid size <br>Click New Game to play</div>
-            <!-- <div class="scoreboard">
-            <p>😊 Human: <span id="humanScore">0</span></p>
-            <p>🤖 Computer: <span id="ComputerScore">0</span></p>
-            <p>🤝 Draws: <span id="draws">0</span></p>
-        </div> -->
             <p id="loading">Loading...</p>
-            <!-- <div id="leaderboard">
-                <h3>🏆 Leaderboard</h3>
-                <ul id="score-list"></ul>
-            </div> -->
         </div>
         <!-- Right Grid -->
         <div id="right">
             <div id="board"></div>
         </div>
     </div>
-
-    <!-- <div class="container">
-    <h1>Tic Tac Toe</h1>
-
-    <div class="top-bar">
-      <label>Difficulty:
-        <select id="difficulty">
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard" selected>Hard</option>
-        </select>
-      </label>
-
-      <button id="toggleTheme">🌙</button>
+    <div id="leaderboardPopup" class="popupWindow">
     </div>
-
-    <div class="scoreboard">
-      <p>😊 Human: <span id="humanScore">0</span></p>
-      <p>🤖 Computer: <span id="aiScore">0</span></p>
-      <p>🤝 Draws: <span id="draws">0</span></p>
+    <div id="localleaderboardPopup" class="popupWindow">
     </div>
-
-    <p class="status">Loading...</p>
-    <div class="board" id="board"></div>
-
-    <div class="buttons">
-      <button onclick="undoMove()">↩️ Undo</button>
-      <button onclick="resetGame()">🔄 New Game</button>
+    <div id="winText">🎉 You Won! 🎉</div>
+    <div class="namebar" id="namebar" aria-live="polite">
+        <div class="row">
+            <div>Player Name : <span id="player1"></span></div>
+            <label for="nameInput">Other Player Name :
+                <input type="text" id="nameInput" placeholder="ABC" value="ABC">
+            </label>
+            <button id="name" class="primary">Ok</button>
+        </div>
     </div>
-  </div> -->
 
     <script type="module" src="tictactoe.js"></script>
+    <script type="module">
+        import { renderLeaderboard, saveScore, sortTable } from '../leaderboard/leaderboard.js';
+
+        window.sortTable = sortTable;
+        window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
+            try {
+                await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+            } catch (e) {
+                document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
+            }
+        };
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLeaderboard('5inarow');
+        });
+    </script>
+
+    <script type="module">
+        import { localrenderLeaderboard } from '../leaderboard/localleaderboard.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            localrenderLeaderboard();
+        });
+    </script>
+
+    <script>
+        fetch('../leaderboard/leaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('leaderboardPopup').innerHTML = htmlText;
+            });
+
+        fetch('../leaderboard/localleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('localleaderboardPopup').innerHTML = htmlText;
+            });
+        document.getElementById("leaderboardPopup").style.display = 'none';
+        document.getElementById("localleaderboardPopup").style.display = 'none';
+
+        document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+            if (document.getElementById("toggle-leaderboard").style.display === 'block') {
+                document.getElementById("leaderboardPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("leaderboardPopup").style.display = 'block';
+                loadCSS()
+            }
+        });
+
+        document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+            if (document.getElementById("leaderboardPopup").style.display === 'block') {
+                document.getElementById("localleaderboardPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("localleaderboardPopup").style.display = 'block';
+                loadCSS();
+            }
+        });
+
+        function loadCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '../leaderboard/leaderboard.css';
+            head.appendChild(link);
+        }
+    </script>
 </body>
 
 </html>

@@ -290,33 +290,8 @@
 						return;
 					}
 					if (bothCorrect == globalGameState.numPegs) {
-						player_name = localStorage.getItem('player_name') || 'Guest';
-						let opponent = player_name.toUpperCase();
-						email = localStorage.getItem('email') || '';
-						let name = localStorage.getItem('player_opponent') || 'computer';
-						let game = 'mastermindsolver';
-						let field1 = 0;
-						let field2 = 0;
-						let field3 = 'Duplicates Allowed';
-						let field4 = '-';
-						let size = '4-slot, 6-colors';
-						d = new Date();
-        				elapsed = (d.getTime() - startms) / 1000;
-						// let moves = evidences.length;
-						console.log("moves", moves)
-						let difficulty = 'easy';
-						const time = new Date().toLocaleString();
-						const score = Math.max(0, 100 - moves * 10);
-
-						const entry = { name, opponent, email, size, difficulty, game, score, elapsed, moves, field1, field2, field3, field4, time };
-						console.log(entry);
-						const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-						boardData.push(entry);
-						localStorage.setItem("leaderboard", JSON.stringify(boardData));
-						alert('Game over — saved in local storage score: ' + score);
-
-						window.submitScore && window.submitScore(name, opponent, email, size, difficulty, game, score, elapsed, moves, field1, field2, field3, field4, time);
-						alert('You cracked it! Score: ' + score);
+						updateleaderboard();
+						alert('You cracked it!');
 						$curGuessAlert.hide();
 						$success.show();
 						return;
@@ -463,6 +438,36 @@
 				], false);
 				console.log("All tests pass")
 			})//(); //Uncomment to run unit tests.
+
+			function updateleaderboard() {
+				let player_name = localStorage.getItem('player_name') || 'Guest';
+				let player_opponent = "-";
+				let game_id = 'mastermindsolvertext';
+				let gsize = "4x6";
+				let elapsed = 0;
+				let filed1 = 0;
+				let filed2 = 0
+				let filed3 = "4-slot, 6-colors";
+				let filed4 = "Duplicates Allowed";
+				let email = localStorage.getItem('email') || '-';
+				let difficulty = 'easy';
+				const created_at = new Date();
+				const score = Math.max(0, 100 - moves * 10);
+
+
+				saveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
+				// const entry = { winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
+				// const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+				// boardData.push(entry);
+				// localStorage.setItem("leaderboard", JSON.stringify(boardData));
+
+				window.submitScore &&
+					window.submitScore(player_name, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+			}
+
+			document.addEventListener('DOMContentLoaded', () => {
+				localrenderLeaderboard();
+			});
 		});
 	</script>
 </body>

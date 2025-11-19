@@ -445,5 +445,20 @@ h1 {
   }
 }
 
+#winText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4vw;
+  color: gold;
+  text-shadow: 2px 2px 10px #fff;
+  font-weight: bold;
+  opacity: 1;
+  z-index: 2;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+}
+
 
 

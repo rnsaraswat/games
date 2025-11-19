@@ -3,6 +3,7 @@
 // import { playSound } from './sound.js';
 // import { textToSpeechEng } from './speak.js';
 // import { saveToLeaderboard, toggleLeaderboard, clearLeaderboard } from './leaderboard.js';
+import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
 
 let timer = false;
 let player1;
@@ -138,8 +139,8 @@ window.addEventListener('load', function () {
             gameOver = true;
             timer = false;
             clearInterval(timerInterval);
-            score = Math.max(0, 100 - gameCount * 10); 
-            window.submitScore && window.submitScore('tictactoe', score, 'player'); 
+            score = Math.max(0, 100 - gameCount * 10);
+            window.submitScore && window.submitScore('tictactoe', score, 'player');
             // alert('You cracked it! Score: ' + score);
             if (winner === human) {
                 winnerName = winner;
@@ -304,7 +305,7 @@ window.addEventListener('load', function () {
         seconds = totalSeconds % 60;
 
         const pad = (num) => String(num).padStart(2, '0');
-        timerDisplay.textContent  = `⏱️ ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        timerDisplay.textContent = `⏱️ ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
     }
 
     // function startTimer() {
@@ -387,12 +388,12 @@ window.addEventListener('load', function () {
         let email = localStorage.getItem('email') || '-';
         const created_at = new Date();
         if (modeEl.value === 'pvc' && currentPlayer === 'o') {
-            messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;                    
+            messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;
             filed3 = 'Player vs Player';
             filed4 = currentPlayer.toUpperCase();
             winnerName = 'Computer';
             opponent = player1;
-            finalScore = score + 50; 
+            finalScore = score + 50;
         } else {
             messageEl.textContent = `${currentPlayer === 'x' ? player1 : player2} ${currentPlayer.toUpperCase()} wins!`;
             winnerName = currentPlayer === 'x' ? player1 : player2;
@@ -402,11 +403,11 @@ window.addEventListener('load', function () {
             finalScore = score + 100;
         }
 
-        const entry = {winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at};
+        const entry = { winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
         const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
         boardData.push(entry);
         localStorage.setItem("leaderboard", JSON.stringify(boardData));
-        
+
         window.submitScore &&
             window.submitScore(winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
     }
@@ -447,12 +448,12 @@ window.addEventListener('load', function () {
         let email = localStorage.getItem('email') || '-';
         const created_at = new Date();
         if (modeEl.value === 'pvc' && currentPlayer === 'o') {
-            messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;                    
+            messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;
             filed3 = 'Player vs Player';
             filed4 = currentPlayer.toUpperCase();
             winnerName = 'Computer';
             opponent = player1;
-            finalScore = 50; 
+            finalScore = 50;
         } else {
             messageEl.textContent = `${currentPlayer === 'x' ? player1 : player2} ${currentPlayer.toUpperCase()} wins!`;
             winnerName = currentPlayer === 'x' ? player1 : player2;
@@ -462,14 +463,18 @@ window.addEventListener('load', function () {
             finalScore = 100;
         }
 
-        const entry = {winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at};
-        const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-        boardData.push(entry);
-        localStorage.setItem("leaderboard", JSON.stringify(boardData));
-        
+    saveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
+    // const entry = { winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
+    //     const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+    //     boardData.push(entry);
+    //     localStorage.setItem("leaderboard", JSON.stringify(boardData));
+
         window.submitScore &&
             window.submitScore(winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
     }
+    document.addEventListener('DOMContentLoaded', () => {
+        localrenderLeaderboard();
+    });
 
     // toggle leaderboard
     // function toggleLeaderboard() {

@@ -9,6 +9,8 @@
         content="Ravindra Games Hub — collection of lightweight web games (TicTacToe, Mastermind, Memory...)">
     <!-- <meta name="theme-color" content="#1a1a1a"> -->
     <!-- <meta name="theme-color" content="#0f172a" id="meta-theme-color"> -->
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/rgh-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./assets/icons/rgh-512x512.png">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -17,7 +19,9 @@
     <div class="container">
         <header>
             <div class="brand">
-                <div class="logo">RG</div>
+                <div class="logo">
+                    <img src="./assets/icons/rgh-192x192.png" alt="Game Logo" style="width: 7vw; height: 7vw;">
+                </div>
                 <div class="title">
                     <h1>Ravindra Games Hub</h1>
                     <p class="lead">Quick browser games — PWA-ready</p>
@@ -27,10 +31,11 @@
                 <div class="hdr-child-div">
                     <!-- <a class="chip" id="toggle-leaderboard" href="leaderboard/index.html">Global Leaderboard</a> -->
                     <a class="chip" id="toggle-leaderboard">🌍 Global Leaderboard</a>
-                    <a class="chip" href="auth/login.html">Sign in</a>
+                    <button class="chip" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
                 </div>
                 <div class="hdr-child-div">
-                    <button class="chip" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
+                    <button class="chip" id="toggle-feedback">💡Feedback</button>
+                    <a class="chip" href="auth/login.html">🚪Sign in</a>
                     <button class="chip" id="themeToggle">☀️ Light</button>
                 </div>
                 <p id="welcom" class="lead">Welcome</p>
@@ -62,7 +67,10 @@
     </div>
     <div id="localleaderboardPopup" class="popupWindow">
     </div>
-    <script src="leaderboard/submit-helper.js"></script>
+    <div id="feedbackPopup" class="popupWindow">
+    </div>
+    <script src="./leaderboard/submit-helper.js"></script>
+    <script  type="module" src="./leaderboard/feedback.js"></script>
 
     <script type="module">
         import { renderLeaderboard, saveScore, sortTable } from './leaderboard/leaderboard.js';
@@ -79,22 +87,28 @@
         });
     </script>
 
+    <!-- <script type="module">
+        import { localrenderLeaderboard, saveToLeaderboard } from './leaderboard/feedback.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            localrenderLeaderboard();
+        });
+    </script> -->
+
     <script type="module">
-        import { localrenderLeaderboard } from './leaderboard/localleaderboard.js';
+        import { localrenderLeaderboard, saveToLeaderboard } from './leaderboard/localleaderboard.js';
         document.addEventListener('DOMContentLoaded', () => {
             localrenderLeaderboard();
         });
     </script>
 
-
     <script>
         const games = [
             { id: 'rockpaperscissor', name: 'rockpaperscissor', title: 'Rock Paper Scissor', desc: 'Classic & Action-Oriented X vs O', href: 'games/rock_paper_scissor/RPS.html' },
-            { id: '4inARow', name: '4inarow', title: '4 in A Row', desc: 'Classic & Action-Oriented X vs O', href: 'games/4inARow/index.html' },
             { id: '5inARow', name: '5inarow', title: '5 in A Row', desc: "It's not just luck, it's strategy", href: 'games/5inARow/index.html' },
-            { id: 'connect3', name: 'connect3', title: 'Connect 3', desc: 'Connect Three Classic X vs O', href: 'games/connect_3/index.html' },
             { id: 'connect4', name: 'connect4', title: 'Connect 4', desc: 'Endless ways to connect four X vs O', href: 'games/connect_4/index.html' },
             { id: 'sudoku', name: 'sudoku', title: 'Sudoku', desc: 'Solve logic puzzles of various sizes', href: 'games/sudoku/index.html' },
+            { id: '4inARow', name: '4inarow', title: '4 in A Row', desc: 'Classic & Action-Oriented X vs O', href: 'games/4inARow/index.html' },
+            { id: 'connect3', name: 'connect3', title: 'Connect 3', desc: 'Connect Three Classic X vs O', href: 'games/connect_3/index.html' },
             { id: 'sudokusolver', name: 'sudokusolver', title: 'Sudoku Solver', desc: 'Solve your sudoku Puzzle', href: 'games/sudoku_solver/index.html' },
             { id: 'tictactoe', name: 'tictactoe', title: 'Tic Tac Toe', desc: 'Simple to learn, tough to master X vs O', href: 'games/tictactoe/index.html' },
             { id: 'tictactoe1', name: 'tictactoe', title: 'Tic Tac Toe New', desc: "One wrong move, and it's over X vs O", href: 'games/tictactoe1/index.html' },
@@ -136,7 +150,6 @@
         if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
-        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').then(() => console.log('sw registered')); }
 
 
         fetch('./leaderboard/leaderboard.html')
@@ -150,8 +163,15 @@
             .then(htmlText => {
                 document.getElementById('localleaderboardPopup').innerHTML = htmlText;
             });
+
+        fetch('./leaderboard/feedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('feedbackPopup').innerHTML = htmlText;
+            });
         document.getElementById("leaderboardPopup").style.display = 'none';
         document.getElementById("localleaderboardPopup").style.display = 'none';
+        document.getElementById("feedbackPopup").style.display = 'none';
 
         document.getElementById("toggle-leaderboard").addEventListener("click", () => {
             if (document.getElementById("toggle-leaderboard").style.display === 'block') {
@@ -177,6 +197,27 @@
             }
         });
 
+        document.getElementById("toggle-feedback").addEventListener("click", () => {
+            if (document.getElementById("feedbackPopup").style.display === 'block') {
+                // document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+                document.getElementById("feedbackPopup").style.display = 'none';
+                return;
+            } else {
+                // document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+                document.getElementById("feedbackPopup").style.display = 'block';
+                loadfeedbakCSS();
+            }
+        });
+
+        function loadfeedbakCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = './leaderboard/feedback.css';
+            head.appendChild(link);
+        }
+
         function loadCSS() {
             var head = document.head;
             var link = document.createElement('link');
@@ -188,7 +229,20 @@
 
         window.onload = function () {
             loadCSS();
+            loadfeedbakCSS();
         };
+    </script>
+
+    <script>
+        // if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').then(() => console.log('sw registered')); }
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("./sw.js")
+                    .then(() => console.log("SW registered"))
+                    .catch((err) => console.log("SW error", err));
+            });
+        }
     </script>
 </body>
 

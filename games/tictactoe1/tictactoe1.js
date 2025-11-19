@@ -1,3 +1,5 @@
+import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
+
 window.addEventListener('load', function () {
     const loading = document.getElementById('loading');
     loading.style.display = 'none';
@@ -265,9 +267,9 @@ window.addEventListener('load', function () {
         for (let y = 0; y < gridSize; y++) {
             for (let x = 0; x < gridSize; x++) {
                 if (!board[y][x]) {
-                    let scoreO = getScore(x, y, 'o'); 
-                    let scoreX = getScore(x, y, 'x'); 
-                    let totalScore = scoreO + scoreX * 1.1; 
+                    let scoreO = getScore(x, y, 'o');
+                    let scoreX = getScore(x, y, 'x');
+                    let totalScore = scoreO + scoreX * 1.1;
 
                     if (totalScore > bestScore) {
                         bestScore = totalScore;
@@ -282,10 +284,10 @@ window.addEventListener('load', function () {
     function getScore(x, y, player) {
         let score = 0;
         const directions = [
-            { dx: 1, dy: 0 },   
-            { dx: 0, dy: 1 },   
-            { dx: 1, dy: 1 },   
-            { dx: 1, dy: -1 } 
+            { dx: 1, dy: 0 },
+            { dx: 0, dy: 1 },
+            { dx: 1, dy: 1 },
+            { dx: 1, dy: -1 }
         ];
 
         for (const { dx, dy } of directions) {
@@ -357,12 +359,12 @@ window.addEventListener('load', function () {
         let email = localStorage.getItem('email') || '-';
         const created_at = new Date();
         if (modeEl.value === 'pvc' && currentPlayer === 'o') {
-            messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;                    
+            messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;
             filed3 = 'Player vs Player';
             filed4 = currentPlayer.toUpperCase();
             winnerName = 'Computer';
             opponent = player1;
-            finalScore = score + 50; 
+            finalScore = score + 50;
         } else {
             messageEl.textContent = `${currentPlayer === 'x' ? player1 : player2} ${currentPlayer.toUpperCase()} wins!`;
             winnerName = currentPlayer === 'x' ? player1 : player2;
@@ -372,15 +374,19 @@ window.addEventListener('load', function () {
             finalScore = score + 100;
         }
 
-        const entry = {winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at};
-        const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-        boardData.push(entry);
-        localStorage.setItem("leaderboard", JSON.stringify(boardData));
-        
+        saveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
+        // const entry = {winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at};
+        //     const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+        //     boardData.push(entry);
+        //     localStorage.setItem("leaderboard", JSON.stringify(boardData));
+
         window.submitScore &&
             window.submitScore(winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
     }
 
+    document.addEventListener('DOMContentLoaded', () => {
+        localrenderLeaderboard();
+    });
     function getWinner(b) {
         const wins = [
             [0, 1, 2], [3, 4, 5], [6, 7, 8],
@@ -420,7 +426,7 @@ window.addEventListener('load', function () {
         }
 
         if ((level === "easy" && depth >= 1) || (level === "medium" && depth >= 2)) {
-            return 0; 
+            return 0;
         }
 
         if (isMax) {
@@ -505,7 +511,7 @@ window.addEventListener('load', function () {
         seconds = totalSeconds % 60;
 
         const pad = (num) => String(num).padStart(2, '0');
-        timerDisplay.textContent  = `⏱️ ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        timerDisplay.textContent = `⏱️ ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
     }
 
     function textToSpeechEng(text) {
@@ -563,7 +569,7 @@ window.addEventListener('load', function () {
                 }
             }
             ctx.closePath();
-            ctx.stroke(); 
+            ctx.stroke();
         }
 
         update(ctx) {
