@@ -142,7 +142,7 @@ button.primary {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 1vw 1.2vw;
+    padding: 0.2vw 1.2vw;
     margin: 1vw 0.2vw 0.5vw 0.2vw;
     font-size: 1.6vw;
     display: inline-block;
@@ -330,10 +330,10 @@ td {
 /* display wining text */
 #winText {
     position: absolute;
-    top: 20%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 3vw;
+    font-size: 2vw;
     color: var(--win-text);
     text-shadow: 0.2vw 0.2vw 1vw #fff;
     font-weight: bold;

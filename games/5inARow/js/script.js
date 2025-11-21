@@ -443,7 +443,7 @@ window.addEventListener('load', function () {
     }
     let player_name = winnerName;
     let player_opponent = opponent;
-    saveToLeaderboard(player_name, player_name, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
+    saveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
 
     // const entry = { player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
     // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");

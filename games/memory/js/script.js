@@ -4,6 +4,7 @@ import { startTimer,seconds, minutes, hours, timerInterval } from './timer.js';
 // import { launchConfetti, stopConfetti } from './confetti.js';
 import { playSound } from './sound.js';
 // import { loadBest, saveBest } from './best_score.js';
+import { themeToggle } from './theme.js';
 import { textToSpeechEng } from './speak.js';
 import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
 // import { saveToLeaderboard } from './leaderboard.js';
@@ -208,7 +209,7 @@ function generateChooseImageArray(c, preArray) {
 function startGame() {
     // reset confetti & winbar
     wintxt.innerHTML = '';
-    namebar.classList.remove('show');
+    // namebar.classList.remove('show');
     // stopConfetti();
     // winbar.classList.remove('show');
 
@@ -247,7 +248,7 @@ function startGame() {
                 <div class="inner">
                     <div class="face front" aria-label="face down"></div>
 
-                <div class="face back" style="background-image: url('assets/images/${themeSel.value}/${img}')"></div>
+                <div class="face back" style="background-image: url('../../assets/images/${themeSel.value}/${img}')"></div>
 
                 </div>
                     `;
@@ -310,6 +311,7 @@ function resetPick() {
 }
 
 const wintxt = document.getElementById('winText');
+wintxt.style.display = 'none';
 
 /* ---------- Win ---------- */
 function onWin() {
@@ -320,6 +322,7 @@ function onWin() {
     timer = false;
     // saveBest();
     // loadBest();
+    wintxt.style.display = 'block';
     wintxt.innerHTML = `🎉${player1} Won!🎉(⏱️${hours}:${minutes}:${seconds}, Moves:${moves})`;
     // wintxt.textContent = `(⏱️${hrs}:${min}:${sec}`;
     // winbar.classList.add('show');
@@ -329,12 +332,12 @@ function onWin() {
 }
 
 // get player name
-const namebar = document.getElementById('namebar');
-namebar.classList.add('show');
-document.getElementById('name').addEventListener('click', () => {
-    player1 = document.getElementById("nameInput").value;
-    namebar.classList.remove('show');
-});
+// const namebar = document.getElementById('namebar');
+// namebar.classList.add('show');
+// document.getElementById('name').addEventListener('click', () => {
+//     player1 = document.getElementById("nameInput").value;
+//     namebar.classList.remove('show');
+// });
 
 function updateleaderboard() {
     let player_name = player1;
@@ -359,7 +362,7 @@ function updateleaderboard() {
     else if(difficulty == 'easy') { score = score + 200 }
     else if(difficulty == 'veryeasy') { score = score + 100 }
   
-    saveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
+    saveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
 
     // const entry = { player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at };
     // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");

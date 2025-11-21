@@ -1,246 +1,140 @@
-<!doctype html>
-<html lang="hi">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Mastermind — Ravindra Games Hub</title>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link rel="stylesheet" href="../../style.css">
-  <style>
-    body {
-      display: flex;
-      height: 100vh;
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #222;
-      color: #fff;
-    }
-
-    #gameArea {
-      flex: 3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #sidebar {
-      width: 300px;
-      background: #fff;
-      border-right: 2px solid #ccc;
-      padding: 20px;
-      overflow-y: auto;
-      height: 100vh;
-    }
-
-    h2 {
-      text-align: center;
-      margin-top: 0;
-      color: #010101;
-    }
-
-    .score-row {
-      display: flex;
-      justify-content: space-between;
-      background: #333;
-      margin: 8px 0;
-      padding: 6px 10px;
-      border-radius: 6px;
-    }
-
-    .muted {
-      color: #bbb;
-      font-size: 12px;
-    }
-
-    table,
-    th,
-    td {
-      color: #bbb;
-      border: 1px solid #d9d8d8;
-      box-shadow: 0 0.5vw 2.5vw 0 rgba(0, 0, 0, 0.2);
-    }
-
-    th {
-      cursor: default;
-      position: relative;
-      user-select: none;
-    }
-
-    .arrow {
-      font-size: 14px;
-      margin-left: 4px;
-      cursor: pointer;
-      opacity: 0.3;
-      transition: opacity 0.2s;
-    }
-
-    .arrow:hover {
-      opacity: 1;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastermind</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <aside id="sidebar">
-    <h2>🏆 Leaderboard</h2>
-    <div class="search-container" style="margin-bottom:10px;">
-      <input type="text" id="searchInput" placeholder="🔍 Search player..." />
+    <div id="container">
+        <!-- Left Panel -->
+        <div id="left" class="section">
+            <h1>🎯Mastermind</h1>
+            <div class="button-group">
+                <div class="button-group" style="border: 0.1vw solid var(--cell-border);">
+                    <label for="slotInput">No of Slots:
+                        <input type="number" id="slotInput" min="1" max="12" value="4">
+                    </label>
+                    <label for="colorInput">No of Colors:
+                        <input type="number" id="colorInput" min="1" max="20" value="6">
+
+                    </label>
+                    <label>Max Attempts:
+                        <input type="number" id="maxAttempts" min="4" max="20" value="12">
+                    </label>
+                    <label id="allowedDuplicates">👯 Allow Duplicate Colors
+                        <input type="checkbox" id="buttonDuplicate" checked>
+                    </label>
+                    <button id="buttonStart">🔄 New Game</button>
+                    <p id="diffcultydisplay">Very Easy</p>
+                </div>
+                <button id="undo-last">↩️ Undo</button>
+                <button id="buttonEnd">🔚 End</button>
+                <button id="toggle-theme">☀️ Light</button>
+                <button id="toggle-sound">🔇 Music:Off"</button>
+                <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
+                <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
+              <div id="timerdisplay">⏱️ 00:00:00</div>
+                <div class="message" id="output">
+                    Please Click on Circle to select your secreate colors and press Start
+                </div>
+            </div>
+        </div>
+        <!-- Right Grid -->
+        <div id="right">
+            <div class="board" id="secretBoard"></div>
+            <div id="game"> 
+                <div id="colorPopup" class="popup"></div>
+                <div id="visualGuesses"></div>
+            </div>
+            <div class="log" id="log"></div>
+        </div>
     </div>
-
-    <table id="leaderboardTable" border="1" cellspacing="0" cellpadding="6"
-      style="width:100%;border-collapse:collapse;text-align:left;">
-      <thead style="background:#222;color:#fff;">
-        <tr>
-          <th>#</th>
-          <th class="sortable">Player
-            <span class="arrow asc">🔼</span>
-            <span class="arrow desc">🔽</span>
-          </th>
-          <th class="sortable">Game
-            <span class="arrow asc">🔼</span>
-            <span class="arrow desc">🔽</span>
-          </th>
-          <th class="sortable">Score
-            <span class="arrow asc">🔼</span>
-            <span class="arrow desc">🔽</span>
-          </th>
-          <th class="sortable">Date
-            <span class="arrow asc">🔼</span>
-            <span class="arrow desc">🔽</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody id="leaderboardTableBody">
-        <tr>
-          <td colspan="4" style="text-align:center;">Loading...</td>
-        </tr>
-      </tbody>
-    </table>
-  </aside>
-  <div class="container">
-    <h1>Mastermind (4 slots, 6 colors)</h1>
-    <div id="gameArea">
-      <div><button id="guessBtn" class="chip">Make Guess</button><button id="restart" class="chip">Restart</button>
-      </div>
-      <div>
-        <p id="secret">Code is</p>
-        <p id="choice">Guess Code is</p>
-      </div>
+    <div id="leaderboardPopup" class="popupWindow">
     </div>
-  </div>
-
-  <script type="module">
-    import { renderLeaderboard, saveScore, sortTable } from "./leaderboard/leaderboard.js";
-
-    // make sortTable global so onclick in <th> works
-    window.sortTable = sortTable;
-
-    // expose submitScore as global for your game to call
-    window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
-      try {
-        await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
-        console.log('Score saved and leaderboard refreshed');
-      } catch (e) {
-        console.error('Error saving score from index:', e);
-      }
-    };
-
-
-    window.addEventListener("DOMContentLoaded", () => {
-      renderLeaderboard("mastermind");
-    });
-  </script>
-
-  <script>
-    import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
-
-    // Simple Mastermind: randomly generate code of 4 colors (0..5). Player guesses via prompts.
-    let secret = Array.from({ length: 4 }, () => Math.floor(Math.random() * 6));
-    // console.log("secret", secret);
-    let attempts = 0;
-    async function makeGuess() {
-      const guessStr = prompt('Enter 4 digits (0-5) e.g. 0123'); if (!guessStr) return;
-      const guess = guessStr.split('').map(Number);
-      attempts++;
-      let exact = 0, colorOnly = 0;
-      const sCopy = [...secret];
-      for (let i = 0; i < 4; i++) if (guess[i] === sCopy[i]) { exact++; sCopy[i] = null; }
-      for (let i = 0; i < 4; i++) {
-        if (guess[i] !== secret[i]) {
-          const idx = sCopy.indexOf(guess[i]); if (idx !== -1) { colorOnly++; sCopy[idx] = null; }
-        }
-      }
-      const msg = `Attempt ${attempts}: exact=${exact}, color=${colorOnly}`;
-      alert(msg);
-      document.getElementById("choice").textContent = msg;
-      if (exact === 4) {
-        updateleaderboard()
-        // const finalScore = Math.max(0, 100 - attempts * 10); console.log("window.submitScore", window.submitScore)
-        // window.submitScore && window.submitScore('mastermind', finalScore); alert('Game over — score: ' + finalScore);
-      }
-    }
-    document.getElementById('gameArea').innerHTML = '<div><button id="guessBtn" class="chip">Make Guess</button><button id="restart" class="chip">Restart</button> </div><div><p id="secret">Code is</p><p id="choice">Guess Code is</p></div>';
-    document.getElementById("secret").textContent = "Code is " + secret;
-    document.getElementById('guessBtn').addEventListener('click', makeGuess);
-    document.getElementById('restart').addEventListener('click', () => { secret = Array.from({ length: 4 }, () => Math.floor(Math.random() * 6)); attempts = 0; alert('New code generated'); });
-
-    function updateleaderboard() {
-      let player_name = localStorage.getItem('player_name') || 'Human1';
-      // let score = 0;
-      let player_opponent = "-";
-      let game_id = 'mastermind';
-      let gsize = "4x6";
-      let elapsed = 0;
-      gameCount = attempts;
-      // let moves = 0;
-      let filed1 = 0;
-      let filed2 = 0
-      let filed3 = "slot=4";
-      let filed4 = "color=6";
-      let email = localStorage.getItem('email') || '-';
-      const created_at = new Date();
-      const score = Math.max(0, 100 - attempts * 10); console.log("window.submitScore", window.submitScore)
-
-      saveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
-      // const entry = { winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
-      // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-      // boardData.push(entry);
-      // localStorage.setItem("leaderboard", JSON.stringify(boardData));
-
-      window.submitScore &&
-        window.submitScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      localrenderLeaderboard();
-    });
-  </script>
-
-  <!-- <script>
-      window.submitScore = async function (game_id, score) {
-        const player_name = localStorage.getItem("player_name") || "Guest";
-        const email = localStorage.getItem("email") || "";
-
-        try {
-          const res = await fetch("https://bkhoexvgorxzgdujofar.supabase.co/functions/v1/submit-score", {
-            method: "POST",
-            headers: {
-              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ",
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ player_name, email, game_id, score })
+    <div id="localleaderboardPopup" class="popupWindow">
+    </div>
+    <!-- Display winning text -->
+    <div id="winText">🎉 You Won! 🎉</div>
+    <!-- fire crackers canvas -->
+    <canvas id="fireworksCanvas"></canvas>
+    <!-- <script type="module" src="js/script.js"></script> -->
+    <script type="module" src="js/script.js"></script>
+    <script type="module">
+        import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
+    
+        window.sortTable = sortTable;
+        window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
+          try {
+            await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+          } catch (e) {
+            document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
+          }
+        };
+        document.addEventListener('DOMContentLoaded', () => {
+          renderLeaderboard('5inarow');
+        });
+      </script>
+    
+      <script type="module">
+        import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
+        document.addEventListener('DOMContentLoaded', () => {
+                localrenderLeaderboard();
+            });
+      </script>
+    
+      <script>
+        fetch('../../leaderboard/leaderboard.html')
+          .then(response => response.text())
+          .then(htmlText => {
+            document.getElementById('leaderboardPopup').innerHTML = htmlText;
           });
-
-          const data = await res.json();
-          console.log("✅ Score saved:", data);
-          alert("✅ " + data.message);
-        } catch (err) {
-          console.error("❌ Error saving score:", err);
-          alert("❌ Error saving score. Check console.");
+    
+        fetch('../../leaderboard/localleaderboard.html')
+          .then(response => response.text())
+          .then(htmlText => {
+            document.getElementById('localleaderboardPopup').innerHTML = htmlText;
+          });
+        document.getElementById("leaderboardPopup").style.display = 'none';
+        document.getElementById("localleaderboardPopup").style.display = 'none';
+    
+        document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+          if (document.getElementById("toggle-leaderboard").style.display === 'block') {
+            // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+            document.getElementById("leaderboardPopup").style.display = 'none';
+            return;
+          } else {
+            // document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
+            document.getElementById("leaderboardPopup").style.display = 'block';
+            loadCSS()
+          }
+        });
+    
+        document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+          if (document.getElementById("leaderboardPopup").style.display === 'block') {
+            // document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
+            document.getElementById("localleaderboardPopup").style.display = 'none';
+            return;
+          } else {
+            // document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
+            document.getElementById("localleaderboardPopup").style.display = 'block';
+            loadCSS();
+          }
+        });
+    
+        function loadCSS() {
+          var head = document.head;
+          var link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.type = 'text/css';
+          link.href = '../../leaderboard/leaderboard.css';
+          head.appendChild(link);
         }
-      };
-    </script> -->
+      </script>
 </body>
 
 </html>

@@ -108,6 +108,7 @@ h3 {
   justify-content: center;
   width: 100%;
   margin-bottom: 1vw;
+  box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
 }
 
 select,

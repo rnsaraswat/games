@@ -354,7 +354,6 @@ function checkGuess() {
       updateScoreboard("🎉 You cracked the code!");
         updateleaderboard()
         // saveToLeaderboard(player1);
-        clearInterval(timerInterval);
         timer = false;
         playSound('win');
         launchFireworks();

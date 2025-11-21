@@ -18,6 +18,6 @@ if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStora
 setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
 //start game
-document.getElementById("startGame").addEventListener("click", () => {
-  startGame();
-});
+// document.getElementById("startGame").addEventListener("click", () => {
+//   startGame();
+// });

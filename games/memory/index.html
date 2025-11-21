@@ -4,14 +4,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Memory Game — Fullscreen Fit + Win Controls</title>
+    <title>Memory</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="rules.css">
 </head>
 
 <body>
     <div id="main">
-        <h1>Memory Game</h1>
+        <h1>Memory</h1>
         <header id="hdr">
             <!-- <div class="controls"> -->
             <label>Level
@@ -20,7 +20,7 @@
                     <option value="easy">🙂 Easy (6×6)</option>
                     <option value="medium">🤔 Medium (8×8)</option>
                     <option value="hard">😥 Hard (10×10)</option>
-                    <option value="expert">🎓Expert (12×12)</option>
+                    <option value="expert" selected>🎓Expert (12×12)</option>
                 </select>
             </label>
             <label>Theme
@@ -36,7 +36,7 @@
                     <option value="hall">🎃 Hallween</option>
                     <option value="hero">🎭 Actor</option>
                     <option value="houses">📺 House item</option>
-                    <option value="heroin">🎭 Actress</option>
+                    <option value="heroin" selected>🎭 Actress</option>
                     <option value="items">📦 Items</option>
                     <option value="Number">0️⃣ Number</option>
                     <option value="occu">🧑‍🍳 Occupations</option>
@@ -54,18 +54,24 @@
             <button id="startBtn" class="primary">Start</button>
             <!-- </div> -->
             <!-- <div class="stats"> -->
-            <div>🌀 Moves: <b id="moves">0</b></div>
             <!-- <div>🏆 Best: <b id="best">—</b></div> -->
             <!-- </div> -->
             <!-- <div> -->
-                <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
+                <!-- <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
                 <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
                 <div id="timer-display">⏱️ 00:00:00</div>
             <button class="primary" id="toggle-rules">View Rules</button>
             <button class="primary" id="dark">☀️ Light</button>
             <button class="primary" id="toggle-sound">🔇 Music:Off"</button>
-            <p id="loading">Loading...</p>
+            <p id="loading">Loading...</p> -->
             <!-- </div> -->
+            <button id="toggle-theme">☀️ Light</button>
+            <!-- to sound on / off button -->
+            <button id="toggle-sound">🔇 Sound: Off"</button>
+            <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
+            <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
+            <div>🌀 Moves: <b id="moves">0</b></div>
+            <div id="timerdisplay">⏱️ 00:00:00</div>
         </header>
     </div>
 
@@ -78,26 +84,27 @@
     </div>
 
     <!-- Rules Popup -->
-    <div id="rulesPopup">
+    <!-- <div id="rulesPopup">
         <h3>Game Rules</h3>
         <button class="primary" id="hide-rules">Hide Rules</button>
         <ul id="RulesBox"></ul>
-    </div>
+    </div> -->
 
-    <!-- Display winning text -->
+      <p id="loading">Loading...</p>
+      <!-- Display winning text -->
     <div id="winText">🎉 You Won! 🎉</div>
     <!-- fire crackers canvas -->
     <canvas id="confettiCanvas"></canvas>
-    <div class="namebar" id="namebar" aria-live="polite">
+    <!-- <div class="namebar" id="namebar" aria-live="polite">
         <div class="row">
             <label for="nameInput">Player Name :
                 <input type="text" id="nameInput" placeholder="Human" value="Human">
             </label>
             <button id="name" class="primary">Ok</button>
         </div>
-    </div>
+    </div> -->
     <script type="module" src="js/script.js"></script>
-    <script type="module" src="js/rules.js"></script>
+    <!-- <script type="module" src="js/rules.js"></script> -->
     <script type="module">
         import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
         window.sortTable = sortTable;
@@ -164,7 +171,7 @@
             var link = document.createElement('link');
             link.rel = 'stylesheet';
             link.type = 'text/css';
-            link.href = '../../leaderboard/leaderboard.css'; // आपकी CSS फ़ाइल का नाम
+            link.href = '../../leaderboard/leaderboard.css';
             head.appendChild(link);
         }
     </script>

@@ -1,0 +1,12 @@
+.buttondisplayrules {
+    padding: 0.5vh 1vw;
+    background: #4CAF50;
+    border: none;
+    color: var(--fg);
+    cursor: pointer;
+}
+
+.buttondisplayrules:hover {
+    background: #45a049;
+    color: var(--fg);
+}
