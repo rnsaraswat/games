@@ -5,7 +5,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tic Tac Toe</title>
-    <link rel="stylesheet" href="style.css" />
     <style>
         :root {
             --bg-color: #f0f0f0;
@@ -225,8 +224,8 @@
         }
 
         #board {
-            width: 100%;
-            max-width: 22vw;
+            /* width: 100%;
+            max-width: 22vw; */
             aspect-ratio: 1/1;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -393,12 +392,12 @@
                 <button id="undo-last">↩️ Undo</button>
                 <select id="mode">
                     <option value="pvp">😊Player vs 😊Player</option>
-                    <option value="pvc">😊Player vs 🤖Computer</option>
+                    <option value="pvc" selected>😊Player vs 🤖Computer</option>
                 </select>
                 <select id="difficulty">
                     <option value="easy">😊 Easy</option>
                     <option value="medium">😐 Medium</option>
-                    <option value="hard">🙁 Hard</option>
+                    <option value="hard" selected>🙁 Hard</option>
                 </select>
                 <button id="toggle-theme">☀️ Light</button>
                 <!-- to background music on / off button -->
@@ -407,7 +406,7 @@
                 <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
                 <div id="timer-display">⏱️ 00:00:00</div>
             </div>
-            <div id="message">Select grid size <br>Click New Game to play</div>
+            <div id="message">Click New Game to play</div>
             <p id="loading">Loading...</p>
         </div>
         <!-- Right Grid -->
@@ -443,14 +442,14 @@
             }
         };
         document.addEventListener('DOMContentLoaded', () => {
-            renderLeaderboard();
+            renderLeaderboard('tictactoe');
         });
     </script>
 
     <script type="module">
         import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
         document.addEventListener('DOMContentLoaded', () => {
-            localrenderLeaderboard();
+            localrenderLeaderboard('tictactoe');
         });
     </script>
 

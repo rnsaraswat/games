@@ -312,7 +312,8 @@ window.addEventListener('load', function () {
                 }
             }
         }
-        return bestMove || getRandomMove();
+        // return bestMove || getRandomMove();
+        return bestMove;
     }
 
     function getScore(x, y, player) {

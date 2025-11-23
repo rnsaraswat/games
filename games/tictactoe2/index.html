@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -77,10 +78,26 @@
     .arrow:hover {
       opacity: 1;
     }
+
+    #board {
+            /* width: 100%;
+            max-width: 22vw; */
+            aspect-ratio: 1/1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.2vw;
+            margin: 0 auto;
+        }
+        .tic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 80px);
+    gap: 6px
+}
   </style>
 </head>
+
 <body>
-  <aside id="sidebar">
+  <!-- <aside id="sidebar">
     <h1>🏆 Leaderboard</h1>
 
     <div class="search-container" style="margin-bottom:10px;">
@@ -112,10 +129,10 @@
         </tr>
       </tbody>
     </table>
-    <!--  -->
     </section>
-
-  </aside>
+    <button id="local-toggle-leaderboard">🏆Local Leaderboard</button>
+    <button id="toggle-leaderboard">🌍 Global Leaderboard</button>
+  </aside> -->
 
   <div class="container">
     <h2>Tic Tac Toe</h2>
@@ -124,31 +141,81 @@
       <div id="board" class="tic-grid"></div>
       <div style="margin-top:12px"><button id="reset" class="chip">Reset</button></div>
     </div>
+    <button id="local-toggle-leaderboard">🏆Local Leaderboard</button>
+    <button id="toggle-leaderboard">🌍 Global Leaderboard</button>
 
-
+  </div>
+  <div id="leaderboardPopup" class="popupWindow">
+  </div>
+  <div id="localleaderboardPopup" class="popupWindow">
   </div>
 
   <script type="module">
-    import { renderLeaderboard, saveScore, sortTable } from './leaderboard/leaderboard.js';
+    import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
-    // make sortTable global so onclick in <th> works
     window.sortTable = sortTable;
-
-    const game_id = 'tictactoe';
-    // expose submitScore as global for your game to call
-    window.submitScore = async function (game_id, score) {
+    window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
       try {
-        await saveScore(game_id, score);
-        console.log('Score saved and leaderboard refreshed');
+        await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
       } catch (e) {
-        console.error('Error saving score from index:', e);
+        document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
       }
     };
-
-    // initial render
     document.addEventListener('DOMContentLoaded', () => {
-      renderLeaderboard('tictactoe');
+      renderLeaderboard();
     });
+  </script>
+  <script type="module">
+    import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      localrenderLeaderboard();
+    });
+  </script>
+
+  <script>
+    fetch('../../leaderboard/leaderboard.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('leaderboardPopup').innerHTML = htmlText;
+      });
+
+    fetch('../../leaderboard/localleaderboard.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('localleaderboardPopup').innerHTML = htmlText;
+      });
+    document.getElementById("leaderboardPopup").style.display = 'none';
+    document.getElementById("localleaderboardPopup").style.display = 'none';
+
+    document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+      if (document.getElementById("toggle-leaderboard").style.display === 'block') {
+        document.getElementById("leaderboardPopup").style.display = 'none';
+        return;
+      } else {
+        document.getElementById("leaderboardPopup").style.display = 'block';
+        loadCSS()
+      }
+    });
+
+    document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+      if (document.getElementById("leaderboardPopup").style.display === 'block') {
+        document.getElementById("localleaderboardPopup").style.display = 'none';
+        return;
+      } else {
+        document.getElementById("localleaderboardPopup").style.display = 'block';
+        loadCSS();
+      }
+    });
+
+    function loadCSS() {
+      var head = document.head;
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = '../../leaderboard/leaderboard.css'; // 
+      head.appendChild(link);
+    }
+
   </script>
   <script>
 
@@ -195,47 +262,48 @@
     }
 
     function updateleaderboard() {
-    winnerName = currentPlayer === 'x' ? player1 : player2;
-    // let score = 0;
-    let opponent = player2;
-    let game_id = 'tictactoe';
-    let gsize = "3x3";
-    let elapsed = hours * 3600 + minutes * 60 + seconds;
-    gameCount = history.length;
-    let moves = cells.forEach((cell) => {
-      if (cell.textContent) moves++;
-    });
-    let difficulty = 'easy';
-    let filed1 = 0;
-    let filed2 = 0
-    let filed3 = "-";
-    let filed4 = "-";
-    let email = localStorage.getItem('email') || '-';
-    const created_at = new Date();
-    if (currentPlayer === 'o') {
-      winnerName = 'Computer';
-      opponent = player1;
-      score = (size * size - history.length) * 10 + 100;
-    } else {
-      winnerName = player1;
-      opponent = 'Computer';
-      score = (size * size - history.length) * 10 + 50;
+      winnerName = currentPlayer === 'x' ? player1 : player2;
+      // let score = 0;
+      let opponent = player2;
+      let game_id = 'tictactoe';
+      let gsize = "3x3";
+      let elapsed = hours * 3600 + minutes * 60 + seconds;
+      gameCount = history.length;
+      let moves = cells.forEach((cell) => {
+        if (cell.textContent) moves++;
+      });
+      let difficulty = 'easy';
+      let filed1 = 0;
+      let filed2 = 0
+      let filed3 = "-";
+      let filed4 = "-";
+      let email = localStorage.getItem('email') || '-';
+      const created_at = new Date();
+      if (currentPlayer === 'o') {
+        winnerName = 'Computer';
+        opponent = player1;
+        score = (size * size - history.length) * 10 + 100;
+      } else {
+        winnerName = player1;
+        opponent = 'Computer';
+        score = (size * size - history.length) * 10 + 50;
+      }
+
+      saveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
+      // const entry = { winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
+      // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+      // boardData.push(entry);
+      // localStorage.setItem("leaderboard", JSON.stringify(boardData));
+
+      window.submitScore &&
+        window.submitScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
     }
 
-    saveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
-    // const entry = { winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
-    // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-    // boardData.push(entry);
-    // localStorage.setItem("leaderboard", JSON.stringify(boardData));
-
-    window.submitScore &&
-      window.submitScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    localrenderLeaderboard();
-});
+//   document.addEventListener('DOMContentLoaded', () => {
+//     localrenderLeaderboard();
+// });
 
   </script>
 </body>
+
 </html>
