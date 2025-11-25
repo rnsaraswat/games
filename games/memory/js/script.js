@@ -351,7 +351,7 @@ function updateleaderboard() {
     // let moves = 0;
     let filed1 = 0;
     let filed2 = 0;
-    let filed3 = "-";
+    let filed3 = themeSel.value;
     let filed4 = "-";
     let email = localStorage.getItem('email') || '-';
     const created_at = new Date();
