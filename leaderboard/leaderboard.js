@@ -25,12 +25,12 @@ export function toggleLeaderboard() {
     renderLeaderboard();
 }
 
-document.getElementById("hide-leaderboard").addEventListener("click", () => {
-  textToSpeechEng('Close Leaderboard');
-  document.getElementById("leaderboardPopup").style.display = "none";
+// document.getElementById("hide-leaderboard").addEventListener("click", () => {
+//   textToSpeechEng('Close Leaderboard');
+//   document.getElementById("leaderboardPopup").style.display = "none";
   // document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
   // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
-})
+// })
 
 document.getElementById("searchInput").addEventListener("input", handleSearch);
 document.getElementById("topSelect").addEventListener("change", handleTopSelect);
@@ -305,3 +305,4 @@ export async function saveScore(player_name, player_opponent, email, size, diffi
     throw err;
   }
 }
+

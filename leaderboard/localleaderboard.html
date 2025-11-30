@@ -1,117 +1,121 @@
-<div class="ldpopupHeadeer">
+<div class="ldbrand">
+  <div class="ldpopupHeadeer">
     <div class="ldcontrols">
       <h3 class="ldh3">🏆 Local Leaderboard</h3>
-      <button class="ldPry" id="local-hide-leaderboard">Hide Leaderboard</button>
-      <button class="ldClearPry" id="clear-leaderboard">Clear Leaderboard</button>
+      <!-- <button class="ldClearPry" id="clear-leaderboard">Clear Leaderboard</button> -->
+      <button class="ldClearPry" id="clear-leaderboard" onclick="clearLLB()">Clear Leaderboard</button>
       <a href="../auth/login.html" class="ldlogin">Sign in</a>
     </div>
-    <div class="search-container">
-      <label class="leaderboard">Filter game: </label>
-      <select class="leaderboard" id="localgameFilter">
-        <option value="all">All Games</option>
-        <option value="rockpaperscissor">Rock Paper Scissor</option>
-        <option value="5inARow">5 in A Row</option>
-        <option value="connect4">Connect 4</option>
-        <option value="sudoku">Sudoku</option>
-        <option value="4inARow">4 in A Row</option>
-        <option value="connect3">Connect 3</option>
-        <option value="tictactoe">Tic Tac Toe</option>
-        <option value="threeinarow">3 in Row</option>
-        <option value="mastermind">Mastermind</option>
-        <option value="watersort">Water Sort</option>
-        <option value="memory">Memory</option>
-      </select>
-      <label class="leaderboard">Per page:
-        <select class="leaderboardSelect" id="localtopSelect">
-          <option value="5">5</option>
-          <option value="10" selected>10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-        </select>
-      </label>
-      <input type="text" class="leaderboard" id="localsearchInput" placeholder="🔍 Search player..." />
+    <div class="ldhdrbtns">
+      <button class="ldclose-btn" onclick="hideLLB()">Close ❌</button>
     </div>
   </div>
-  <div class="ldpopupContent">
-    <section>
-      <div>
-        <table class="leaderboardTable" id="localleaderboardTable">
-          <thead>
-            <tr>
-              <th>#
-                <!-- <span class="arrow asc">🔼</span>
-                <span class="arrow desc">🔽</span> -->
-              </th>
-              <th class="sortable">Game
-                <span class="arrow asc">🔼</span>
-                <span class="arrow desc">🔽</span>
-              </th>
-              <th class="sortable">Winner
-                <span class="arrow asc">🔼</span>
-                <span class="arrow desc">🔽</span>
-              </th>
-              <th class="sortable">Looser
-                <span class="arrow asc">🔼</span>
-                <span class="arrow desc">🔽</span>
-              </th>
-              <th class="sortable">Size
-                <span class="arrow asc">🔼</span>
-                <span class="arrow desc">🔽</span>
-              </th>
-              <th class="sortable">Difficulty
-                <span class="arrow asc">🔼</span>
-                <span class="arrow desc">🔽</span>
-              </th>
-              <th class="sortable">Score
-                <span class="arrow asc">🔼</span>
-                <span class="arrow desc">🔽</span>
-              </th>
-              <th class="sortable">Elapsed time
-                <span class="arrow asc">🔼</span>
-                <span class="arrow desc">🔽</span>
-              </th>
-              <th class="sortable">Date
-                <span class="arrow asc">🔼</span>
-                <span class="arrow desc">🔽</span>
-              </th>
-              <th class="sortable">Moves
-                <span class="arrow asc">🔼</span>
-                <span class="arrow desc">🔽</span>
-              </th>
-              <th class="sortable">Email
-                <span class="arrow asc">🔼</span>
-                <span class="arrow desc">🔽</span>
-              </th>
-              <th class="sortable">Field1
-                <span class="arrow asc">🔼</span>
-                <span class="arrow desc">🔽</span>
-              </th>
-              <th class="sortable">Field2
-                <span class="arrow asc">🔼</span>
-                <span class="arrow desc">🔽</span>
-              </th>
-              <th class="sortable">Field3
-                <span class="arrow asc">🔼</span>
-                <span class="arrow desc">🔽</span>
-              </th>
-              <th class="sortable">Field4
-                <span class="arrow asc">🔼</span>
-                <span class="arrow desc">🔽</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody id="localleaderboardTableBody">
-            <tr>
-              <td colspan="4" style="text-align:center;">Loading...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="ldpagination">
-        <button class="leaderboard" id="localprevPage">⬅ Prev</button>
-        <span id="localpageInfo"></span>
-        <button class="leaderboard" id="localnextPage">Next ➡</button>
-      </div>
-    </section>
+  <div class="ldsearch-container">
+    <label class="leaderboard">Filter game: </label>
+    <select class="leaderboard" id="localgameFilter">
+      <option value="all">All Games</option>
+      <option value="rockpaperscissor">Rock Paper Scissor</option>
+      <option value="5inARow">5 in A Row</option>
+      <option value="connect4">Connect 4</option>
+      <option value="sudoku">Sudoku</option>
+      <option value="4inARow">4 in A Row</option>
+      <option value="connect3">Connect 3</option>
+      <option value="tictactoe">Tic Tac Toe</option>
+      <option value="threeinarow">3 in Row</option>
+      <option value="mastermind">Mastermind</option>
+      <option value="watersort">Water Sort</option>
+      <option value="memory">Memory</option>
+    </select>
+    <label class="leaderboard">Per page:
+      <select class="leaderboardSelect" id="localtopSelect">
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+      </select>
+    </label>
+    <input type="text" class="leaderboard" id="localsearchInput" placeholder="🔍 Search player..." />
   </div>
+</div>
+</div>
+<div class="ldpopupContent">
+  <section>
+    <div>
+      <table class="leaderboardTable" id="localleaderboardTable">
+        <thead>
+          <tr>
+            <th>#
+            </th>
+            <th class="sortable">Game
+              <span class="arrow asc">🔼</span>
+              <span class="arrow desc">🔽</span>
+            </th>
+            <th class="sortable">Winner
+              <span class="arrow asc">🔼</span>
+              <span class="arrow desc">🔽</span>
+            </th>
+            <th class="sortable">Looser
+              <span class="arrow asc">🔼</span>
+              <span class="arrow desc">🔽</span>
+            </th>
+            <th class="sortable">Size
+              <span class="arrow asc">🔼</span>
+              <span class="arrow desc">🔽</span>
+            </th>
+            <th class="sortable">Difficulty
+              <span class="arrow asc">🔼</span>
+              <span class="arrow desc">🔽</span>
+            </th>
+            <th class="sortable">Score
+              <span class="arrow asc">🔼</span>
+              <span class="arrow desc">🔽</span>
+            </th>
+            <th class="sortable">Elapsed time
+              <span class="arrow asc">🔼</span>
+              <span class="arrow desc">🔽</span>
+            </th>
+            <th class="sortable">Date
+              <span class="arrow asc">🔼</span>
+              <span class="arrow desc">🔽</span>
+            </th>
+            <th class="sortable">Moves
+              <span class="arrow asc">🔼</span>
+              <span class="arrow desc">🔽</span>
+            </th>
+            <th class="sortable">Email
+              <span class="arrow asc">🔼</span>
+              <span class="arrow desc">🔽</span>
+            </th>
+            <th class="sortable">Field1
+              <span class="arrow asc">🔼</span>
+              <span class="arrow desc">🔽</span>
+            </th>
+            <th class="sortable">Field2
+              <span class="arrow asc">🔼</span>
+              <span class="arrow desc">🔽</span>
+            </th>
+            <th class="sortable">Field3
+              <span class="arrow asc">🔼</span>
+              <span class="arrow desc">🔽</span>
+            </th>
+            <th class="sortable">Field4
+              <span class="arrow asc">🔼</span>
+              <span class="arrow desc">🔽</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="localleaderboardTableBody">
+          <tr>
+            <td colspan="4" style="text-align:center;">Loading...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ldpagination">
+      <button class="leaderboard" id="localprevPage">⬅ Prev</button>
+      <span id="localpageInfo"></span>
+      <button class="leaderboard" id="localnextPage">Next ➡</button>
+    </div>
+  </section>
+</div>
 </div>

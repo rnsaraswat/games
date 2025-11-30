@@ -34,8 +34,8 @@
                     <button class="chip" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
                 </div>
                 <div class="hdr-child-div">
-                    <button class="chip" id="toggle-feedback">💡Feedback</button>
-                    <a class="chip" href="auth/login.html">🚪Sign in</a>
+                    <button class="chip" id="toggle-feedback">📝Feedback</button>
+                    <a class="chip" href="./auth/login.html">🚪Sign in</a>
                     <button class="chip" id="themeToggle">☀️ Light</button>
                 </div>
                 <p id="welcom" class="lead">Welcome</p>
@@ -70,7 +70,7 @@
     <div id="feedbackPopup" class="popupWindow">
     </div>
     <script src="./leaderboard/submit-helper.js"></script>
-    <script  type="module" src="./leaderboard/feedback.js"></script>
+    <script type="module" src="./leaderboard/feedback.js"></script>
 
     <script type="module">
         import { renderLeaderboard, saveScore, sortTable } from './leaderboard/leaderboard.js';
@@ -86,13 +86,6 @@
             renderLeaderboard();
         });
     </script>
-
-    <!-- <script type="module">
-        import { localrenderLeaderboard, saveToLeaderboard } from './leaderboard/feedback.js';
-        document.addEventListener('DOMContentLoaded', () => {
-            localrenderLeaderboard();
-        });
-    </script> -->
 
     <script type="module">
         import { localrenderLeaderboard, saveToLeaderboard } from './leaderboard/localleaderboard.js';
@@ -151,7 +144,25 @@
         if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
+        function hideFeedback() {
+            document.getElementById("feedbackPopup").style.display = 'none';
+        };
 
+        function hideLB() {
+            document.getElementById("leaderboardPopup").style.display = 'none';
+        };
+
+        function hideLLB() {
+            document.getElementById("localleaderboardPopup").style.display = 'none';
+        };
+
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
+            }
+        };
 
         fetch('./leaderboard/leaderboard.html')
             .then(response => response.text())
@@ -176,11 +187,9 @@
 
         document.getElementById("toggle-leaderboard").addEventListener("click", () => {
             if (document.getElementById("toggle-leaderboard").style.display === 'block') {
-                // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
                 document.getElementById("leaderboardPopup").style.display = 'none';
                 return;
             } else {
-                // document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
                 document.getElementById("leaderboardPopup").style.display = 'block';
                 loadCSS()
             }
@@ -188,11 +197,9 @@
 
         document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
             if (document.getElementById("leaderboardPopup").style.display === 'block') {
-                // document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
                 document.getElementById("localleaderboardPopup").style.display = 'none';
                 return;
             } else {
-                // document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
                 document.getElementById("localleaderboardPopup").style.display = 'block';
                 loadCSS();
             }
@@ -200,11 +207,9 @@
 
         document.getElementById("toggle-feedback").addEventListener("click", () => {
             if (document.getElementById("feedbackPopup").style.display === 'block') {
-                // document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
                 document.getElementById("feedbackPopup").style.display = 'none';
                 return;
             } else {
-                // document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
                 document.getElementById("feedbackPopup").style.display = 'block';
                 loadfeedbakCSS();
             }
@@ -235,7 +240,6 @@
     </script>
 
     <script>
-        // if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').then(() => console.log('sw registered')); }
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {
                 navigator.serviceWorker

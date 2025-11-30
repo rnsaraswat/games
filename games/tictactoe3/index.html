@@ -4,17 +4,38 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta property="og:title" content="Score Sharing" />
+  <meta property="og:description" content="See my score!" />
+  <meta property="og:image" content="https://https://rnsaraswat.github.io.vercel.app/api/og?score=500" />
+  <meta property="og:type" content="website" />
+
   <title>Tic Tac Toe — Ravindra Games Hub</title>
   <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="../../style.css">
   <style>
+    /* body:before {
+      content: "";
+      position: fixed;
+      inset: -50px;
+
+      background:
+        repeating-radial-gradient(#ffffff 0 0.0001%, #000000 0 0.0002%) 60% 60%/3000px 3000px,
+        repeating-conic-gradient(#ffffff 0 0.0001%, #555e82 0 0.0002%) 40% 40%/4000px 3000px;
+
+      background-blend-mode: difference;
+      filter: blur(0px) contrast(100) brightness(40);
+      mix-blend-mode: lighten;
+    } */
+
     body {
       display: flex;
       height: 100vh;
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #222;
+      /* background: #222; */
       color: #fff;
+      /* background: #d8d9f8; */
+      background: linear-gradient(to right, #ff7e5f, #feb47b);
     }
 
     #gameArea {
@@ -85,6 +106,61 @@
       grid-template-rows: repeat(3, 80px);
       gap: 6px
     }
+
+    /* CSS code for share link/button for browser and mobile */
+
+    .share-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .share-box {
+      background: #fff;
+      padding: 2vw;
+      width: 30vw;
+      text-align: center;
+      border-radius: 1vw;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .share-icons-group {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      margin: 1.5vw 1vw;
+      padding: 1vw 1vw;
+      border: 0.1vw solid black;
+      border-radius: 1vw;
+    }
+
+    .share-icons {
+      margin: 1.5vw 1vw;
+      padding: 1vw 1vw;
+      border: 0.1vw solid black;
+      border-radius: 1vw;
+    }
+
+    .share-icons img {
+      width: 45px;
+      cursor: pointer;
+    }
+
+    #closePopup {
+      padding: 8px 15px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 8px;
+    }
+
+    /* CSS code for share link/button for browser and mobile */
   </style>
 </head>
 
@@ -102,231 +178,44 @@
     </div>
     <p id="msg">Click in BOX to play</p>
     <!-- index.html -->
-    <button id="shareBtn">Share your score</button>
-    <button id="copyBtn">Copy link</button>
-    <button id="nativeShare">Share image + link</button>
-  </div>
-  <!-- Local Leaderboard Popup -->
-  <div id="localleaderboardPopup" class="popupWindow">
-    <div class="popupHeadeer">
-      <div class="controls">
-        <h3>🏆Local Leaderboard</h3>
-        <button class="chip" id="local-hide-leaderboard">Hide Leaderboard</button>
-        <button class="primary" id="clear-leaderboard">Clear Leaderboard</button>
-        <a href="../auth/login.html" class="chip">Sign in</a>
-      </div>
-      <div class="search-container" style="margin-bottom:10px;">
-        <label>Filter game: </label>
-        <select id="localgameFilter">
-          <option value="all">All</option>
-          <option value="tictactoe">Tic Tac Toe</option>
-          <option value="mastermind">Mastermind</option>
-        </select>
-        <label>Per page:
-          <select id="localtopSelect">
-            <option value="5">5</option>
-            <option value="10" selected>10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-          </select>
-        </label>
-        <input type="text" id="localsearchInput" placeholder="🔍 Search player..." />
-      </div>
-    </div>
-    <div class="popupContent">
-      <!-- <ul id="local-leaderboardList"></ul> -->
+    <button id="shareBtn">Share on Facebook</button>
+    <button id="shareBtn1">Share on Twitter</button>
+    <button id="nativeShare">Share mobile</button>
+    <button id="shareBtn2">Share detect device</button>
 
-      <section style="margin-top:12px">
-        <div>
-          <table id="localleaderboardTable" border="1" cellspacing="0" cellpadding="6"
-            style="width:100%;border-collapse:collapse;text-align:left;">
-            <thead style="background:#222;color:#fff;">
-              <tr>
-                <th>#</th>
-                <th class="sortable">Game
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Winner
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Looser
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Size
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Difficulty
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Score
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Elapsed time
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Date
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Moves
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Field1
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Field2
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Field3
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Field4
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody id="localleaderboardTableBody">
-              <tr>
-                <td colspan="4" style="text-align:center;">Loading...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="pagination">
-          <button id="localprevPage">⬅ Prev</button>
-          <span id="localpageInfo"></span>
-          <button id="localnextPage">Next ➡</button>
-        </div>
-      </section>
-    </div>
   </div>
-
-  <!-- Global Leaderboard Popup -->
   <div id="leaderboardPopup" class="popupWindow">
-    <div class="popupHeadeer">
-      <div class="controls">
-        <h3>🏆Global Leaderboard</h3>
-        <button class="chip" id="hide-leaderboard">Hide Leaderboard</button>
-        <!-- <button class="primary" id="clear-leaderboard">Clear Leaderboard</button> -->
-        <a href="../auth/login.html" class="chip">Sign in</a>
-      </div>
-      <div class="search-container" style="margin-bottom:10px;">
-        <label>Filter game: </label>
-        <select id="gameFilter">
-          <option value="all">All</option>
-          <option value="tictactoe">Tic Tac Toe</option>
-          <option value="mastermind">Mastermind</option>
-        </select>
-        <label>Show Top:
-          <select id="topSelect">
-            <option value="5">5</option>
-            <option value="10" selected>10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-          </select>
-        </label>
-        <input type="text" id="searchInput" placeholder="🔍 Search player..." />
-      </div>
-    </div>
-    <div class="popupContent">
-      <!-- <ul id="leaderboardList"></ul> -->
-      <section style="margin-top:12px">
-        <div>
-          <table id="leaderboardTable" border="1" cellspacing="0" cellpadding="6"
-            style="width:100%;border-collapse:collapse;text-align:left;">
-            <thead style="background:#222;color:#fff;">
-              <tr>
-                <th>#</th>
-                <th class="sortable">Game
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Winner
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Looser
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Size
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Difficulty
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Score
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Elapsed time
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Date
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Moves
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Field1
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Field2
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Field3
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-                <th class="sortable">Field4
-                  <span class="arrow asc">🔼</span>
-                  <span class="arrow desc">🔽</span>
-                </th>
-            </thead>
-            <tbody id="leaderboardTableBody">
-              <tr>
-                <td colspan="4" style="text-align:center;">Loading...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="pagination">
-          <button id="prevPage">⬅ Prev</button>
-          <span id="pageInfo"></span>
-          <button id="nextPage">Next ➡</button>
-        </div>
-      </section>
-    </div>
+  </div>
+  <div id="localleaderboardPopup" class="popupWindow">
   </div>
 
+  <!-- html code for share link/button for browser and mobile-->
+  <div id="sharePopup" class="share-popup">
+    <div class="share-box">
+      <h3>Share Your Score</h3>
+
+      <div class="share-icons-group">
+        <a id="twLink" target="_blank">twitter</a>
+        <a id="waLink" target="_blank">whatapp</a>
+        <a id="fbLink" class="share-icons" target="_blank">Facebook</a>
+        <a id="tgLink" class="share-icons" target="_blank">Telegram</a>
+        <a id="igLink" class="share-icons" target="_blank">Instagram</a>
+        <button id="copyBtn" class="share-icons">Copy link</button>
+        <!-- <a id="twLink" target="_blank"><img src="icons/twitter.png"></a> -->
+        <!-- <a id="waLink" target="_blank"><img src="icons/whatsapp.png"></a> -->
+        <!-- <a id="fbLink" target="_blank" class="background: #3B5998; color: white;"><img src="icons/facebook.png"></a> -->
+        <!-- <a id="tgLink" target="_blank"><img src="icons/telegram.png"></a> -->
+        <!-- <a id="igLink" target="_blank"><img src="icons/instagram.png"></a> -->
+      </div>
+
+      <button id="closePopup">Close</button>
+    </div>
+  </div>
 
   <script type="module">
-    // import { saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
     import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
-    import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
 
-    // make sortTable global so onclick in <th> works
     window.sortTable = sortTable;
-    // expose submitScore as global for your game to call
     window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
       try {
         await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
@@ -334,49 +223,97 @@
         document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
       }
     };
-
-    document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-      if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
-        document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
-        document.getElementById("leaderboardPopup").style.display = 'none';
-        return;
-      }
-      document.getElementById("local-toggle-leaderboard").textContent = "Hide Global Leaderboard";
-      document.getElementById("leaderboardPopup").style.display = 'block';
-      renderLeaderboard();
-    });
-
-    document.getElementById("hide-leaderboard").addEventListener("click", () => {
-      document.getElementById("leaderboardPopup").style.display = "none";
-      document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
-      document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
-    });
-
-    // initial render
     document.addEventListener('DOMContentLoaded', () => {
       renderLeaderboard('tictactoe');
     });
   </script>
 
-
   <script type="module">
-    import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
-
-    //toggle Local leaderboard
-    document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
-      if (document.getElementById("leaderboardPopup").style.display === 'block') {
-        document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
-        document.getElementById("leaderboardPopup").style.display = 'none';
-        return;
-      }
-      document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
-      document.getElementById("leaderboardPopup").style.display = 'block';
-      localrenderLeaderboard();
+    import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      localrenderLeaderboard('tictactoe');
     });
   </script>
 
-
   <script>
+    fetch('../../leaderboard/leaderboard.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('leaderboardPopup').innerHTML = htmlText;
+      });
+
+    fetch('../../leaderboard/localleaderboard.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('localleaderboardPopup').innerHTML = htmlText;
+      });
+
+      fetch('./leaderboard/feedback.html')
+              .then(response => response.text())
+              .then(htmlText => {
+                  document.getElementById('feedbackPopup').innerHTML = htmlText;
+              });
+
+    document.getElementById("leaderboardPopup").style.display = 'none';
+    document.getElementById("localleaderboardPopup").style.display = 'none';
+    document.getElementById("feedbackPopup").style.display = 'none';
+
+    document.getElementById("toggle-leaderboard").addEventListener("click", () => {
+      if (document.getElementById("toggle-leaderboard").style.display === 'block') {
+        document.getElementById("leaderboardPopup").style.display = 'none';
+      } else {
+        document.getElementById("leaderboardPopup").style.display = 'block';
+        loadCSS()
+      }
+    });
+
+    document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
+      if (document.getElementById("leaderboardPopup").style.display === 'block') {
+        document.getElementById("localleaderboardPopup").style.display = 'none';
+        return;
+      } else {
+        document.getElementById("localleaderboardPopup").style.display = 'block';
+        loadCSS();
+      }
+    });
+
+    document.getElementById("toggle-feedback").addEventListener("click", () => {
+            if (document.getElementById("feedbackPopup").style.display === 'block') {
+                document.getElementById("feedbackPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("feedbackPopup").style.display = 'block';
+                loadfeedbakCSS();
+            }
+        });
+
+        function loadfeedbakCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = './leaderboard/feedback.css';
+            head.appendChild(link);
+        }
+
+    function loadCSS() {
+      var head = document.head;
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = '../../leaderboard/leaderboard.css';
+      head.appendChild(link);
+    }
+
+    window.onload = function () {
+            loadCSS();
+            loadfeedbakCSS();
+        };
+  </script>
+
+  <script  type="module">
+    score;
+
     // Minimal TicTacToe: human vs AI (random)
     const boardEl = document.getElementById('board');
     let board = Array(9).fill(null), turn = 'X', over = false, moves = 0, startTime, currenttime, elapsed = 0;
@@ -427,7 +364,7 @@
       let filed2 = 0
       let filed3 = "-";
       let filed4 = "-";
-      let score = finalScore;
+      score = finalScore;
       let difficulty = 'easy';
       const created_at = new Date();
 
@@ -468,82 +405,206 @@
       const url = encodeURIComponent(makeShareURL(currentScore));
       const text = encodeURIComponent(`I scored ${currentScore} points! Can you beat me?`);
       // Twitter
-      const twitter = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+      // const twitter = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
       // Facebook share (FB reads OG tags from URL)
       const facebook = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
       // open a dialog: choose twitter for quick test (or open both options UI)
-      window.open(twitter, '_blank', 'noopener');
+      window.open(facebook, '_blank', 'noopener');
     });
 
-    // native share 
+    // native share score on mobile with image
 
-    const score = 420;
+    // const score = 500;
 
-  // 1) canvas पर एक simple image बनाना (score दिखे)
-  function makeScoreImage(score) {
-    const canvas = document.createElement('canvas');
-    canvas.width = 1200;
-    canvas.height = 630; // common social card size
-    const ctx = canvas.getContext('2d');
+    // 1) canvas पर एक simple image बनाना (score दिखे)
+    function makeScoreImage(score) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1200;
+      canvas.height = 630; // common social card size
+      const ctx = canvas.getContext('2d');
 
-    // background
-    ctx.fillStyle = '#0f172a';
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+      const img = new Image();
+      // अपनी छवि फ़ाइल का पथ (path) या URL यहाँ बदलें
+      img.src = '../../assets/icons/maskable-icon.png';
+      // background
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 300, 100, 600, 300);
 
-    // big score text
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.font = 'bold 120px sans-serif';
-    ctx.fillText(`${score}`, canvas.width/2, canvas.height/2 - 20);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '70px Impact';
+      ctx.textAlign = 'center';
+      // छवि के नीचे थोड़ा स्थान छोड़कर टेक्स्ट की Y स्थिति निर्धारित करें
+      const text1Y = img.height + 60;
+      ctx.fillText('Ravindra games hub', canvas.width / 2, 460);
 
-    ctx.font = '28px sans-serif';
-    ctx.fillText('Can you beat my score?', canvas.width/2, canvas.height/2 + 70);
+      // 'my score 200' टेक्स्ट ड्रा करें (छोटा आकार)
+      ctx.font = '40px Arial'; // फ़ॉन्ट आकार और शैली
+      const text2Y = text1Y + 50; // पहले टेक्स्ट के नीचे थोड़ा स्थान छोड़ें
+      ctx.fillText(`Can you beat my score=${score}`, canvas.width / 2, 510);
 
-    return canvas;
-  }
+      // big score text
+      // ctx.fillStyle = '#fff';
+      // ctx.textAlign = 'center';
+      // ctx.font = 'bold 120px sans-serif';
+      // ctx.fillText(`${score}`, canvas.width / 2, canvas.height / 2 - 20);
 
-  async function shareScore() {
-    const url = new URL(window.location.href);
-    url.searchParams.set('score', score);
+      // ctx.font = '28px sans-serif';
+      // ctx.fillText('Can you beat my score?', canvas.width / 2, canvas.height / 2 + 70);
 
-    // If Web Share + files supported -> create blob from canvas and share
-    const canvas = makeScoreImage(score);
-    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-    const file = new File([blob], 'score.png', { type: 'image/png' });
-
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({
-          title: 'My Score',
-          text: `I scored ${score} points!`,
-          url: url.toString(),
-          files: [file]
-        });
-        console.log('Shared successfully');
-      } catch (err) {
-        console.error('Share failed:', err);
-      }
-    } else if (navigator.share) {
-      // fallback: share without file
-      try {
-        await navigator.share({
-          title: 'My Score',
-          text: `I scored ${score} points! ${url.toString()}`,
-          url: url.toString()
-        });
-      } catch (err) {
-        console.error(err);
-      }
-    } else {
-      // ultimate fallback: open twitter share dialog
-      const text = encodeURIComponent(`I scored ${score} points! Can you beat me?`);
-      const href = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url.toString())}`;
-      window.open(href, '_blank', 'noopener');
+      return canvas;
     }
-  }
 
-  document.getElementById('nativeShare').addEventListener('click', shareScore);
+    // async function shareScore() {
+    //   const url = new URL(window.location.href);
+    //   url.searchParams.set('score', score);
+
+      // If Web Share + files supported -> create blob from canvas and share
+      // const canvas = makeScoreImage(score);
+      // const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+      // const file = new File([blob], 'score.png', { type: 'image/png' });
+
+      // if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      //   try {
+      //     await navigator.share({
+      //       title: 'My Score',
+      //       text: `I scored ${score} points!`,
+      //       url: url.toString(),
+      //       files: [file]
+      //     });
+      //     console.log('Shared successfully');
+      //   } catch (err) {
+      //     console.error('Share failed:', err);
+      //   }
+      // } else if (navigator.share) {
+        // fallback: share without file
+      //   try {
+      //     await navigator.share({
+      //       title: 'My Score',
+      //       text: `I scored ${score} points! ${url.toString()}`,
+      //       url: url.toString()
+      //     });
+      //   } catch (err) {
+      //     console.error(err);
+      //   }
+      // } else {
+        // ultimate fallback: open twitter share dialog
+  //       const text = encodeURIComponent(`I scored ${score} points! Can you beat me?`);
+  //       const href = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url.toString())}`;
+  //       window.open(href, '_blank', 'noopener');
+  //     }
+  //   }
+
+  //   document.getElementById('nativeShare').addEventListener('click', shareScore);
+
   </script>
+
+
+  <!-- <script>
+    // Detect Mobile Browser
+    function isMobile() {
+      return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+    }
+
+    document.getElementById("shareBtn2").addEventListener("click", async () => {
+      const score = 420;
+      const shareLink = "https://yourdomain.com/share.html?score=" + score;
+      const shareText = `I scored ${score} points! Can you beat me?`;
+
+      // ---------------------------
+      // 📱 MOBILE SHARE (Native)
+      // ---------------------------
+      if (isMobile() && navigator.share) {
+        try {
+          await navigator.share({
+            title: "My Score",
+            text: shareText,
+            url: shareLink,
+          });
+          return;
+        } catch (err) {
+          console.log("Native share failed, fallback to desktop share");
+        }
+      }
+
+      // ---------------------------
+      // 💻 DESKTOP SHARE (fallback)
+      // ---------------------------
+      const url = encodeURIComponent(shareLink);
+      const text = encodeURIComponent(shareText);
+
+      window.open(
+        `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+        "_blank"
+      );
+    });
+  </script> -->
+
+
+  <script>
+    /* javascript code for share link/button for browser and mobile */
+
+    // Detect Mobile Browser
+    function isMobile() {
+      return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+    }
+
+    // document.getElementById("shareBtn2").addEventListener("click", async () => {
+      const score = 420;
+      const shareText = `I scored ${score} points! Try to beat me!`;
+      const shareURL = "https://yourdomain.com/share.html?score=" + score;
+
+      // --------------------------
+      // 📱 MOBILE SHARE
+      // --------------------------
+      if (isMobile() && navigator.share) {
+        try {
+          await navigator.share({
+            title: "My Score",
+            text: shareText,
+            url: shareURL
+          });
+          return;
+        } catch (e) { }
+      }
+
+      // --------------------------
+      // 💻 DESKTOP SHARE POPUP
+      // --------------------------
+
+      // Encode
+      const t = encodeURIComponent(shareText);
+      const u = encodeURIComponent(shareURL);
+
+      // Twitter
+      document.getElementById("twLink").href =
+        `https://twitter.com/intent/tweet?text=${t}&url=${u}`;
+
+      // WhatsApp Web
+      document.getElementById("waLink").href =
+        `https://web.whatsapp.com/send?text=${t}%20${u}`;
+
+      // Facebook Share
+      document.getElementById("fbLink").href =
+        `https://www.facebook.com/sharer/sharer.php?u=${u}`;
+
+      // Telegram Web
+      document.getElementById("tgLink").href =
+        `https://t.me/share/url?url=${u}&text=${t}`;
+
+      // // Instagram (guide to direct message)
+      document.getElementById("igLink").href =
+        `https://www.instagram.com/direct/inbox/`;
+
+      // Show Popup
+      document.getElementById("sharePopup").style.display = "flex";
+    // });
+
+    document.getElementById("closePopup").addEventListener("click", () => {
+      document.getElementById("sharePopup").style.display = "none";
+    });
+  </script>
+
 
 </body>
 

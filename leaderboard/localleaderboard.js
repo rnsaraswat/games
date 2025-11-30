@@ -12,29 +12,20 @@ let sNo = 1;
 
 export function localtoggleLeaderboard() {
   if (document.getElementById("leaderboardPopup").style.display === 'block') {
-    // document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
     document.getElementById("leaderboardPopup").style.display = 'none';
     return;
   }
-  // document.getElementById("local-toggle-leaderboard").textContent = "Hide Leaderboard";
   document.getElementById("leaderboardPopup").style.display = 'block';
     localrenderLeaderboard();
 }
 
-document.getElementById("local-hide-leaderboard").addEventListener("click", () => {
-  textToSpeechEng('Close Leaderboard');
-  document.getElementById("localleaderboardPopup").style.display = "none";
-  // document.getElementById("local-hide-leaderboard").textContent = "Hide Leaderboard";
-  // document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
-})
-
-document.getElementById("clear-leaderboard").addEventListener("click", () => {
-  if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
-    localStorage.removeItem('leaderboard');
-    alert("All games Local Leaderboard Data is Cleared");
-    textToSpeechEng('Local Leaderboard data cleared');
-  }
-})
+// document.getElementById("clear-leaderboard").addEventListener("click", () => {
+//   if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+//     localStorage.removeItem('leaderboard');
+//     alert("All games Local Leaderboard Data is Cleared");
+//     textToSpeechEng('Local Leaderboard data cleared');
+//   }
+// })
 
 document.getElementById("localsearchInput").addEventListener("input", localhandleSearch);
 document.getElementById("localtopSelect").addEventListener("change", localhandleTopSelect);
@@ -120,12 +111,12 @@ function localrenderTable() {
     return;
   }
 
-  // sNo = 1;
+  // sNo++;
   tbody.innerHTML = currentItems
     .map(
       row => `
       <tr>
-        <td>${sNo++}</td>
+        <td>${sNo}</td>
         <td>${row.game_id}</td>
         <td>${row.player_name}</td>
         <td>${!row.player_opponent ? "-" : row.player_opponent}</td>

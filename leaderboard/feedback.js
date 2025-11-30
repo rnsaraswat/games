@@ -12,7 +12,7 @@ import { textToSpeechEng } from './speak.js';
         // Pagination state
         let currentPage = 1;
         let totalItems = 0;
-        let pageSize = parseInt(document.getElementById('page-size').value, 10);
+        let pageSize = 10;
         let totalPages = 1;
         
         // DOM
@@ -519,7 +519,7 @@ import { textToSpeechEng } from './speak.js';
            clear local storage (dev helper)
            ----------------------------- */
         document.getElementById('btn-clear').addEventListener('click', () => {
-            if (!confirm('Local data हटाना है?')) return;
+            if (!confirm('Delete Local data?')) return;
             localStorage.removeItem(STORAGE_KEY);
             localStorage.removeItem(VOTES_KEY);
             loadAndRender(1, pageSize);
@@ -576,12 +576,12 @@ import { textToSpeechEng } from './speak.js';
             }
         });
 
-        document.getElementById("hide-feedback").addEventListener("click", () => {
-            // textToSpeechEng('Close feedback');
-            document.getElementById("feedbackPopup").style.display = "none";
-            // document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
-            // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
-          });
+        // document.getElementById("hide-feedback").addEventListener("click", () => {
+        //     // textToSpeechEng('Close feedback');
+        //     document.getElementById("feedbackPopup").style.display = "none";
+        //     // document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
+        //     // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+        //   });
           
         /* -----------------------------
            Final notes for server implementer (copy into your backend README):

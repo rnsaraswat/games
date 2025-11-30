@@ -4,8 +4,38 @@ const PRECACHE = [
     '/index.html',
     '/style.css',
     '/manifest.json',
+    '/sw.js',
+    '/supabasecClient.js',
+    '/README.md',
+    '/api/og.js',
+    '/assets/font/Bangers-Regular.ttf',
+    '/assets/font/BowlbyOne-Regular.ttf',
+    '/assets/font/digital-italic.ttf',
+    '/assets/sound/bg-music.mp3',
+    '/assets/sound/card-flip.wav',
+    '/assets/sound/card-match.wav',
+    '/assets/sound/card-mismatched.wav',
+    '/assets/sound/Clock-Ticking-one.mp3',
+    '/assets/sound/Clock-Ticking-Turning-one.mp3',
+    '/assets/sound/error-sound.mp3',
+    '/assets/sound/fireworks.mp3',
+    '/assets/sound/game-over-classic.mp3',
+    '/assets/sound/game-start-1.mp3',
+    '/assets/sound/inhalation-and-exhalation.mp3',
+    '/assets/sound/laoptop-single-key-press.wav',
+    '/assets/sound/Looser.mp3',
+    '/assets/sound/single-key-press.mp3',
+    '/assets/icons/rgh-16x16.png',
+    '/assets/icons/rgh-32x32.png',
     '/assets/icons/rgh-192x192.png',
-    '/assets/icons/rgh-512x512.png'
+    '/assets/icons/rgh-512x512.png',
+    '/assets/icons/rgh-ico.png',
+    '/assets/icons/rgh.ico',
+    '/assets/icons/maskable-icon.png',
+    '/auth/auth.js',
+    '/auth/login.html',
+    '/auth/redirect.html',
+    '/auth/style.css'
 ];
 self.addEventListener("install", (event) => {
     event.waitUntil(
@@ -26,20 +56,6 @@ self.addEventListener("activate", (event) => {
       )
     );
   });
-
-// self.addEventListener('activate', 
-// e => e.waitUntil(caches.keys().then(keys => 
-//     Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => 
-//         caches.delete(k)))).then(() => self.clients.claim())));
-
-// self.addEventListener("fetch", (event) => {
-//     event.respondWith(
-//       caches.match(event.request).then((cached) => {
-//         return cached || fetch(event.request);
-//       })
-//     );
-//   });
-
 
 self.addEventListener('fetch', e => {
     if (e.request.method !== 'GET') return;

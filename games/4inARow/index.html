@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>4 in a Row</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#6200ee" />
 </head>
 
 <body>
@@ -14,7 +16,7 @@
     <div class="main">
       <div id="left" class="section">
         <h1>4 IN A ROW</h1>
-        <div>
+        <div class="Other-Buttons">
           <label for="gridSize">Grid Size:</label>
           <input type="number" id="gridSize" min="5" max="20" value="9">
           <button class="primary" id="startGame">🔄 New Game</button>
@@ -31,10 +33,14 @@
           <button id="toggle-theme">☀️ Light</button>
           <button id="toggle-sound">🔇 Music:Off"</button>
           <button id="toggle-rules">View Rules</button>
-        </div>
-        <div>
+
           <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
           <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
+          <button class="primary" id="toggle-share">📤Sharing</button>
+          <!-- <button id="toggle-share" onclick="openSharePopup(250)">Share Your Score</button> -->
+          <button class="primary" id="toggle-feedback">📝Feedback</button>
+        </div>
+        <div>
           <div id="timer-display">⏱️ 00:00:00</div>
           <div id="message">Select grid size <br>Click New Game to play</div>
           <p id="loading">Loading...</p>
@@ -45,10 +51,10 @@
       </section>
     </div>
   </div>
-  <div id="leaderboardPopup" class="popupWindow">
-  </div>
-  <div id="localleaderboardPopup" class="popupWindow">
-  </div>
+  <div id="leaderboardPopup" class="popupWindow"></div>
+  <div id="localleaderboardPopup" class="popupWindow"></div>
+  <div id="feedbackPopup" class="popupWindow"></div>
+  <div id="sharePopup" class="popupShare"></div>
   <div id="rulesPopup" class="popupWindow">
     <div class="popupHeadeer">
       <h3>Game Rules</h3>
@@ -72,74 +78,179 @@
 
   <script type="module" src="js/script.js"></script>
   <script type="module" src="js/rules.js"></script>
+  <script type="module" src="../../leaderboard/feedback.js"></script>
+  <!-- <script type="module" src="../../leaderboard/share1.js"></script> -->
+  <script type="module">
+    import { openSharePopup } from '../../leaderboard/share.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      openSharePopup();
+    });
+  </script>
   <script type="module">
     import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
     window.sortTable = sortTable;
     window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
-        try {
-            await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
-        } catch (e) {
-            document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
-        }
+      try {
+        await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+      } catch (e) {
+        document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
+      }
     };
     document.addEventListener('DOMContentLoaded', () => {
-        renderLeaderboard('3inarow');
+      renderLeaderboard('3inarow');
     });
-</script>
+  </script>
 
-<script type="module">
+  <script type="module">
     import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
     document.addEventListener('DOMContentLoaded', () => {
-            localrenderLeaderboard();
-        });
-</script>
+      localrenderLeaderboard();
+    });
+  </script>
 
-<script>
+  <script>
+    function hideFeedback() {
+      document.getElementById("feedbackPopup").style.display = 'none';
+    };
+
+    function hideLB() {
+      document.getElementById("leaderboardPopup").style.display = 'none';
+    };
+
+    function hideLLB() {
+      document.getElementById("localleaderboardPopup").style.display = 'none';
+    };
+
+    function hideShare() {
+      document.getElementById("sharePopup").style.display = 'none';
+    };
+
+    function clearLLB() {
+      if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+        localStorage.removeItem('leaderboard');
+        alert("All games Local Leaderboard Data is Cleared");
+        textToSpeechEng('Local Leaderboard data cleared');
+      }
+    };
+
     fetch('../../leaderboard/leaderboard.html')
-        .then(response => response.text())
-        .then(htmlText => {
-            document.getElementById('leaderboardPopup').innerHTML = htmlText;
-        });
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('leaderboardPopup').innerHTML = htmlText;
+      });
 
     fetch('../../leaderboard/localleaderboard.html')
-        .then(response => response.text())
-        .then(htmlText => {
-            document.getElementById('localleaderboardPopup').innerHTML = htmlText;
-        });
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('localleaderboardPopup').innerHTML = htmlText;
+      });
+
+    fetch('../../leaderboard/feedback.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('feedbackPopup').innerHTML = htmlText;
+      });
+
+    fetch('../../leaderboard/share.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('sharePopup').innerHTML = htmlText;
+      });
+
     document.getElementById("leaderboardPopup").style.display = 'none';
     document.getElementById("localleaderboardPopup").style.display = 'none';
+    document.getElementById("feedbackPopup").style.display = 'none';
+    document.getElementById("sharePopup").style.display = 'none';
 
     document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-      if (document.getElementById("toggle-leaderboard").style.display === 'block'){
-            document.getElementById("leaderboardPopup").style.display = 'none';
-            return;
-        } else {
-            document.getElementById("leaderboardPopup").style.display = 'block';
-            loadCSS()
-        }
+      if (document.getElementById("toggle-leaderboard").style.display === 'block') {
+        document.getElementById("leaderboardPopup").style.display = 'none';
+        return;
+      } else {
+        document.getElementById("leaderboardPopup").style.display = 'block';
+        loadCSS()
+      }
     });
 
     document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
-        if (document.getElementById("leaderboardPopup").style.display === 'block') {
-            // document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
-            document.getElementById("localleaderboardPopup").style.display = 'none';
-            return;
-        } else {
-            // document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
-            document.getElementById("localleaderboardPopup").style.display = 'block';
-            loadCSS();
-        }
+      if (document.getElementById("leaderboardPopup").style.display === 'block') {
+        document.getElementById("localleaderboardPopup").style.display = 'none';
+        return;
+      } else {
+        document.getElementById("localleaderboardPopup").style.display = 'block';
+        loadCSS();
+      }
     });
 
-    function loadCSS() {
-        var head = document.head;
-        var link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        link.href = '../../leaderboard/leaderboard.css';
-        head.appendChild(link);
+    document.getElementById("toggle-feedback").addEventListener("click", () => {
+      if (document.getElementById("feedbackPopup").style.display === 'block') {
+        document.getElementById("feedbackPopup").style.display = 'none';
+        return;
+      } else {
+        document.getElementById("feedbackPopup").style.display = 'block';
+        loadfeedbakCSS();
+      }
+    });
+
+    document.getElementById("toggle-share").addEventListener("click", () => {
+      if (document.getElementById("sharePopup").style.display === 'block') {
+        document.getElementById("sharePopup").style.display = 'none';
+        return;
+      } else {
+        document.getElementById("sharePopup").style.display = 'block';
+        loadshareCSS();
+      }
+    });
+
+    // document.getElementById("toggle-share").addEventListener("click", () => {
+    //   openSharePopup(250)
+    // });
+
+    function loadshareCSS() {
+      var head = document.head;
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = '../../leaderboard/share.css';
+      head.appendChild(link);
     }
+
+    function loadfeedbakCSS() {
+      var head = document.head;
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = '../../leaderboard/feedback.css';
+      head.appendChild(link);
+    }
+
+    function loadCSS() {
+      var head = document.head;
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = '../../leaderboard/leaderboard.css';
+      head.appendChild(link);
+    }
+
+    window.onload = function () {
+      loadCSS();
+      loadfeedbakCSS();
+      loadshareCSS();
+    };
+  </script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+          navigator.serviceWorker
+              .register("./sw.js")
+              .then(() => console.log("SW registered"))
+              .catch((err) => console.log("SW error", err));
+      });
+  }
 </script>
 </body>
 
