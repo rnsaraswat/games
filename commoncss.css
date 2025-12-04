@@ -1,0 +1,206 @@
+:root {
+    --bg: #ffcea9;
+    --bg-hover: #fec295;
+    --text: #000000;
+    --cell-bg: #ffffff;
+    --cell-border: #333;
+    --box-shadow: rgba(0, 0, 0, 0.2);
+    --cell-size: 20px;
+    --win-text: gold;
+    --bg1: #fcc4b7;
+    --bg2: #f8e0ce;
+}
+
+[data-theme='dark'] {
+    --bg: #686cff;
+    --bg-hover: #555bfd;
+    --text: #ffffff;
+    --cell-bg: #1e1e1e;
+    --cell-border: #d9d8d8;
+    --box-shadow: rgba(255, 255, 255, 0.5);
+    --bg1: #0008fd;
+    --bg2: #434af7;
+}
+
+@font-face {
+    font-family: 'EnglishFontBangers';
+    src: url('./assets/font/Bangers-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Digital';
+    src: url('./assets/font/digital-italic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'HindiFontGajraj';
+    src: url('./assets/font/GajrajOne-Regular.ttf') format('truetype');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(to right, var(--bg1), var(--bg2));
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    background: linear-gradient(to right, var(--bg1), var(--bg2));
+    color: var(--text);
+    transition: background 0.3s, color 0.3s;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+@keyframes color {
+    0% {
+        border-color: #ffffff;
+    }
+
+    50% {
+        border-color: var(--bg);
+    }
+
+    100% {
+        border-color: var(--border);
+    }
+}
+
+.main-container {
+    display: flex;
+    flex-direction: row;
+    padding: 0.1vw;
+}
+
+.left-section {
+    box-sizing: border-box;
+    padding: 1vw;
+    overflow: hidden;
+}
+
+#displayTime {
+    font-family: 'Digital', Arial, Helvetica, sans-serif;
+    text-align: center;
+    width: auto;
+    height: auto;
+    font-size: 1.5vw;
+    padding: 1vw 1vw;
+    background: var(--bg);
+    color: var(--text);
+    border: none;
+}
+
+h1 {
+    text-align: center;
+    font-size: 4vw;
+    font-family: 'EnglishFontBangers', Arial, Helvetica, sans-serif;
+    color: var(--text);
+    letter-spacing: .8vw;
+    text-shadow: 0 1px 0 #030303,
+        0 2px 0 #c9c9c9,
+        0 3px 0 #bbb,
+        0 4px 0 #b9b9b9,
+        0 5px 0 #aaa,
+        0 6px 1px var(--box-shadow),
+        0 0 5px var(--box-shadow),
+        0 1px 3px var(--box-shadow),
+        0 3px 5px var(--box-shadow),
+        0 5px 10px var(--box-shadow),
+        0 10px 10px var(--box-shadow),
+        0 20px 20px var(--box-shadow);
+    margin-bottom: 0.3vw;
+}
+
+@media (max-width:520px),
+(max-aspect-ratio: 1/1) {
+    #container {
+        flex-direction: column;
+    }
+
+    #left {
+        width: 100%;
+        max-width: 100%;
+        flex: 0 0 auto;
+    }
+
+    #right {
+        flex: 1;
+        width: 100%;
+    }
+
+    #displayTime {
+        font-size: 5.5vw;
+    }
+
+    h1 {
+        font-size: 4vw;
+    }
+}
+/* OVERLAY */
+.share-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+}
+
+/* POPUP */
+.share-box {
+    width: 320px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    animation: pop 0.3s ease-out;
+}
+
+@keyframes pop {
+    from { transform: scale(0.7); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+/* ICON LIST */
+.share-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.share-icons a {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f3f3f3;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #111;
+}
+
+.share-icons img {
+    width: 28px;
+    height: 28px;
+}
+
+/* Copy Link Box */
+.copy-link {
+    margin-top: 12px;
+    padding: 10px;
+    background: #eee;
+    border-radius: 6px;
+    font-size: 14px;
+    word-wrap: break-word;
+    cursor: pointer;
+}

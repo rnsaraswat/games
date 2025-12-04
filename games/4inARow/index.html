@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>4 in a Row</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="../../leaderboard/share.css">
+  <link rel="stylesheet" href="../../commoncss.css">
   <link rel="manifest" href="../../manifest.json" />
   <meta name="theme-color" content="#6200ee" />
 </head>
@@ -37,10 +37,12 @@
 
           <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
           <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
-          <button class="primary" onclick="openShare('4 in a row')">📤Sharing</button>
+          <!-- <button class="primary" id="toggle-share">📤Sharing</button> -->
+          <button onclick="shareScore('Memory Game', 120)">📤Share Score</button>
+
           <!-- <button id="toggle-share" onclick="openSharePopup(250)">Share Your Score</button> -->
           <!-- <button onclick="openShare('4 in a row')">Share</button> -->
-
+          <!-- <button onclick="shareScore('Memory Game', 150)">Share Score</button> -->
           <button class="primary" id="toggle-feedback">📝Feedback</button>
         </div>
         <div>
@@ -57,8 +59,8 @@
   <div id="leaderboardPopup" class="popupWindow"></div>
   <div id="localleaderboardPopup" class="popupWindow"></div>
   <div id="feedbackPopup" class="popupWindow"></div>
-  <!-- <div id="sharePopup" class="popup-overlay"></div> -->
-  <div id="sharePopup" class="popup"></div>
+  <!-- <div id="sharePopup1"></div> -->
+  <div id="sharePopup" class="popupWindow"></div>
   <div id="rulesPopup" class="popupWindow">
     <div class="popupHeadeer">
       <h3>Game Rules</h3>
@@ -79,17 +81,21 @@
     </div>
   </div>
   <canvas id="fireworksCanvas"></canvas>
-
   <script type="module" src="js/script.js"></script>
   <script type="module" src="js/rules.js"></script>
   <script type="module" src="../../leaderboard/feedback.js"></script>
-  <script type="module" src="../../leaderboard/share.js"></script>
-  <!-- <script type="module">
-    import { openShare } from '../../leaderboard/share.js';
 
-    // document.addEventListener('DOMContentLoaded', () => {
-      openShare('4 in a row');
-    // });
+
+  <script src="../../leaderboard/share-popup.js"></script>
+  <script src="../../leaderboard/share-common.js"></script>
+
+  <!-- <script type="module" src="../../leaderboard/share.js"></script> -->
+  <!-- <script type="module">
+    import { shareScore } from '../../leaderboard/share.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      shareScore('4 in a row');
+    });
   </script> -->
   <script type="module">
     import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
@@ -127,9 +133,9 @@
       document.getElementById("localleaderboardPopup").style.display = 'none';
     };
 
-    function hideShare() {
-      document.getElementById("sharePopup").style.display = 'none';
-    };
+    // function hideShare() {
+    //   document.getElementById("shareOverlay").style.display = 'none';
+    // };
 
     function clearLLB() {
       if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
@@ -157,16 +163,16 @@
         document.getElementById('feedbackPopup').innerHTML = htmlText;
       });
 
-    fetch('../../leaderboard/share.html')
-      .then(response => response.text())
-      .then(htmlText => {
-        document.getElementById('sharePopup').innerHTML = htmlText;
-      });
+    // fetch('../../leaderboard/share.html')
+    //   .then(response => response.text())
+    //   .then(htmlText => {
+    //     document.getElementById('sharePopup').innerHTML = htmlText;
+    //   });
 
     document.getElementById("leaderboardPopup").style.display = 'none';
     document.getElementById("localleaderboardPopup").style.display = 'none';
     document.getElementById("feedbackPopup").style.display = 'none';
-    document.getElementById("sharePopup").style.display = 'none';
+    // document.getElementById("sharePopup").style.display = 'none';
 
     document.getElementById("toggle-leaderboard").addEventListener("click", () => {
       if (document.getElementById("toggle-leaderboard").style.display === 'block') {
@@ -198,28 +204,30 @@
       }
     });
 
-    document.getElementById("sharePopup").addEventListener("click", () => {
-      if (document.getElementById("sharePopup").style.display === 'block') {
-        document.getElementById("sharePopup").style.display = 'none';
-        return;
-      } else {
-        document.getElementById("sharePopup").style.display = 'block';
-        loadshareCSS();
-      }
-    });
+    // document.getElementById("toggle-share").addEventListener("click", () => {
+    //   if (document.getElementById("sharePopup").style.display === 'block') {
+    //     document.getElementById("sharePopup").style.display = 'none';
+    //     return;
+    //   } else {
+    //     document.getElementById("sharePopup").style.display = 'block';
+    //     loadshareCSS();
+    //     document.getElementById("shareOverlay").style.display = 'block';
+    //   }
+    // });
 
-    document.getElementById("sharePopup").addEventListener("click", () => {
-      openShare(250)
-    });
+    // document.getElementById("shareOverlay").addEventListener("click", () => {
+    //     shareScore('4 in a row');
+    //   openShare(250)
+    // });
 
-    function loadshareCSS() {
-      var head = document.head;
-      var link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = '../../leaderboard/share.css';
-      head.appendChild(link);
-    }
+    // function loadshareCSS() {
+    //   var head = document.head;
+    //   var link = document.createElement('link');
+    //   link.rel = 'stylesheet';
+    //   link.type = 'text/css';
+    //   link.href = '../../leaderboard/share.css';
+    //   head.appendChild(link);
+    // }
 
     function loadfeedbakCSS() {
       var head = document.head;
@@ -242,20 +250,20 @@
     window.onload = function () {
       loadCSS();
       loadfeedbakCSS();
-      loadshareCSS();
+      // loadshareCSS();
     };
   </script>
 
-<script>
-  if ("serviceWorker" in navigator) {
+  <script>
+    if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-          navigator.serviceWorker
-              .register("./sw.js")
-              .then(() => console.log("SW registered"))
-              .catch((err) => console.log("SW error", err));
+        navigator.serviceWorker
+          .register("./sw.js")
+          .then(() => console.log("SW registered"))
+          .catch((err) => console.log("SW error", err));
       });
-  }
-</script>
+    }
+  </script>
 </body>
 
 </html>
