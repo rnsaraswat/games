@@ -15,9 +15,12 @@
     ctx.fillStyle = '#fff';
     ctx.textAlign = 'center';
     ctx.font = 'bold 120px sans-serif';
+    ctx.fillText(`Ravindra Games Hub`, canvas.width/2, canvas.height/2 - 100);
+
+    ctx.font = 'bold 100px sans-serif';
     ctx.fillText(`${score}`, canvas.width/2, canvas.height/2 - 20);
 
-    ctx.font = '28px sans-serif';
+    ctx.font = '50px sans-serif';
     ctx.fillText('Can you beat my score?', canvas.width/2, canvas.height/2 + 70);
 
     return canvas;
