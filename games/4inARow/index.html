@@ -37,8 +37,10 @@
 
           <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
           <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
-          <!-- <button class="primary" id="toggle-share">📤Sharing</button> -->
-          <button onclick="shareScore('Memory Game', 120)">📤Share Score</button>
+          <button class="primary" id="toggle-share">📤Sharing</button>
+          <button id="shareBtn">Share</button>
+          <a id="downloadLink" style="display:none;">Download Image</a>
+          <!-- <button onclick="shareScore('Memory Game', 120)">📤Share Score</button> -->
 
           <!-- <button id="toggle-share" onclick="openSharePopup(250)">Share Your Score</button> -->
           <!-- <button onclick="openShare('4 in a row')">Share</button> -->
@@ -60,7 +62,7 @@
   <div id="localleaderboardPopup" class="popupWindow"></div>
   <div id="feedbackPopup" class="popupWindow"></div>
   <!-- <div id="sharePopup1"></div> -->
-  <div id="sharePopup" class="popupWindow"></div>
+  <!-- <div id="sharePopup" class="popupWindow"></div> -->
   <div id="rulesPopup" class="popupWindow">
     <div class="popupHeadeer">
       <h3>Game Rules</h3>
@@ -89,7 +91,7 @@
   <script src="../../leaderboard/share-popup.js"></script>
   <script src="../../leaderboard/share-common.js"></script>
 
-  <!-- <script type="module" src="../../leaderboard/share.js"></script> -->
+  <script type="module" src="../../leaderboard/share.js"></script>
   <!-- <script type="module">
     import { shareScore } from '../../leaderboard/share.js';
 
@@ -202,6 +204,14 @@
         document.getElementById("feedbackPopup").style.display = 'block';
         loadfeedbakCSS();
       }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("toggle-share");
+      btn.addEventListener("click", () => {
+        // call the global shareScore (it should be attached to window)
+        window.shareScore && window.shareScore("Memory Game", 120);
+      });
     });
 
     // document.getElementById("toggle-share").addEventListener("click", () => {
