@@ -1,13 +1,13 @@
 document.getElementById("shareBtn").addEventListener("click", async () => {
-    
-    const siteLogoUrl = "../../assets/icons/maskable-icon.png";  
+
+    const siteLogoUrl = "../../assets/icons/maskable-icon.png";
     const siteName = "Ravindra Games Hub";
     const gameName = "Memory Game";
     const score = 320;
     const gameLink = "https://rnsaraswat.github.io/games/play?game=memory";
 
-    const textToShare = 
-`${siteName}
+    const textToShare =
+        `${siteName}
 ${gameName}
 Score: ${score}
 
@@ -44,8 +44,8 @@ ${gameLink}`;
         a.style.display = "inline-block";
         a.textContent = "Download Image (Desktop)";
         alert(
-"⚠ Desktop browsers native image sharing support नहीं करते.\n\n" +
-"👉 Image download कर सकते हैं\n👉 Text + Link नीचे copy कर सकते हैं"
+            "⚠ Desktop browsers native image sharing support नहीं करते.\n\n" +
+            "👉 Image download कर सकते हैं\n👉 Text + Link नीचे copy कर सकते हैं"
         );
 
         console.log("Fallback text:", textToShare);
