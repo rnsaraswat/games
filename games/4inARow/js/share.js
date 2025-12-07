@@ -11,17 +11,37 @@
     ctx.fillStyle = '#0f172a';
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.src = '../../assets/icons/maskable-icon.png';
     // big score text
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = '#FFFFFF';
     ctx.textAlign = 'center';
-    ctx.font = 'bold 120px sans-serif';
-    ctx.fillText(`Ravindra Games Hub`, canvas.width/2, canvas.height/2 - 100);
+    ctx.shadowColor = 'black';
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+    ctx.shadowBlur = 3;
+    ctx.font = 'bold 100px Arial';
+    let text = 'Ravindra Games Hub';
+    let metrics = ctx.measureText(text);
+    let textWidth = metrics.width;
+    console.log(textWidth);
+    ctx.fillText(text, (canvas.width - textWidth) / 2, canvas.height / 2 + 50);
 
-    ctx.font = 'bold 100px sans-serif';
-    ctx.fillText(`${score}`, canvas.width/2, canvas.height/2 - 20);
+    ctx.font = 'italic 100px Georgia';
+    text = 'Tic Tac Toe';
+    metrics = ctx.measureText(text);
+    textWidth = metrics.width;
+    console.log(textWidth);
+    ctx.fillText(text, (canvas.width - textWidth) / 2, canvas.height / 2 + 150);
 
-    ctx.font = '50px sans-serif';
-    ctx.fillText('Can you beat my score?', canvas.width/2, canvas.height/2 + 70);
+    ctx.font = '50px Verdana';
+    // score = 250
+    text = 'Can you beat my score:' + score;
+    metrics = ctx.measureText(text);
+    textWidth = metrics.width;
+    console.log(textWidth);
+    ctx.fillText(text, canvas.width / 2 - 350, canvas.height / 2 + 220);
 
     return canvas;
   }
@@ -34,6 +54,8 @@
     const canvas = makeScoreImage(score);
     const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
     const file = new File([blob], 'score.png', { type: 'image/png' });
+
+    document.getElementById("shareGeneratedImg").src = canvas;
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
