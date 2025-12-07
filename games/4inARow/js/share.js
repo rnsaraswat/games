@@ -1,12 +1,13 @@
   const score = 420;
-
+  const outputImage = document.getElementById('outputImage');
   // 1) canvas पर एक simple image बनाना (score दिखे)
   function makeScoreImage(gamename, score) {
+    score = (typeof score !== 'undefined') ? score : 100;
     const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
     canvas.width = 1200;
     canvas.height = 630; // common social card size
-    const ctx = canvas.getContext('2d');
-
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     // const img = new Image();
     // img.src = '../../assets/icons/maskable-icon.png';
     
@@ -29,14 +30,16 @@
     let metrics = ctx.measureText(text);
     let textWidth = metrics.width;
     console.log(textWidth);
-    ctx.fillText(text, (canvas.width - textWidth) / 2, canvas.height / 2 + 50);
+    ctx.fillText(text, 580, 250);
+    // ctx.fillText(text, (canvas.width - textWidth) / 2, canvas.height / 2 + 50);
 
     ctx.font = 'italic 100px Georgia';
     text = gamename;
     metrics = ctx.measureText(text);
     textWidth = metrics.width;
     console.log(textWidth);
-    ctx.fillText(text, (canvas.width - textWidth) / 2, canvas.height / 2 + 150);
+    ctx.fillText(text, 530, 350);
+    // ctx.fillText(text, (canvas.width - textWidth) / 2, canvas.height / 2 + 150);
 
     ctx.font = '50px Verdana';
     // score = 250
@@ -44,7 +47,20 @@
     metrics = ctx.measureText(text);
     textWidth = metrics.width;
     console.log(textWidth);
-    ctx.fillText(text, canvas.width / 2 - 350, canvas.height / 2 + 220);
+    ctx.fillText(text, 600, 400);
+    // ctx.fillText(text, canvas.width / 2 - 350, canvas.height / 2 + 220);
+
+
+
+    // 3. कैनवास को इमेज डेटा URL में बदलें
+    const imageDataURL = canvas.toDataURL('image/png');
+
+    // 4. इमेज टैग में सोर्स सेट करें और उसे दिखाएं
+    outputImage.src = imageDataURL;
+    outputImage.style.display = 'block';
+    outputImage.style.width = '50%';
+    outputImage.style.margin = '1vw';
+
 
     console.log(canvas);
     return canvas;
@@ -52,6 +68,7 @@
   }
 
   async function shareScore(gameName, score) {
+    console.log(gameName);
     const url = new URL(`https://rnsaraswat.github.io/games/games/${gameName}/`);
     url.searchParams.set('score', score);
 
@@ -61,7 +78,7 @@
     const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
     const file = new File([blob], 'score.png', { type: 'image/png' });
 
-    // document.getElementById("shareGeneratedImg").src = canvas;
+    document.getElementById("shareGeneratedImg").src = canvas;
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
@@ -94,4 +111,4 @@
     }
   }
 
-  document.getElementById('nativeShare').addEventListener('click', shareScore);
+  document.getElementById('nativeShare').addEventListener('click', shareScore("4inarow"));
