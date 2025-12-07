@@ -7,14 +7,16 @@
     canvas.height = 630; // common social card size
     const ctx = canvas.getContext('2d');
 
-    // background
-    ctx.fillStyle = '#0f172a';
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+    // const img = new Image();
+    // img.src = '../../assets/icons/maskable-icon.png';
+    
+    // img.crossOrigin = "Anonymous";
+    // img.onload = () => {
+      // background
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    const img = new Image();
-    img.crossOrigin = "Anonymous";
-    img.src = '../../assets/icons/maskable-icon.png';
-    ctx.drawImage(img, 300, 30, 500, 250);
+    // ctx.drawImage(img, 300, 30, 500, 250);
     // big score text
     ctx.fillStyle = '#FFFFFF';
     ctx.textAlign = 'center';
@@ -44,7 +46,9 @@
     console.log(textWidth);
     ctx.fillText(text, canvas.width / 2 - 350, canvas.height / 2 + 220);
 
+    console.log(canvas);
     return canvas;
+    // }
   }
 
   async function shareScore(gameName, score) {
@@ -53,10 +57,11 @@
 
     // If Web Share + files supported -> create blob from canvas and share
     const canvas = makeScoreImage(gameName, score);
+    console.log(canvas)
     const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
     const file = new File([blob], 'score.png', { type: 'image/png' });
 
-    document.getElementById("shareGeneratedImg").src = canvas;
+    // document.getElementById("shareGeneratedImg").src = canvas;
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
