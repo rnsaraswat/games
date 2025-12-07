@@ -14,6 +14,7 @@
     const img = new Image();
     img.crossOrigin = "Anonymous";
     img.src = '../../assets/icons/maskable-icon.png';
+    ctx.drawImage(img, 300, 30, 500, 250);
     // big score text
     ctx.fillStyle = '#FFFFFF';
     ctx.textAlign = 'center';
@@ -47,7 +48,7 @@
   }
 
   async function shareScore(gameName, score) {
-    const url = new URL(`https://rnsaraswat.github.io/games/`);
+    const url = new URL(`https://rnsaraswat.github.io/games/games/${gameName}/`);
     url.searchParams.set('score', score);
 
     // If Web Share + files supported -> create blob from canvas and share
