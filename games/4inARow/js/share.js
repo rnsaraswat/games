@@ -1,7 +1,7 @@
   const score = 420;
 
   // 1) canvas पर एक simple image बनाना (score दिखे)
-  function makeScoreImage(score) {
+  function makeScoreImage(gamename, score) {
     const canvas = document.createElement('canvas');
     canvas.width = 1200;
     canvas.height = 630; // common social card size
@@ -29,7 +29,7 @@
     ctx.fillText(text, (canvas.width - textWidth) / 2, canvas.height / 2 + 50);
 
     ctx.font = 'italic 100px Georgia';
-    text = 'Tic Tac Toe';
+    text = gamename;
     metrics = ctx.measureText(text);
     textWidth = metrics.width;
     console.log(textWidth);
@@ -46,12 +46,12 @@
     return canvas;
   }
 
-  async function shareScore() {
-    const url = new URL(window.location.href);
+  async function shareScore(gameName, score) {
+    const url = new URL(`https://rnsaraswat.github.io/games/`);
     url.searchParams.set('score', score);
 
     // If Web Share + files supported -> create blob from canvas and share
-    const canvas = makeScoreImage(score);
+    const canvas = makeScoreImage(gameName, score);
     const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
     const file = new File([blob], 'score.png', { type: 'image/png' });
 
