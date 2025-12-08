@@ -8,7 +8,7 @@ export const modeEl = document.getElementById('mode');
 export const difficultyEl = document.getElementById('difficulty');
 export let timer = false;
 export let winnerName;
-export let gameName = '4inarow';
+export let gameName = '4inARow';
 export let score = 0;
 
 window.addEventListener('load', function () {
