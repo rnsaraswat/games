@@ -39,7 +39,7 @@
           <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
           <button class="primary" id="toggle-share">📤Sharing</button>
           <button id="shareBtn">Share</button>
-          <img id="shareGeneratedImg" style="width:50%; border-radius:10px; margin:10px 0;">
+          <!-- <img id="shareGeneratedImg" style="width:50%; border-radius:10px; margin:10px 0;"> -->
 
           <a id="downloadLink" style="display:none;">Download Image</a>
           <!-- <button onclick="shareScore('Memory Game', 120)">📤Share Score</button> -->
@@ -215,7 +215,7 @@
       const btn = document.getElementById("toggle-share");
       btn.addEventListener("click", () => {
         // call the global shareScore (it should be attached to window)
-        window.shareScore && window.shareScore("Memory Game", 120);
+        window.shareScore && window.shareScore("4inarow", 120);
       });
     });
 
