@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Game Page - Demo</title>
+  <link rel="stylesheet" href="share.css">
+</head>
+<body>
+  <h1>Demo Game</h1>
+
+  <!-- ONE button per page (give it id) -->
+  <button id="shareBtn">Share Score</button>
+
+  <!-- Loader for popup (will fetch and inject share-popup.html) -->
+  <script>
+    // share-popup loader: fetch and append; then dispatch event
+    (function() {
+      fetch("share-popup.html")
+        .then(r => {
+          if (!r.ok) throw new Error("popup not found");
+          return r.text();
+        })
+        .then(html => {
+          const div = document.createElement("div");
+          div.innerHTML = html;
+          document.body.appendChild(div);
+
+          // Notify that popup loaded
+          window.__sharePopupLoaded = true;
+          document.dispatchEvent(new Event("sharePopupLoaded"));
+        })
+        .catch(err => {
+          console.warn("share-popup load failed:", err);
+          // still dispatch so code doesn't wait forever
+          window.__sharePopupLoaded = false;
+          document.dispatchEvent(new Event("sharePopupLoaded"));
+        });
+    })();
+  </script>
+
+  <!-- main share system -->
+  <script src="share.js"></script>
+
+  <script>
+    // Example: attach share action (no inline onclick)
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("shareBtn");
+      btn.addEventListener("click", () => {
+        // call with object (robust): game, score, link, image
+        window.requestShare({ game: "Memory Game", score: 250, link: `https://rnsaraswat.github.io/games/`, image: "images/RGHlogo.jpg" });
+      });
+    });
+  </script>
+</body>
+</html>
