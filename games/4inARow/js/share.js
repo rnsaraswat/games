@@ -3,12 +3,13 @@ document.getElementById("shareBtn").addEventListener("click", async () => {
   const siteName = "Ravindra Games Hub";
   const gameName = "Memory Game";
   const score = 320;
-  const gameLink = "https://rnsaraswat.github.io/games/play?game=memory";
+  // const gameLink = "https://rnsaraswat.github.io/games/play?game=memory";
+  const gameLink = "https://rnsaraswat.github.io/games/memory/index.html";
 
   const textToShare = 
 `${siteName}
 ${gameName}
-Score: ${score}
+Can you beat my Score: ${score}
 
 Play here:
 ${gameLink}`;
