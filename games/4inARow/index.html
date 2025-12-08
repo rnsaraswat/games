@@ -37,24 +37,18 @@
 
           <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
           <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
-          <button class="primary" id="toggle-share">📤Sharing</button>
-          <button id="shareBtn">Share</button>
-          <!-- <img id="shareGeneratedImg" style="width:50%; border-radius:10px; margin:10px 0;"> -->
+          <button class="primary" id="shareBtn">📤Sharing</button>
 
-          <a id="downloadLink" style="display:none;">Download Image</a>
+          <!-- <a id="downloadLink" style="display:none;">Download Image</a> -->
           <!-- <button onclick="shareScore('Memory Game', 120)">📤Share Score</button> -->
-          <button id="nativeShare">Share image + link</button>
-          <!-- <button id="toggle-share" onclick="openSharePopup(250)">Share Your Score</button> -->
-          <!-- <button onclick="openShare('4 in a row')">Share</button> -->
-          <!-- <button onclick="shareScore('Memory Game', 150)">Share Score</button> -->
           <button class="primary" id="toggle-feedback">📝Feedback</button>
         </div>
         <div>
           <div id="timer-display">⏱️ 00:00:00</div>
           <div id="message">Select grid size <br>Click New Game to play</div>
           <p id="loading">Loading...</p>
-          <h3>जनरेट की गई इमेज:</h3>
-          <img id="outputImage" alt="Generated Canvas Image">
+          <!-- <h3>जनरेट की गई इमेज:</h3>
+          <img id="outputImage" alt="Generated Canvas Image"> -->
         </div>
       </div>
       <section id="right">
@@ -65,8 +59,6 @@
   <div id="leaderboardPopup" class="popupWindow"></div>
   <div id="localleaderboardPopup" class="popupWindow"></div>
   <div id="feedbackPopup" class="popupWindow"></div>
-  <!-- <div id="sharePopup1"></div> -->
-  <!-- <div id="sharePopup" class="popupWindow"></div> -->
   <div id="rulesPopup" class="popupWindow">
     <div class="popupHeadeer">
       <h3>Game Rules</h3>
@@ -90,20 +82,7 @@
   <script type="module" src="js/script.js"></script>
   <script type="module" src="js/rules.js"></script>
   <script type="module" src="../../leaderboard/feedback.js"></script>
-
-
-  <!-- <script src="../../leaderboard/share-popup.js"></script>
-  <script src="../../leaderboard/share-common.js"></script> -->
-
-  <!-- <script type="module" src="../../leaderboard/share.js"></script> -->
   <script type="module" src="js/share.js"></script>
-  <!-- <script type="module">
-    import { shareScore } from '../../leaderboard/share.js';
-
-    document.addEventListener('DOMContentLoaded', () => {
-      shareScore('4 in a row');
-    });
-  </script> -->
   <script type="module">
     import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
@@ -140,10 +119,6 @@
       document.getElementById("localleaderboardPopup").style.display = 'none';
     };
 
-    // function hideShare() {
-    //   document.getElementById("shareOverlay").style.display = 'none';
-    // };
-
     function clearLLB() {
       if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
         localStorage.removeItem('leaderboard');
@@ -169,12 +144,6 @@
       .then(htmlText => {
         document.getElementById('feedbackPopup').innerHTML = htmlText;
       });
-
-    // fetch('../../leaderboard/share.html')
-    //   .then(response => response.text())
-    //   .then(htmlText => {
-    //     document.getElementById('sharePopup').innerHTML = htmlText;
-    //   });
 
     document.getElementById("leaderboardPopup").style.display = 'none';
     document.getElementById("localleaderboardPopup").style.display = 'none';
@@ -214,35 +183,9 @@
     document.addEventListener("DOMContentLoaded", () => {
       const btn = document.getElementById("toggle-share");
       btn.addEventListener("click", () => {
-        // call the global shareScore (it should be attached to window)
         window.shareScore && window.shareScore("4inarow", 120);
       });
     });
-
-    // document.getElementById("toggle-share").addEventListener("click", () => {
-    //   if (document.getElementById("sharePopup").style.display === 'block') {
-    //     document.getElementById("sharePopup").style.display = 'none';
-    //     return;
-    //   } else {
-    //     document.getElementById("sharePopup").style.display = 'block';
-    //     loadshareCSS();
-    //     document.getElementById("shareOverlay").style.display = 'block';
-    //   }
-    // });
-
-    // document.getElementById("shareOverlay").addEventListener("click", () => {
-    //     shareScore('4 in a row');
-    //   openShare(250)
-    // });
-
-    // function loadshareCSS() {
-    //   var head = document.head;
-    //   var link = document.createElement('link');
-    //   link.rel = 'stylesheet';
-    //   link.type = 'text/css';
-    //   link.href = '../../leaderboard/share.css';
-    //   head.appendChild(link);
-    // }
 
     function loadfeedbakCSS() {
       var head = document.head;
@@ -265,7 +208,6 @@
     window.onload = function () {
       loadCSS();
       loadfeedbakCSS();
-      // loadshareCSS();
     };
   </script>
 

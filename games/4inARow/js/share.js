@@ -14,6 +14,7 @@ Can you beat my Score: ${score}
 Play here:
 ${gameLink}`;
 
+console.log(gameLink)
   const imageUrl = "../../assets/icons/maskable-icon.png";
 
   try {
