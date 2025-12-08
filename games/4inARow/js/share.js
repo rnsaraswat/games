@@ -4,7 +4,7 @@ document.getElementById("shareBtn").addEventListener("click", async () => {
   const gameName = "Memory Game";
   const score = 320;
   // const gameLink = "https://rnsaraswat.github.io/games/play?game=memory";
-  const gameLink = "https://rnsaraswat.github.io/games/memory/index.html";
+  const gameLink = "https://rnsaraswat.github.io/games/games/memory/index.html";
 
   const textToShare = 
 `${siteName}
