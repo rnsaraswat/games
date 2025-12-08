@@ -416,7 +416,7 @@ window.addEventListener('load', function () {
     winnerName = currentPlayer === 'x' ? player1 : player2;
     // let score = 0;
     let opponent = player2;
-    let game_id = '4inarow';
+    let game_id = '4inARow';
     let gsize = `${size}x${size}`;
     let elapsed = hours * 3600 + minutes * 60 + seconds;
     gameCount = history.length;
