@@ -8,6 +8,8 @@ export const modeEl = document.getElementById('mode');
 export const difficultyEl = document.getElementById('difficulty');
 export let timer = false;
 export let winnerName;
+export let gameName = '4inarow';
+export let score = 0;
 
 window.addEventListener('load', function () {
   const loading = document.getElementById('loading');
@@ -28,7 +30,7 @@ window.addEventListener('load', function () {
   let theme = localStorage.getItem('rg_theme') || 'dark';
   let player1 = localStorage.getItem('player_name') || 'Human1';
   let player2 = localStorage.getItem('player_opponent') || 'Human2';
-  let score = 0;
+  // let gameName = '4inarow';
   let gameCount = 0;
   let difficulty = difficultyEl.value;
   let mode = modeEl.value;
@@ -197,6 +199,7 @@ window.addEventListener('load', function () {
       playSound('win');
       launchFireworks();
       showWinText();
+      shareScore(gameName, score);
       return;
     }
 
