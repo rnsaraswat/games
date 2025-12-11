@@ -10,6 +10,8 @@
     --box-shadow: rgba(0, 0, 0, 0.2);
     --btn-shadow: rgba(0, 0, 0, 0.2);
     --cell-border: #0fa;
+    --card-border: rgb(255, 165, 0);
+    --card-color:#0a192f;
 }
 
 [data-theme='dark'] {
@@ -24,6 +26,8 @@
     --cell-border: #0fa;
     --box-shadow: rgba(255, 255, 255, 0.5);
     --btn-shadow: rgba(0, 0, 0, 0.2);
+    --card-border: rgb(0, 255, 255);
+    --card-color: rgb(0, 255, 255);
     /* box-shadow: 
         0 0 5px #0fa,
         0 0 20px #0fa,
@@ -114,21 +118,24 @@ header {
     padding: 2vw;
     margin: 2vw;
     border-radius: 1vw;
+    /* font-size: 4vw; */
     overflow: hidden;
     box-shadow: 
     0 0 2px var(--card),
     0 0 4px var(--card),
     0 0 6px var(--card),
-    0 0 10px var(--card) inset; /* बॉर्डर के अंदर चमक */
-transition: box-shadow 0.3s ease;
+    0 0 10px var(--card) inset;
+    transition: box-shadow 0.3s ease;
     /* box-shadow: 0 6px 18px rgba(2, 6, 23, .06); */
     display: flex;
-    flex-direction: column
+    flex-direction: column;
+    color: var(--card-color);
+    border: var(--card-border) 0.125em solid;
+    box-shadow: inset 0 0 0.5em 0 var(--card-border), 0 0 0.5em 0 var(--card-border);
 }
 
 .game-card:hover {
-    /* background: var(--card-hover); */
-    box-shadow: 5px 5px var(--box-shadow);
+        box-shadow: 0 0 20px var(--card-border), 0 0 40px var(--card-border), 0 0 60px var(--card-border);
 }
 
 .thumb {
@@ -151,7 +158,7 @@ transition: box-shadow 0.3s ease;
     background: var(--accent);
     color: white;
     font-weight: bold;
-    font-size: 1.6vw;
+    font-size: 4vw;
     text-decoration: none;
     box-shadow: 0 1vw 4vw var(--box-shadow);
 }
@@ -244,7 +251,8 @@ h1 {
 }
 
 .game-card > h3 {
-    font-size: 2vw;
+    font-size: 3vw;
+    text-align: center;
     /* background: var(--card); */
 }
 
@@ -264,19 +272,22 @@ h1 {
         font-size: 4vw;
     }
     .play-btn {
-        font-size: 2.5vw;
+        font-size: 4vw;
         width: 100%;
         margin: 0.5vw;
     }
     .chip {
         border-radius: 0.5vw;
         padding: 0.2vw 1vw;
-        font-size: 2.5vw;
+        font-size: 4.5vw;
         margin-top: 0.1vh;
-        margin: 0.2vw;
+        margin: 1vw;
+    }
+    .title .lead {
+        font-size: 3.5vw;
     }
     .lead {
-        font-size: 2.5vw;
+        font-size: 4.5vw;
     }
     .brand {
         width: 100%;
@@ -296,6 +307,8 @@ h1 {
     .hdrbtns {
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 }
 

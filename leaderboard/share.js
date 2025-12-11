@@ -1,59 +1,56 @@
-document.getElementById("shareBtn").addEventListener("click", async () => {
+// import { gameName, score } from './script.js';
 
-    const siteLogoUrl = "../../assets/icons/maskable-icon.png";
+export async function shareScore(gameName, score = 0) {
+
+    console.log("shareScore", gameName, score);
+
     const siteName = "Ravindra Games Hub";
-    const gameName = "Memory Game";
-    const score = 320;
-    const gameLink = "https://rnsaraswat.github.io/games/play?game=memory";
+    let gameLink = `https://rnsaraswat.github.io/games/index.html`;
+    let textToShare;
+    if (gameName == '-') {
+        gameLink = `https://rnsaraswat.github.io/games/index.html`;
+    
+        textToShare =
+            `${siteName}
+            Play here:
+        ${gameLink}`;
+    } else {
+        gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
+    
+        textToShare =
+            `${siteName}
+        ${gameName}
+        Can you beat my Score: ${score}
+        
+        Play here:
+        ${gameLink}`;
+        console.log("gamelink", gameLink);
+    }
 
-    const textToShare =
-        `${siteName}
-${gameName}
-Score: ${score}
-
-Play here:
-${gameLink}`;
+    const imageUrl = "../games/assets/icons/maskable-icon.png";
 
     try {
-        const imgBlob = await (await fetch(siteLogoUrl)).blob();
-        const file = new File([imgBlob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
+        await navigator.share({
+            title: siteName,
+            text: textToShare
+        });
+        console.log("try", gameLink);
 
-        // -----------------------
-        // MOBILE SHARE (if supported)
-        // -----------------------
+        const blob = await (await fetch(imageUrl)).blob();
+        const file = new File([blob], "../games/assets/icons/maskable-icon.png", { type: "image/png" });
+
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
             await navigator.share({
-                title: siteName,
-                text: textToShare,
                 files: [file]
             });
-            console.log("Shared via mobile!");
-            return;
+            console.log("navigator.canShare && navigator.canShare", file, blob);
         }
 
-        // -----------------------
-        // DESKTOP FALLBACK
-        // -----------------------
-        console.log("Desktop detected → native share not supported");
-
-        // 1️⃣ Image download
-        const url = URL.createObjectURL(imgBlob);
-        const a = document.getElementById("downloadLink");
-        a.href = url;
-        a.download = "shared-image.png";
-        a.style.display = "inline-block";
-        a.textContent = "Download Image (Desktop)";
-        alert(
-            "⚠ Desktop browsers native image sharing support नहीं करते.\n\n" +
-            "👉 Image download कर सकते हैं\n👉 Text + Link नीचे copy कर सकते हैं"
-        );
-
-        console.log("Fallback text:", textToShare);
-
-        // 2️⃣ Copy link automatically
-        navigator.clipboard.writeText(textToShare);
-
     } catch (err) {
-        console.error("Share failed:", err);
+        console.log("Share cancelled or failed", err);
     }
-});
+}
+
+// document.getElementById("shareBtn").addEventListener("click", async () => {
+//     shareScore(gameName, score);
+// });

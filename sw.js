@@ -29,6 +29,8 @@ const PRECACHE = [
     '/assets/icons/rgh-32x32.png',
     '/assets/icons/rgh-192x192.png',
     '/assets/icons/rgh-512x512.png',
+    '/assets/icons/rgh-icon.png',
+    '/assets/icons/RGHlogo.png',
     '/assets/icons/rgh-ico.png',
     '/assets/icons/rgh.ico',
     '/assets/icons/maskable-icon.png',

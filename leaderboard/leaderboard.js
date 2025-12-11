@@ -1,4 +1,4 @@
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+// import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { supabase } from '../supabaseClient.js';
 import { textToSpeechEng } from './speak.js';
@@ -87,7 +87,10 @@ gameFilter.addEventListener("change", async (event) => {
 
 export async function renderLeaderboard() {
   try {
+    console.log("SUPABASE_URL",SUPABASE_URL)
     const url = `${SUPABASE_URL}/rest/v1/scores?select=*`;
+    console.log("url",url)
+    console.log("SUPABASE_ANON_KEY",SUPABASE_ANON_KEY)
 
     const res = await fetch(url, {
       headers: {
@@ -104,6 +107,7 @@ export async function renderLeaderboard() {
     }
 
     const data = await res.json();
+    console.log("data",data)
 
     if (!Array.isArray(data)) {
       document.getElementById("leaderboardTableBody").textContent = "⚠️ Unexpected response";
@@ -119,6 +123,8 @@ export async function renderLeaderboard() {
     filteredData = [...data];
     currentPage = 1;
     renderTable();
+    console.log("leaderboardData",leaderboardData)
+    console.log("filteredData",filteredData)
 
   } catch (err) {
     document.getElementById("leaderboardTableBody").textContent = "❌ Error loading global leaderboard: " + err;

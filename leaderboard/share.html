@@ -1,19 +1,33 @@
-<!-- Share Popup -->
-<div id="sharePopup" class="popup">
-    <div class="popup-content">
-        <span class="close" onclick="closeSharePopup()">&times;</span>
+<!-- <script src="../../leaderboard/share.js"></script> -->
+
+<!-- SHARE POPUP -->
+<div id="shareOverlay" class="share-overlay">
+    <div class="share-box">
 
         <h2>Share Your Score</h2>
 
-        <img id="shareGeneratedImg" style="width:100%; border-radius:10px; margin:10px 0;">
+        <!-- Generated Image Preview -->
+        <img id="shareGeneratedImage" 
+             src="" 
+             style="width:100%; border-radius:10px; margin:10px 0;">
 
-        <div class="icons">
-            <a id="twLink" target="_blank" rel="noopener">🐦 Twitter</a>
-            <a id="fbLink" target="_blank" rel="noopener">📘 Facebook</a>
-            <a id="waLink" target="_blank" rel="noopener">💬 WhatsApp Web</a>
-            <a id="tgLink" target="_blank" rel="noopener">📨 Telegram</a>
+        <!-- Share Options -->
+        <div class="share-icons">
+            <button class="js-button" onclick="openLinkSameTab()">
+                Google खोलें (JS Same Tab)
+            </button>
+            <a id="waLink" target="_blank"><img src="../../assets/icons/wa.jpg"> WhatsApp</a>
+            <a id="tgLink" target="_blank"><img src="../../assets/icons/tg.jpg"> Telegram</a>
+            <a id="fbLink" target="_blank"><img src="../../assets/icons/fb.jpg"> Facebook</a>
+            <a id="twLink" target="_blank"><img src="../../assets/icons/tw.jpg"> Twitter</a>
+            <a id="instaMsg"><img src="../../assets/icons/insta.jpg"> Instagram</a>
         </div>
+
+        <!-- Copy Link -->
+        <div class="copy-link" onclick="copyShareLink()">
+            <span id="shareLinkText"></span>
+        </div>
+
+        <button style="margin-top:18px;" onclick="closeSharePopup()">Close</button>
     </div>
 </div>
-  
-  

@@ -1,7 +1,8 @@
-import { startTimer, seconds, minutes, hours } from './timer.js';
+import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
 import { launchFireworks, showWinText } from './fireworks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
+import { shareScore } from './share.js';
 import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
 
 export const modeEl = document.getElementById('mode');
@@ -194,18 +195,23 @@ window.addEventListener('load', function () {
     if (checkWin(x, y)) {
       updateleaderboard();
       timer = false;
+      clearInterval(timerInterval);
       gameOver = true;
       switchStartingPlayer();
       playSound('win');
       launchFireworks();
       showWinText();
+      console.log("before",gameName, score);
       shareScore(gameName, score);
+      console.log("after",gameName, score);
+
       return;
     }
 
     if (isBoardFull()) {
       messageEl.textContent = `It's a draw!`;
       timer = false;
+      clearInterval(timerInterval);
       gameOver = true;
       playSound('draw');
       switchStartingPlayer();

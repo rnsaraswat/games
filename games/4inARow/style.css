@@ -341,6 +341,10 @@ th {
     font-size: 2.5vw;
   }
 
+  #winText {
+    font-size: 4vw;
+  }
+
 }
 
 #fireworksCanvas {
@@ -358,7 +362,7 @@ th {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 60px;
+  font-size: 5vw;
   color: gold;
   text-shadow: 2px 2px 10px #fff;
   font-weight: bold;

@@ -37,6 +37,7 @@
                     <button class="chip" id="toggle-feedback">📝Feedback</button>
                     <a class="chip" href="./auth/login.html">🚪Sign in</a>
                     <button class="chip" id="themeToggle">☀️ Light</button>
+                    <button class="chip" id="shareBtn">📤Share</button>
                 </div>
                 <p id="welcom" class="lead">Welcome</p>
             </div>
@@ -71,6 +72,13 @@
     </div>
     <script src="./leaderboard/submit-helper.js"></script>
     <script type="module" src="./leaderboard/feedback.js"></script>
+    <script type="module">
+        import { shareScore } from './leaderboard/share.js';
+        document.getElementById("shareBtn").addEventListener("click", async () => {
+            console.log("shareBtn clicked")
+            shareScore("-", 0);
+        });
+    </script>
 
     <script type="module">
         import { renderLeaderboard, saveScore, sortTable } from './leaderboard/leaderboard.js';

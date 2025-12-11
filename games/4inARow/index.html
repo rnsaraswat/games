@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>4 in a Row</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="../../commoncss.css">
+  <!-- <link rel="stylesheet" href="../../commoncss.css"> -->
   <link rel="manifest" href="../../manifest.json" />
   <meta name="theme-color" content="#6200ee" />
 </head>
@@ -39,16 +39,13 @@
           <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
           <button class="primary" id="shareBtn">📤Sharing</button>
 
-          <!-- <a id="downloadLink" style="display:none;">Download Image</a> -->
-          <!-- <button onclick="shareScore('Memory Game', 120)">📤Share Score</button> -->
           <button class="primary" id="toggle-feedback">📝Feedback</button>
+          <button class="primary" onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
         </div>
         <div>
           <div id="timer-display">⏱️ 00:00:00</div>
           <div id="message">Select grid size <br>Click New Game to play</div>
           <p id="loading">Loading...</p>
-          <!-- <h3>जनरेट की गई इमेज:</h3>
-          <img id="outputImage" alt="Generated Canvas Image"> -->
         </div>
       </div>
       <section id="right">
@@ -82,7 +79,14 @@
   <script type="module" src="js/script.js"></script>
   <script type="module" src="js/rules.js"></script>
   <script type="module" src="../../leaderboard/feedback.js"></script>
-  <script type="module" src="js/share.js"></script>
+  <!-- <script type="module" src="./leaderboard/share.js"></script> -->
+  <script type="module">
+    import { shareScore } from './leaderboard/share.js';
+    document.getElementById("shareBtn").addEventListener("click", async () => {
+        console.log("shareBtn clicked")
+        shareScore("-", 0);
+    });
+</script>
   <script type="module">
     import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
@@ -179,6 +183,10 @@
         loadfeedbakCSS();
       }
     });
+
+      // document.getElementById("home-screen").addEventListener("click", () => {
+      //   window.shareScore && window.shareScore("4inarow", 120);
+      // });
 
     // document.addEventListener("DOMContentLoaded", () => {
     //   // const btn = document.getElementById("toggle-share");
