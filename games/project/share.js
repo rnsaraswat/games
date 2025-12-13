@@ -45,7 +45,8 @@
         // draw background (image if provided)
         const bg = new Image();
         bg.crossOrigin = "anonymous";
-        bg.src = image || bgFallback;
+        // bg.src = image || bgFallback;
+        bg.src = bgFallback;
         await bg.decode().catch(()=>{ /* ignore */ });
         if (bg.width) ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
         else { ctx.fillStyle = "#222"; ctx.fillRect(0,0,canvas.width,canvas.height); }
@@ -63,14 +64,14 @@
         // texts
         ctx.fillStyle = "#fff";
         ctx.font = "bold 70px sans-serif";
-        ctx.fillText("Ravindra Games Hub", 120, 20);
+        ctx.fillText("Ravindra Games Hub", 40, 220);
         ctx.fillStyle = "#fff";
         ctx.font = "bold 44px sans-serif";
-        ctx.fillText(game || "Game", 160, 80);
+        ctx.fillText(game || "Game", 200, 280);
   
         ctx.fillStyle = "#00ff90";
         ctx.font = "bold 56px sans-serif";
-        ctx.fillText("Score: " + (typeof score !== "undefined" ? score : 0), 160, 160);
+        ctx.fillText("Score: " + (typeof score !== "undefined" ? score : 0), 220, 360);
   
         // convert to blob URL
         return await new Promise((res) => {
@@ -102,20 +103,21 @@
       if (linkInput) linkInput.value = shareData.link || window.location.href;
   
       // set social links
+      const title = encodeURIComponent(`Ravindra Games Hub`);
       const text = encodeURIComponent(`${shareData.game} — Score: ${shareData.score}`);
       const u = encodeURIComponent(shareData.link || window.location.href);
   
       const wa = document.getElementById("whatsappShare");
-      if (wa) wa.href = `https://wa.me/?text=${text}%0A${u}`;
+      if (wa) wa.href = `https://wa.me/?text=${title}%0A${text}%0A${u}`;
   
       const fb = document.getElementById("facebookShare");
       if (fb) fb.href = `https://www.facebook.com/sharer/sharer.php?u=${u}`;
   
       const tg = document.getElementById("telegramShare");
-      if (tg) tg.href = `https://t.me/share/url?url=${u}&text=${text}`;
+      if (tg) tg.href = `https://t.me/share/url?url=${u}&text=${text}&title=${title}`;
   
       const tw = document.getElementById("twitterShare");
-      if (tw) tw.href = `https://twitter.com/intent/tweet?text=${text}&url=${u}`;
+      if (tw) tw.href = `https://twitter.com/intent/tweet?title=${title}&text=${text}&url=${u}`;
   
       const ig = document.getElementById("instagramShare");
       if (ig) ig.href = "https://www.instagram.com/direct/inbox/";
@@ -142,7 +144,7 @@
       const shareData = {
         game: data.game || "Game",
         score: typeof data.score !== "undefined" ? data.score : 0,
-        link: data.link || window.location.href,
+        link: data.link || `https://rnsaraswat.github.io/games/`,
         image: data.image || null
       };
   

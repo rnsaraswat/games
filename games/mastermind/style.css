@@ -3,23 +3,23 @@
     --text: #222;
     --cell-border: #333;
     --box-shadow: rgba(0, 0, 0, 0.2);
-    --card:#fff;
-    --muted:#d0d7de;
-    --accent:#4f46e5;
-    --good:#16a34a;
-    --bad:#dc2626;
-    --shadow: 0 6px 20px rgba(0,0,0,.08);
+    --card: #fff;
+    --muted: #d0d7de;
+    --accent: #4f46e5;
+    --good: #16a34a;
+    --bad: #dc2626;
+    --shadow: 0 6px 20px rgba(0, 0, 0, .08);
 }
 
-[data-theme='dark']  {
+[data-theme='dark'] {
     --bg: #454545;
     --text: #eee;
     --cell-border: #d9d8d8;
     --box-shadow: rgba(255, 255, 255, 0.3);
-    --card:#0b1223; 
-    --muted:#273248; 
-    --accent:#818cf8;
-    --shadow: 0 6px 20px rgba(0,0,0,.35);
+    --card: #0b1223;
+    --muted: #273248;
+    --accent: #818cf8;
+    --shadow: 0 6px 20px rgba(0, 0, 0, .35);
 }
 
 @font-face {
@@ -187,11 +187,11 @@ button.primary {
     background: linear-gradient(180deg, #10b981, #059669);
     border: none;
     box-shadow: 0 1vw 4vw var(--box-shadow);
-  }
-  
-  button.primary:hover {
+}
+
+button.primary:hover {
     opacity: 0.6;
-  }
+}
 
 #right {
     background: var(--bg-color);
@@ -250,7 +250,7 @@ button.primary {
     gap: 0.8vw;
     align-items: center;
     margin: 0.2vw 0;
-    flex-wrap:wrap;
+    flex-wrap: wrap;
 }
 
 .row {
@@ -327,20 +327,20 @@ button {
 
 #visualGuesses {
     margin-top: 1.2vw;
-    display:flex;
-    flex-direction:column;
+    display: flex;
+    flex-direction: column;
     /* gap:0.8vw; */
-    max-height:36vw;
-    overflow:auto;
-    padding-right:0.6vw
+    max-height: 36vw;
+    overflow: auto;
+    padding-right: 0.6vw
 }
 
 .fb-submit {
     padding: 0.8vw 1vw;
-    border-radius:0.8vw;
-    background:var(--accent);
-    color:white;
-    border:none;
+    border-radius: 0.8vw;
+    background: var(--accent);
+    color: white;
+    border: none;
     margin: auto;
 }
 
@@ -355,7 +355,7 @@ button {
     font-size: 1.3vw
 }
 
-#timer-display  {
+#timerdisplay {
     font-family: 'Digital', Arial, Helvetica, sans-serif;
     display: grid;
     align-items: center;
@@ -380,6 +380,34 @@ button {
     #right {
         flex: 1;
         width: 100%;
+    }
+
+    .message {
+        font-size: 3vw;
+    }
+    select,
+    button,
+    label,
+    input [type="number"] {
+        padding: 0.5vw 0.5vw;
+        margin: 0.5vw 0.5vw;
+        font-size: 3.6vw;
+    }
+    .button-group input {
+        font-size: 3.6vw;
+    }
+    #diffcultydisplay {
+        font-size: 4vw;
+    }
+    button.primary {
+        gap: 0.8vw;
+        align-items: center;
+        padding: 1vw 1.2vw;
+        margin: 1vw 0.2vw 0.5vw 0.2vw;
+        font-size: 3.6vw;
+    }
+    #timerdisplay {
+        font-size: 3.6vw;
     }
 }
 

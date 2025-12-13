@@ -59,6 +59,11 @@
                     <button id="themeBtn" class="btn">☀️ Light</button>
                     <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
                     <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
+                    <button class="primary" id="shareBtn">📤Sharing</button>
+
+                    <button class="primary" id="toggle-feedback">📝Feedback</button>
+                    <button class="primary"
+                      onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
                     <button class="primary" id="toggle-rules">View Rules</button>
                     <button class="primary" id="toggle-sound">🔇 Music:Off"</button>
                     <div id="info">
@@ -83,6 +88,8 @@
     </div>
     <div id="localleaderboardPopup" class="popupWindow">
     </div>
+  <div id="feedbackPopup" class="popupWindow"></div>
+
     <div id="winText">🎉 Completed 🎉</div>
     <canvas id="confettiCanvas"></canvas>
 
@@ -112,16 +119,36 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderLeaderboard();
         });
-        </script>
+    </script>
 
-<script type="module">
-    import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
-    document.addEventListener('DOMContentLoaded', () => {
-        localrenderLeaderboard();
-    });
+    <script type="module">
+        import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            localrenderLeaderboard();
+        });
     </script>
 
     <script>
+        function hideFeedback() {
+            document.getElementById("feedbackPopup").style.display = 'none';
+        };
+
+        function hideLB() {
+            document.getElementById("leaderboardPopup").style.display = 'none';
+        };
+
+        function hideLLB() {
+            document.getElementById("localleaderboardPopup").style.display = 'none';
+        };
+
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
+            }
+        };
+
         fetch('../../leaderboard/leaderboard.html')
             .then(response => response.text())
             .then(htmlText => {
@@ -133,8 +160,16 @@
             .then(htmlText => {
                 document.getElementById('localleaderboardPopup').innerHTML = htmlText;
             });
+
+        fetch('../../leaderboard/feedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('feedbackPopup').innerHTML = htmlText;
+            });
+
         document.getElementById("leaderboardPopup").style.display = 'none';
         document.getElementById("localleaderboardPopup").style.display = 'none';
+        document.getElementById("feedbackPopup").style.display = 'none';
 
         document.getElementById("toggle-leaderboard").addEventListener("click", () => {
             if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
@@ -160,13 +195,66 @@
             }
         });
 
+        document.getElementById("toggle-feedback").addEventListener("click", () => {
+            if (document.getElementById("feedbackPopup").style.display === 'block') {
+                document.getElementById("feedbackPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("feedbackPopup").style.display = 'block';
+                loadfeedbakCSS();
+            }
+        });
+
+        function loadfeedbakCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '../../leaderboard/feedback.css';
+            head.appendChild(link);
+        }
+
         function loadCSS() {
             var head = document.head;
             var link = document.createElement('link');
             link.rel = 'stylesheet';
             link.type = 'text/css';
-            link.href = '../../leaderboard/leaderboard.css'; 
+            link.href = '../../leaderboard/leaderboard.css';
             head.appendChild(link);
+        }
+        window.onload = function () {
+            loadCSS();
+            loadfeedbakCSS();
+        };
+
+        setupManifest("5inARow", "5 IN A ROW");
+
+        async function setupManifest(shortName, fullName) {
+
+            const res = await fetch("../../manifest.json");
+            let manifest = await res.json();
+
+            manifest.short_name = shortName;
+            manifest.name = fullName;
+
+            const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
+            const manifestURL = URL.createObjectURL(blob);
+
+            let link = document.createElement("link");
+            link.rel = "manifest";
+            link.href = manifestURL;
+            document.head.appendChild(link);
+        }
+    </script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("./sw.js")
+                    .then(() => console.log("SW registered"))
+                    .catch((err) => console.log("SW error", err));
+            });
         }
     </script>
 </body>

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mastermind Solver by Computer Automatic</title>
     <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#6200ee" />
 </head>
 
 <body>
@@ -29,10 +30,15 @@
                     <button id="resetSecret" class="btn ghost">Reset secret</button>
                     <button id="randomSecret" class="btn">Random secret</button>
                 </div>
-                <button id="startSolve" class="btn">Start solver</button>
+                <button class="primary" id="startSolve" class="btn">Start solver</button>
                 <button id="toggle-theme">☀️ Light</button>
                 <button id="toggle-sound">🔇 Music:Off"</button>
-                <div id="timer-display">⏱️ 00:00:00</div>
+                <button class="primary" id="shareBtn">📤Sharing</button>
+
+                <button class="primary" id="toggle-feedback">📝Feedback</button>
+                <button class="primary"
+                    onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+                <div id="timerdisplay">⏱️ 00:00:00</div>
                 <div class="message" id="output">
                     Please Click on slot to select/change your secreate colors and press Start solver
                 </div>
@@ -50,7 +56,80 @@
             <div class="log" id="log"></div>
         </div>
     </div>
+    <div id="feedbackPopup" class="popupWindow"></div>
     <script type="module" src="js/script.js"></script>
+    <script type="module">
+        import { shareScore } from '../../leaderboard/share.js';
+        document.getElementById("shareBtn").addEventListener("click", async () => {
+            shareScore("5inARow", 0);
+        });
+    </script>
+    <script>
+        function hideFeedback() {
+            document.getElementById("feedbackPopup").style.display = 'none';
+        };
+
+        fetch('../../leaderboard/feedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('feedbackPopup').innerHTML = htmlText;
+            });
+
+        document.getElementById("feedbackPopup").style.display = 'none';
+
+        document.getElementById("toggle-feedback").addEventListener("click", () => {
+            if (document.getElementById("feedbackPopup").style.display === 'block') {
+                document.getElementById("feedbackPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("feedbackPopup").style.display = 'block';
+                loadfeedbakCSS();
+            }
+        });
+
+        function loadfeedbakCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '../../leaderboard/feedback.css';
+            head.appendChild(link);
+        }
+
+        window.onload = function () {
+            loadfeedbakCSS();
+        };
+
+        setupManifest("mastermindsolver", "Mastermind Solver");
+
+        async function setupManifest(shortName, fullName) {
+
+            const res = await fetch("../../manifest.json");
+            let manifest = await res.json();
+
+            manifest.short_name = shortName;
+            manifest.name = fullName;
+
+            const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
+            const manifestURL = URL.createObjectURL(blob);
+
+            let link = document.createElement("link");
+            link.rel = "manifest";
+            link.href = manifestURL;
+            document.head.appendChild(link);
+        }
+    </script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("./sw.js")
+                    .then(() => console.log("SW registered"))
+                    .catch((err) => console.log("SW error", err));
+            });
+        }
+    </script>
 </body>
 
 </html>

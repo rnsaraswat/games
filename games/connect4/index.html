@@ -5,17 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Connect 4</title>
   <link rel="stylesheet" href="style.css">
-  <meta name="theme-color" content="#6200ee" />
 </head>
 <body>
-  <div id="container">
+  <div id="container" class="main-containef">
     <!-- Left Panel -->
-    <div id="left" class="section">
+    <div id="left" class="left-section">
       <h1>Connect 4</h1>
       <div class="button-group">
         <label for="gridSize">Grid Size:</label>
         <input type="number" id="gridSize" min="6" max="20" value="9">
-        <button class="primary" id="startGame">🔄 New Game</button>
+        <button id="startGame">🔄 New Game</button>
         <button id="undo-last">↩️ Undo</button>
         <select id="mode">
           <option value="pvp">😊Player vs 😊Player</option>
@@ -29,20 +28,15 @@
         <button id="toggle-theme">☀️ Light</button>
         <!-- to background music on / off button -->
         <button id="toggle-sound">🔇 Music:Off"</button>
-        <button class="primary"         <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
+        <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
         <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
-        <button class="primary" id="shareBtn">📤Sharing</button>
-
-        <button class="primary" id="toggle-feedback">📝Feedback</button>
-        <button class="primary"
-          onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
         <div id="timer-display">⏱️ 00:00:00</div>
       </div>
       <div id="message">Select grid size <br>Click New Game to play</div>
       <p id="loading">Loading...</p>
     </div>
     <!-- Right Grid -->
-    <div id="right">
+    <div id="right" class="left-section">
       <div id="board"></div>
     </div>
   </div>
@@ -50,7 +44,6 @@
   </div>
   <div id="localleaderboardPopup" class="popupWindow">
   </div>
-  <div id="feedbackPopup" class="popupWindow"></div>
   <div id="winText">🎉 You Won! 🎉</div>
   <div class="namebar" id="namebar" aria-live="polite">
     <div class="row">
@@ -63,12 +56,6 @@
   </div>
   <script type="module" src="js/script.js"></script>
   <script type="module">
-    import { shareScore } from '../../leaderboard/share.js';
-    document.getElementById("shareBtn").addEventListener("click", async () => {
-      shareScore("Connect4", 0);
-    });
-  </script>
-  <script type="module">
     import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
     window.sortTable = sortTable;
     window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
@@ -79,7 +66,7 @@
         }
     };
     document.addEventListener('DOMContentLoaded', () => {
-        renderLeaderboard("Connect4");
+        renderLeaderboard();
     });
 </script>
 
@@ -91,26 +78,6 @@
 </script>
 
 <script>
-      function hideFeedback() {
-      document.getElementById("feedbackPopup").style.display = 'none';
-    };
-
-    function hideLB() {
-      document.getElementById("leaderboardPopup").style.display = 'none';
-    };
-
-    function hideLLB() {
-      document.getElementById("localleaderboardPopup").style.display = 'none';
-    };
-
-    function clearLLB() {
-      if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
-        localStorage.removeItem('leaderboard');
-        alert("All games Local Leaderboard Data is Cleared");
-        textToSpeechEng('Local Leaderboard data cleared');
-      }
-    };
-
     fetch('../../leaderboard/leaderboard.html')
         .then(response => response.text())
         .then(htmlText => {
@@ -122,22 +89,16 @@
         .then(htmlText => {
             document.getElementById('localleaderboardPopup').innerHTML = htmlText;
         });
-
-        fetch('../../leaderboard/feedback.html')
-      .then(response => response.text())
-      .then(htmlText => {
-        document.getElementById('feedbackPopup').innerHTML = htmlText;
-      });
-
     document.getElementById("leaderboardPopup").style.display = 'none';
     document.getElementById("localleaderboardPopup").style.display = 'none';
-    document.getElementById("feedbackPopup").style.display = 'none';
 
     document.getElementById("toggle-leaderboard").addEventListener("click", () => {
       if (document.getElementById("toggle-leaderboard").style.display === 'block')  {
+            // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
             document.getElementById("leaderboardPopup").style.display = 'none';
             return;
         } else {
+            // document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
             document.getElementById("leaderboardPopup").style.display = 'block';
             loadCSS()
         }
@@ -145,32 +106,15 @@
 
     document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
         if (document.getElementById("leaderboardPopup").style.display === 'block') {
+            // document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
             document.getElementById("localleaderboardPopup").style.display = 'none';
             return;
         } else {
+            // document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
             document.getElementById("localleaderboardPopup").style.display = 'block';
             loadCSS();
         }
     });
-
-    document.getElementById("toggle-feedback").addEventListener("click", () => {
-      if (document.getElementById("feedbackPopup").style.display === 'block') {
-        document.getElementById("feedbackPopup").style.display = 'none';
-        return;
-      } else {
-        document.getElementById("feedbackPopup").style.display = 'block';
-        loadfeedbakCSS();
-      }
-    });
-
-    function loadfeedbakCSS() {
-      var head = document.head;
-      var link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = '../../leaderboard/feedback.css';
-      head.appendChild(link);
-    }
 
     function loadCSS() {
         var head = document.head;
@@ -180,43 +124,6 @@
         link.href = '../../leaderboard/leaderboard.css';
         head.appendChild(link);
     }
-
-    window.onload = function () {
-      loadCSS();
-      loadfeedbakCSS();
-    };
-
-    setupManifest("connect4", "Connect 4");
-
-    async function setupManifest(shortName, fullName) {
-
-      const res = await fetch("../../manifest.json");
-      let manifest = await res.json();
-
-      manifest.short_name = shortName;
-      manifest.name = fullName;
-
-      const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
-      const manifestURL = URL.createObjectURL(blob);
-
-      let link = document.createElement("link");
-      link.rel = "manifest";
-      link.href = manifestURL;
-      document.head.appendChild(link);
-    }
-
 </script>
-
-<script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("./sw.js")
-        .then(() => console.log("SW registered"))
-        .catch((err) => console.log("SW error", err));
-    });
-  }
-</script>
-
 </body>
 </html>

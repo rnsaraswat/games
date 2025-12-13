@@ -1,8 +1,9 @@
 // document.getElementById("shareBtn").addEventListener("click", async () => {
 import { gameName, score } from './script.js';
 
-async function shareScore(gameName, score = 0) {
+export async function shareScore(gameName, score = 0) {
 
+  console.log("shareScore",gameName, score);
 
   const siteName = "Ravindra Games Hub";
   // const gameName = gameName;
@@ -19,7 +20,7 @@ Can you beat my Score: ${score}
 Play here:
 ${gameLink}`;
 
-  console.log(gameLink)
+  console.log("gamelink", gameLink);
   const imageUrl = "../../assets/icons/maskable-icon.png";
 
   try {
@@ -30,6 +31,7 @@ ${gameLink}`;
       title: siteName,
       text: textToShare
     });
+    console.log("try", gameLink);
 
     // -----------------------
     // STEP 2 → Share IMAGE after text
@@ -41,7 +43,8 @@ ${gameLink}`;
       await navigator.share({
         files: [file]
       });
-    }
+    console.log("navigator.canShare && navigator.canShare", file, blob);
+  }
 
   } catch (err) {
     console.log("Share cancelled or failed", err);
@@ -50,5 +53,7 @@ ${gameLink}`;
 }
 
 document.getElementById("shareBtn").addEventListener("click", async () => {
-  shareScore(gameName, score)
+  console.log("share.js button",gameName, score);
+  shareScore(gameName, score);
+  console.log("share.js button after",gameName, score);
 });

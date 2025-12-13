@@ -3,12 +3,15 @@ import { launchFireworks, showWinText } from './fireworks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
 // import { saveToLeaderboard, toggleLeaderboard } from './leaderboard.js';
+import { shareScore } from '../../../leaderboard/share.js';
 import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
 
 export const modeEl = document.getElementById('mode');
 export const difficultyEl = document.getElementById('difficulty');
 export let timer = false;
 export let winnerName;
+export let gameName = '4inARow';
+export let score = 0;
 
 window.addEventListener('load', function () {
   const loading = document.getElementById('loading');
@@ -51,24 +54,6 @@ window.addEventListener('load', function () {
     }
   });
 
-
-  //toggle theme
-  // document.getElementById("toggle-theme").addEventListener("click", () => {
-  //   toggleTheme();
-  // });
-
-  // // change theme
-  // function toggleTheme() {
-  //   document.body.classList.toggle(theme);
-  //   if (document.body.classList.contains("dark")) {
-  //       localStorage.setItem('rg_theme')
-  //       toggleThemeBtn.innerText = "☀️ Light";
-  //     textToSpeechEng('Theme Dark');
-  //   } else {
-  //     toggleThemeBtn.innerText = "🌙 Dark";
-  //     textToSpeechEng('Theme Light');
-  //   }
-  // }
   const themeToggle = document.getElementById('toggle-theme');
   function setTheme(t) {
     if (t === 'dark') {
@@ -185,7 +170,8 @@ window.addEventListener('load', function () {
       switchStartingPlayer();
       playSound('win');
       launchFireworks();
-      showWinText();
+      shareScore(gameName, score);
+      // showWinText();
       return;
     }
 
@@ -443,12 +429,7 @@ window.addEventListener('load', function () {
     }
     let player_name = winnerName;
     let player_opponent = opponent;
-    saveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
-
-    // const entry = { player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
-    // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-    // boardData.push(entry);
-    // localStorage.setItem("leaderboard", JSON.stringify(boardData));
+    saveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
 
     window.submitScore &&
       window.submitScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);

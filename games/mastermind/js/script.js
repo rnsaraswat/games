@@ -2,14 +2,12 @@ import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
 import { launchFireworks } from './edgeFireWorks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
+import { shareScore } from '../../../leaderboard/share.js';
 import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
 
-// define variables
 export let timer = false;
-// let hours = 0;
-// let minutes = 0;
-// let seconds = 0;
-// let hrdsec = 0;
+export let gameName = 'mastermind';
+export let score = 0;
 export let slotCount = 4;
 export let colorCount = 6;
 export let maxAttempts = 10;
@@ -24,37 +22,37 @@ let theme = localStorage.getItem('rg_theme') || 'dark';
 export let player1 = localStorage.getItem('player_name') || 'Human1';
 let difficulty = "-";
 
-function finddifficulty(){
+function finddifficulty() {
     if (slotCount < 3) {
-        if (colorCount < 4) {difficulty = 'very easy';}
-        else if (colorCount < 7) {difficulty = 'easy';}
-        else if (colorCount < 9) {difficulty = 'medium';}
-        else if (colorCount < 11) {difficulty = 'hard';}
-        else if (colorCount < 16) {difficulty = 'very hard';}
-        else {difficulty == 'expert';}
+        if (colorCount < 4) { difficulty = 'very easy'; }
+        else if (colorCount < 7) { difficulty = 'easy'; }
+        else if (colorCount < 9) { difficulty = 'medium'; }
+        else if (colorCount < 11) { difficulty = 'hard'; }
+        else if (colorCount < 16) { difficulty = 'very hard'; }
+        else { difficulty == 'expert'; }
     }
     else if (slotCount < 5) {
-        if (colorCount < 7) {difficulty = 'easy';}
-        else if (colorCount < 9) {difficulty = 'medium';}
-        else if (colorCount < 11) {difficulty = 'hard';}
-        else if (colorCount < 16) {difficulty = 'very hard';}
-        else {difficulty == 'expert';}
+        if (colorCount < 7) { difficulty = 'easy'; }
+        else if (colorCount < 9) { difficulty = 'medium'; }
+        else if (colorCount < 11) { difficulty = 'hard'; }
+        else if (colorCount < 16) { difficulty = 'very hard'; }
+        else { difficulty == 'expert'; }
     }
     else if (slotCount < 7) {
-        if (colorCount < 9) {difficulty = 'medium';}
-        else if (colorCount < 11) {difficulty = 'hard';}
-        else if (colorCount < 16) {difficulty = 'very hard';}
-        else {difficulty == 'expert';}
+        if (colorCount < 9) { difficulty = 'medium'; }
+        else if (colorCount < 11) { difficulty = 'hard'; }
+        else if (colorCount < 16) { difficulty = 'very hard'; }
+        else { difficulty == 'expert'; }
     }
     else if (slotCount < 9) {
-        if (colorCount < 11) {difficulty = 'hard';}
-        else if (colorCount < 16) {difficulty = 'very hard';}
-        else {difficulty = 'expert';}
+        if (colorCount < 11) { difficulty = 'hard'; }
+        else if (colorCount < 16) { difficulty = 'very hard'; }
+        else { difficulty = 'expert'; }
     }
     else if (slotCount < 11) {
-        if (colorCount < 16) {difficulty = 'very hard';}
-        else {difficulty = 'expert';}
-    } else {difficulty = 'expert';}
+        if (colorCount < 16) { difficulty = 'very hard'; }
+        else { difficulty = 'expert'; }
+    } else { difficulty = 'expert'; }
     document.getElementById("diffcultydisplay").textContent = difficulty;
 }
 
@@ -381,12 +379,13 @@ function checkGuess() {
     if (black === slotCount) {
         gameOver = true;
         updateScoreboard("🎉 You cracked the code!");
-      clearInterval(timerInterval);
-      updateleaderboard()
+        clearInterval(timerInterval);
+        updateleaderboard()
         // saveToLeaderboard(player1);
         timer = false;
         playSound('win');
         launchFireworks();
+        shareScore(gameName, score);
     } else if (attemptsLeft <= 0) {
         gameOver = true;
         updateScoreboard("💥 Out of attempts! Code was revealed.");
@@ -444,30 +443,18 @@ function disableGame() {
     document.getElementById("colorPopup").style.display = "none";
 }
 
-//toggle theme
-// document.getElementById("dark").addEventListener("click", () => {
-//     document.body.classList.toggle("dark");
-//     if (document.body.classList.contains("dark")) {
-//         document.getElementById("dark").innerText = "☀️ Light";
-//         textToSpeechEng('Theme Dark');
-//     } else {
-//         document.getElementById("dark").innerText = "🌙 Dark";
-//         textToSpeechEng('Theme Light');
-//     }
-// });
-
 const themeToggle = document.getElementById('toggle-theme');
 function setTheme(t) {
-  if (t === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    localStorage.setItem('rg_theme', t);
-    themeToggle.textContent = '☀️ Light'
-  }
-  if (t === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
-    localStorage.setItem('rg_theme', t);
-    themeToggle.textContent = '🌙 Dark'
-  }
+    if (t === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('rg_theme', t);
+        themeToggle.textContent = '☀️ Light'
+    }
+    if (t === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('rg_theme', t);
+        themeToggle.textContent = '🌙 Dark'
+    }
 }
 if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
 setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
@@ -483,7 +470,7 @@ function updateleaderboard() {
     let filed1 = 0;
     let filed2 = 0
     let filed3 = `slots:${slotCount}`;
-    let filed4 =  `colors:${colorCount}`;
+    let filed4 = `colors:${colorCount}`;
     let email = localStorage.getItem('email') || '-';
     const created_at = new Date();
 
@@ -495,14 +482,10 @@ function updateleaderboard() {
     else score = score + 500;
 
     saveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
-    // const entry = { player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at };
-    // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-    // boardData.push(entry);
-    // localStorage.setItem("leaderboard", JSON.stringify(boardData));
-  
+
     window.submitScore &&
-      window.submitScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
-  }
-  document.addEventListener('DOMContentLoaded', () => {
+        window.submitScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+}
+document.addEventListener('DOMContentLoaded', () => {
     localrenderLeaderboard();
-  });
+});

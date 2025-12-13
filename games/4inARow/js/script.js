@@ -201,10 +201,7 @@ window.addEventListener('load', function () {
       playSound('win');
       launchFireworks();
       showWinText();
-      console.log("before",gameName, score);
       shareScore(gameName, score);
-      console.log("after",gameName, score);
-
       return;
     }
 

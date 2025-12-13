@@ -2,12 +2,15 @@ import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
 import { launchFireworks } from './edgeFireWorks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
+import { shareScore } from '../../../leaderboard/share.js';
 import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
 
 export const modeEl = document.getElementById('mode');
 export const difficultyEl = document.getElementById('difficulty');
 export let timer = false;
 export let winnerName;
+export let gameName = 'connect3';
+export let score = 0;
 
 window.addEventListener('load', function () {
   const loading = document.getElementById('loading');
@@ -53,22 +56,6 @@ window.addEventListener('load', function () {
   });
 
   //toggle theme
-  // document.getElementById("toggle-theme").addEventListener("click", () => {
-  //   toggleTheme();
-  // });
-
-  // // change theme
-  // function toggleTheme() {
-  //   document.body.classList.toggle(theme);
-  //   if (document.body.classList.contains("dark")) {
-  //       localStorage.setItem('rg_theme')
-  //       toggleThemeBtn.innerText = "☀️ Light";
-  //     textToSpeechEng('Theme Dark');
-  //   } else {
-  //     toggleThemeBtn.innerText = "🌙 Dark";
-  //     textToSpeechEng('Theme Light');
-  //   }
-  // }
   const themeToggle = document.getElementById('toggle-theme');
   function setTheme(t) {
     if (t === 'dark') {
@@ -177,6 +164,8 @@ window.addEventListener('load', function () {
       switchStartingPlayer();
       playSound('win');
       launchFireworks();
+      // showWinText();
+      shareScore(gameName, score);
       return;
     }
 

@@ -1,10 +1,10 @@
 {
-    "name": "Ravindra Games Hub",
-    "short_name": "RGames",
+    "name": "GAME_NAME_REPLACE",
+    "short_namec": "GAME_SHORT_REPLACE",
     "display": "standalone",
     "background_color": "#1a1a1a",
-    "theme_color": "#1a1a1a",
-    "start_url": "./index.html",
+    "theme_color": "#2196f3",
+    "start_url": "/",
     "scope": "./",
     "orientation": "portrait",
     "icons": [

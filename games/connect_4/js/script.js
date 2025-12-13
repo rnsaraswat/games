@@ -3,12 +3,15 @@ import { launchFireworks } from './edgeFireWorks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
 // import { saveToLeaderboard, toggleLeaderboard, clearLeaderboard } from './leaderboard.js';
+import { shareScore } from '../../../leaderboard/share.js';
 import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
 
 export const modeEl = document.getElementById('mode');
 export const difficultyEl = document.getElementById('difficulty');
 export let timer = false;
 export let winnerName;
+export let gameName = 'connect4';
+export let score = 0;
 
 window.addEventListener('load', function () {
   const loading = document.getElementById('loading');
@@ -50,23 +53,6 @@ window.addEventListener('load', function () {
       namebar.classList.remove('show');
     }
   });
-
-  //toggle theme
-  // document.getElementById("toggle-theme").addEventListener("click", () => {
-  //   toggleTheme();
-  // });
-
-  // // change theme
-  // function toggleTheme() {
-  //   document.body.classList.toggle("dark");
-  //   if (document.body.classList.contains("dark")) {
-  //     toggleThemeBtn.innerText = "☀️ Light";
-  //     textToSpeechEng('Theme Dark');
-  //   } else {
-  //     toggleThemeBtn.innerText = "🌙 Dark";
-  //     textToSpeechEng('Theme Light');
-  //   }
-  // }
 
   const themeToggle = document.getElementById('toggle-theme');
   function setTheme(t) {
@@ -176,6 +162,7 @@ window.addEventListener('load', function () {
       switchStartingPlayer();
       playSound('win');
       launchFireworks();
+      shareScore(gameName, score);
       return;
     }
 
@@ -457,7 +444,7 @@ window.addEventListener('load', function () {
     let player_name = winnerName;
     let player_opponent = opponent;
 
-    saveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
+    saveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
 
     // const entry = { player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
     // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");

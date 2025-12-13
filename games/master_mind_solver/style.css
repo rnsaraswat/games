@@ -31,6 +31,11 @@
     src: url('../../assets/font/Bangers-Regular.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'Digital';
+    src: url('../../assets/font/digital-italic.ttf') format('truetype');
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -142,6 +147,33 @@ button:hover {
     background: var(--bg-hover);
 }
 
+button.primary {
+    gap: 0.8vw;
+    align-items: center;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 1vw 1.2vw;
+    margin: 1vw 0.2vw 0.5vw 0.2vw;
+    font-size: 1.6vw;
+    display: inline-block;
+    margin-top: 0.1vh;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+    border-radius: 0.5vw;
+    background: linear-gradient(90deg, #9762f1, #7c3aed);
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(180deg, #10b981, #059669);
+    border: none;
+    box-shadow: 0 1vw 4vw var(--box-shadow);
+  }
+  
+  button.primary:hover {
+    opacity: 0.6;
+  }
+  
 .message {
     width: 100%;
     text-align: center;
@@ -216,19 +248,53 @@ button:hover {
         max-width: 100%;
         flex: 0 0 auto;
     }
-
+    #left h1 {
+        font-size: 4vw;
+    }
     #right {
         flex: 1;
         width: 100%;
     }
+
+    .message {
+        font-size: 3vw;
+    }
+    select,
+    button,
+    label,
+    input [type="number"] {
+        padding: 0.5vw 0.5vw;
+        margin: 0.5vw 0.5vw;
+        font-size: 3.6vw;
+    }
+    .button-group input {
+        font-size: 3.6vw;
+    }
+    #diffcultydisplay {
+        font-size: 4vw;
+    }
+    button.primary {
+        gap: 0.8vw;
+        align-items: center;
+        padding: 1vw 1.2vw;
+        margin: 1vw 0.2vw 0.5vw 0.2vw;
+        font-size: 3.6vw;
+    }
+    #timerdisplay {
+        font-size: 3.6vw;
+    }
+
+    .small {
+        font-size: 5vw;
+    }
 }
 
-#timer-display  {
+#timerdisplay  {
     font-family: 'Digital', Arial, Helvetica, sans-serif;
     text-align: center;
     width: auto;
     height: auto;
-    font-size: 1.8vw;
+    font-size: 3vw;
     padding: 1vw 1vw;
     background: var(--bg);
     color: var(--text);
@@ -269,8 +335,8 @@ button:hover {
 }
 
 .colorBtn {
-    width: 2.5vw;
-    height: 2.5vw;
+    /* width: 2.5vw;
+    height: 2.5vw; */
     border-radius: 0.5vw;
     border: 0.2vw solid rgba(255, 255, 255, .06);
     cursor: pointer
@@ -296,9 +362,10 @@ button:hover {
 }
 
 .small {
-    font-size: 1.3vw;
+    font-size: 2vw;
     color: var(--text);
     margin-left: 0.8vw;
+    text-align: center;
 }
 
 #visualGuesses {

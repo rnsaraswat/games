@@ -27,6 +27,16 @@
   --box-shadow: rgba(255, 255, 255, 0.5);
 }
 
+@font-face {
+  font-family: 'EnglishFontBangers';
+  src: url('../../assets/font/Bangers-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Digital';
+  src: url('../../assets/font/digital-italic.ttf') format('truetype');
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -46,7 +56,7 @@ body {
   color: var(--light-text);
 }
 
-.card {
+/* .card {
   width: 100%;
   max-width: 88vw;
   border-radius: 1.4vw;
@@ -65,7 +75,7 @@ body.light .card {
 
 body.dark .card {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), var(--dark-card));
-}
+} */
 
 header {
   grid-column: 1/-1;
@@ -91,7 +101,8 @@ h1 {
   display: flex;
   gap: 1vw;
   align-items: center;
-  justify-content:center; flex-wrap:wrap
+  justify-content: center;
+  flex-wrap: wrap
 }
 
 .score {
@@ -165,7 +176,11 @@ body.dark .sidebar {
   background: rgba(255, 255, 255, 0.02);
 }
 
-.small{ color: var(--text); font-size:2.5vw; margin-bottom:0.6vw}
+.playersmall {
+  color: var(--text);
+  font-size: 3.5vw;
+  margin-bottom: 0.6vw
+}
 
 .btn {
   display: inline-block;
@@ -302,7 +317,7 @@ select,
 label,
 input,
 button,
-.label  {
+.label {
   padding: 1vw 1.2vw;
   margin: 1vw 0.2vw 0.5vw 0.2vw;
   font-size: 1.6vw;
@@ -323,7 +338,8 @@ input[type="checkbox"]:hover {
   outline: 2px dotted var(--border);
 }
 
-@media (max-width:480px), (max-aspect-ratio:1/1),
+@media (max-width:480px),
+(max-aspect-ratio:1/1),
 (orientation:portrait) {
   .main {
     flex-direction: column;
@@ -342,6 +358,44 @@ input[type="checkbox"]:hover {
     padding: 0.2vw;
     border-radius: 1vw;
     overflow: auto;
+  }
+
+  h1 {
+    font-size: 5vw;
+  }
+
+  select,
+  label,
+  input,
+  button,
+  .label {
+    /* padding: 1vw 1.2vw;
+  margin: 1vw 0.2vw 0.5vw 0.2vw; */
+    font-size: 3.6vw;
+  }
+
+  .primaryColor {
+    font-size: 3.6vw;
+  }
+  #statusText {
+        padding: 1vw 1.2vw;
+  margin: 1vw 0.2vw 0.5vw 0.2vw;
+    font-size: 3vw;
+  }
+  .muted {
+    font-size: 3vw;
+    padding: 1vw 1.2vw;
+    margin: 1vw 0.2vw 0.5vw 0.2vw;
+  }
+
+  .choice-label {
+    font-size: 4vw;
+  }
+  .small {
+    font-size: 4vw;
+  }
+  .vs {
+    font-size: 4vw;
   }
 }
 
@@ -363,9 +417,11 @@ input[type="checkbox"]:hover {
 
 .inlinewidth {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   text-align: center;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .controls {
@@ -380,7 +436,7 @@ input[type="checkbox"]:hover {
 }
 
 .board-wrap {
-  flex: 1;
+  flex: 1 1 40%;
   margin: 1vw 1vw 1vw 1vw;
   padding: 1vw 1vw 1vw 1vw;
   align-items: center;
@@ -394,7 +450,7 @@ input[type="checkbox"]:hover {
 
 h1 {
   text-align: center;
-  font-size: 3vw;
+  font-size: 5vw;
   font-family: 'EnglishFontBangers', Arial, Helvetica, sans-serif;
   color: var(--text);
   letter-spacing: .4vw;
@@ -432,13 +488,15 @@ h1 {
   opacity: 0.8;
   border-radius: 2px;
   animation: fall 3s linear forwards;
-  box-shadow: 0 0 1px #0ff, 0 0 2px #0ff, 0 0 3px #0ff; /* Initial glow */
+  box-shadow: 0 0 1px #0ff, 0 0 2px #0ff, 0 0 3px #0ff;
+  /* Initial glow */
 }
 
 @keyframes fall {
   0% {
     transform: translateY(0) rotate(0deg);
   }
+
   100% {
     transform: translateY(100vh) rotate(720deg);
     opacity: 0;
@@ -459,6 +517,3 @@ h1 {
   transition: opacity 0.5s ease, transform 0.5s ease;
   pointer-events: none;
 }
-
-
-

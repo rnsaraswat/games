@@ -103,6 +103,7 @@ export const state = {
     const remainInfo = document.getElementById('remainInfo');
     const statusText = document.getElementById('statusText');
     updateHint();
+    wintxt.style.display = 'none';
 
     // this.document.getElementById("player1").textContent = player1;
 

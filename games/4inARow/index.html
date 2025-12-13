@@ -78,13 +78,13 @@
   <canvas id="fireworksCanvas"></canvas>
   <script type="module" src="js/script.js"></script>
   <script type="module" src="js/rules.js"></script>
-  <script type="module" src="../../leaderboard/feedback.js"></script>
+  <!-- <script type="module" src="../../leaderboard/feedback.js"></script> -->
   <!-- <script type="module" src="./leaderboard/share.js"></script> -->
   <script type="module">
     import { shareScore } from './leaderboard/share.js';
     document.getElementById("shareBtn").addEventListener("click", async () => {
         console.log("shareBtn clicked")
-        shareScore("-", 0);
+        shareScore("4inARow", 0);
     });
 </script>
   <script type="module">

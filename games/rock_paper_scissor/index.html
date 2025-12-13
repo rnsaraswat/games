@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Rock Paper Scissors</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="../../manifest.json" />
+    <meta name="theme-color" content="#6200ee" />
 </head>
 
 <body>
@@ -22,8 +24,8 @@
                             <option value="7">Best of 7</option>
                             <option value="9">Best of 9</option>
                         </select>
-                    </div>
-                    <div>
+                        <!-- </div>
+                    <div> -->
                         <label class="label" for="difficulty">Difficulty</label>
                         <select id="difficulty">
                             <option value="easy">😊 Easy</option>
@@ -31,14 +33,19 @@
                             <option value="hard" selected>🤯 Hard</option>
                         </select>
                     </div>
-                </div>
-
-                <div>
+                    <!-- </div>
+                
+                <div> -->
                     <button id="reset" class="primaryColor">🔄 New Game</button>
                     <button id="themeToggle" class="primary">☀️ Light</button>
                     <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
                     <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
                     <button class="primary" id="toggle-sound">🔇 Music:Off"</button>
+                    <button class="primary" id="shareBtn">📤Sharing</button>
+
+                    <button class="primary" id="toggle-feedback">📝Feedback</button>
+                    <button class="primary"
+                        onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
                 </div>
                 <div class="result-box">
                     <div id="statusText">Best of 5 — who wins the first 3 will win</div>
@@ -72,16 +79,16 @@
                 <div class="controls-top">
                     <div class="scoreboard">
                         <div class="score">
-                            <div class="small">You
+                            <div class="playersmall">You
                                 <div>
-                                    <div class="small" id="player-score">0
+                                    <div class="playersmall" id="player-score">0
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="score">
-                            <div class="small">Computer</ div>
-                                <div class="small" id="computer-score">0
+                            <div class="playersmall">Computer</ div>
+                                <div class="playersmall" id="computer-score">0
                                 </div>
                             </div>
                         </div>
@@ -95,10 +102,19 @@
     </div>
     <div id="localleaderboardPopup" class="popupWindow">
     </div>
+    <div id="feedbackPopup" class="popupWindow"></div>
     <div class="confetti-container">
         <div id="winText">🎉 Completed 🎉</div>
     </div>
     <script type="module" src="js/script1.js"></script>
+    <script type="module" src="../../leaderboard/feedback.js"></script>
+    <script type="module">
+        import { shareScore } from '../../leaderboard/share.js';
+        document.getElementById("shareBtn").addEventListener("click", async () => {
+            console.log("shareBtn clicked")
+            shareScore("rockpaperscissor", 0);
+        });
+    </script>
     <script type="module">
         import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
         window.sortTable = sortTable;
@@ -122,6 +138,25 @@
     </script>
 
     <script>
+        function hideFeedback() {
+            document.getElementById("feedbackPopup").style.display = 'none';
+        };
+
+        function hideLB() {
+            document.getElementById("leaderboardPopup").style.display = 'none';
+        };
+
+        function hideLLB() {
+            document.getElementById("localleaderboardPopup").style.display = 'none';
+        };
+
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
+            }
+        };
         fetch('../../leaderboard/leaderboard.html')
             .then(response => response.text())
             .then(htmlText => {
@@ -133,8 +168,16 @@
             .then(htmlText => {
                 document.getElementById('localleaderboardPopup').innerHTML = htmlText;
             });
+
+        fetch('../../leaderboard/feedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('feedbackPopup').innerHTML = htmlText;
+            });
+
         document.getElementById("leaderboardPopup").style.display = 'none';
         document.getElementById("localleaderboardPopup").style.display = 'none';
+        document.getElementById("feedbackPopup").style.display = 'none';
 
         document.getElementById("toggle-leaderboard").addEventListener("click", () => {
             if (document.getElementById("toggle-leaderboard").style.display === 'block') {
@@ -156,6 +199,24 @@
             }
         });
 
+        document.getElementById("toggle-feedback").addEventListener("click", () => {
+            if (document.getElementById("feedbackPopup").style.display === 'block') {
+                document.getElementById("feedbackPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("feedbackPopup").style.display = 'block';
+                loadfeedbakCSS();
+            }
+        });
+
+        function loadfeedbakCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '../../leaderboard/feedback.css';
+            head.appendChild(link);
+        }
         function loadCSS() {
             var head = document.head;
             var link = document.createElement('link');
@@ -163,6 +224,22 @@
             link.type = 'text/css';
             link.href = '../../leaderboard/leaderboard.css';
             head.appendChild(link);
+        }
+
+        window.onload = function () {
+            loadCSS();
+            loadfeedbakCSS();
+        };
+    </script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("./sw.js")
+                    .then(() => console.log("SW registered"))
+                    .catch((err) => console.log("SW error", err));
+            });
         }
     </script>
 </body>

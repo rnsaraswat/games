@@ -27,7 +27,7 @@ export async function shareScore(gameName, score = 0) {
         console.log("gamelink", gameLink);
     }
 
-    const imageUrl = "../games/assets/icons/maskable-icon.png";
+    const imageUrl = "../../assets/icons/maskable-icon.png";
 
     try {
         await navigator.share({
@@ -37,7 +37,7 @@ export async function shareScore(gameName, score = 0) {
         console.log("try", gameLink);
 
         const blob = await (await fetch(imageUrl)).blob();
-        const file = new File([blob], "../games/assets/icons/maskable-icon.png", { type: "image/png" });
+        const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
 
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
             await navigator.share({
