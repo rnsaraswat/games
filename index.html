@@ -249,22 +249,33 @@
 
         setupManifest("RGH Games", "Ravindra Games Hub");
 
-        async function setupManifest(shortName, fullName) {
+        (async () => {
+
+            const GAME_SHORT = "RGH Games";      // 👈 game specific
+            const GAME_NAME = "Ravindra Games Hub"; // 👈 game specific
 
             const res = await fetch("./manifest.json");
-            let manifest = await res.json();
+            const manifest = await res.json();
 
-            manifest.short_name = shortName;
-            manifest.name = fullName;
+            manifest.short_name = GAME_SHORT;
+            manifest.name = GAME_NAME;
+            manifest.start_url = location.pathname;
 
-            const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
+            const blob = new Blob(
+                [JSON.stringify(manifest)],
+                { type: "application/json" }
+            );
+
             const manifestURL = URL.createObjectURL(blob);
 
-            let link = document.createElement("link");
+            const link = document.createElement("link");
             link.rel = "manifest";
             link.href = manifestURL;
+
             document.head.appendChild(link);
-        }
+
+        })();
+
     </script>
 
     <script>
