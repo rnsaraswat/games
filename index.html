@@ -251,7 +251,7 @@
 
         async function setupManifest(shortName, fullName) {
 
-            const res = await fetch("../../manifest.json");
+            const res = await fetch("./manifest.json");
             let manifest = await res.json();
 
             manifest.short_name = shortName;
