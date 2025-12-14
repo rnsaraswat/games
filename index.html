@@ -246,6 +246,25 @@
             loadCSS();
             loadfeedbakCSS();
         };
+
+        setupManifest("RGH Games", "Ravindra Games Hub");
+
+        async function setupManifest(shortName, fullName) {
+
+            const res = await fetch("../../manifest.json");
+            let manifest = await res.json();
+
+            manifest.short_name = shortName;
+            manifest.name = fullName;
+
+            const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
+            const manifestURL = URL.createObjectURL(blob);
+
+            let link = document.createElement("link");
+            link.rel = "manifest";
+            link.href = manifestURL;
+            document.head.appendChild(link);
+        }
     </script>
 
     <script>
