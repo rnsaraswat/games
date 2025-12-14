@@ -247,33 +247,36 @@
             loadfeedbakCSS();
         };
 
-        setupManifest("RGH Games", "Ravindra Games Hub");
-
         (async () => {
-
-            const GAME_SHORT = "RGH Games";      // 👈 game specific
-            const GAME_NAME = "Ravindra Games Hub"; // 👈 game specific
+            const GAME_NAME = "Ravindra Games Hub";
+            const GAME_SHORT = "RGH Games";
 
             const res = await fetch("./manifest.json");
             const manifest = await res.json();
 
             manifest.short_name = GAME_SHORT;
             manifest.name = GAME_NAME;
+
             manifest.start_url = location.pathname;
+            manifest.scope = location.pathname;
+
+            // 🔥 icons ko absolute banane ka safety fix
+            manifest.icons = manifest.icons.map(icon => ({
+                ...icon,
+                src: new URL(icon.src, location.origin).href
+            }));
 
             const blob = new Blob(
                 [JSON.stringify(manifest)],
                 { type: "application/json" }
             );
 
-            const manifestURL = URL.createObjectURL(blob);
+            const url = URL.createObjectURL(blob);
 
             const link = document.createElement("link");
             link.rel = "manifest";
-            link.href = manifestURL;
-
+            link.href = url;
             document.head.appendChild(link);
-
         })();
 
     </script>
