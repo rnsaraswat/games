@@ -7,7 +7,7 @@
   <title>4 in a Row</title>
   <link rel="stylesheet" href="style.css">
   <!-- <link rel="stylesheet" href="../../commoncss.css"> -->
-  <link rel="manifest" href="../../manifest.json" />
+  <!-- <link rel="manifest" href="../../manifest.json" /> -->
   <meta name="theme-color" content="#6200ee" />
 </head>
 
@@ -40,7 +40,8 @@
           <button class="primary" id="shareBtn">📤Sharing</button>
 
           <button class="primary" id="toggle-feedback">📝Feedback</button>
-          <button class="primary" onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+          <button class="primary"
+            onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
         </div>
         <div>
           <div id="timer-display">⏱️ 00:00:00</div>
@@ -83,10 +84,10 @@
   <script type="module">
     import { shareScore } from './leaderboard/share.js';
     document.getElementById("shareBtn").addEventListener("click", async () => {
-        console.log("shareBtn clicked")
-        shareScore("4inARow", 0);
+      console.log("shareBtn clicked")
+      shareScore("4inARow", 0);
     });
-</script>
+  </script>
   <script type="module">
     import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
@@ -184,9 +185,9 @@
       }
     });
 
-      // document.getElementById("home-screen").addEventListener("click", () => {
-      //   window.shareScore && window.shareScore("4inarow", 120);
-      // });
+    // document.getElementById("home-screen").addEventListener("click", () => {
+    //   window.shareScore && window.shareScore("4inarow", 120);
+    // });
 
     // document.addEventListener("DOMContentLoaded", () => {
     //   // const btn = document.getElementById("toggle-share");
@@ -218,6 +219,25 @@
       loadCSS();
       loadfeedbakCSS();
     };
+
+    setupManifest("4inARow", "4 IN A ROW");
+
+    async function setupManifest(shortName, fullName) {
+
+      const res = await fetch("../../manifest.json");
+      let manifest = await res.json();
+
+      manifest.short_name = shortName;
+      manifest.name = fullName;
+
+      const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
+      const manifestURL = URL.createObjectURL(blob);
+
+      let link = document.createElement("link");
+      link.rel = "manifest";
+      link.href = manifestURL;
+      document.head.appendChild(link);
+    }
   </script>
 
   <script>
