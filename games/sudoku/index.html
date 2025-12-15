@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Sudoku</title>
     <link rel="stylesheet" href="styles.css">
+  <meta name="theme-color" content="#6200ee" />
 </head>
 
 <body>
@@ -227,24 +228,37 @@
             loadfeedbakCSS();
         };
 
-        setupManifest("5inARow", "5 IN A ROW");
-
-        async function setupManifest(shortName, fullName) {
+        (async () => {
+            const GAME_NAME = "Sudoku Game";
+            const GAME_SHORT = "sudoku";
 
             const res = await fetch("../../manifest.json");
-            let manifest = await res.json();
+            const manifest = await res.json();
 
-            manifest.short_name = shortName;
-            manifest.name = fullName;
+            manifest.short_name = GAME_SHORT;
+            manifest.name = GAME_NAME;
 
-            const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
-            const manifestURL = URL.createObjectURL(blob);
+            manifest.start_url = 'https://rnsaraswat.github.io/games/games/sudoku/index.html';
+            manifest.scope = 'https://rnsaraswat.github.io/games/games/sudoku/index.html';
 
-            let link = document.createElement("link");
+            // 🔥 icons ko absolute banane ka safety fix
+            manifest.icons = manifest.icons.map(icon => ({
+                ...icon,
+                src: new URL(icon.src, location.origin).href
+            }));
+
+            const blob = new Blob(
+                [JSON.stringify(manifest)],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("link");
             link.rel = "manifest";
-            link.href = manifestURL;
+            link.href = url;
             document.head.appendChild(link);
-        }
+        })();
     </script>
 
     <script>

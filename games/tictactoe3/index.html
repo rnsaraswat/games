@@ -9,32 +9,16 @@
   <meta property="og:image" content="https://https://rnsaraswat.github.io.vercel.app/api/og?score=500" />
   <meta property="og:type" content="website" />
 
-  <title>Tic Tac Toe — Ravindra Games Hub</title>
+  <title>Tic Tac Toe</title>
   <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="../../style.css">
   <style>
-    /* body:before {
-      content: "";
-      position: fixed;
-      inset: -50px;
-
-      background:
-        repeating-radial-gradient(#ffffff 0 0.0001%, #000000 0 0.0002%) 60% 60%/3000px 3000px,
-        repeating-conic-gradient(#ffffff 0 0.0001%, #555e82 0 0.0002%) 40% 40%/4000px 3000px;
-
-      background-blend-mode: difference;
-      filter: blur(0px) contrast(100) brightness(40);
-      mix-blend-mode: lighten;
-    } */
-
     body {
       display: flex;
       height: 100vh;
       margin: 0;
       font-family: Arial, sans-serif;
-      /* background: #222; */
       color: #fff;
-      /* background: #d8d9f8; */
       background: linear-gradient(to right, #ff7e5f, #feb47b);
     }
 
@@ -107,8 +91,6 @@
       gap: 6px
     }
 
-    /* CSS code for share link/button for browser and mobile */
-
     .share-popup {
       position: fixed;
       top: 0;
@@ -159,8 +141,6 @@
       border: none;
       border-radius: 8px;
     }
-
-    /* CSS code for share link/button for browser and mobile */
   </style>
 </head>
 
@@ -175,9 +155,14 @@
       <button id="reset" class="chip">Reset</button>
       <button id="local-toggle-leaderboard" class="chip">Local Leaderboard</button>
       <button id="toggle-leaderboard" class="chip">Global Leaderboard</button>
+      <button class="primary" id="shareBtn">📤Sharing</button>
+
+      <button class="primary" id="toggle-feedback">📝Feedback</button>
+      <button class="primary"
+        onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+      <div id="timerdisplay">⏱️ 00:00:00</div>
     </div>
     <p id="msg">Click in BOX to play</p>
-    <!-- index.html -->
     <button id="shareBtn">Share on Facebook</button>
     <button id="shareBtn1">Share on Twitter</button>
     <button id="nativeShare">Share mobile</button>
@@ -188,8 +173,7 @@
   </div>
   <div id="localleaderboardPopup" class="popupWindow">
   </div>
-
-  <!-- html code for share link/button for browser and mobile-->
+  <div id="feedbackPopup" class="popupWindow"></div>
   <div id="sharePopup" class="share-popup">
     <div class="share-box">
       <h3>Share Your Score</h3>
@@ -201,17 +185,18 @@
         <a id="tgLink" class="share-icons" target="_blank">Telegram</a>
         <a id="igLink" class="share-icons" target="_blank">Instagram</a>
         <button id="copyBtn" class="share-icons">Copy link</button>
-        <!-- <a id="twLink" target="_blank"><img src="icons/twitter.png"></a> -->
-        <!-- <a id="waLink" target="_blank"><img src="icons/whatsapp.png"></a> -->
-        <!-- <a id="fbLink" target="_blank" class="background: #3B5998; color: white;"><img src="icons/facebook.png"></a> -->
-        <!-- <a id="tgLink" target="_blank"><img src="icons/telegram.png"></a> -->
-        <!-- <a id="igLink" target="_blank"><img src="icons/instagram.png"></a> -->
       </div>
 
       <button id="closePopup">Close</button>
     </div>
   </div>
 
+  <script type="module">
+    import { shareScore } from '../../leaderboard/share.js';
+    document.getElementById("shareBtn").addEventListener("click", async () => {
+      shareScore("tictactoe", 0);
+    });
+  </script>
   <script type="module">
     import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
@@ -236,6 +221,26 @@
   </script>
 
   <script>
+    function hideFeedback() {
+      document.getElementById("feedbackPopup").style.display = 'none';
+    };
+
+    function hideLB() {
+      document.getElementById("leaderboardPopup").style.display = 'none';
+    };
+
+    function hideLLB() {
+      document.getElementById("localleaderboardPopup").style.display = 'none';
+    };
+
+    function clearLLB() {
+      if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+        localStorage.removeItem('leaderboard');
+        alert("All games Local Leaderboard Data is Cleared");
+        textToSpeechEng('Local Leaderboard data cleared');
+      }
+    };
+
     fetch('../../leaderboard/leaderboard.html')
       .then(response => response.text())
       .then(htmlText => {
@@ -248,11 +253,11 @@
         document.getElementById('localleaderboardPopup').innerHTML = htmlText;
       });
 
-      fetch('./leaderboard/feedback.html')
-              .then(response => response.text())
-              .then(htmlText => {
-                  document.getElementById('feedbackPopup').innerHTML = htmlText;
-              });
+    fetch('../../leaderboard/feedback.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('feedbackPopup').innerHTML = htmlText;
+      });
 
     document.getElementById("leaderboardPopup").style.display = 'none';
     document.getElementById("localleaderboardPopup").style.display = 'none';
@@ -278,23 +283,23 @@
     });
 
     document.getElementById("toggle-feedback").addEventListener("click", () => {
-            if (document.getElementById("feedbackPopup").style.display === 'block') {
-                document.getElementById("feedbackPopup").style.display = 'none';
-                return;
-            } else {
-                document.getElementById("feedbackPopup").style.display = 'block';
-                loadfeedbakCSS();
-            }
-        });
+      if (document.getElementById("feedbackPopup").style.display === 'block') {
+        document.getElementById("feedbackPopup").style.display = 'none';
+        return;
+      } else {
+        document.getElementById("feedbackPopup").style.display = 'block';
+        loadfeedbakCSS();
+      }
+    });
 
-        function loadfeedbakCSS() {
-            var head = document.head;
-            var link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = './leaderboard/feedback.css';
-            head.appendChild(link);
-        }
+    function loadfeedbakCSS() {
+      var head = document.head;
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = '../../leaderboard/feedback.css';
+      head.appendChild(link);
+    }
 
     function loadCSS() {
       var head = document.head;
@@ -306,15 +311,49 @@
     }
 
     window.onload = function () {
-            loadCSS();
-            loadfeedbakCSS();
-        };
+      loadCSS();
+      loadfeedbakCSS();
+    };
+
+    (async () => {
+      const GAME_NAME = "TIC TAC TOE";
+      const GAME_SHORT = "tictactoe";
+
+      const res = await fetch("../../manifest.json");
+      const manifest = await res.json();
+
+      manifest.short_name = GAME_SHORT;
+      manifest.name = GAME_NAME;
+
+      manifest.start_url = 'https://rnsaraswat.github.io/games/games/tictactoe3/index.html';
+      manifest.scope = 'https://rnsaraswat.github.io/games/games/tictactoe3/index.html';
+
+      // 🔥 icons ko absolute banane ka safety fix
+      manifest.icons = manifest.icons.map(icon => ({
+        ...icon,
+        src: new URL(icon.src, location.origin).href
+      }));
+
+      const blob = new Blob(
+        [JSON.stringify(manifest)],
+        { type: "application/json" }
+      );
+
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("link");
+      link.rel = "manifest";
+      link.href = url;
+      document.head.appendChild(link);
+    })();
   </script>
 
-  <script  type="module">
-    score;
+  <script type="module">
+    import { shareScore } from '../../leaderboard/share.js';
+    import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
+    let gameName = 'tictactoe';
+    let score = 0;
 
-    // Minimal TicTacToe: human vs AI (random)
     const boardEl = document.getElementById('board');
     let board = Array(9).fill(null), turn = 'X', over = false, moves = 0, startTime, currenttime, elapsed = 0;
     function render() {
@@ -337,7 +376,9 @@
           elapsed = Math.floor((currenttime - startTime) / 1000);
           const winner = board[a];
           document.getElementById("msg").textContent = "winner is " + winner;
+          score = 9 * 10 - moves * 2 + 50;
           setTimeout(() => onGameOver(winner, winner === 'X' ? 100 : 50), 100);
+          shareScore(gameName, score);
           return;
         }
       }
@@ -347,28 +388,27 @@
         elapsed = Math.floor((currenttime - startTime) / 1000);
         winner = 'draw';
         document.getElementById("msg").textContent = "its a Draw"
-        setTimeout(() => onGameOver(winner, 0), 100);
+        score = 9 * 10 - moves * 2 + 100;
+        setTimeout(() => onGameOver(winner, 0));
       }
     }
-    function onGameOver(winner, finalScore) { // higher better
+    function onGameOver(winner) { // higher better
 
       if (winner === 'draw') return;
       let player_name = localStorage.getItem('player_name');
       let email = localStorage.getItem('email') || "-";
       let player_opponent = localStorage.getItem('player_opponent') || 'computer';
-      let game_id = 'tictactoe';
+      let game_id = gameName;
       let size = '3x3';
-      // let elapsed = hours * 3600 + minutes * 60 + seconds;
-      // let moves = 0;
       let filed1 = 0;
       let filed2 = 0
       let filed3 = "-";
       let filed4 = "-";
-      score = finalScore;
       let difficulty = 'easy';
       const created_at = new Date();
 
-      saveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
+      saveToLeaderboard(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+
       window.submitScore && window.submitScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
     }
     document.getElementById('reset').addEventListener('click', () => { board = Array(9).fill(null); over = false; moves = 0; render(); });
@@ -378,8 +418,7 @@
   </script>
 
 
-  <script>
-    // मान लीजिए currentScore आपके गेम से आता है
+  <!-- <script>
     const currentScore = 420;
 
     // बनाएँ share URL (query param में score)
@@ -404,29 +443,20 @@
     document.getElementById('shareBtn').addEventListener('click', () => {
       const url = encodeURIComponent(makeShareURL(currentScore));
       const text = encodeURIComponent(`I scored ${currentScore} points! Can you beat me?`);
-      // Twitter
-      // const twitter = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
-      // Facebook share (FB reads OG tags from URL)
+
       const facebook = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-      // open a dialog: choose twitter for quick test (or open both options UI)
+
       window.open(facebook, '_blank', 'noopener');
     });
 
-    // native share score on mobile with image
-
-    // const score = 500;
-
-    // 1) canvas पर एक simple image बनाना (score दिखे)
     function makeScoreImage(score) {
       const canvas = document.createElement('canvas');
       canvas.width = 1200;
-      canvas.height = 630; // common social card size
+      canvas.height = 630;
       const ctx = canvas.getContext('2d');
 
       const img = new Image();
-      // अपनी छवि फ़ाइल का पथ (path) या URL यहाँ बदलें
       img.src = '../../assets/icons/maskable-icon.png';
-      // background
       ctx.fillStyle = '#0f172a';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 300, 100, 600, 300);
@@ -434,114 +464,19 @@
       ctx.fillStyle = '#FFFFFF';
       ctx.font = '70px Impact';
       ctx.textAlign = 'center';
-      // छवि के नीचे थोड़ा स्थान छोड़कर टेक्स्ट की Y स्थिति निर्धारित करें
       const text1Y = img.height + 60;
       ctx.fillText('Ravindra games hub', canvas.width / 2, 460);
 
-      // 'my score 200' टेक्स्ट ड्रा करें (छोटा आकार)
-      ctx.font = '40px Arial'; // फ़ॉन्ट आकार और शैली
-      const text2Y = text1Y + 50; // पहले टेक्स्ट के नीचे थोड़ा स्थान छोड़ें
+      ctx.font = '40px Arial';
+      const text2Y = text1Y + 50;
       ctx.fillText(`Can you beat my score=${score}`, canvas.width / 2, 510);
-
-      // big score text
-      // ctx.fillStyle = '#fff';
-      // ctx.textAlign = 'center';
-      // ctx.font = 'bold 120px sans-serif';
-      // ctx.fillText(`${score}`, canvas.width / 2, canvas.height / 2 - 20);
-
-      // ctx.font = '28px sans-serif';
-      // ctx.fillText('Can you beat my score?', canvas.width / 2, canvas.height / 2 + 70);
-
       return canvas;
     }
 
-    // async function shareScore() {
-    //   const url = new URL(window.location.href);
-    //   url.searchParams.set('score', score);
-
-      // If Web Share + files supported -> create blob from canvas and share
-      // const canvas = makeScoreImage(score);
-      // const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-      // const file = new File([blob], 'score.png', { type: 'image/png' });
-
-      // if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      //   try {
-      //     await navigator.share({
-      //       title: 'My Score',
-      //       text: `I scored ${score} points!`,
-      //       url: url.toString(),
-      //       files: [file]
-      //     });
-      //     console.log('Shared successfully');
-      //   } catch (err) {
-      //     console.error('Share failed:', err);
-      //   }
-      // } else if (navigator.share) {
-        // fallback: share without file
-      //   try {
-      //     await navigator.share({
-      //       title: 'My Score',
-      //       text: `I scored ${score} points! ${url.toString()}`,
-      //       url: url.toString()
-      //     });
-      //   } catch (err) {
-      //     console.error(err);
-      //   }
-      // } else {
-        // ultimate fallback: open twitter share dialog
-  //       const text = encodeURIComponent(`I scored ${score} points! Can you beat me?`);
-  //       const href = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url.toString())}`;
-  //       window.open(href, '_blank', 'noopener');
-  //     }
-  //   }
-
-  //   document.getElementById('nativeShare').addEventListener('click', shareScore);
-
-  </script>
-
-
-  <!-- <script>
-    // Detect Mobile Browser
-    function isMobile() {
-      return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
-    }
-
-    document.getElementById("shareBtn2").addEventListener("click", async () => {
-      const score = 420;
-      const shareLink = "https://yourdomain.com/share.html?score=" + score;
-      const shareText = `I scored ${score} points! Can you beat me?`;
-
-      // ---------------------------
-      // 📱 MOBILE SHARE (Native)
-      // ---------------------------
-      if (isMobile() && navigator.share) {
-        try {
-          await navigator.share({
-            title: "My Score",
-            text: shareText,
-            url: shareLink,
-          });
-          return;
-        } catch (err) {
-          console.log("Native share failed, fallback to desktop share");
-        }
-      }
-
-      // ---------------------------
-      // 💻 DESKTOP SHARE (fallback)
-      // ---------------------------
-      const url = encodeURIComponent(shareLink);
-      const text = encodeURIComponent(shareText);
-
-      window.open(
-        `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
-        "_blank"
-      );
-    });
   </script> -->
 
 
-  <script>
+  <!-- <script>
     /* javascript code for share link/button for browser and mobile */
 
     // Detect Mobile Browser
@@ -550,61 +485,72 @@
     }
 
     // document.getElementById("shareBtn2").addEventListener("click", async () => {
-      const score = 420;
-      const shareText = `I scored ${score} points! Try to beat me!`;
-      const shareURL = "https://yourdomain.com/share.html?score=" + score;
+    const score = 420;
+    const shareText = `I scored ${score} points! Try to beat me!`;
+    const shareURL = "https://yourdomain.com/share.html?score=" + score;
 
-      // --------------------------
-      // 📱 MOBILE SHARE
-      // --------------------------
-      if (isMobile() && navigator.share) {
-        try {
-          await navigator.share({
-            title: "My Score",
-            text: shareText,
-            url: shareURL
-          });
-          return;
-        } catch (e) { }
-      }
+    // --------------------------
+    // 📱 MOBILE SHARE
+    // --------------------------
+    if (isMobile() && navigator.share) {
+      try {
+        await navigator.share({
+          title: "My Score",
+          text: shareText,
+          url: shareURL
+        });
+        return;
+      } catch (e) { }
+    }
 
-      // --------------------------
-      // 💻 DESKTOP SHARE POPUP
-      // --------------------------
+    // --------------------------
+    // 💻 DESKTOP SHARE POPUP
+    // --------------------------
 
-      // Encode
-      const t = encodeURIComponent(shareText);
-      const u = encodeURIComponent(shareURL);
+    // Encode
+    const t = encodeURIComponent(shareText);
+    const u = encodeURIComponent(shareURL);
 
-      // Twitter
-      document.getElementById("twLink").href =
-        `https://twitter.com/intent/tweet?text=${t}&url=${u}`;
+    // Twitter
+    document.getElementById("twLink").href =
+      `https://twitter.com/intent/tweet?text=${t}&url=${u}`;
 
-      // WhatsApp Web
-      document.getElementById("waLink").href =
-        `https://web.whatsapp.com/send?text=${t}%20${u}`;
+    // WhatsApp Web
+    document.getElementById("waLink").href =
+      `https://web.whatsapp.com/send?text=${t}%20${u}`;
 
-      // Facebook Share
-      document.getElementById("fbLink").href =
-        `https://www.facebook.com/sharer/sharer.php?u=${u}`;
+    // Facebook Share
+    document.getElementById("fbLink").href =
+      `https://www.facebook.com/sharer/sharer.php?u=${u}`;
 
-      // Telegram Web
-      document.getElementById("tgLink").href =
-        `https://t.me/share/url?url=${u}&text=${t}`;
+    // Telegram Web
+    document.getElementById("tgLink").href =
+      `https://t.me/share/url?url=${u}&text=${t}`;
 
-      // // Instagram (guide to direct message)
-      document.getElementById("igLink").href =
-        `https://www.instagram.com/direct/inbox/`;
+    // // Instagram (guide to direct message)
+    document.getElementById("igLink").href =
+      `https://www.instagram.com/direct/inbox/`;
 
-      // Show Popup
-      document.getElementById("sharePopup").style.display = "flex";
+    // Show Popup
+    document.getElementById("sharePopup").style.display = "flex";
     // });
 
     document.getElementById("closePopup").addEventListener("click", () => {
       document.getElementById("sharePopup").style.display = "none";
     });
-  </script>
+  </script> -->
 
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .then(() => console.log("SW registered"))
+          .catch((err) => console.log("SW error", err));
+      });
+    }
+  </script>
 
 </body>
 

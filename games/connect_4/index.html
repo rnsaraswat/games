@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="style.css">
   <meta name="theme-color" content="#6200ee" />
 </head>
+
 <body>
   <div id="container">
     <!-- Left Panel -->
@@ -29,7 +31,7 @@
         <button id="toggle-theme">☀️ Light</button>
         <!-- to background music on / off button -->
         <button id="toggle-sound">🔇 Music:Off"</button>
-        <button class="primary"         <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
+        <button class="primary" <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
         <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
         <button class="primary" id="shareBtn">📤Sharing</button>
 
@@ -72,26 +74,26 @@
     import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
     window.sortTable = sortTable;
     window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
-        try {
-            await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
-        } catch (e) {
-            document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
-        }
+      try {
+        await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+      } catch (e) {
+        document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
+      }
     };
     document.addEventListener('DOMContentLoaded', () => {
-        renderLeaderboard("Connect4");
+      renderLeaderboard("Connect4");
     });
-</script>
+  </script>
 
-<script type="module">
+  <script type="module">
     import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
     document.addEventListener('DOMContentLoaded', () => {
-          localrenderLeaderboard();
-      });
-</script>
+      localrenderLeaderboard();
+    });
+  </script>
 
-<script>
-      function hideFeedback() {
+  <script>
+    function hideFeedback() {
       document.getElementById("feedbackPopup").style.display = 'none';
     };
 
@@ -112,18 +114,18 @@
     };
 
     fetch('../../leaderboard/leaderboard.html')
-        .then(response => response.text())
-        .then(htmlText => {
-            document.getElementById('leaderboardPopup').innerHTML = htmlText;
-        });
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('leaderboardPopup').innerHTML = htmlText;
+      });
 
     fetch('../../leaderboard/localleaderboard.html')
-        .then(response => response.text())
-        .then(htmlText => {
-            document.getElementById('localleaderboardPopup').innerHTML = htmlText;
-        });
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('localleaderboardPopup').innerHTML = htmlText;
+      });
 
-        fetch('../../leaderboard/feedback.html')
+    fetch('../../leaderboard/feedback.html')
       .then(response => response.text())
       .then(htmlText => {
         document.getElementById('feedbackPopup').innerHTML = htmlText;
@@ -134,23 +136,23 @@
     document.getElementById("feedbackPopup").style.display = 'none';
 
     document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-      if (document.getElementById("toggle-leaderboard").style.display === 'block')  {
-            document.getElementById("leaderboardPopup").style.display = 'none';
-            return;
-        } else {
-            document.getElementById("leaderboardPopup").style.display = 'block';
-            loadCSS()
-        }
+      if (document.getElementById("toggle-leaderboard").style.display === 'block') {
+        document.getElementById("leaderboardPopup").style.display = 'none';
+        return;
+      } else {
+        document.getElementById("leaderboardPopup").style.display = 'block';
+        loadCSS()
+      }
     });
 
     document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
-        if (document.getElementById("leaderboardPopup").style.display === 'block') {
-            document.getElementById("localleaderboardPopup").style.display = 'none';
-            return;
-        } else {
-            document.getElementById("localleaderboardPopup").style.display = 'block';
-            loadCSS();
-        }
+      if (document.getElementById("leaderboardPopup").style.display === 'block') {
+        document.getElementById("localleaderboardPopup").style.display = 'none';
+        return;
+      } else {
+        document.getElementById("localleaderboardPopup").style.display = 'block';
+        loadCSS();
+      }
     });
 
     document.getElementById("toggle-feedback").addEventListener("click", () => {
@@ -173,12 +175,12 @@
     }
 
     function loadCSS() {
-        var head = document.head;
-        var link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        link.href = '../../leaderboard/leaderboard.css';
-        head.appendChild(link);
+      var head = document.head;
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = '../../leaderboard/leaderboard.css';
+      head.appendChild(link);
     }
 
     window.onload = function () {
@@ -186,37 +188,51 @@
       loadfeedbakCSS();
     };
 
-    setupManifest("connect4", "Connect 4");
-
-    async function setupManifest(shortName, fullName) {
+    (async () => {
+      const GAME_NAME = "Connect 4";
+      const GAME_SHORT = "connect4";
 
       const res = await fetch("../../manifest.json");
-      let manifest = await res.json();
+      const manifest = await res.json();
 
-      manifest.short_name = shortName;
-      manifest.name = fullName;
+      manifest.short_name = GAME_SHORT;
+      manifest.name = GAME_NAME;
 
-      const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
-      const manifestURL = URL.createObjectURL(blob);
+      manifest.start_url = 'https://rnsaraswat.github.io/games/games/connect_4/index.html';
+      manifest.scope = 'https://rnsaraswat.github.io/games/games/connect_4/index.html';
 
-      let link = document.createElement("link");
+      // 🔥 icons ko absolute banane ka safety fix
+      manifest.icons = manifest.icons.map(icon => ({
+        ...icon,
+        src: new URL(icon.src, location.origin).href
+      }));
+
+      const blob = new Blob(
+        [JSON.stringify(manifest)],
+        { type: "application/json" }
+      );
+
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("link");
       link.rel = "manifest";
-      link.href = manifestURL;
+      link.href = url;
       document.head.appendChild(link);
+    })();
+
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .then(() => console.log("SW registered"))
+          .catch((err) => console.log("SW error", err));
+      });
     }
-
-</script>
-
-<script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("./sw.js")
-        .then(() => console.log("SW registered"))
-        .catch((err) => console.log("SW error", err));
-    });
-  }
-</script>
+  </script>
 
 </body>
+
 </html>

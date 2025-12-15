@@ -1,5 +1,5 @@
 import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
-
+import { shareScore } from '../../leaderboard/share.js';
 window.addEventListener('load', function () {
     const loading = document.getElementById('loading');
     loading.style.display = 'none';
@@ -10,7 +10,7 @@ window.addEventListener('load', function () {
     const toggleThemeBtn = document.getElementById("toggle-theme");
     const messageEl = document.getElementById('message');
     const canvas = document.getElementById('fireworksCanvas');
-    const timerDisplay = document.getElementById('timer-display');
+    const timerDisplay = document.getElementById('timerdisplay');
 
     let board = Array(9).fill("");
     let history = [];
@@ -22,6 +22,7 @@ window.addEventListener('load', function () {
     let turn = "X";
     let gameCount = 0;
     let score = 0;
+    let gameName = 'tictactoe';
     let timer = false;
     let seconds = 0;
     let minutes = 0;
@@ -49,9 +50,7 @@ window.addEventListener('load', function () {
         console.log("change mode", mode);
         document.getElementById("player1").textContent = player1;
         document.getElementById("nameInput").placeholder = player2 || 'Human2';
-        // player2 = localStorage.getItem('player_opponent') || 'Human2';
         player2 = document.getElementById("nameInput").value;
-        // namebar.classList.add('show');
         if (mode == 'pvp') {
             namebar.classList.add('show');
         } else {
@@ -167,6 +166,7 @@ window.addEventListener('load', function () {
             gameOver = true;
             timer = false;
             clearInterval(timerInterval);
+            score = 9 * 10 - moves * 2 + 50;
             if (modeEl.value === 'pvp') {
                 if (winner === human) {
                     winnerName = winner;
@@ -174,11 +174,13 @@ window.addEventListener('load', function () {
                     launchFireworks(player1);
                     messageEl.innerText = `${player1} Win! 😊`;
                     updateleaderboard();
+                    shareScore(gameName, score);
                 } else if (winner === ai) {
                     winnerName = winner;
                     playSound('win');
                     launchFireworks(player2);
                     messageEl.innerText = `${player2} Wins! 🤖`;
+                    shareScore(gameName, score);
                 } else {
                     playSound('draw');
                     messageEl.innerText = "It's a Draw! 😆 press new game to play again";
@@ -189,7 +191,7 @@ window.addEventListener('load', function () {
                     playSound('win');
                     launchFireworks(player1);
                     messageEl.innerText = `${player1} Win! 😊`;
-                    updateleaderboard();
+                    updateleaderboard();            shareScore(gameName, score);
                 } else if (winner === ai) {
                     winnerName = winner;
                     playSound('win');
@@ -388,7 +390,7 @@ window.addEventListener('load', function () {
         let game_id = 'tictactoe';
         let size = '3x3';
         let elapsed = hours * 3600 + minutes * 60 + seconds;
-        let moves = history.length;;
+        // let moves = history.length;;
         let filed1 = 0;
         let filed2 = 0
         let filed3 = "-";
@@ -653,16 +655,6 @@ window.addEventListener('load', function () {
                 padding + i * (window.innerWidth - 2 * padding) / (edgeCrackers - 1),
                 window.innerHeight - padding
             ));
-            // // Left
-            // crackers.push(new GroundCracker(
-            //     padding,
-            //     padding + i * (window.innerHeight - 2 * padding) / (edgeCrackers - 1)
-            // ));
-            // // Right
-            // crackers.push(new GroundCracker(
-            //     window.innerWidth - padding,
-            //     padding + i * (window.innerHeight - 2 * padding) / (edgeCrackers - 1)
-            // ));
         }
 
         function animate() {

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>3 in a Row</title>
     <link rel="stylesheet" href="style.css" />
+    <meta name="theme-color" content="#6200ee" />
 </head>
 
 <body>
@@ -34,7 +35,12 @@
                 <button onclick="clearLeaderboard()">Clear Leaderboard</button> -->
                 <button id="local-toggle-leaderboard">Local Leaderboard</button>
                 <button id="toggle-leaderboard">Global Leaderboard</button>
-                <div id="timer-display">⏱️ 00:00:00</div>
+                <button class="primary" id="shareBtn">📤Sharing</button>
+
+                <button class="primary" id="toggle-feedback">📝Feedback</button>
+                <button class="primary"
+                    onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+                <div id="timerdisplay">⏱️ 00:00:00</div>
             </div>
             <div id="message">Select grid size <br>Click New Game to play</div>
             <!-- <div class="scoreboard">
@@ -56,67 +62,63 @@
         </div>
         <div id="localleaderboardPopup" class="popupWindow">
         </div>
+        <div id="feedbackPopup" class="popupWindow"></div>
     </div>
 
     <script type="module" src="./js/script.js"></script>
     <script type="module">
+        import { shareScore } from '../../leaderboard/share.js';
+        document.getElementById("shareBtn").addEventListener("click", async () => {
+            shareScore("5inARow", 0);
+        });
+    </script>
+    <script type="module">
         // import { saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
         import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
-        // make sortTable global so onclick in <th> works
         window.sortTable = sortTable;
-        // expose submitScore as global for your game to call
         window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
-            // console.log(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
             try {
                 await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
-                // console.log('Score saved and leaderboard refreshed', name, opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
             } catch (e) {
                 document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
             }
         };
 
-        // document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-        //     if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
-        //         document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
-        //         document.getElementById("leaderboardPopup").style.display = 'none';
-        //         return;
-        //     }
-        //     document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
-        //     document.getElementById("leaderboardPopup").style.display = 'block';
-        //     renderLeaderboard();
-        // });
-
-        // document.getElementById("hide-leaderboard").addEventListener("click", () => {
-        //     document.getElementById("leaderboardPopup").style.display = "none";
-        //     document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
-        //     document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
-        // });
-
-        // initial render
         document.addEventListener('DOMContentLoaded', () => {
             renderLeaderboard('3inarow');
         });
     </script>
 
-    <!-- <script type="module" src="leaderboard/leaderboard.js"></script> -->
     <script type="module">
         import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
 
-        // //toggle Local leaderboard
-        // document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
-        //     if (document.getElementById("leaderboardPopup").style.display === 'block') {
-        //         document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
-        //         document.getElementById("leaderboardPopup").style.display = 'none';
-        //         return;
-        //     }
-        //     document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
-        //     document.getElementById("leaderboardPopup").style.display = 'block';
-        //     localrenderLeaderboard();
-        // });
+        document.addEventListener('DOMContentLoaded', () => {
+            localrenderLeaderboard();
+        });
     </script>
 
     <script>
+        function hideFeedback() {
+            document.getElementById("feedbackPopup").style.display = 'none';
+        };
+
+        function hideLB() {
+            document.getElementById("leaderboardPopup").style.display = 'none';
+        };
+
+        function hideLLB() {
+            document.getElementById("localleaderboardPopup").style.display = 'none';
+        };
+
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
+            }
+        };
+
         fetch('../../leaderboard/leaderboard.html')
             .then(response => response.text())
             .then(htmlText => {
@@ -128,16 +130,16 @@
             .then(htmlText => {
                 document.getElementById('localleaderboardPopup').innerHTML = htmlText;
             });
+
         document.getElementById("leaderboardPopup").style.display = 'none';
         document.getElementById("localleaderboardPopup").style.display = 'none';
+        document.getElementById("feedbackPopup").style.display = 'none';
 
         document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-            if (document.getElementById("toggle-leaderboard").textContent == "Hide Global Leaderboard") {
-                document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+            if (document.getElementById("toggle-leaderboard").style.display === 'block') {
                 document.getElementById("leaderboardPopup").style.display = 'none';
                 return;
             } else {
-                document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
                 document.getElementById("leaderboardPopup").style.display = 'block';
                 loadCSS()
             }
@@ -145,15 +147,33 @@
 
         document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
             if (document.getElementById("leaderboardPopup").style.display === 'block') {
-                document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
                 document.getElementById("leaderboardPopup").style.display = 'none';
                 return;
             } else {
-                document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
                 document.getElementById("leaderboardPopup").style.display = 'block';
                 loadCSS();
             }
         });
+
+        document.getElementById("toggle-feedback").addEventListener("click", () => {
+            if (document.getElementById("feedbackPopup").style.display === 'block') {
+                document.getElementById("feedbackPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("feedbackPopup").style.display = 'block';
+                loadfeedbakCSS();
+            }
+        });
+
+        function loadfeedbakCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '../../leaderboard/feedback.css';
+            head.appendChild(link);
+        }
+
 
         function loadCSS() {
             var head = document.head;
@@ -164,6 +184,54 @@
             head.appendChild(link);
         }
 
+
+        window.onload = function () {
+            loadCSS();
+            loadfeedbakCSS();
+        };
+
+        (async () => {
+            const GAME_NAME = "3 IN A ROW";
+            const GAME_SHORT = "3inARow";
+
+            const res = await fetch("../../manifest.json");
+            const manifest = await res.json();
+
+            manifest.short_name = GAME_SHORT;
+            manifest.name = GAME_NAME;
+
+            manifest.start_url = 'https://rnsaraswat.github.io/games/games/3inARow/index.html';
+            manifest.scope = 'https://rnsaraswat.github.io/games/games/3inARow/index.html';
+
+            // 🔥 icons ko absolute banane ka safety fix
+            manifest.icons = manifest.icons.map(icon => ({
+                ...icon,
+                src: new URL(icon.src, location.origin).href
+            }));
+
+            const blob = new Blob(
+                [JSON.stringify(manifest)],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("link");
+            link.rel = "manifest";
+            link.href = url;
+            document.head.appendChild(link);
+        })();
+    </script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("./sw.js")
+                    .then(() => console.log("SW registered"))
+                    .catch((err) => console.log("SW error", err));
+            });
+        }
     </script>
 </body>
 

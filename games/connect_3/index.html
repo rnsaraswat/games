@@ -188,25 +188,37 @@
       loadCSS();
       loadfeedbakCSS();
     };
-    setupManifest("5inARow", "5 IN A ROW");
+    (async () => {
+            const GAME_NAME = "Connect 3";
+            const GAME_SHORT = "connect3";
 
-    async function setupManifest(shortName, fullName) {
+            const res = await fetch("../../manifest.json");
+            const manifest = await res.json();
 
-      const res = await fetch("../../manifest.json");
-      let manifest = await res.json();
+            manifest.short_name = GAME_SHORT;
+            manifest.name = GAME_NAME;
 
-      manifest.short_name = shortName;
-      manifest.name = fullName;
+            manifest.start_url = 'https://rnsaraswat.github.io/games/games/connect_3/index.html';
+            manifest.scope = 'https://rnsaraswat.github.io/games/games/connect_3/index.html';
 
-      // नई Blob manifest बनाकर attach करें
-      const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
-      const manifestURL = URL.createObjectURL(blob);
+            // 🔥 icons ko absolute banane ka safety fix
+            manifest.icons = manifest.icons.map(icon => ({
+                ...icon,
+                src: new URL(icon.src, location.origin).href
+            }));
 
-      let link = document.createElement("link");
-      link.rel = "manifest";
-      link.href = manifestURL;
-      document.head.appendChild(link);
-    }
+            const blob = new Blob(
+                [JSON.stringify(manifest)],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("link");
+            link.rel = "manifest";
+            link.href = url;
+            document.head.appendChild(link);
+        })();
   </script>
   <script>
     if ("serviceWorker" in navigator) {

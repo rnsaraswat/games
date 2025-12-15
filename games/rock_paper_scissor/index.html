@@ -230,6 +230,38 @@
             loadCSS();
             loadfeedbakCSS();
         };
+
+        (async () => {
+            const GAME_NAME = "Rock Paper Scissor";
+            const GAME_SHORT = "RockPaperScissor";
+
+            const res = await fetch("../../manifest.json");
+            const manifest = await res.json();
+
+            manifest.short_name = GAME_SHORT;
+            manifest.name = GAME_NAME;
+
+            manifest.start_url = 'https://rnsaraswat.github.io/games/games/rock_paper_scissor/index.html';
+            manifest.scope = 'https://rnsaraswat.github.io/games/games/rock_paper_scissor/index.html';
+
+            // 🔥 icons ko absolute banane ka safety fix
+            manifest.icons = manifest.icons.map(icon => ({
+                ...icon,
+                src: new URL(icon.src, location.origin).href
+            }));
+
+            const blob = new Blob(
+                [JSON.stringify(manifest)],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("link");
+            link.rel = "manifest";
+            link.href = url;
+            document.head.appendChild(link);
+        })();
     </script>
 
     <script>

@@ -80,19 +80,20 @@
     }
 
     #board {
-            /* width: 100%;
+      /* width: 100%;
             max-width: 22vw; */
-            aspect-ratio: 1/1;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.2vw;
-            margin: 0 auto;
-        }
-        .tic-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 80px);
-    gap: 6px
-}
+      aspect-ratio: 1/1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.2vw;
+      margin: 0 auto;
+    }
+
+    .tic-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 80px);
+      gap: 6px
+    }
   </style>
 </head>
 
@@ -139,17 +140,29 @@
 
     <div id="gameArea">
       <div id="board" class="tic-grid"></div>
-      <div style="margin-top:12px"><button id="reset" class="chip">Reset</button></div>
     </div>
+    <div style="margin-top:12px"><button id="reset" class="chip">Reset</button></div>
     <button id="local-toggle-leaderboard">🏆Local Leaderboard</button>
     <button id="toggle-leaderboard">🌍 Global Leaderboard</button>
 
+    <div id="leaderboardPopup" class="popupWindow">
+    </div>
+    <div id="localleaderboardPopup" class="popupWindow">
+    </div>
+    <div id="feedbackPopup" class="popupWindow"></div>
+    
+    <button class="primary" id="shareBtn">📤Sharing</button>
+    <div id="sharePopup" class="share-popup"></div>
+    <button class="primary" id="toggle-feedback">📝Feedback</button>
+    <button class="primary" onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+    <div id="timerdisplay">⏱️ 00:00:00</div>
   </div>
-  <div id="leaderboardPopup" class="popupWindow">
-  </div>
-  <div id="localleaderboardPopup" class="popupWindow">
-  </div>
-
+  <script type="module">
+    import { shareScore } from '../../leaderboard/share.js';
+    document.getElementById("shareBtn").addEventListener("click", async () => {
+      shareScore("tictactoe", 0);
+    });
+  </script>
   <script type="module">
     import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
@@ -173,6 +186,26 @@
   </script>
 
   <script>
+    function hideFeedback() {
+      document.getElementById("feedbackPopup").style.display = 'none';
+    };
+
+    function hideLB() {
+      document.getElementById("leaderboardPopup").style.display = 'none';
+    };
+
+    function hideLLB() {
+      document.getElementById("localleaderboardPopup").style.display = 'none';
+    };
+
+    function clearLLB() {
+      if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+        localStorage.removeItem('leaderboard');
+        alert("All games Local Leaderboard Data is Cleared");
+        textToSpeechEng('Local Leaderboard data cleared');
+      }
+    };
+
     fetch('../../leaderboard/leaderboard.html')
       .then(response => response.text())
       .then(htmlText => {
@@ -184,8 +217,16 @@
       .then(htmlText => {
         document.getElementById('localleaderboardPopup').innerHTML = htmlText;
       });
+
+    fetch('../../leaderboard/feedback.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('feedbackPopup').innerHTML = htmlText;
+      });
+
     document.getElementById("leaderboardPopup").style.display = 'none';
     document.getElementById("localleaderboardPopup").style.display = 'none';
+    document.getElementById("feedbackPopup").style.display = 'none';
 
     document.getElementById("toggle-leaderboard").addEventListener("click", () => {
       if (document.getElementById("toggle-leaderboard").style.display === 'block') {
@@ -207,6 +248,25 @@
       }
     });
 
+    document.getElementById("toggle-feedback").addEventListener("click", () => {
+      if (document.getElementById("feedbackPopup").style.display === 'block') {
+        document.getElementById("feedbackPopup").style.display = 'none';
+        return;
+      } else {
+        document.getElementById("feedbackPopup").style.display = 'block';
+        loadfeedbakCSS();
+      }
+    });
+
+    function loadfeedbakCSS() {
+      var head = document.head;
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = '../../leaderboard/feedback.css';
+      head.appendChild(link);
+    }
+
     function loadCSS() {
       var head = document.head;
       var link = document.createElement('link');
@@ -216,14 +276,56 @@
       head.appendChild(link);
     }
 
-  </script>
-  <script>
 
+    window.onload = function () {
+      loadCSS();
+      loadfeedbakCSS();
+    };
+
+    (async () => {
+      const GAME_NAME = "TIC TAC TOE";
+      const GAME_SHORT = "tictactoe";
+
+      const res = await fetch("../../manifest.json");
+      const manifest = await res.json();
+
+      manifest.short_name = GAME_SHORT;
+      manifest.name = GAME_NAME;
+
+      manifest.start_url = 'https://rnsaraswat.github.io/games/games/tictactoe2/index.html';
+      manifest.scope = 'https://rnsaraswat.github.io/games/games/tictactoe2/index.html';
+
+      // 🔥 icons ko absolute banane ka safety fix
+      manifest.icons = manifest.icons.map(icon => ({
+        ...icon,
+        src: new URL(icon.src, location.origin).href
+      }));
+
+      const blob = new Blob(
+        [JSON.stringify(manifest)],
+        { type: "application/json" }
+      );
+
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("link");
+      link.rel = "manifest";
+      link.href = url;
+      document.head.appendChild(link);
+    })();
+
+  </script>
+  <script type="module">
+    import { shareScore } from '../../leaderboard/share.js';
+    import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
+    let gameName = 'tictactoe';
+    let score = 0;
     // ---------------- Game Logic ----------------
     const board = document.getElementById("board");
     const cells = document.querySelectorAll(".cell");
     let currentPlayer = "X";
     let gameActive = true;
+    let moves = 0;
 
     const winningCombos = [
       [0, 1, 2],
@@ -243,6 +345,8 @@
         if (checkWinner()) {
           updateleaderboard();
           alert(`${currentPlayer} wins!`);
+          score = 9 * 10 - moves * 2 + 50;
+          shareScore(gameName, score);
           gameActive = false;
           // window.submitScore("tictactoe", 100);
         } else if ([...cells].every((c) => c.textContent)) {
@@ -269,7 +373,7 @@
       let gsize = "3x3";
       let elapsed = hours * 3600 + minutes * 60 + seconds;
       gameCount = history.length;
-      let moves = cells.forEach((cell) => {
+      moves = cells.forEach((cell) => {
         if (cell.textContent) moves++;
       });
       let difficulty = 'easy';
@@ -303,6 +407,17 @@
 //     localrenderLeaderboard();
 // });
 
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .then(() => console.log("SW registered"))
+          .catch((err) => console.log("SW error", err));
+      });
+    }
   </script>
 </body>
 

@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Sort Puzzle (4 to 14 tubes)</title>
+    <title>Water Sort Puzzle</title>
     <link rel="stylesheet" href="style.css" />
+    <meta name="theme-color" content="#6200ee" />
 </head>
 
 <body>
@@ -32,6 +33,11 @@
                 <button data-name="rules" id="rules-btn1" onclick="ShowRules();">RULES</button>
                 <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
                 <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
+                <button class="primary" id="shareBtn">📤Sharing</button>
+
+                <button class="primary" id="toggle-feedback">📝Feedback</button>
+                <button class="primary"
+                    onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
             </div>
             <div class="output-box" id="output">
                 Please Select no of tubes select level and press start
@@ -73,6 +79,13 @@
     </div>
     <div id="localleaderboardPopup" class="popupWindow">
     </div>
+    <div id="feedbackPopup" class="popupWindow"></div>
+    <script type="module">
+        import { shareScore } from '../../leaderboard/share.js';
+        document.getElementById("shareBtn").addEventListener("click", async () => {
+            shareScore("watersort", 0);
+        });
+    </script>
     <script type="module">
         import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
@@ -85,11 +98,31 @@
             }
         };
         document.addEventListener('DOMContentLoaded', () => {
-            renderLeaderboard('5inarow');
+            renderLeaderboard('watersort');
         });
     </script>
 
     <script>
+        function hideFeedback() {
+            document.getElementById("feedbackPopup").style.display = 'none';
+        };
+
+        function hideLB() {
+            document.getElementById("leaderboardPopup").style.display = 'none';
+        };
+
+        function hideLLB() {
+            document.getElementById("localleaderboardPopup").style.display = 'none';
+        };
+
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
+            }
+        };
+
         fetch('../../leaderboard/leaderboard.html')
             .then(response => response.text())
             .then(htmlText => {
@@ -101,8 +134,16 @@
             .then(htmlText => {
                 document.getElementById('localleaderboardPopup').innerHTML = htmlText;
             });
+
+            fetch('../../leaderboard/feedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('feedbackPopup').innerHTML = htmlText;
+            });
+
         document.getElementById("leaderboardPopup").style.display = 'none';
         document.getElementById("localleaderboardPopup").style.display = 'none';
+        document.getElementById("feedbackPopup").style.display = 'none';
 
         document.getElementById("toggle-leaderboard").addEventListener("click", () => {
             if (document.getElementById("toggle-leaderboard").style.display === 'block') {
@@ -124,6 +165,25 @@
             }
         });
 
+        document.getElementById("toggle-feedback").addEventListener("click", () => {
+            if (document.getElementById("feedbackPopup").style.display === 'block') {
+                document.getElementById("feedbackPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("feedbackPopup").style.display = 'block';
+                loadfeedbakCSS();
+            }
+        });
+
+        function loadfeedbakCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '../../leaderboard/feedback.css';
+            head.appendChild(link);
+        }
+
         function loadCSS() {
             var head = document.head;
             var link = document.createElement('link');
@@ -132,11 +192,49 @@
             link.href = '../../leaderboard/leaderboard.css';
             head.appendChild(link);
         }
+
+        window.onload = function () {
+            loadCSS();
+            loadfeedbakCSS();
+        };
+
+        (async () => {
+            const GAME_NAME = "Water Sort";
+            const GAME_SHORT = "watersort";
+
+            const res = await fetch("../../manifest.json");
+            const manifest = await res.json();
+
+            manifest.short_name = GAME_SHORT;
+            manifest.name = GAME_NAME;
+
+            manifest.start_url = 'https://rnsaraswat.github.io/games/games/watersort/index.html';
+            manifest.scope = 'https://rnsaraswat.github.io/games/games/watersort/index.html';
+
+            // 🔥 icons ko absolute banane ka safety fix
+            manifest.icons = manifest.icons.map(icon => ({
+                ...icon,
+                src: new URL(icon.src, location.origin).href
+            }));
+
+            const blob = new Blob(
+                [JSON.stringify(manifest)],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("link");
+            link.rel = "manifest";
+            link.href = url;
+            document.head.appendChild(link);
+        })();
     </script>
 
-    <script  type="module">
-    import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
-    document.addEventListener('DOMContentLoaded', () => {
+    <script type="module">
+        import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
+        import { shareScore } from '../../leaderboard/share.js';
+        document.addEventListener('DOMContentLoaded', () => {
             localrenderLeaderboard();
         });
         let heading = "EASY";
@@ -144,7 +242,7 @@
         var noOfTubes = 0;
         var lequidTransferFromTube = 0;
         var lequidReceivedtoTube = 0;
-        var color = ["#FF0000", "#8b0000", "#00FF00", "#006400", "#00bfff", "#0000FF", "#000080",  "#ffd700", "#bdb76b","#00FFFF", "#FF00FF", "#9932cc"];
+        var color = ["#FF0000", "#8b0000", "#00FF00", "#006400", "#00bfff", "#0000FF", "#000080", "#ffd700", "#bdb76b", "#00FFFF", "#FF00FF", "#9932cc"];
 
         // define test tube position ([left, top]) in 3 row
         var testTubePosition = {
@@ -168,6 +266,8 @@
         let timerInterval;
         let startTime;
         let elapsedTime = 0;
+        let gameName = 'watersort';
+        let score = 0;
         let theme = localStorage.getItem('rg_theme') || 'dark';
         let player1 = localStorage.getItem('player_name') || 'Human1';
         const timerDisplay = document.getElementById('timerdisplay');
@@ -309,6 +409,8 @@
             updateleaderboard();
             // disply winning message
             level.innerHTML = `<div id="won" class="msgr">${player1} WON</div>`;
+            score = (noOfTubes * noOfTubes) * 10 - moves * 1;
+            shareScore(gameName, score);
         }
 
         // function to suffle colors in each test tube for game setup
@@ -487,9 +589,8 @@
         }
 
         function updateleaderboard() {
-            let score = 0;
             // let opponent = player2;
-            let game_id = 'watersort';
+            let game_id = gameName;
             let gsize = noOfTubes;
             let elapsed = hours * 3600 + minutes * 60 + seconds;
             let filed1 = 0;
@@ -499,7 +600,7 @@
             let difficulty = heading;
             let email = localStorage.getItem('email') || '-';
             const created_at = new Date();
-            score = (noOfTubes * noOfTubes) * 10 - moves * 1;
+            // score = (noOfTubes * noOfTubes) * 10 - moves * 1;
             let player_name = player1;
             let player_opponent = "-";
             saveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
@@ -522,6 +623,17 @@
             beep.play();
         }
     </script>
+
+<script>
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+            navigator.serviceWorker
+                .register("../../sw.js")
+                .then(() => console.log("SW registered"))
+                .catch((err) => console.log("SW error", err));
+        });
+    }
+</script>
 </body>
 
 </html>

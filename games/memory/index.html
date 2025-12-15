@@ -7,6 +7,7 @@
     <title>Memory</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="rules.css">
+    <meta name="theme-color" content="#6200ee" />
 </head>
 
 <body>
@@ -57,7 +58,7 @@
             <!-- <div>🏆 Best: <b id="best">—</b></div> -->
             <!-- </div> -->
             <!-- <div> -->
-                <!-- <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
+            <!-- <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
                 <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
                 <div id="timer-display">⏱️ 00:00:00</div>
             <button class="primary" id="toggle-rules">View Rules</button>
@@ -72,6 +73,11 @@
             <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
             <div>🌀 Moves: <b id="moves">0</b></div>
             <div id="timerdisplay">⏱️ 00:00:00</div>
+            <button class="primary" id="shareBtn">📤Sharing</button>
+
+            <button class="primary" id="toggle-feedback">📝Feedback</button>
+            <button class="primary"
+                onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
         </header>
     </div>
 
@@ -82,7 +88,7 @@
     </div>
     <div id="localleaderboardPopup" class="popupWindow">
     </div>
-
+    <div id="feedbackPopup" class="popupWindow"></div>
     <!-- Rules Popup -->
     <!-- <div id="rulesPopup">
         <h3>Game Rules</h3>
@@ -90,8 +96,8 @@
         <ul id="RulesBox"></ul>
     </div> -->
 
-      <p id="loading">Loading...</p>
-      <!-- Display winning text -->
+    <p id="loading">Loading...</p>
+    <!-- Display winning text -->
     <div id="winText">🎉 You Won! 🎉</div>
     <!-- fire crackers canvas -->
     <canvas id="confettiCanvas"></canvas>
@@ -106,6 +112,12 @@
     <script type="module" src="js/script.js"></script>
     <!-- <script type="module" src="js/rules.js"></script> -->
     <script type="module">
+        import { shareScore } from '../../leaderboard/share.js';
+        document.getElementById("shareBtn").addEventListener("click", async () => {
+            shareScore("memory", 0);
+        });
+    </script>
+    <script type="module">
         import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
         window.sortTable = sortTable;
         window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
@@ -116,56 +128,100 @@
             }
         };
         document.addEventListener('DOMContentLoaded', () => {
-            renderLeaderboard('connect3');
+            renderLeaderboard('memory');
         });
     </script>
-  
+
     <script type="module">
         import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
         document.addEventListener('DOMContentLoaded', () => {
-              localrenderLeaderboard();
-          });
+            localrenderLeaderboard();
+        });
     </script>
-  
+
     <script>
+        function hideFeedback() {
+            document.getElementById("feedbackPopup").style.display = 'none';
+        };
+
+        function hideLB() {
+            document.getElementById("leaderboardPopup").style.display = 'none';
+        };
+
+        function hideLLB() {
+            document.getElementById("localleaderboardPopup").style.display = 'none';
+        };
+
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
+            }
+        };
+
         fetch('../../leaderboard/leaderboard.html')
             .then(response => response.text())
             .then(htmlText => {
                 document.getElementById('leaderboardPopup').innerHTML = htmlText;
             });
-  
+
         fetch('../../leaderboard/localleaderboard.html')
             .then(response => response.text())
             .then(htmlText => {
                 document.getElementById('localleaderboardPopup').innerHTML = htmlText;
             });
+
+        fetch('../../leaderboard/feedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('feedbackPopup').innerHTML = htmlText;
+            });
+
         document.getElementById("leaderboardPopup").style.display = 'none';
         document.getElementById("localleaderboardPopup").style.display = 'none';
-  
+        document.getElementById("feedbackPopup").style.display = 'none';
+
         document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-          if (document.getElementById("toggle-leaderboard").style.display === 'block')  {
-                // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
+            if (document.getElementById("toggle-leaderboard").style.display === 'block') {
                 document.getElementById("leaderboardPopup").style.display = 'none';
                 return;
             } else {
-                // document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
                 document.getElementById("leaderboardPopup").style.display = 'block';
                 loadCSS()
             }
         });
-  
+
         document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
             if (document.getElementById("leaderboardPopup").style.display === 'block') {
-                // document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
                 document.getElementById("localleaderboardPopup").style.display = 'none';
                 return;
             } else {
-                // document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
                 document.getElementById("localleaderboardPopup").style.display = 'block';
                 loadCSS();
             }
         });
-  
+
+
+        document.getElementById("toggle-feedback").addEventListener("click", () => {
+            if (document.getElementById("feedbackPopup").style.display === 'block') {
+                document.getElementById("feedbackPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("feedbackPopup").style.display = 'block';
+                loadfeedbakCSS();
+            }
+        });
+
+        function loadfeedbakCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '../../leaderboard/feedback.css';
+            head.appendChild(link);
+        }
+
         function loadCSS() {
             var head = document.head;
             var link = document.createElement('link');
@@ -173,6 +229,54 @@
             link.type = 'text/css';
             link.href = '../../leaderboard/leaderboard.css';
             head.appendChild(link);
+        }
+
+        window.onload = function () {
+            loadCSS();
+            loadfeedbakCSS();
+        };
+
+        (async () => {
+            const GAME_NAME = "Memory Game";
+            const GAME_SHORT = "memory";
+
+            const res = await fetch("../../manifest.json");
+            const manifest = await res.json();
+
+            manifest.short_name = GAME_SHORT;
+            manifest.name = GAME_NAME;
+
+            manifest.start_url = 'https://rnsaraswat.github.io/games/games/memory/index.html';
+            manifest.scope = 'https://rnsaraswat.github.io/games/games/memory/index.html';
+
+            // 🔥 icons ko absolute banane ka safety fix
+            manifest.icons = manifest.icons.map(icon => ({
+                ...icon,
+                src: new URL(icon.src, location.origin).href
+            }));
+
+            const blob = new Blob(
+                [JSON.stringify(manifest)],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("link");
+            link.rel = "manifest";
+            link.href = url;
+            document.head.appendChild(link);
+        })();
+    </script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("./sw.js")
+                    .then(() => console.log("SW registered"))
+                    .catch((err) => console.log("SW error", err));
+            });
         }
     </script>
 </body>

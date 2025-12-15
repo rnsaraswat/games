@@ -10,7 +10,7 @@ export const modeEl = document.getElementById('mode');
 export const difficultyEl = document.getElementById('difficulty');
 export let timer = false;
 export let winnerName;
-export let gameName = '4inARow';
+export let gameName = '5inARow';
 export let score = 0;
 
 window.addEventListener('load', function () {
@@ -30,7 +30,7 @@ window.addEventListener('load', function () {
   let theme = localStorage.getItem('rg_theme') || 'dark';
   let player1 = localStorage.getItem('player_name') || 'Human1';
   let player2 = localStorage.getItem('player_opponent') || 'Human2';
-  let score = 0;
+  // let score = 0;
   let gameCount = 0;
   let difficulty = difficultyEl.value;
   let mode = modeEl.value;

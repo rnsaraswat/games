@@ -1,4 +1,5 @@
 import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
+import { shareScore } from '../../leaderboard/share.js';
 
 window.addEventListener('load', function () {
     const loading = document.getElementById('loading');
@@ -29,6 +30,7 @@ window.addEventListener('load', function () {
     let score = 0;
     let gameCount = 0;
     let winnerName;
+    let gameName = 'tictactoe';
     let theme = localStorage.getItem('rg_theme') || 'dark';
     let player1 = localStorage.getItem('player_name') || 'Human1';
     let player2 = localStorage.getItem('player_opponent') || 'Human2';
@@ -51,22 +53,6 @@ window.addEventListener('load', function () {
           namebar.classList.remove('show');
         }
       });
-
-    //toggle theme
-    // document.getElementById("toggle-theme").addEventListener("click", () => {
-    //     toggleTheme();
-    // });
-
-    // function toggleTheme() {
-    //     document.body.classList.toggle("dark");
-    //     if (document.body.classList.contains("dark")) {
-    //         toggleThemeBtn.innerText = "☀️ Light";
-    //         textToSpeechEng('Theme Dark');
-    //     } else {
-    //         toggleThemeBtn.innerText = "🌙 Dark";
-    //         textToSpeechEng('Theme Light');
-    //     }
-    // }
 
     const themeToggle = document.getElementById('toggle-theme');
     function setTheme(t) {
@@ -151,6 +137,7 @@ window.addEventListener('load', function () {
             switchStartingPlayer();
             playSound('win');
             launchFireworks();
+            shareScore(gameName, score);
             return;
         }
 
@@ -538,7 +525,7 @@ window.addEventListener('load', function () {
     let timerInterval;
     let startTime;
     let elapsedTime = 0;
-    const timerDisplay = document.getElementById('timer-display');
+    const timerDisplay = document.getElementById('timerdisplay');
 
     function startTimer() {
         clearInterval(timerInterval);

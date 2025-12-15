@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#6200ee" />
     <title>Tic Tac Toe</title>
     <style>
         :root {
@@ -191,7 +192,7 @@
         button.primary:hover {
             opacity: 0.6;
         }
-        
+
         table,
         th,
         td {
@@ -280,7 +281,7 @@
             }
         }
 
-        #timer {
+        #timerdisplay {
             font-family: 'Digital', Arial, Helvetica, sans-serif;
             font-size: 1.8vw;
             font-weight: bold;
@@ -303,6 +304,31 @@
                 flex: 1;
                 width: 100%;
             }
+
+            #message {
+                font-size: 3vw;
+            }
+
+            select,
+            label,
+            input,
+            button {
+                padding: 1vw 2vw;
+                margin: 1vw 0.5vw 0.1vw 0.5vw;
+                font-size: 3vw;
+                margin-top: 0.1vh;
+            }
+
+            button.primary {
+                padding: 1vw 2vw;
+                margin: 1vw 0.5vw 0.1vw 0.5vw;
+                font-size: 3vw;
+            }
+
+            #timerdisplay {
+                font-size: 3vw;
+            }
+
         }
 
         #fireworksCanvas {
@@ -387,9 +413,14 @@
                 </select>
                 <button id="toggle-theme">☀️ Light</button>
                 <button id="toggle-sound">🔇 Music:Off"</button>
-                <button id="local-toggle-leaderboard">🏆Local Leaderboard</button>
-                <button id="toggle-leaderboard">🌍 Global Leaderboard</button>
-                <div id="timer-display">⏱️ 00:00:00</div>
+                <button class="primary" id="local-toggle-leaderboard">🏆Local Leaderboard</button>
+                <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
+                <button class="primary" id="shareBtn">📤Sharing</button>
+
+                <button class="primary" id="toggle-feedback">📝Feedback</button>
+                <button class="primary"
+                    onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+                <div id="timerdisplay">⏱️ 00:00:00</div>
             </div>
             <div id="message"><br>Click New Game to play</div>
             <p id="loading">Loading...</p>
@@ -403,6 +434,7 @@
     </div>
     <div id="localleaderboardPopup" class="popupWindow">
     </div>
+    <div id="feedbackPopup" class="popupWindow"></div>
     <!-- <div id="winText">🎉 You Won! 🎉</div> -->
     <div class="namebar" id="namebar" aria-live="polite">
         <div class="row">
@@ -417,6 +449,12 @@
 
     <canvas id="fireworksCanvas"></canvas>
     <script type="module" src="tictactoe1.js"></script>
+    <script type="module">
+        import { shareScore } from '../../leaderboard/share.js';
+        document.getElementById("shareBtn").addEventListener("click", async () => {
+            shareScore("tictactoe", 0);
+        });
+    </script>
     <script type="module">
         import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
@@ -441,6 +479,26 @@
     </script>
 
     <script>
+        function hideFeedback() {
+            document.getElementById("feedbackPopup").style.display = 'none';
+        };
+
+        function hideLB() {
+            document.getElementById("leaderboardPopup").style.display = 'none';
+        };
+
+        function hideLLB() {
+            document.getElementById("localleaderboardPopup").style.display = 'none';
+        };
+
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
+            }
+        };
+
         fetch('../../leaderboard/leaderboard.html')
             .then(response => response.text())
             .then(htmlText => {
@@ -452,8 +510,16 @@
             .then(htmlText => {
                 document.getElementById('localleaderboardPopup').innerHTML = htmlText;
             });
+
+        fetch('../../leaderboard/feedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('feedbackPopup').innerHTML = htmlText;
+            });
+
         document.getElementById("leaderboardPopup").style.display = 'none';
         document.getElementById("localleaderboardPopup").style.display = 'none';
+        document.getElementById("feedbackPopup").style.display = 'none';
 
         document.getElementById("toggle-leaderboard").addEventListener("click", () => {
             if (document.getElementById("toggle-leaderboard").style.display === 'block') {
@@ -475,6 +541,25 @@
             }
         });
 
+        document.getElementById("toggle-feedback").addEventListener("click", () => {
+            if (document.getElementById("feedbackPopup").style.display === 'block') {
+                document.getElementById("feedbackPopup").style.display = 'none';
+                return;
+            } else {
+                document.getElementById("feedbackPopup").style.display = 'block';
+                loadfeedbakCSS();
+            }
+        });
+
+        function loadfeedbakCSS() {
+            var head = document.head;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '../../leaderboard/feedback.css';
+            head.appendChild(link);
+        }
+
         function loadCSS() {
             var head = document.head;
             var link = document.createElement('link');
@@ -484,6 +569,54 @@
             head.appendChild(link);
         }
 
+        window.onload = function () {
+            loadCSS();
+            loadfeedbakCSS();
+        };
+
+        (async () => {
+            const GAME_NAME = "TIC TAC TOE";
+            const GAME_SHORT = "tictactoe";
+
+            const res = await fetch("../../manifest.json");
+            const manifest = await res.json();
+
+            manifest.short_name = GAME_SHORT;
+            manifest.name = GAME_NAME;
+
+            manifest.start_url = 'https://rnsaraswat.github.io/games/games/tictactoe1/index.html';
+            manifest.scope = 'https://rnsaraswat.github.io/games/games/tictactoe1/index.html';
+
+            // 🔥 icons ko absolute banane ka safety fix
+            manifest.icons = manifest.icons.map(icon => ({
+                ...icon,
+                src: new URL(icon.src, location.origin).href
+            }));
+
+            const blob = new Blob(
+                [JSON.stringify(manifest)],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("link");
+            link.rel = "manifest";
+            link.href = url;
+            document.head.appendChild(link);
+        })();
+
+    </script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("./sw.js")
+                    .then(() => console.log("SW registered"))
+                    .catch((err) => console.log("SW error", err));
+            });
+        }
     </script>
 </body>
 
