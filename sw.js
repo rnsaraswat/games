@@ -33,6 +33,7 @@ const PRECACHE = [
     '/assets/icons/RGHlogo.png',
     '/assets/icons/rgh-ico.png',
     '/assets/icons/rgh.ico',
+    '/assets/icons/favicon.ico',
     '/assets/icons/maskable-icon.png',
     '/auth/auth.js',
     '/auth/login.html',

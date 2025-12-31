@@ -1,0 +1,8 @@
+<h2>Admin Dashboard</h2>
+<div id="adminList"></div>
+<script>
+const { data } = await supabase.from('feedback').select('*');
+data.forEach(f=>{
+adminList.innerHTML += `<p>${f.message} <button onclick="remove(${f.id})">❌</button></p>`;
+});
+</script>

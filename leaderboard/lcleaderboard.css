@@ -1,0 +1,218 @@
+:root {
+    --lc-bg: #ffcea9;
+    --lc-bg-hover: #ff9748;
+    --lc-text: #000000;
+    --lc-border: #333;
+    --lc-gradient1: #fe6201;
+    --lc-gradient2: #ff904a;
+    --lc-text-gradient: #ffff00;
+    --lc-box-shadow: rgba(0, 0, 0, 0.2);
+    --lc-btn-shadow: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] {
+    --lc-bg: #686cff;
+    --lc-bg-hover: #474dfb;
+    --lc-text: #ffffff;
+    --lc-border: #d9d8d8;
+    --lc-gradient1: #0015ff;
+    --lc-gradient2: #4a4aff;
+    --lc-text-gradient: #ff904a;
+    --lc-box-shadow: rgba(255, 255, 255, 0.5);
+    --cl-btn-shadow: rgba(0, 0, 0, 0.2);
+}
+
+.lc-main-container {
+    inset: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px;
+    z-index: 10;
+    text-align: center;
+    border: 2px solid var(--gb-border);
+    background: var(--gb-bg);
+    color: var(--gb-text);
+    width: 90vw;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.lc-header-section {
+    padding: 2px;
+    background: var(--gb-bg);
+    color: var(--gb-text);
+    text-align: center;
+}
+
+.lc-h2 {
+    background: var(--gb-bg);
+}
+
+.lc-btn-container {
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: Arial, sans-serif;
+    background: var(--gb-bg);
+    color: var(--gb-text);
+    border-bottom: 1px solid var(--gb-border);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.lc-table-area {
+    flex: 1;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.lc-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+.lc-leaderboardTable td,  .lc-leaderboardTable th{
+    border: 1px solid var(--lc-border);
+}
+
+.lc-thead th {
+    position: sticky;
+    top: 0;
+    padding: 2px;
+    z-index: 10;
+
+    background: var(--lc-bg);
+    color: var(--lc-text);
+    z-index: 1;
+    padding: 4px;
+    text-align: left;
+    border-bottom: 2px solid var(--lc-border);
+}
+
+.lc-thead th {
+    background: var(--gb-lc-hover);
+}
+
+.lc-td {
+    padding: 2px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.lc-textarea {
+    border: 1px solid var(--lc-border);
+    width: 100%;
+    margin: 5px 0;
+    padding: 8px;
+}
+
+.lcPopupClose {
+    float: right;
+    cursor: pointer;
+    color: var(--lc-text);
+    background: var(--lc-bg);
+    border: 1px solid var(--lc-border);
+    transition: 0.5s ease-in-out;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.lcPopupClose:hover {
+    background: var(--gb-lc-hover);
+    color: var(--lc-text);
+    transform: translateY(-2px);
+}
+
+.lc-footer-section {
+    padding: 2px;
+    background: var(--lc-bg);
+    color: var(--lc-text);
+    border-top: 2px solid #333;
+    display: flex;
+    justify-content: space-around;
+}
+
+.lc-leaderboard {
+    padding: 4px 3px;
+    margin-top: 1px;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 5px 5px 0 var(--lc-box-shadow);
+    cursor: pointer;
+    background: var(--lc-bg);
+    color: var(--lc-text);
+    border: 2px solid var(--lc-border);
+    border-radius: 5px;
+}
+
+.lc-leaderboard:hover {
+    background: var(--lc-bg-hover);
+}
+
+.lc-leaderboardSelect {
+    padding: 1px 2px;
+}
+
+.lc-pageInfo {
+    padding: 4px 3px;
+    margin-top: 1px;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+    background: var(--lc-bg);
+    color: var(--lc-text);
+}
+
+.lclogin {
+    background: var(--lc-bg);
+    border-radius: 5px;
+    padding: 2px 5px;
+    margin-top: 5px;
+    margin: 2px;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 5px 2px 0 var(--lc-box-shadow);
+    cursor: pointer;
+    color: var(--lc-text);
+    border: 2px solid var(--lc-border);
+    text-decoration: none;
+}
+
+.lclogin:hover {
+    background: var(--lc-bg-hover);
+}
+
+
+.lcClearPry {
+    gap: 5px;
+    align-items: center;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 5px;
+    margin: 10px 2px 5px 2px;
+    font-size: 1.6vw;
+    display: inline-block;
+    margin-top: 0.1vh;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 5px 5px 0 var(--lc-box-shadow);
+    border-radius: 5px;
+    color: var(--lc-text);;
+    border-color: transparent;
+    border: none;
+    box-shadow: 0 1px 4px var(--lc-box-shadow);
+}
+
+.gbClearPry:hover {
+    background: linear-gradient(90deg, #6eeb7f, #3aed3a);
+}
+
+.gbClearPry {
+    background: linear-gradient(90deg, #ec7777, #ed3a3a);
+}

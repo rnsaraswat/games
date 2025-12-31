@@ -2,7 +2,7 @@
     "name": "Default Game",
     "short_name": "Game",
     "start_url": "/",
-    "scope": "./",
+    "scope": "/",
     "orientation": "portrait",
     "display": "standalone",
     "background_color": "#ffffff",

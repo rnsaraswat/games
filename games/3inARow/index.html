@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>3 in a Row</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="gbfeedback.css" />
     <meta name="theme-color" content="#6200ee" />
 </head>
 
@@ -38,6 +39,7 @@
                 <button class="primary" id="shareBtn">📤Sharing</button>
 
                 <button class="primary" id="toggle-feedback">📝Feedback</button>
+                <button id="openFeedback" class="primary-btn">💬 Feedback</button>
                 <button class="primary"
                     onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
                 <div id="timerdisplay">⏱️ 00:00:00</div>
@@ -65,7 +67,48 @@
         <div id="feedbackPopup" class="popupWindow"></div>
     </div>
 
+    <!-- Feedback Modal    main-container -->
+    <!-- <div id="feedbackModal" class="modal"> -->
+    <div id="feedbackModal" class="feedback-main-cntainer">
+        <!--    header section -->
+        <!-- <div class="modal-content"> -->
+        <div class="feedback-header-section">
+            <!-- <span id="closeFeedback" class="popupClose">Close X</span> -->
+            <span id="feedbackCloseBtn" class="feedbackPopupClose">Close X</span>
+            <h2 class="feedback-h2">Comments, Feedback, Suggestions</h2>
+            <strong id="userName" class="feedback-userName"></strong>
+            <!-- <input type="text" id="userName" placeholder="Your Name" /> -->
+            <textarea id="userFeedback" class="fedback-textarea"
+                placeholder="Write your comments / feedback / suggestions..."></textarea>
+        </div>
+        <div class="feedback-btn-container">
+            <!-- लाइक बटन -->
+            <button id="likeBtn" class="feedback-btn">👍</button>
+
+            <!-- डिसलाइक बटन -->
+            <button id="dislikeBtn" class="feedback-btn">👎</button>
+            <button onclick="toggleReport()" class="feedback-btn">🚩</button>
+            <!-- रेटिंग ड्रॉपडाउन -->
+            <label for="rating" class="feedback-btn">Rating:
+                <select id="ratingSelect" class="feedback-btn">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select></label>
+            <button id="submitFeedback" class="feedback-btn">Submit</button>
+
+        </div>
+        <hr />
+        <div id="feedbackList" class="feedback-list"></div>
+        <!-- <div class="feedback-footer-section"></div> -->
+    </div>
+    </div>
+
     <script type="module" src="./js/script.js"></script>
+    <script type="module" src="./js/gbfeedback.js"></script>
     <script type="module">
         import { shareScore } from '../../leaderboard/share.js';
         document.getElementById("shareBtn").addEventListener("click", async () => {

@@ -1,9 +1,13 @@
 import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
 import { shareScore } from '../../leaderboard/share.js';
 
+// export let player1 = localStorage.getItem('player_name') || 'Human1';
+// export let email = localStorage.getItem('email') || '-';
+
 window.addEventListener('load', function () {
     const loading = document.getElementById('loading');
     loading.style.display = 'none';
+    console.log("load loading");
 
     const boardEl = document.getElementById("board");
     const difficultyEl = document.getElementById("difficulty");
@@ -32,7 +36,7 @@ window.addEventListener('load', function () {
     let winnerName;
     let gameName = 'tictactoe';
     let theme = localStorage.getItem('rg_theme') || 'dark';
-    let player1 = localStorage.getItem('player_name') || 'Human1';
+    // let player1 = localStorage.getItem('player_name') || 'Human1';
     let player2 = localStorage.getItem('player_opponent') || 'Human2';
     let difficulty = difficultyEl.value;
 
@@ -72,7 +76,8 @@ window.addEventListener('load', function () {
 
     
     document.getElementById("startGame").addEventListener("click", () => {
-        startGame();
+    console.log("startGame");
+    startGame();
     });
 
     // const namebar = document.getElementById('namebar');
@@ -389,7 +394,7 @@ window.addEventListener('load', function () {
         let filed2 = 0
         let filed3 = "-";
         let filed4 = "-";
-        let email = localStorage.getItem('email') || '-';
+        // let email = localStorage.getItem('email') || '-';
         const created_at = new Date();
         if (modeEl.value === 'pvc' && currentPlayer === 'o') {
             messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;

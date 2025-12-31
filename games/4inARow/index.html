@@ -6,8 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>4 in a Row</title>
   <link rel="stylesheet" href="style.css">
-  <!-- <link rel="stylesheet" href="../../commoncss.css"> -->
-  <!-- <link rel="manifest" href="../../manifest.json" /> -->
+  <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+  <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+  <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+  <link rel="stylesheet" href="../../commoncss.css">
+  <link rel="manifest" href="../../manifest.json" />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <meta name="theme-color" content="#6200ee" />
 </head>
 
@@ -18,9 +22,9 @@
       <div id="left" class="section">
         <h1>4 IN A ROW</h1>
         <div class="Other-Buttons">
-          <label for="gridSize">Grid Size:</label>
+          <label for="gridSize">⊞ Grid Size:</label>
           <input type="number" id="gridSize" min="5" max="20" value="9">
-          <button class="primary" id="startGame">🔄 New Game</button>
+          <button class="button-primary" id="startGame">🔄 New Game</button>
           <button id="undo-last">↩️ Undo</button>
           <select id="mode">
             <option value="pvp">😊Player vs 😊Player</option>
@@ -33,14 +37,12 @@
           </select>
           <button id="toggle-theme">☀️ Light</button>
           <button id="toggle-sound">🔇 Music:Off"</button>
-          <button id="toggle-rules">View Rules</button>
-
-          <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
-          <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
-          <button class="primary" id="shareBtn">📤Sharing</button>
-
-          <button class="primary" id="toggle-feedback">📝Feedback</button>
-          <button class="primary"
+          <button id="toggle-rules">📜Rules</button>
+          <button class="button-primary" id="toggle-gb-leaderboard">🌍 Global Leaderboard</button>
+          <button class="button-primary" id="toggle-lc-leaderboard">🏆 Local Leaderboard</button>
+          <button class="button-primary" id="shareBtn">📤Sharing</button>
+          <button id="openFeedback" class="button-primary">💬 Feedback</button>
+          <button class="button-primary"
             onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
         </div>
         <div>
@@ -54,203 +56,95 @@
       </section>
     </div>
   </div>
-  <div id="leaderboardPopup" class="popupWindow"></div>
-  <div id="localleaderboardPopup" class="popupWindow"></div>
-  <div id="feedbackPopup" class="popupWindow"></div>
+  <div id="localleaderboardPopup" class="popupWindow"></div> -->
+  <div id="gbLeaderboardModal" class="gb-main-cntainer"></div>
+  <div id="lcLeaderboardModal" class="lc-main-cntainer"></div>
+  <div id="feedbackModal" class="feedback-main-cntainer"></div>
   <div id="rulesPopup" class="popupWindow">
     <div class="popupHeadeer">
       <h3>Game Rules</h3>
-      <button class="primary" id="hide-rules">Hide Rules</button>
+      <button id="hide-rules">Hide Rules</button>
     </div>
     <div class="popupContent">
       <ul id="RulesBox"></ul>
     </div>
   </div>
   <div id="winText">🎉 You Won! 🎉</div>
-  <div class="namebar" id="namebar" aria-live="polite">
-    <div class="row">
-      <div>Player Name : <span id="player1"></span></div>
-      <label for="nameInput">Other Player Name :
+  <div class="name-main-container" id="namebar">
+    <div class="name-top-section">Player Name : <span id="player1"></span></div>
+    <div class="name-mid-section">
+      <label class="name-mid-section" for="nameInput">Other Player Name :
         <input type="text" id="nameInput" placeholder="ABC" value="ABC">
       </label>
-      <button id="name" class="primary">Ok</button>
+    </div>
+    <div class="name-footer-section">
+
+      <button id="name" class="name-primary-button">Ok</button>
     </div>
   </div>
   <canvas id="fireworksCanvas"></canvas>
   <script type="module" src="js/script.js"></script>
   <script type="module" src="js/rules.js"></script>
-  <!-- <script type="module" src="../../leaderboard/feedback.js"></script> -->
-  <!-- <script type="module" src="./leaderboard/share.js"></script> -->
+  <script type="module" src="../../leaderboard/gbfeedback.js"></script>
+  <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+  <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
   <script type="module">
-    import { shareScore } from './leaderboard/share.js';
+    import { shareScore } from '../../leaderboard/share.js';
     document.getElementById("shareBtn").addEventListener("click", async () => {
       console.log("shareBtn clicked")
       shareScore("4inARow", 0);
     });
   </script>
-  <script type="module">
-    import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
-
-    window.sortTable = sortTable;
-    window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
-      try {
-        await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
-      } catch (e) {
-        document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
-      }
-    };
-    document.addEventListener('DOMContentLoaded', () => {
-      renderLeaderboard('3inarow');
-    });
-  </script>
-
-  <script type="module">
-    import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
-    document.addEventListener('DOMContentLoaded', () => {
-      localrenderLeaderboard();
-    });
-  </script>
 
   <script>
-    function hideFeedback() {
-      document.getElementById("feedbackPopup").style.display = 'none';
-    };
-
-    function hideLB() {
-      document.getElementById("leaderboardPopup").style.display = 'none';
-    };
-
-    function hideLLB() {
-      document.getElementById("localleaderboardPopup").style.display = 'none';
-    };
-
-    function clearLLB() {
-      if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
-        localStorage.removeItem('leaderboard');
-        alert("All games Local Leaderboard Data is Cleared");
-        textToSpeechEng('Local Leaderboard data cleared');
-      }
-    };
-
-    fetch('../../leaderboard/leaderboard.html')
+    fetch('../../leaderboard/gbleaderboard.html')
       .then(response => response.text())
       .then(htmlText => {
-        document.getElementById('leaderboardPopup').innerHTML = htmlText;
+        document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
       });
 
-    fetch('../../leaderboard/localleaderboard.html')
+    fetch('../../leaderboard/lcleaderboard.html')
       .then(response => response.text())
       .then(htmlText => {
-        document.getElementById('localleaderboardPopup').innerHTML = htmlText;
+        document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
       });
 
-    fetch('../../leaderboard/feedback.html')
+    fetch('../../leaderboard/gbfeedback.html')
       .then(response => response.text())
       .then(htmlText => {
-        document.getElementById('feedbackPopup').innerHTML = htmlText;
+        document.getElementById('feedbackModal').innerHTML = htmlText;
       });
-
-    document.getElementById("leaderboardPopup").style.display = 'none';
-    document.getElementById("localleaderboardPopup").style.display = 'none';
-    document.getElementById("feedbackPopup").style.display = 'none';
-    // document.getElementById("sharePopup").style.display = 'none';
-
-    document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-      if (document.getElementById("toggle-leaderboard").style.display === 'block') {
-        document.getElementById("leaderboardPopup").style.display = 'none';
-        return;
-      } else {
-        document.getElementById("leaderboardPopup").style.display = 'block';
-        loadCSS()
-      }
-    });
-
-    document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
-      if (document.getElementById("leaderboardPopup").style.display === 'block') {
-        document.getElementById("localleaderboardPopup").style.display = 'none';
-        return;
-      } else {
-        document.getElementById("localleaderboardPopup").style.display = 'block';
-        loadCSS();
-      }
-    });
-
-    document.getElementById("toggle-feedback").addEventListener("click", () => {
-      if (document.getElementById("feedbackPopup").style.display === 'block') {
-        document.getElementById("feedbackPopup").style.display = 'none';
-        return;
-      } else {
-        document.getElementById("feedbackPopup").style.display = 'block';
-        loadfeedbakCSS();
-      }
-    });
-
-    // document.getElementById("home-screen").addEventListener("click", () => {
-    //   window.shareScore && window.shareScore("4inarow", 120);
-    // });
-
-    // document.addEventListener("DOMContentLoaded", () => {
-    //   // const btn = document.getElementById("toggle-share");
-    //   const btn = document.getElementById("shareBtn");
-    //   btn.addEventListener("click", () => {
-    //     window.shareScore && window.shareScore("4inarow", 120);
-    //   });
-    // });
-
-    function loadfeedbakCSS() {
-      var head = document.head;
-      var link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = '../../leaderboard/feedback.css';
-      head.appendChild(link);
-    }
-
-    function loadCSS() {
-      var head = document.head;
-      var link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = '../../leaderboard/leaderboard.css';
-      head.appendChild(link);
-    }
-
-    window.onload = function () {
-      loadCSS();
-      loadfeedbakCSS();
-    };
 
     (async () => {
-            const GAME_NAME = "4 IN A ROW";
-            const GAME_SHORT = "4inARow";
+      const GAME_NAME = "4 IN A ROW";
+      const GAME_SHORT = "4inARow";
 
-            const res = await fetch("../../manifest.json");
-            const manifest = await res.json();
+      const res = await fetch("../../manifest.json");
+      const manifest = await res.json();
 
-            manifest.short_name = GAME_SHORT;
-            manifest.name = GAME_NAME;
+      manifest.short_name = GAME_SHORT;
+      manifest.name = GAME_NAME;
 
-            manifest.start_url = 'https://rnsaraswat.github.io/games/games/4inARow/index.html';
-            manifest.scope = 'https://rnsaraswat.github.io/games/games/4inARow/index.html';
+      manifest.start_url = 'https://rnsaraswat.github.io/games/games/4inARow/index.html';
+      manifest.scope = 'https://rnsaraswat.github.io/games/games/4inARow/index.html';
 
-            // 🔥 icons ko absolute banane ka safety fix
-            manifest.icons = manifest.icons.map(icon => ({
-                ...icon,
-                src: new URL(icon.src, location.origin).href
-            }));
+      manifest.icons = manifest.icons.map(icon => ({
+        ...icon,
+        src: new URL(icon.src, location.origin).href
+      }));
 
-            const blob = new Blob(
-                [JSON.stringify(manifest)],
-                { type: "application/json" }
-            );
+      const blob = new Blob(
+        [JSON.stringify(manifest)],
+        { type: "application/json" }
+      );
 
-            const url = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(blob);
 
-            const link = document.createElement("link");
-            link.rel = "manifest";
-            link.href = url;
-            document.head.appendChild(link);
-        })();
+      const link = document.createElement("link");
+      link.rel = "manifest";
+      link.href = url;
+      document.head.appendChild(link);
+    })();
 
   </script>
 
@@ -258,7 +152,7 @@
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
-          .register("./sw.js")
+          .register("../../sw.js")
           .then(() => console.log("SW registered"))
           .catch((err) => console.log("SW error", err));
       });

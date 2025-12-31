@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>Global Feedback System</title>
+<link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+<h2>💬 Global Feedback</h2>
+
+<div class="feedback-form">
+  <input id="name" placeholder="Your Name">
+  <input id="email" placeholder="Email (optional)">
+  <textarea id="text" placeholder="Your Feedback"></textarea>
+
+  <label>Rating (0–4)</label>
+  <select id="rating">
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+  </select>
+
+  <button onclick="submitFeedback()">Submit</button>
+</div>
+
+<hr>
+
+<div id="feedbackList"></div>
+
+<script src="feedback.js"></script>
+</body>
+</html>

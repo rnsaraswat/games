@@ -3,9 +3,9 @@ import { playSound } from './sound.js';
 const canvas = document.getElementById('fireworksCanvas');
 const ctx = canvas.getContext('2d');
 
-export function showWinText(winner) {
+export function showWinText() {
     const winText = document.getElementById("winText");
-    winText.textContent = `🎉 ${winner} Won! 🎉`;
+    winText.textContent = `🎉 you Won! 🎉`;
     winText.style.opacity = 1;
     winText.style.transform = "translate(-50%, -50%) scale(1.2)";
 

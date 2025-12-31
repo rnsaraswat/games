@@ -5,7 +5,8 @@ const sounds = {
     win: new Audio('../../assets/sound/winner-trumpets.mp3'),
     draw: new Audio('../../assets/sound/game-over-classic.mp3'),
     bg: new Audio('../../assets/sound/bg-music.mp3'),
-    fire: new Audio('../../assets/sound/fireworks.mp3')
+    fire: new Audio('../../assets/sound/fireworks.mp3'),
+    ball: new Audio('../../assets/sound/tennis-ball-hit.mp3')
   };
   
   // sounds.bg.loop = true;

@@ -7,6 +7,9 @@
     --cell-border: #d9d8d8;
     --box-shadow: rgba(255, 255, 255, 0.5);
     --bg-hover: #454545;
+    --bg-gradient1: #fe6201;
+    --bg-gradient2: #ff904a;
+    --text-gradient: #ffff00;
 }
 
 body.dark {
@@ -17,6 +20,10 @@ body.dark {
     --cell-border: #333;
     --box-shadow: rgba(0, 0, 0, 0.2);
     --bg-hover: #d1d1d1;
+    --bg-gradient1: #ffff00;
+    --bg-gradient2: #ffff4a;
+    --text-gradient: #ff904a;
+
 }
 
 @font-face {

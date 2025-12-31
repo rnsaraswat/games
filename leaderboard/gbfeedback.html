@@ -1,0 +1,28 @@
+<div id="feedbackModal" class="feedback-main-cntainer">
+    <div class="feedback-header-section">
+        <span id="feedbackCloseBtn" class="feedbackPopupClose">Close X</span>
+        <h2 class="feedback-h2">Comments, Feedback, Suggestions</h2>
+        <strong id="userName" class="feedback-userName"></strong>
+        <textarea id="userFeedback" class="fedback-textarea"
+            placeholder="Write your comments / feedback / suggestions..."></textarea>
+    </div>
+    <div class="feedback-btn-container">
+        <button id="likeBtn" class="feedback-btn">👍</button>
+
+        <button id="dislikeBtn" class="feedback-btn">👎</button>
+        <button onclick="toggleReport()" class="feedback-btn">🚩</button>
+        <label for="rating" class="feedback-btn">Rating:
+            <select id="ratingSelect" class="feedback-btn">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select></label>
+        <button id="submitFeedback" class="feedback-btn-spl">Submit</button>
+
+    </div>
+    <hr />
+    <div id="feedbackList" class="feedback-list"></div>
+</div>

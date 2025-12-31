@@ -1,5 +1,5 @@
 import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
-import { launchFireworks } from './edgeFireWorks.js';
+import { launchFireworks } from './fireworks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
 // import { saveToLeaderboard, toggleLeaderboard, clearLeaderboard } from './leaderboard.js';
@@ -10,7 +10,7 @@ export const modeEl = document.getElementById('mode');
 export const difficultyEl = document.getElementById('difficulty');
 export let timer = false;
 export let winnerName;
-export let gameName = 'connect4';
+export let gameName = 'connect_4';
 export let score = 0;
 
 window.addEventListener('load', function () {
@@ -20,7 +20,7 @@ window.addEventListener('load', function () {
   const boardEl = document.getElementById('board');
   const messageEl = document.getElementById('message');
   const toggleThemeBtn = document.getElementById("toggle-theme");
-
+  const canvas = document.getElementById('fireworksCanvas');
 
   let board = [];
   let gridSize = 15;

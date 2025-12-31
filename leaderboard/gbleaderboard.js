@@ -1,4 +1,4 @@
-// import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { supabase } from '../supabaseClient.js';
 import { textToSpeechEng } from './speak.js';
@@ -14,6 +14,14 @@ let currentPage = 1;
 let itemsPerPage = 10;
 let sNo = 1;
 
+const modal = document.getElementById('gbLeaderboardModal');
+const openBtn = document.getElementById('toggle-gb-leaderboard');
+const closeBtn = document.getElementById('gbCloseBtn');
+
+modal.style.display = 'none';
+openBtn.onclick = () => modal.style.display = 'flex';
+closeBtn.onclick = () => modal.style.display = 'none';
+
 export function toggleLeaderboard() {
   if (document.getElementById("leaderboardPopup").style.display === 'block') {
     // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
@@ -25,17 +33,10 @@ export function toggleLeaderboard() {
     renderLeaderboard();
 }
 
-// document.getElementById("hide-leaderboard").addEventListener("click", () => {
-//   textToSpeechEng('Close Leaderboard');
-//   document.getElementById("leaderboardPopup").style.display = "none";
-  // document.getElementById("hide-leaderboard").textContent = "Hide Leaderboard";
-  // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
-// })
-
-document.getElementById("searchInput").addEventListener("input", handleSearch);
-document.getElementById("topSelect").addEventListener("change", handleTopSelect);
-document.getElementById("prevPage").addEventListener("click", prevPage);
-document.getElementById("nextPage").addEventListener("click", nextPage);
+document.getElementById("gbsearchInput").addEventListener("input", handleSearch);
+document.getElementById("gbtopSelect").addEventListener("change", handleTopSelect);
+document.getElementById("gbprevPage").addEventListener("click", prevPage);
+document.getElementById("gbnextPage").addEventListener("click", nextPage);
 
 document.querySelectorAll("#leaderboardTable thead th").forEach(th => {
   th.addEventListener("click", () => handleSort(th.dataset.column));
@@ -71,7 +72,7 @@ function nextPage() {
   }
 }
 
-gameFilter.addEventListener("change", async (event) => {
+gbgameFilter.addEventListener("change", async (event) => {
   const q = event.target.value.toLowerCase();
   if (q == "all") {
     filteredData = leaderboardData;
@@ -81,6 +82,7 @@ gameFilter.addEventListener("change", async (event) => {
       (row.game_id).toLowerCase().includes(q)
     );
   }
+
   currentPage = 1;
   renderTable();
 });
@@ -99,34 +101,38 @@ export async function renderLeaderboard() {
     if (!res.ok) {
       let errText;
       try { errText = await res.json(); } catch (e) { errText = await res.text(); }
-      document.getElementById("leaderboardTableBody").textContent = "Global Leaderboard fetch error: " + res.status + errText;
+      document.getElementById("gb-table-body").textContent = "Global Leaderboard fetch error: " + res.status + errText;
       return;
     }
 
     const data = await res.json();
 
     if (!Array.isArray(data)) {
-      document.getElementById("leaderboardTableBody").textContent = "⚠️ Unexpected response";
+      document.getElementById("gb-table-body").textContent = "⚠️ Unexpected response";
       return;
     }
 
     if (data.length === 0) {
-      document.getElementById("leaderboardTableBody").textContent = "No scores yet.";
+      document.getElementById("gb-table-body").textContent = "No scores yet.";
       return;
     }
 
-    leaderboardData = data;
-    filteredData = [...data];
+    // leaderboardData = data;
+    leaderboardData = data.map((item, index) => ({
+      serialNo: index + 1, 
+      ...item
+    }));
+    filteredData = [...leaderboardData];
     currentPage = 1;
     renderTable();
 
   } catch (err) {
-    document.getElementById("leaderboardTableBody").textContent = "❌ Error loading global leaderboard: " + err;
+    document.getElementById("gb-table-body").textContent = "❌ Error loading global leaderboard: " + err;
   }
 }
 
 function renderTable() {
-  const tbody = document.getElementById("leaderboardTableBody");
+  const tbody = document.getElementById("gb-table-body");
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage;
   const currentItems = filteredData.slice(start, end);
@@ -135,8 +141,8 @@ function renderTable() {
 
   tbody.innerHTML = "";
   if (currentItems.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="4">No records found.</td></tr>`;
-    document.getElementById("pageInfo").textContent = "";
+    tbody.innerHTML = `<tr><td class="gb-td" colspan="6">No records found.</td></tr>`;
+    document.getElementById("gbpageInfo").textContent = "";
     return;
   }
 
@@ -144,28 +150,28 @@ function renderTable() {
     .map(
       row => `
       <tr>
-        <td>${sNo++}</td>
-        <td>${row.game_id}</td>
-        <td>${row.player_name}</td>
-        <td>${!row.player_opponent ? "-" : row.player_opponent}</td>
-        <td>${!row.size ? "-" : row.size}</td>
-        <td>${!row.difficulty ? "-" : row.difficulty}</td>
-        <td>${!row.score ? 0 : row.score}</td>
-        <td>${Math.floor(row.elapsed / 3600)}:${Math.floor((row.elapsed % 3600) / 60)}:${row.elapsed % 60}</td>
-        <td>${new Date(row.created_at).toLocaleString()}</td>
-        <td>${!row.moves ? "-" : row.moves}</td>
-        <td>${!row.email ? "-" : row.email}</td>
-        <td>${!row.filed1 ? "-" : row.filed1}</td>
-        <td>${!row.filed2 ? "-" : row.filed2}</td>
-        <td>${!row.filed3 ? "-" : row.filed3}</td>
-        <td>${!row.filed4 ? "-" : row.filed4}</td>
+        <td class="gb-td">${row.serialNo}</td>
+        <td class="gb-td">${row.game_id}</td>
+        <td class="gb-td">${row.player_name}</td>
+        <td class="gb-td">${!row.player_opponent ? "-" : row.player_opponent}</td>
+        <td class="gb-td">${!row.size ? "-" : row.size}</td>
+        <td class="gb-td">${!row.difficulty ? "-" : row.difficulty}</td>
+        <td class="gb-td">${!row.score ? 0 : row.score}</td>
+        <td class="gb-td">${Math.floor(row.elapsed / 3600)}:${Math.floor((row.elapsed % 3600) / 60)}:${row.elapsed % 60}</td>
+        <td class="gb-td">${new Date(row.created_at).toLocaleString()}</td>
+        <td class="gb-td">${!row.moves ? "-" : row.moves}</td>
+        <td class="gb-td">${!row.email ? "-" : row.email}</td>
+        <td class="gb-td">${!row.filed1 ? "-" : row.filed1}</td>
+        <td class="gb-td">${!row.filed2 ? "-" : row.filed2}</td>
+        <td class="gb-td">${!row.filed3 ? "-" : row.filed3}</td>
+        <td class="gb-td">${!row.filed4 ? "-" : row.filed4}</td>
       </tr>
     `
     )
     .join("");
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  document.getElementById("pageInfo").textContent = `Page ${currentPage} of ${totalPages}`;
+  document.getElementById("gbpageInfo").textContent = `Page ${currentPage} of ${totalPages}`;
 }
 
 export function sortTable(colIndex, order) {
@@ -247,14 +253,16 @@ export function sortTable(colIndex, order) {
 }
 
 function updateIndicators(activeCol, order) {
-  const headers = document.querySelectorAll("#leaderboardTable thead th");
+  // const headers = document.querySelectorAll("#gbleaderboardTable .gb-thead th");
+  const headers = document.querySelectorAll(".sortable");
   headers.forEach((th, i) => {
     const arrows = th.querySelectorAll(".arrow");
     arrows.forEach(arrow => {
       arrow.style.opacity = "1";
     });
 
-    if (i === activeCol + 1) {
+    // if (i === activeCol + 1) {
+    if (i === activeCol) {
       const arrow = th.querySelector(`.arrow.${order}`);
       if (arrow) arrow.style.opacity = "0.3";
     }
@@ -273,7 +281,7 @@ if (searchInput) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const headers = document.querySelectorAll("#leaderboardTable thead th.sortable");
+  const headers = document.querySelectorAll(".sortable");
   headers.forEach((th, i) => {
     const up = th.querySelector(".arrow.asc");
     const down = th.querySelector(".arrow.desc");
@@ -301,8 +309,9 @@ export async function saveScore(player_name, player_opponent, email, size, diffi
       return data;
     }
   } catch (err) {
-    document.getElementById("leaderboardTableBody").textContent = "Score save error in global leaderboard" + err;
+    document.getElementById("gb-table-body").textContent = "Score save error in global leaderboard" + err;
     throw err;
   }
 }
 
+renderLeaderboard();

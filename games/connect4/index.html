@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Connect 4</title>
   <link rel="stylesheet" href="style.css">
+  <meta name="theme-color" content="#6200ee" />
 </head>
 <body>
   <div id="container" class="main-containef">
@@ -12,49 +13,47 @@
     <div id="left" class="left-section">
       <h1>Connect 4</h1>
       <div class="button-group">
-        <label for="gridSize">Grid Size:</label>
-        <input type="number" id="gridSize" min="6" max="20" value="9">
-        <button id="startGame">🔄 New Game</button>
-        <button id="undo-last">↩️ Undo</button>
-        <select id="mode">
-          <option value="pvp">😊Player vs 😊Player</option>
-          <option value="pvc" selected>😊Player vs 🤖Computer</option>
-        </select>
-        <select id="difficulty">
-          <option value="easy">😊 Easy</option>
-          <option value="medium">🤔 Medium</option>
-          <option value="hard" selected>🤯 Hard</option>
-        </select>
+        <label>Level
+          <select id="difficulty">Level
+            <option value="easy">😊 Easy</option>
+            <option value="medium">🤔 Medium</option>
+            <option value="hard" selected>🤯 Hard</option>
+          </select>
+        </label>
+        <button class="primary" id="newBtn">🔄 New Game</button>
         <button id="toggle-theme">☀️ Light</button>
-        <!-- to background music on / off button -->
         <button id="toggle-sound">🔇 Music:Off"</button>
         <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
         <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
-        <div id="timer-display">⏱️ 00:00:00</div>
+        <button class="primary" id="shareBtn">📤Sharing</button>
+
+        <button class="primary" id="toggle-feedback">📝Feedback</button>
+        <button class="primary"
+          onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+        <div id="timerdisplay">⏱️ 00:00:00</div>
       </div>
-      <div id="message">Select grid size <br>Click New Game to play</div>
+      <div id="status">Turn: You (Red)</div>
       <p id="loading">Loading...</p>
     </div>
     <!-- Right Grid -->
     <div id="right" class="left-section">
-      <div id="board"></div>
+      <div id="boardHolder" class="board"></div>
     </div>
   </div>
   <div id="leaderboardPopup" class="popupWindow">
   </div>
   <div id="localleaderboardPopup" class="popupWindow">
   </div>
+  <div id="feedbackPopup" class="popupWindow"></div>
+
   <div id="winText">🎉 You Won! 🎉</div>
-  <div class="namebar" id="namebar" aria-live="polite">
-    <div class="row">
-      <div>Player Name : <span id="player1"></span></div>
-      <label for="nameInput">Other Player Name :
-        <input type="text" id="nameInput" placeholder="ABC" value="ABC">
-      </label>
-      <button id="name" class="primary">Ok</button>
-    </div>
-  </div>
   <script type="module" src="js/script.js"></script>
+  <script type="module">
+    import { shareScore } from '../../leaderboard/share.js';
+    document.getElementById("shareBtn").addEventListener("click", async () => {
+      shareScore("Connect4", 0);
+    });
+  </script>
   <script type="module">
     import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
     window.sortTable = sortTable;
@@ -78,6 +77,26 @@
 </script>
 
 <script>
+      function hideFeedback() {
+      document.getElementById("feedbackPopup").style.display = 'none';
+    };
+
+    function hideLB() {
+      document.getElementById("leaderboardPopup").style.display = 'none';
+    };
+
+    function hideLLB() {
+      document.getElementById("localleaderboardPopup").style.display = 'none';
+    };
+
+    function clearLLB() {
+      if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+        localStorage.removeItem('leaderboard');
+        alert("All games Local Leaderboard Data is Cleared");
+        textToSpeechEng('Local Leaderboard data cleared');
+      }
+    };
+
     fetch('../../leaderboard/leaderboard.html')
         .then(response => response.text())
         .then(htmlText => {
@@ -89,16 +108,22 @@
         .then(htmlText => {
             document.getElementById('localleaderboardPopup').innerHTML = htmlText;
         });
+        
+    fetch('../../leaderboard/feedback.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('feedbackPopup').innerHTML = htmlText;
+      });
+
     document.getElementById("leaderboardPopup").style.display = 'none';
     document.getElementById("localleaderboardPopup").style.display = 'none';
+    document.getElementById("feedbackPopup").style.display = 'none';
 
     document.getElementById("toggle-leaderboard").addEventListener("click", () => {
       if (document.getElementById("toggle-leaderboard").style.display === 'block')  {
-            // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
             document.getElementById("leaderboardPopup").style.display = 'none';
             return;
         } else {
-            // document.getElementById("toggle-leaderboard").textContent = "Hide Global Leaderboard";
             document.getElementById("leaderboardPopup").style.display = 'block';
             loadCSS()
         }
@@ -106,15 +131,33 @@
 
     document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
         if (document.getElementById("leaderboardPopup").style.display === 'block') {
-            // document.getElementById("local-toggle-leaderboard").textContent = "Local Leaderboard";
             document.getElementById("localleaderboardPopup").style.display = 'none';
             return;
         } else {
-            // document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
             document.getElementById("localleaderboardPopup").style.display = 'block';
             loadCSS();
         }
     });
+
+    
+    document.getElementById("toggle-feedback").addEventListener("click", () => {
+      if (document.getElementById("feedbackPopup").style.display === 'block') {
+        document.getElementById("feedbackPopup").style.display = 'none';
+        return;
+      } else {
+        document.getElementById("feedbackPopup").style.display = 'block';
+        loadfeedbakCSS();
+      }
+    });
+
+    function loadfeedbakCSS() {
+      var head = document.head;
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = '../../leaderboard/feedback.css';
+      head.appendChild(link);
+    }
 
     function loadCSS() {
         var head = document.head;
@@ -124,6 +167,53 @@
         link.href = '../../leaderboard/leaderboard.css';
         head.appendChild(link);
     }
+
+    window.onload = function () {
+      loadCSS();
+      loadfeedbakCSS();
+    };
+
+    (async () => {
+      const GAME_NAME = "Connect 4";
+      const GAME_SHORT = "connect4";
+
+      const res = await fetch("../../manifest.json");
+      const manifest = await res.json();
+
+      manifest.short_name = GAME_SHORT;
+      manifest.name = GAME_NAME;
+
+      manifest.start_url = 'https://rnsaraswat.github.io/games/games/connect4/index.html';
+      manifest.scope = 'https://rnsaraswat.github.io/games/games/connect4/index.html';
+
+      // 🔥 icons ko absolute banane ka safety fix
+      manifest.icons = manifest.icons.map(icon => ({
+        ...icon,
+        src: new URL(icon.src, location.origin).href
+      }));
+
+      const blob = new Blob(
+        [JSON.stringify(manifest)],
+        { type: "application/json" }
+      );
+
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("link");
+      link.rel = "manifest";
+      link.href = url;
+      document.head.appendChild(link);
+    })();
+</script>
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker
+        .register("./sw.js")
+        .then(() => console.log("SW registered"))
+        .catch((err) => console.log("SW error", err));
+    });
+  }
 </script>
 </body>
 </html>

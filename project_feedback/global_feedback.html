@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Feedback</title>
+  <style>
+    .feedback-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 15px;
+      border: none;
+      background: #4f46e5;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .modal-content {
+      background: white;
+      width: 90%;
+      max-width: 400px;
+      margin: 10% auto;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .close {
+      float: right;
+      cursor: pointer;
+      font-size: 22px;
+    }
+
+    textarea,
+    input {
+      width: 100%;
+      margin: 5px 0;
+      padding: 8px;
+    }
+
+    #feedbackList {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .feedback-item {
+      background: #f3f4f6;
+      padding: 8px;
+      margin-bottom: 5px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Global Feedback</h1>
+
+  <!-- Global Feedback Button -->
+  <button id="openFeedback" class="feedback-btn">💬 Feedback</button>
+
+  <!-- Feedback Modal -->
+  <div id="feedbackModal" class="modal">
+    <div class="modal-content">
+      <span id="closeFeedback" class="close">&times;</span>
+      <h2>Global Feedback</h2>
+
+      <input type="text" id="userName" placeholder="Your Name" />
+      <textarea id="userFeedback" placeholder="Write your feedback..."></textarea>
+      <div class="feedback-container">
+        <select id="rating">
+          <option value="">Rating</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+        <button onclick="report(${f.id})">🚩 Report</button>
+      </div>
+
+      <button id="submitFeedback">Submit</button>
+      <hr />
+      <div id="feedbackList"></div>
+    </div>
+  </div>
+  <button id="loginBtn">Login with Google</button>
+  <button id="logoutBtn" style="display:none">Logout</button>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> -->
+  <script type="module">
+    // const SUPABASE_URL = "https://bkhoexvgorxzgdujofar.supabase.co";
+    // const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJraG9leHZnb3J4emdkdWpvZmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MTE3NDgsImV4cCI6MjA3NjA4Nzc0OH0.DG1jB5GDBJAtfOsJF0KjO8luVVTLTgx6MlZIvj_v7IQ";
+
+    // supabase = window.supabase.createClient(
+    //   SUPABASE_URL,
+    //   SUPABASE_KEY
+    // );
+
+    // export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    console.log("Feedback Modal");
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+    import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../leaderboard/config.js';
+    import { supabase } from '../supabaseClient.js';
+    console.log("feedback import createClient", SUPABASE_URL, SUPABASE_ANON_KEY);
+    // import { player1, email } from './tictactoe1.js';
+
+    // console.log("feedback import createClient", player1);
+    console.log("feedback import createClient", supabase);
+
+    const { data } = await supabase.from('feedback').select('*');
+    console.log("feedback data", data);
+
+
+    // const { data } = await supabase.from('feedback').select('*');
+    //         console.log("feedback data", data);
+
+    const modal = document.getElementById('feedbackModal');
+    const openBtn = document.getElementById('openFeedback');
+    const closeBtn = document.getElementById('closeFeedback');
+    const submitBtn = document.getElementById('submitFeedback');
+    const list = document.getElementById('feedbackList');
+    // 👇 GLOBAL बना दिया
+    window.like = like;
+    window.dislike = dislike;
+    window.report = report;
+
+    openBtn.onclick = () => modal.style.display = 'block';
+    closeBtn.onclick = () => modal.style.display = 'none';
+
+
+    async function loadFeedback() {
+      console.log("load Feedback");
+      list.innerHTML = 'Loading...';
+
+
+      const { data, error } = await supabase
+        .from('feedback')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        list.innerHTML = 'Error loading feedback';
+        return;
+      }
+
+      list.innerHTML = '';
+      data.forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'feedback-item';
+        div.innerHTML = `<strong>${f.name}</strong><br>${f.message}<br>
+
+      <button onclick="like(${f.id})">👍 ${f.likes}</button>
+      <button onclick="dislike(${f.id})">👎 ${f.dislikes}</button>
+      <button onclick="report(${f.id})">🚩 Report</button>
+      <select id="rating">
+        <option value="">Rating</option>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+    </select>`;
+        list.appendChild(div);
+      });
+    }
+
+    submitBtn.onclick = async () => {
+      console.log("Feedback button clicked");
+      const name = userName.value.trim();
+      const text = userFeedback.value.trim();
+      const userRating = rating.value;
+      if (!name || !text) return alert('Fill all fields');
+
+
+      await supabase.from('feedback').insert([
+        { name: name, message: text, rating: userRating }
+      ]);
+
+
+      userFeedback.value = '';
+      loadFeedback();
+    };
+
+    loadFeedback();
+
+    loginBtn.onclick = async () => {
+      await supabase.auth.signInWithOAuth({ provider: 'google' });
+    };
+
+    logoutBtn.onclick = async () => {
+      await supabase.auth.signOut();
+      location.reload();
+    };
+
+    supabase.auth.onAuthStateChange((_, session) => {
+      if (session) {
+        loginBtn.style.display = 'none';
+        logoutBtn.style.display = 'block';
+        userName.value = session.user.user_metadata.full_name;
+        userName.disabled = true;
+      }
+    });
+
+    async function like(id) {
+      const user = (await supabase.auth.getUser()).data.user;
+            console.log("Feedback like(id)", user);
+      const { data } = await supabase.from('likes')
+        .select('*').eq('feedback_id', id).eq('user_email', user.email);
+      if (data.length) return alert('Already liked');
+      await supabase.from('likes').insert([{ feedback_id: id, user_email: user.email }]);
+      await supabase.rpc('increment_like', { fid: id });
+      loadFeedback();
+    }
+    async function dislike(id) {
+      await supabase.rpc('increment_dislike', { fid: id });
+      loadFeedback();
+    }
+
+    const ADMIN_EMAIL = "admin@gmail.com";
+
+    function isAdmin(user) {
+      return user?.email === ADMIN_EMAIL;
+    }
+
+    if (isAdmin((await supabase.auth.getUser()).data.user)) {
+      div.innerHTML += `<button onclick="remove(${f.id})">❌ Delete</button>`;
+    }
+
+    async function remove(id) {
+      if (!confirm('Delete feedback?')) return;
+      await supabase.from('feedback').delete().eq('id', id);
+      loadFeedback();
+    }
+
+
+
+    supabase.channel('feedback-live')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'feedback' }, loadFeedback)
+      .subscribe();
+
+    async function report(id) {
+      await supabase.from('reports').insert([{ feedback_id: id }]);
+      alert('Reported');
+    }
+
+  </script>
+</body>
+
+</html>

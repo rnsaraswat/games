@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Connect 4 — Human vs AI (Hard)</title>
+  <style>
+    :root{ --bg:#0f1724; --board:#0b5b8a; --cell:#08324a; --red:#ef4444; --yellow:#fbbf24; --glass: rgba(255,255,255,0.04)}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:linear-gradient(180deg,#071024 0%, #052034 100%);color:#e6eef8;font-family:Inter,system-ui,Segoe UI,Roboto,'Noto Sans',sans-serif;display:flex;align-items:center;justify-content:center;padding:24px}
+    .wrap{width:980px;max-width:96vw;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));border-radius:12px;padding:18px;box-shadow:0 8px 30px rgba(2,6,23,0.7)}
+    .header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+    h1{font-size:20px;margin:0}
+    .controls{margin-left:auto;display:flex;gap:8px;align-items:center}
+    .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:8px;color:inherit;cursor:pointer}
+    .board{display:grid;grid-template-columns:repeat(7,72px);gap:8px;padding:12px;background:var(--board);border-radius:12px;width:max-content}
+    .col{display:flex;flex-direction:column-reverse;gap:8px;padding:6px}
+    .cell{width:72px;height:72px;border-radius:50%;background:var(--cell);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -6px 12px rgba(0,0,0,0.6);cursor:pointer;transition:transform .08s}
+    .cell:hover{transform:translateY(-4px)}
+    .disc{width:64px;height:64px;border-radius:50%;background:transparent;display:block;box-shadow:inset 0 -6px 12px rgba(0,0,0,0.6)}
+    .disc.r{background:var(--red)}
+    .disc.y{background:var(--yellow)}
+    .info{margin-top:12px;display:flex;align-items:center;gap:12px}
+    .status{padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:8px}
+    .small{font-size:13px;color:#a8c0d8}
+    @media (max-width:640px){.board{grid-template-columns:repeat(7,44px)}.cell{width:44px;height:44px}.disc{width:38px;height:38px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1>Connect 4 — Human vs AI (Hard)</h1>
+      <div class="controls">
+        <button class="btn" id="newBtn">New Game</button>
+        <label class="small">AI Difficulty:</label>
+        <select id="difficulty" class="btn">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard" selected>Hard</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="boardHolder" class="board"></div>
+
+    <div class="info">
+      <div class="status" id="status">Turn: You (Red)</div>
+      <div class="small" id="hint">AI uses minimax (alpha-beta). Hard = strong.</div>
+    </div>
+  </div>
+
+<script>
+/*
+  Connect 4 implementation with a minimax AI (alpha-beta pruning).
+  Comments in Hindi to help samajhne mein.
+*/
+
+// बोर्ड के सामान्य सेटअप
+const COLS = 7;
+const ROWS = 6;
+let board = []; // 2D array: board[row][col] -> 0 empty, 1 human (रंग: red), 2 ai (yellow)
+let gameOver = false;
+let human = 1;
+let ai = 2;
+let currentPlayer = human;
+const boardHolder = document.getElementById('boardHolder');
+const statusEl = document.getElementById('status');
+const difficultySelect = document.getElementById('difficulty');
+
+// इनिशियलाइज़ बोर्ड
+function initBoard(){
+  board = Array.from({length:ROWS}, ()=>Array(COLS).fill(0));
+  gameOver = false;
+  currentPlayer = human;
+  renderBoard();
+  updateStatus("Your turn — click a column to drop a disc.");
+}
+
+// DOM मे	board बनाएं: हर column एक div, हर cell button जैसा दिखे
+function renderBoard(){
+  boardHolder.innerHTML = '';
+  // हम columns बनाएंगे ताकि user column पे क्लिक कर सके
+  for(let c=0;c<COLS;c++){
+    const col = document.createElement('div');
+    col.className='col';
+    col.dataset.col = c;
+    col.addEventListener('click', ()=>handleColClick(c));
+    for(let r=0;r<ROWS;r++){
+      const cell = document.createElement('div');
+      cell.className='cell';
+      const disc = document.createElement('span');
+      disc.className='disc';
+      const cellVal = board[r][c];
+      if(cellVal===1) disc.classList.add('r');
+      else if(cellVal===2) disc.classList.add('y');
+      cell.appendChild(disc);
+      col.appendChild(cell);
+    }
+    boardHolder.appendChild(col);
+  }
+}
+
+function handleColClick(col){
+  if(gameOver) return;
+  if(currentPlayer!==human) return; // जब AI का move चल रहा हो तो ignore
+  // valid location check
+  if(!isValidLocation(col)){
+    updateStatus('Column full — किसी दूसरी column पर डालें');
+    return;
+  }
+  const row = getNextOpenRow(col);
+  dropPiece(row, col, human);
+  renderBoard();
+  if(winningMove(board, human)){
+    gameOver = true;
+    updateStatus('आप जीत गए! 🎉');
+    return;
+  }
+  if(isBoardFull()){gameOver=true;updateStatus('ड्रो — बोर्ड भर गया');return;}
+  currentPlayer = ai;
+  updateStatus('AI सोच रहा है...');
+  // छोटा delay ताकि UI update दिखे
+  setTimeout(()=>aiMove(), 120);
+}
+
+function isValidLocation(col){
+  return board[ROWS-1][col]===0; // top row (index ROWS-1) खाली होना चाहिए
+}
+function getNextOpenRow(col){
+  for(let r=0;r<ROWS;r++) if(board[r][col]===0) return r;
+  return null;
+}
+function dropPiece(row,col,player){ board[row][col]=player; }
+function isBoardFull(){ return board.every(row => row.every(cell=>cell!==0)); }
+
+// जीत की जाँच — horizontally, vertically, diagonally
+function winningMove(bd, piece){
+  // horizontal
+  for(let r=0;r<ROWS;r++){
+    for(let c=0;c<COLS-3;c++){
+      if(bd[r][c]===piece && bd[r][c+1]===piece && bd[r][c+2]===piece && bd[r][c+3]===piece) return true;
+    }
+  }
+  // vertical
+  for(let c=0;c<COLS;c++){
+    for(let r=0;r<ROWS-3;r++){
+      if(bd[r][c]===piece && bd[r+1][c]===piece && bd[r+2][c]===piece && bd[r+3][c]===piece) return true;
+    }
+  }
+  // positive diagonal
+  for(let r=0;r<ROWS-3;r++){
+    for(let c=0;c<COLS-3;c++){
+      if(bd[r][c]===piece && bd[r+1][c+1]===piece && bd[r+2][c+2]===piece && bd[r+3][c+3]===piece) return true;
+    }
+  }
+  // negative diagonal
+  for(let r=3;r<ROWS;r++){
+    for(let c=0;c<COLS-3;c++){
+      if(bd[r][c]===piece && bd[r-1][c+1]===piece && bd[r-2][c+2]===piece && bd[r-3][c+3]===piece) return true;
+    }
+  }
+  return false;
+}
+
+// AI logic — scoring function
+function evaluateWindow(windowArr, piece){
+  const oppPiece = piece===ai? human:ai;
+  let score = 0;
+  const countPiece = windowArr.filter(x=>x===piece).length;
+  const countEmpty = windowArr.filter(x=>x===0).length;
+  const countOpp = windowArr.filter(x=>x===oppPiece).length;
+  if(countPiece===4) score += 1000;
+  else if(countPiece===3 && countEmpty===1) score += 50;
+  else if(countPiece===2 && countEmpty===2) score += 10;
+  if(countOpp===3 && countEmpty===1) score -= 80; // block opponent
+  return score;
+}
+
+function scorePosition(bd, piece){
+  let score = 0;
+  // center column preference
+  const centerArray = [];
+  for(let r=0;r<ROWS;r++) centerArray.push(bd[r][Math.floor(COLS/2)]);
+  const centerCount = centerArray.filter(x=>x===piece).length;
+  score += centerCount*6;
+
+  // horizontal
+  for(let r=0;r<ROWS;r++){
+    const rowArr = bd[r];
+    for(let c=0;c<COLS-3;c++){
+      const windowArr = rowArr.slice(c,c+4);
+      score += evaluateWindow(windowArr, piece);
+    }
+  }
+  // vertical
+  for(let c=0;c<COLS;c++){
+    const colArr=[]; for(let r=0;r<ROWS;r++) colArr.push(bd[r][c]);
+    for(let r=0;r<ROWS-3;r++){
+      const windowArr = colArr.slice(r,r+4);
+      score += evaluateWindow(windowArr, piece);
+    }
+  }
+  // positive diagonal
+  for(let r=0;r<ROWS-3;r++){
+    for(let c=0;c<COLS-3;c++){
+      const windowArr = [bd[r][c], bd[r+1][c+1], bd[r+2][c+2], bd[r+3][c+3]];
+      score += evaluateWindow(windowArr, piece);
+    }
+  }
+  // negative diagonal
+  for(let r=3;r<ROWS;r++){
+    for(let c=0;c<COLS-3;c++){
+      const windowArr = [bd[r][c], bd[r-1][c+1], bd[r-2][c+2], bd[r-3][c+3]];
+      score += evaluateWindow(windowArr, piece);
+    }
+  }
+  return score;
+}
+
+function getValidLocations(bd){
+  const valid = [];
+  for(let c=0;c<COLS;c++) if(isValidLocationForBoard(bd,c)) valid.push(c);
+  return valid;
+}
+function isValidLocationForBoard(bd,col){ return bd[ROWS-1][col]===0; }
+function getNextOpenRowForBoard(bd,col){ for(let r=0;r<ROWS;r++) if(bd[r][col]===0) return r; return null; }
+
+// копия बोर्ड बनाएं
+function copyBoard(bd){ return bd.map(row=>row.slice()); }
+
+// minimax with alpha-beta pruning
+function minimax(bd, depth, alpha, beta, maximizingPlayer){
+  const validLocations = getValidLocations(bd);
+  const isTerminal = winningMove(bd, human) || winningMove(bd, ai) || validLocations.length===0;
+  if(depth===0 || isTerminal){
+    if(isTerminal){
+      if(winningMove(bd, ai)) return {score: 100000000000000};
+      else if(winningMove(bd, human)) return {score: -100000000000000};
+      else return {score: 0};
+    } else {
+      return {score: scorePosition(bd, ai)};
+    }
+  }
+  if(maximizingPlayer){
+    let value = -Infinity; let column = validLocations[Math.floor(Math.random()*validLocations.length)];
+    for(const col of orderMoves(validLocations)){
+      const row = getNextOpenRowForBoard(bd,col);
+      const tempBoard = copyBoard(bd);
+      tempBoard[row][col] = ai;
+      const newScore = minimax(tempBoard, depth-1, alpha, beta, false).score;
+      if(newScore > value){ value = newScore; column = col; }
+      alpha = Math.max(alpha, value);
+      if(alpha >= beta) break; // prune
+    }
+    return {column, score: value};
+  } else {
+    let value = Infinity; let column = validLocations[Math.floor(Math.random()*validLocations.length)];
+    for(const col of orderMoves(validLocations)){
+      const row = getNextOpenRowForBoard(bd,col);
+      const tempBoard = copyBoard(bd);
+      tempBoard[row][col] = human;
+      const newScore = minimax(tempBoard, depth-1, alpha, beta, true).score;
+      if(newScore < value){ value = newScore; column = col; }
+      beta = Math.min(beta, value);
+      if(alpha >= beta) break;
+    }
+    return {column, score: value};
+  }
+}
+
+// move ordering: prioritize center columns for speed & strength
+function orderMoves(valid){
+  const center = Math.floor(COLS/2);
+  const order = valid.slice().sort((a,b)=> Math.abs(a-center)-Math.abs(b-center));
+  return order;
+}
+
+// main AI move wrapper
+function aiMove(){
+  if(gameOver) return;
+  const difficulty = difficultySelect.value;
+  let depth = 4; // easy
+  if(difficulty==='medium') depth = 5;
+  if(difficulty==='hard') depth = 7; // hard: deeper search — can be slow on weak devices
+
+  // first check immediate win or need-to-block moves
+  const validLocations = getValidLocations(board);
+  // try winning move
+  for(const col of validLocations){
+    const row = getNextOpenRowForBoard(board,col);
+    const temp = copyBoard(board);
+    temp[row][col] = ai;
+    if(winningMove(temp, ai)){
+      dropPiece(row,col,ai);
+      renderBoard();
+      gameOver = true;
+      updateStatus('AI जीत गया 😐');
+      return;
+    }
+  }
+  // try to block opponent's winning move
+  for(const col of validLocations){
+    const row = getNextOpenRowForBoard(board,col);
+    const temp = copyBoard(board);
+    temp[row][col] = human;
+    if(winningMove(temp, human)){
+      dropPiece(row,col,ai);
+      renderBoard();
+      if(winningMove(board, ai)){ gameOver=true; updateStatus('AI जीत गया 😐'); return; }
+      currentPlayer = human; updateStatus('Your turn'); return;
+    }
+  }
+
+  // otherwise use minimax
+  const start = performance.now();
+  const result = minimax(board, depth, -Infinity, Infinity, true);
+  const end = performance.now();
+  const chosenCol = result.column;
+  if(chosenCol===undefined || !isValidLocation(chosenCol)){
+    // fallback: pick random valid
+    const rnd = validLocations[Math.floor(Math.random()*validLocations.length)];
+    const r = getNextOpenRowForBoard(board,rnd);
+    dropPiece(r,rnd,ai);
+  } else {
+    const r = getNextOpenRowForBoard(board,chosenCol);
+    dropPiece(r, chosenCol, ai);
+  }
+  renderBoard();
+  if(winningMove(board, ai)){
+    gameOver = true; updateStatus('AI जीत गया 😐'); return; }
+  if(isBoardFull()){ gameOver=true; updateStatus('ड्रो — बोर्ड भर गया'); return; }
+  currentPlayer = human;
+  updateStatus(`Your turn — AI thought ${(Math.round(end-start))} ms`);
+}
+
+function updateStatus(text){ statusEl.textContent = text; }
+
+// New game button
+document.getElementById('newBtn').addEventListener('click', ()=>initBoard());
+
+// initialize
+initBoard();
+
+</script>
+</body>
+</html>
