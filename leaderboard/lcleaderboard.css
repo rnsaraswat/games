@@ -22,7 +22,6 @@
     --cl-btn-shadow: rgba(0, 0, 0, 0.2);
 }
 
-
 .ldbrand {
     display: flex;
     gap: 1.2vw;
@@ -132,11 +131,54 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     padding: 5px 10px;
     border-radius: 4px;
+    background: linear-gradient(90deg, var(--accent), #7c3aed);
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(90deg, #b91010, #960505);
+    border: 2px solid #b91010;
+    box-shadow: 0 10px 40px var(--box-shadow);
 }
 
 .lcPopupClose:hover {
-    background: var(--gb-lc-hover);
+    background: linear-gradient(90deg, #960505, #b91010);
     color: var(--lc-text);
+    transform: translateY(-2px);
+}
+
+.lcClearPry {
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    display: inline-block;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 5px 25px 0 var(--lc-box-shadow);
+    border-radius: 5px;
+    background: linear-gradient(90deg, var(--accent), #7c3aed);
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(90deg, #ed3a3a, #ec7777);
+    box-shadow: 0 10px 40px var(--lc-box-shadow);
+}
+
+.lcClearPry:hover {
+    background: linear-gradient(90deg, #6eeb7f, #3aed3a);
+}
+
+.lcClearPry {
+    background: linear-gradient(90deg, #ec7777, #ed3a3a);
+}
+
+.lc-leaderboardSignIn {
+    float: right;
+    cursor: pointer;
+}
+
+.lc-leaderboardignIn:hover {
+    background: var(--gf-bg-hover);
+    color: var(--gf-text);
     transform: translateY(-2px);
 }
 
@@ -198,23 +240,19 @@
 
 
 .lcClearPry {
-    gap: 5px;
+    gap: 8px;
     align-items: center;
     flex-wrap: wrap;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 5px;
-    margin: 10px 2px 5px 2px;
-    font-size: 1.6vw;
     display: inline-block;
-    margin-top: 0.1vh;
     transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 5px 5px 0 var(--lc-box-shadow);
+    box-shadow: 0 5px 25px 0 var(--lc-box-shadow);
     border-radius: 5px;
-    color: var(--lc-text);;
+    background: linear-gradient(90deg, #ed3a3a, #ec7777);
+    color: var(--lc-text);
     border-color: transparent;
-    border: none;
     box-shadow: 0 1px 4px var(--lc-box-shadow);
 }
 

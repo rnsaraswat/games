@@ -133,9 +133,28 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     padding: 5px 8px;
     border-radius: 4px;
+
+    background: linear-gradient(90deg, var(--accent), #7c3aed);
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(90deg, #b91010, #960505);
+    border: 2px solid #b91010;
+    box-shadow: 0 10px 40px var(--box-shadow);
 }
 
 .gb-feedbackPopupClose:hover {
+    /* background: var(--gf-bg-hover); */
+    background: linear-gradient(90deg, #960505, #b91010);
+    color: var(--gf-text);
+    transform: translateY(-2px);
+}
+
+.gb-feedbackSignIn {
+    float: right;
+    cursor: pointer;
+}
+
+.gb-feedbackSignIn:hover {
     background: var(--gf-bg-hover);
     color: var(--gf-text);
     transform: translateY(-2px);

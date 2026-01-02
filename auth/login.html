@@ -6,33 +6,39 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Sign in — Ravindra Games Hub</title>
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="../commoncss.css">
 </head>
 
 <body>
-  <div class="container">
-    <div id="auth-section">
-      <h2>Login to save your score</h2>
+  <div class="login-container ">
+    <div class="login-header-section">
+      <h2>Sign in — Ravindra Games Hub</h2>
+      <h3>Login to save your score</h3>
+    </div>
+    <div id="auth-section" class="login-btn-container">
 
-      <button id="google-login" class="btn">Login with Google</button>
-      <button id="facebook-login" class="btn">Login with Facebook</button>
+      <button id="google-login" class="login-btn">Login with Google</button>
+      <button id="facebook-login" class="login-btn">Login with Facebook</button>
 
-      <form id="email-login">
+      <form id="email-login" class="login-form-box">
         <input type="email" id="email" placeholder="Email (required)" required>
         <input type="text" id="name" placeholder="Name (required)" required>
-        <button type="submit" class="btn">Login with Email</button>
+        <button type="submit" class="login-btn">Login with Email</button>
       </form>
-      <form id="guest-login">
+      <form id="guest-login" class="login-form-box">
         <input type="email" id="gemail" placeholder="Email (required)" required>
         <input type="text" id="gname" placeholder="Name (required)" required>
-        <button type="submit" class="btn">Login as Guest with email</button>
+        <button type="submit" class="login-btn">Login as Guest with email</button>
       </form>
-      <form id="guest">
+      <form id="guest" class="login-form-box">
         <input type="text" id="guname" placeholder="Name (Optional) Default Guest####">
-        <button type="submit" class="btn">Login as Guest</button>
+        <button type="submit" class="login-btn">Login as Guest</button>
       </form>
       <div id="auth-status"></div>
     </div>
-    <p style="margin-top:12px;color:var(--muted)">After login you will be redirected back</p>
+    <div class="login-footer-section">
+      <p style="margin-top:12px;color:var(--muted)">After login you will be redirected back</p>
+    </div>
   </div>
   <script type="module" src="./auth.js"></script>
 </body>

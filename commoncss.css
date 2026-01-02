@@ -182,6 +182,7 @@ button {
     color: var(--text);
     border: 2px solid var(--cell-border);
     border-radius: 5px;
+    cursor: pointer;
 }
 
 button:hover {
