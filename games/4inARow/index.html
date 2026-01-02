@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>4 in a Row</title>
+  <meta name="description"
+  content="Ravindra Games Hub — collection of lightweight web games (4 in a Row) Classic & Action-Oriented X vs O game">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
   <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
@@ -115,17 +117,6 @@
     if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
     setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
-    // function hideLB() {
-    //   document.getElementById("gbLeaderboardModal").classList.remove('show');
-    //   // document.getElementById("gbLeaderboardModal").style.display = 'none';
-    // };
-
-    // function hideLLB() {
-    //   document.getElementById("lcLeaderboardModal").style.display = 'none';
-    //   document.getElementById("lcLeaderboardModal").classList.remove('show');
-    // };
-
-    //Globle leaderboard section
     function openGlobalLeaderboard() {
       document.getElementById("gbLeaderboardModal").style.display = 'flex';
     };
@@ -140,10 +131,8 @@
       .then(htmlText => {
         document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
         document.getElementById("gbLeaderboardModal").style.display = 'none';
-        // document.getElementById("gbLeaderboardModal").classList.remove("show");
       });
 
-    //Local leaderboard section
     function openLocalLeaderboard() {
       document.getElementById("lcLeaderboardModal").style.display = 'flex';
     };
@@ -156,19 +145,15 @@
       .then(response => response.text())
       .then(htmlText => {
         document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
-        // document.getElementById("lcLeaderboardModal").classList.remove("show");
         document.getElementById("lcLeaderboardModal").style.display = 'none';
       });
 
-    //globle feedback section
     function openGlobalFeedback() {
       document.getElementById("gb-feedbackModal").style.display = 'flex';
-      // document.getElementById("gb-feedbackModal").classList.add('show');
     };
 
     function closeGlobalFeedback() {
       document.getElementById("gb-feedbackModal").style.display = 'none';
-      // document.getElementById("gb-feedbackModal").classList.remove('show');
     };
 
     fetch('../../leaderboard/gbfeedback.html')
@@ -176,10 +161,7 @@
       .then(htmlText => {
         document.getElementById('gb-feedbackModal').innerHTML = htmlText;
         document.getElementById("gb-feedbackModal").style.display = 'none';
-        // document.getElementById("gb-feedbackModal").classList.remove("show");
       });
-
-
 
     (async () => {
       const GAME_NAME = "4 IN A ROW";
