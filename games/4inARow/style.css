@@ -61,7 +61,7 @@ button.primary:hover {
   background: white;
   width: 100%;
   text-align: center;
-  margin-top:1px;
+  margin-top: 1px;
   padding: 5px 5px;
   margin: 5px 2px 5px 2px;
   border: 3px dashed var(--box-shadow);
@@ -133,7 +133,10 @@ button.primary:hover {
   color: var(--text);
 }
 
-@media (max-aspect-ratio: 1/1),(max-width:768px),(max-height:720px) and (orientation:portrait) {
+@media (max-aspect-ratio: 1/1),
+(max-width:768px),
+(max-height:720px) and (orientation:portrait) {
+
   /* @media (max-width:768px),  (max-height:720px) and (orientation:portrait) { */
   .main {
     flex-direction: column;
@@ -181,23 +184,23 @@ button.primary:hover {
   pointer-events: none;
 }
 
-.name-main-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: none;
+/* .name-main-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
 
-    width: 60%;
+  width: 60%;
   height: 30%;
   border: 2px solid #333;
   z-index: 10;
 
   display: flex;
-  flex-direction: column; 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .name-top-section {
@@ -210,21 +213,21 @@ button.primary:hover {
 
 .name-mid-section {
 
-  flex: 1; 
-  overflow: auto; 
-  -webkit-overflow-scrolling: touch; 
+  flex: 1;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
   text-align: center;
   align-items: stretch;
-  justify-content: center;  
+  justify-content: center;
   gap: 10px;
 }
 
 .name-footer-section {
   display: flex;
   justify-content: space-around;
-}
+} */
 
 .name-primary-button {
   padding: 10px 12px;
@@ -244,7 +247,7 @@ button.primary:hover {
   background: linear-gradient(180deg, #059669, #10b981);
 }
 
-.namebar.show {
+#namebar.show {
   display: flex;
 }
 

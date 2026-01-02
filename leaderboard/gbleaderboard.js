@@ -7,7 +7,7 @@ const TABLE_NAME = "scores";
 
 let currentData = [];
 let currentSortColumn = null;
-let currentSortOrder = 'asc';
+let currentSortOrder = 'desc';
 let leaderboardData = [];
 let filteredData = [];
 let currentPage = 1;
@@ -18,31 +18,16 @@ const modal = document.getElementById('gbLeaderboardModal');
 const openBtn = document.getElementById('toggle-gb-leaderboard');
 const closeBtn = document.getElementById('gbCloseBtn');
 
-modal.style.display = 'none';
-openBtn.onclick = () => modal.style.display = 'flex';
-closeBtn.onclick = () => modal.style.display = 'none';
-
-export function toggleLeaderboard() {
-  if (document.getElementById("leaderboardPopup").style.display === 'block') {
-    // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
-    document.getElementById("leaderboardPopup").style.display = 'none';
-    return;
-  }
-  // document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
-  document.getElementById("leaderboardPopup").style.display = 'block';
-    renderLeaderboard();
-}
-
-document.getElementById("gbsearchInput").addEventListener("input", handleSearch);
-document.getElementById("gbtopSelect").addEventListener("change", handleTopSelect);
-document.getElementById("gbprevPage").addEventListener("click", prevPage);
-document.getElementById("gbnextPage").addEventListener("click", nextPage);
+document.getElementById("gbsearchInput").addEventListener("input", gbhandleSearch);
+document.getElementById("gbtopSelect").addEventListener("change", gbhandleTopSelect);
+document.getElementById("gbprevPage").addEventListener("click", gbprevPage);
+document.getElementById("gbnextPage").addEventListener("click", gbnextPage);
 
 document.querySelectorAll("#leaderboardTable thead th").forEach(th => {
   th.addEventListener("click", () => handleSort(th.dataset.column));
 });
 
-function handleSearch(e) {
+function gbhandleSearch(e) {
   const searchTerm = e.target.value.toLowerCase();
   filteredData = leaderboardData.filter(row =>
     row.player_name?.toLowerCase().includes(searchTerm)
@@ -51,20 +36,20 @@ function handleSearch(e) {
   renderTable();
 }
 
-function handleTopSelect(e) {
+function gbhandleTopSelect(e) {
   itemsPerPage = parseInt(e.target.value);
   currentPage = 1;
   renderTable();
 }
 
-function prevPage() {
+function gbprevPage() {
   if (currentPage > 1) {
     currentPage--;
     renderTable();
   }
 }
 
-function nextPage() {
+function gbnextPage() {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   if (currentPage < totalPages) {
     currentPage++;
@@ -113,7 +98,7 @@ export async function renderLeaderboard() {
     }
 
     if (data.length === 0) {
-      document.getElementById("gb-table-body").textContent = "No scores yet.";
+      document.getElementById("gb-table-body").textContent = "No global scores yet.";
       return;
     }
 

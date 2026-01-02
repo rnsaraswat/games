@@ -4,37 +4,15 @@ const TABLE_NAME = "scores";
 
 let lccurrentData = [];
 let lccurrentSortColumn = null;
-let lccurrentSortOrder = 'asc';
+let lccurrentSortOrder = 'desc';
 let lcleaderboardData = [];
 let lcfilteredData = [];
 let lccurrentPage = 1;
 let lcitemsPerPage = 10;
-// let lcsNo = 1;
 
 const modal = document.getElementById('lcLeaderboardModal');
 const openBtn = document.getElementById('toggle-lc-leaderboard');
 const closeBtn = document.getElementById('lcCloseBtn');
-
-modal.style.display = 'none';
-// openBtn.onclick = () => modal.style.display = 'flex';
-closeBtn.onclick = () => modal.style.display = 'none';
-
-openBtn.addEventListener ( "click", () => {
-    modal.style.display = 'flex';
-    lcrenderLeaderboard();
-
-})
-
-export function toggleLeaderboard() {
-  if (document.getElementById("leaderboardPopup").style.display === 'block') {
-    // document.getElementById("toggle-leaderboard").textContent = "Global Leaderboard";
-    document.getElementById("leaderboardPopup").style.display = 'none';
-    return;
-  }
-  // document.getElementById("toggle-leaderboard").textContent = "Hide Leaderboard";
-  document.getElementById("leaderboardPopup").style.display = 'block';
-    lcrenderLeaderboard();
-}
 
 document.getElementById("lcsearchInput").addEventListener("input", lchandleSearch);
 document.getElementById("lctopSelect").addEventListener("change", lchandleTopSelect);
@@ -99,12 +77,12 @@ export async function lcrenderLeaderboard() {
     }
 
     if (data.length === 0) {
-      document.getElementById("lc-table-body").innerHTML = "No scores yet.";
+      document.getElementById("lc-table-body").innerHTML = "No local scores yet.";
       return;
     }
 
 
-        // leaderboardData = data;
+    // leaderboardData = data;
     lcleaderboardData = data.map((item, index) => ({
       serialNo: index + 1, 
       ...item
@@ -112,57 +90,7 @@ export async function lcrenderLeaderboard() {
     lcfilteredData = [...lcleaderboardData];
     lccurrentPage = 1;
     lcrenderTable();
-
-
-    // lcleaderboardData = data;
-    // lcfilteredData = [...data];
-    // lccurrentPage = 1;
-    // lcrenderTable();
 }
-
-// export async function lcrenderLeaderboard() {
-//   try {
-//     const url = `${SUPABASE_URL}/rest/v1/scores?select=*`;
-
-//     const res = await fetch(url, {
-//       headers: {
-//         apikey: SUPABASE_ANON_KEY,
-//         Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-//       }
-//     });
-
-//     if (!res.ok) {
-//       let errText;
-//       try { errText = await res.json(); } catch (e) { errText = await res.text(); }
-//       document.getElementById("gb-table-body").textContent = "Global Leaderboard fetch error: " + res.status + errText;
-//       return;
-//     }
-
-//     const data = await res.json();
-
-//     if (!Array.isArray(data)) {
-//       document.getElementById("gb-table-body").textContent = "⚠️ Unexpected response";
-//       return;
-//     }
-
-//     if (data.length === 0) {
-//       document.getElementById("gb-table-body").textContent = "No scores yet.";
-//       return;
-//     }
-
-//     // leaderboardData = data;
-//     lcleaderboardData = data.map((item, index) => ({
-//       serialNo: index + 1, 
-//       ...item
-//     }));
-//     lcfilteredData = [...lcleaderboardData];
-//     lccurrentPage = 1;
-//     lcrenderTable();
-
-//   } catch (err) {
-//     document.getElementById("gb-table-body").textContent = "❌ Error loading global leaderboard: " + err;
-//   }
-// }
 
 function lcrenderTable() {
   const tbody = document.getElementById("lc-table-body");
@@ -294,7 +222,6 @@ function lcupdateIndicators(activeCol, order) {
       arrow.style.opacity = "1";
     });
 
-    // if (i === activeCol + 1) {
     if (i === activeCol) {
       const arrow = th.querySelector(`.arrow.${order}`);
       if (arrow) arrow.style.opacity = "0.3";
@@ -323,36 +250,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// export async function saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
-//   const EDGE_FUNCTION_URL = ""; 
-//   try {
-//     if (EDGE_FUNCTION_URL) {
-//       const res = await fetch(EDGE_FUNCTION_URL, {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at })
-//       });
-//       const json = await res.json();
-//       await renderLeaderboard(game_id);
-//       return json;
-//     } else {
-//       const { data, error } = await supabase.from(TABLE_NAME).insert([{ player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at }]);
-//       if (error) throw error;
-//       await renderLeaderboard(game_id);
-//       return data;
-//     }
-//   } catch (err) {
-//     document.getElementById("gb-table-body").textContent = "Score save error in global leaderboard" + err;
-//     throw err;
-//   }
-// }
-
-// lcrenderLeaderboard();
-
+lcrenderLeaderboard();
 
 export function lcsaveToLeaderboard(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
     const entry = { player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at };
     const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
     boardData.push(entry);
     localStorage.setItem("leaderboard", JSON.stringify(boardData));
+
+    lcrenderLeaderboard();
   }

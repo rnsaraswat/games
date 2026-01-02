@@ -1,14 +1,10 @@
-<div id="lcLeaderboardModal" class="lc-main-container">
-    <!-- हेडिंग -->
-    <div class="lc-header-section">
-        <span id="lcCloseBtn" class="lcPopupClose">Close X</span>
-        <h2 class="lc-h2">🌍 New Local Leaderboard</h2>
-    </div>
+<div class="lc-header-section">
+    <span id="lcCloseBtn" class="lcPopupClose" onclick="closeLocalLeaderboard()">Close X</span>
+    <h2 class="lc-h2">🌍 Local Leaderboard</h2>
+</div>
 
-    <!-- टॉप बटन बार -->
-    <!-- <div class="button-bar"> -->
-    <div class="lc-btn-container">
-        <label class="lc-leaderboard">Filter game: 
+<div class="lc-btn-container">
+    <label class="lc-leaderboard">Filter game:
         <select class="lc-leaderboard" id="lcgameFilter">
             <option value="all">All Games</option>
             <option value="rockpaperscissor">Rock Paper Scissor</option>
@@ -23,104 +19,89 @@
             <option value="watersort">Water Sort</option>
             <option value="memory">Memory</option>
         </select></label>
-        <label class="lc-leaderboard">Show per page:
-            <select class="lc-leaderboardSelect" id="lctopSelect">
-                <option value="5">5</option>
-                <option value="10" selected>10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-            </select>
-        </label>
-        <input type="text" class="lc-leaderboard" id="lcsearchInput" placeholder="🔍 Search player..." />
-        <a href="../auth/login.html" class="lclogin">Sign in</a>
-        <!-- <button class="btn">Add New</button>
-        <button class="btn">Refresh</button>
-        <button class="btn">Export CSV</button>
-        <button class="btn">Filter</button> -->
-    </div>
+    <label class="lc-leaderboard">Show per page:
+        <select class="lc-leaderboardSelect" id="lctopSelect">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+        </select>
+    </label>
+    <input type="text" class="lc-leaderboard" id="lcsearchInput" placeholder="🔍 Search player..." />
+    <a href="../auth/login.html" class="lclogin">Sign in</a>
+</div>
 
-    <!-- टेबल एरिया (Scrolling Section) -->
-    <div class="lc-table-area">
-        <table id="lcleaderboardTable" class="lc-leaderboardTable">
-            <thead class="lc-thead">
-                <tr>
-                    <th>#
-                    </th>
-                    <th class="sortable">Game
-                        <span class="arrow asc">🔼</span>
-                        <span class="arrow desc">🔽</span>
-                    </th>
-                    <th class="sortable">Winner
-                        <span class="arrow asc">🔼</span>
-                        <span class="arrow desc">🔽</span>
-                    </th>
-                    <th class="sortable">Looser
-                        <span class="arrow asc">🔼</span>
-                        <span class="arrow desc">🔽</span>
-                    </th>
-                    <th class="sortable">Size
-                        <span class="arrow asc">🔼</span>
-                        <span class="arrow desc">🔽</span>
-                    </th>
-                    <th class="sortable">Difficulty
-                        <span class="arrow asc">🔼</span>
-                        <span class="arrow desc">🔽</span>
-                    </th>
-                    <th class="sortable">Score
-                        <span class="arrow asc">🔼</span>
-                        <span class="arrow desc">🔽</span>
-                    </th>
-                    <th class="sortable">Elapsed time
-                        <span class="arrow asc">🔼</span>
-                        <span class="arrow desc">🔽</span>
-                    </th>
-                    <th class="sortable">Date
-                        <span class="arrow asc">🔼</span>
-                        <span class="arrow desc">🔽</span>
-                    </th>
-                    <th class="sortable">Moves
-                        <span class="arrow asc">🔼</span>
-                        <span class="arrow desc">🔽</span>
-                    </th>
-                    <th class="sortable">Email
-                        <span class="arrow asc">🔼</span>
-                        <span class="arrow desc">🔽</span>
-                    </th>
-                    <th class="sortable">Field1
-                        <span class="arrow asc">🔼</span>
-                        <span class="arrow desc">🔽</span>
-                    </th>
-                    <th class="sortable">Field2
-                        <span class="arrow asc">🔼</span>
-                        <span class="arrow desc">🔽</span>
-                    </th>
-                    <th class="sortable">Field3
-                        <span class="arrow asc">🔼</span>
-                        <span class="arrow desc">🔽</span>
-                    </th>
-                    <th class="sortable">Field4
-                        <span class="arrow asc">🔼</span>
-                        <span class="arrow desc">🔽</span>
-                    </th>
-                    <!-- <th>Roll No</th>
-                    <th>Student Name</th>
-                    <th>Course</th>
-                    <th>Status</th>
-                    <th>Marks</th>
-                    <th>Action</th> -->
-                </tr>
-            </thead>
-            <!-- <tbody id="leaderboardTableBody"> -->
-            <tbody id="lc-table-body">
-                <!-- JS से डेटा यहाँ आएगा -->
-            </tbody>
-        </table>
-    </div>
+<div class="lc-table-area">
+    <table id="lcleaderboardTable" class="lc-leaderboardTable">
+        <thead class="lc-thead">
+            <tr>
+                <th>#
+                </th>
+                <th class="sortable">Game
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Winner
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Looser
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Size
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Difficulty
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Score
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Elapsed time
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Date
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Moves
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Email
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Field1
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Field2
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Field3
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Field4
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="lc-table-body">
+        </tbody>
+    </table>
+</div>
 
-    <!-- फुटर बटन बार -->
-    <div class="lc-footer-section">
-        <button class="lc-leaderboard" id="lcprevPage">⬅ Prev</button>
-        <span id="lcpageInfo" class="lc-pageInfo"></span>
-        <button class="lc-leaderboard" id="lcnextPage">Next ➡</button>
-    </div>
+<div class="lc-footer-section">
+    <button class="lc-leaderboard" id="lcprevPage">⬅ Prev</button>
+    <span id="lcpageInfo" class="lc-pageInfo"></span>
+    <button class="lc-leaderboard" id="lcnextPage">Next ➡</button>
 </div>

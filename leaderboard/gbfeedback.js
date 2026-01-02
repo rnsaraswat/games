@@ -5,7 +5,7 @@ import { supabase } from '../supabaseClient.js';
 const { data } = await supabase.from('feedback').select('*');
 
 // <!-- Feedback Modal javascript-->
-const modal = document.getElementById('feedbackModal');
+const modal = document.getElementById('gb-feedbackModal');
 const openBtn = document.getElementById('openFeedback');
 const closeBtn = document.getElementById('feedbackCloseBtn');
 const submitBtn = document.getElementById('submitFeedback');
@@ -19,9 +19,9 @@ let liked = 0;
 let disliked = 0;
 let userRating = 5;
 
-modal.style.display = 'none';
-openBtn.onclick = () => modal.style.display = 'flex';
-closeBtn.onclick = () => modal.style.display = 'none';
+// modal.style.display = 'none';
+// openBtn.onclick = () => modal.classList.add('show');
+// closeBtn.onclick = () => modal.classList.remove('show');
 
 function formatIST(dateStr) {
     const date = new Date(dateStr);
@@ -71,9 +71,9 @@ async function loadFeedback() {
 <div style="text-align:left";>${f.message}</div>
 
 <div style="margin-top:0.6vw;">
-<button onclick="like(${f.id})" class="feedback-btn">👍 ${f.likes}</button>
-<button onclick="dislike(${f.id})" class="feedback-btn">👎 ${f.dislikes}</button>
-<button onclick="addReply(${f.id})" class="feedback-btn">💬 Reply</button>
+<button onclick="like(${f.id})" class="gb-feedback-btn">👍 ${f.likes}</button>
+<button onclick="dislike(${f.id})" class="gb-feedback-btn">👎 ${f.dislikes}</button>
+<button onclick="addReply(${f.id})" class="gb-feedback-btn">💬 Reply</button>
 </div>
 
 <div style="margin-top:1vw;">

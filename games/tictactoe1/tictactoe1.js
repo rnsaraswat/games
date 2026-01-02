@@ -39,6 +39,7 @@ window.addEventListener('load', function () {
     // let player1 = localStorage.getItem('player_name') || 'Human1';
     let player2 = localStorage.getItem('player_opponent') || 'Human2';
     let difficulty = difficultyEl.value;
+    let mode = "pvc";
 
     document.getElementById("difficulty").addEventListener("click", () => {
         difficulty = difficultyEl.value;
@@ -376,7 +377,9 @@ window.addEventListener('load', function () {
       document.getElementById("nameInput").value = player2 || 'Human2';
       namebar.classList.add('show');
     }
+
     document.getElementById('name').addEventListener('click', () => {
+        console.log("ok");
       player2 = document.getElementById("nameInput").value;
       namebar.classList.remove('show');
     });
