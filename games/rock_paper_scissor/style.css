@@ -1,10 +1,5 @@
 :root {
-  --bg: #f0f0f0;
-  --text: #222;
   --cell-bg: #fff;
-  --border: #333;
-  --box-shadow: rgba(0, 0, 0, 0.2);
-
 
   --win-text: gold;
   --accent: #4457b5;
@@ -20,13 +15,9 @@
 }
 
 [data-theme='dark'] {
-  --bg: #121212;
-  --text: #eee;
   --cell-bg: #1e1e1e;
-  --border: #d9d8d8;
-  --box-shadow: rgba(255, 255, 255, 0.5);
 }
-
+/* 
 @font-face {
   font-family: 'EnglishFontBangers';
   src: url('../../assets/font/Bangers-Regular.ttf') format('truetype');
@@ -54,7 +45,7 @@ body {
   font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
   background: var(--light-bg-a);
   color: var(--light-text);
-}
+} */
 
 /* .card {
   width: 100%;
@@ -313,31 +304,6 @@ body.dark .sidebar {
   width: 100%;
 }
 
-select,
-label,
-input,
-button,
-.label {
-  padding: 1vw 1.2vw;
-  margin: 1vw 0.2vw 0.5vw 0.2vw;
-  font-size: 1.6vw;
-  margin-top: 0.1vh;
-  transition: background-color 0.3s, transform 0.2s;
-  box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-  background: var(--bg);
-  color: var(--text);
-  border: 0.2vw solid var(--border);
-  border-radius: 1vw;
-}
-
-select:hover {
-  border: 0.2vw dotted var(--border);
-}
-
-input[type="checkbox"]:hover {
-  outline: 2px dotted var(--border);
-}
-
 @media (max-width:480px),
 (max-aspect-ratio:1/1),
 (orientation:portrait) {
@@ -446,27 +412,6 @@ input[type="checkbox"]:hover {
   /* display: flex; */
   border-radius: 1vw;
   box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-}
-
-h1 {
-  text-align: center;
-  font-size: 5vw;
-  font-family: 'EnglishFontBangers', Arial, Helvetica, sans-serif;
-  color: var(--text);
-  letter-spacing: .4vw;
-  text-shadow: 0 1px 0 #030303,
-    0 2px 0 #c9c9c9,
-    0 3px 0 #bbb,
-    0 4px 0 #b9b9b9,
-    0 5px 0 #aaa,
-    0 6px 1px var(--box-shadow),
-    0 0 5px var(--box-shadow),
-    0 1px 3px var(--box-shadow),
-    0 3px 5px var(--box-shadow),
-    0 5px 10px var(--box-shadow),
-    0 10px 10px var(--box-shadow),
-    0 20px 20px var(--box-shadow);
-  margin-bottom: 0.3vw;
 }
 
 .confetti-container {

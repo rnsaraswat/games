@@ -6,7 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mastermind Solver by Computer Automatic</title>
+    <meta name="description"
+        content="Ravindra Games Hub — collection of lightweight web games (mastermind Solver automatic) Guess the secret color code find the correct color code in correct pegs">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+    <link rel="stylesheet" href="../../commoncss.css">
+    <link rel="manifest" href="../../manifest.json" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <meta name="theme-color" content="#6200ee" />
 </head>
 
@@ -14,23 +20,23 @@
     <div id="container">
         <!-- Left Panel -->
         <div id="left" class="section">
-            <h1>Mastermind Solver</h1>
+            <h1>Mastermind Solver Auto</h1>
             <div class="button-group">
                 <div class="button-group" style="border: 0.1vw solid var(--border);">
-                    <label for="slots">No of Slots:
+                    <label for="slots">⁷⁷⁷ No of Slots:
                         <input type="number" id="slots" min="1" max="12" value="4">
                     </label>
-                    <label for="colors">No of Colors:
+                    <label for="colors">📚 No of Colors:
                         <input type="number" id="colors" min="1" max="20" value="6">
 
                     </label>
-                    <label id="allowedDuplicates">Allow Duplicate Colors
+                    <label id="allowedDuplicates">👯Allow Duplicate Colors
                         <input type="checkbox" id="buttonDuplicate" checked>
                     </label>
-                    <button id="resetSecret" class="btn ghost">Reset secret</button>
-                    <button id="randomSecret" class="btn">Random secret</button>
+                    <button id="resetSecret" class="btn ghost">🔄 Reset secret</button>
+                    <button id="randomSecret" class="btn">🎲Random secret</button>
                 </div>
-                <button class="primary" id="startSolve" class="btn">Start solver</button>
+                <button class="primary" id="startSolve" class="btn">▶️ Start solver</button>
                 <button id="toggle-theme">☀️ Light</button>
                 <button id="toggle-sound">🔇 Music:Off"</button>
                 <button class="primary" id="shareBtn">📤Sharing</button>
@@ -38,7 +44,7 @@
                 <button class="primary" id="toggle-feedback">📝Feedback</button>
                 <button class="primary"
                     onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
-                <div id="timerdisplay">⏱️ 00:00:00</div>
+                <div id="timer-display">⏱️ 00:00:00</div>
                 <div class="message" id="output">
                     Please Click on slot to select/change your secreate colors and press Start solver
                 </div>
@@ -56,49 +62,46 @@
             <div class="log" id="log"></div>
         </div>
     </div>
-    <div id="feedbackPopup" class="popupWindow"></div>
+    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
     <script type="module" src="js/script.js"></script>
-    <script type="module">
+    <!-- <script type="module">
         import { shareScore } from '../../leaderboard/share.js';
         document.getElementById("shareBtn").addEventListener("click", async () => {
             shareScore("5inARow", 0);
         });
-    </script>
+    </script> -->
     <script>
-        function hideFeedback() {
-            document.getElementById("feedbackPopup").style.display = 'none';
+        const themeToggle = document.getElementById('toggle-theme');
+        function setTheme(t) {
+            if (t === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '☀️ Light'
+            }
+            if (t === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '🌙 Dark'
+            }
+        }
+        if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+        setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+
+        function openGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'flex';
         };
 
-        fetch('../../leaderboard/feedback.html')
+        function closeGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'none';
+        };
+
+        fetch('../../leaderboard/gbfeedback.html')
             .then(response => response.text())
             .then(htmlText => {
-                document.getElementById('feedbackPopup').innerHTML = htmlText;
+                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+                document.getElementById("gb-feedbackModal").style.display = 'none';
             });
-
-        document.getElementById("feedbackPopup").style.display = 'none';
-
-        document.getElementById("toggle-feedback").addEventListener("click", () => {
-            if (document.getElementById("feedbackPopup").style.display === 'block') {
-                document.getElementById("feedbackPopup").style.display = 'none';
-                return;
-            } else {
-                document.getElementById("feedbackPopup").style.display = 'block';
-                loadfeedbakCSS();
-            }
-        });
-
-        function loadfeedbakCSS() {
-            var head = document.head;
-            var link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = '../../leaderboard/feedback.css';
-            head.appendChild(link);
-        }
-
-        window.onload = function () {
-            loadfeedbakCSS();
-        };
 
         (async () => {
             const GAME_NAME = "Mastermind Solver Auto";
@@ -137,7 +140,7 @@
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {
                 navigator.serviceWorker
-                    .register("./sw.js")
+                    .register("../../sw.js")
                     .then(() => console.log("SW registered"))
                     .catch((err) => console.log("SW error", err));
             });

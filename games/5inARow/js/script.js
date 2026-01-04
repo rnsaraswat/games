@@ -2,9 +2,9 @@ import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
 import { launchFireworks, showWinText } from './fireworks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
-// import { saveToLeaderboard, toggleLeaderboard } from './leaderboard.js';
-import { shareScore } from '../../../leaderboard/share.js';
-import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
+import { shareScore } from './share.js';
+import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
 
 export const modeEl = document.getElementById('mode');
 export const difficultyEl = document.getElementById('difficulty');
@@ -20,6 +20,8 @@ window.addEventListener('load', function () {
   const boardEl = document.getElementById('grid');
   const messageEl = document.getElementById('message');
   const toggleThemeBtn = document.getElementById("toggle-theme");
+  const gridWrap = document.getElementById('right');
+  const canvas = document.getElementById('fireworksCanvas');
 
   let board = [];
   let size = 15;
@@ -30,7 +32,6 @@ window.addEventListener('load', function () {
   let theme = localStorage.getItem('rg_theme') || 'dark';
   let player1 = localStorage.getItem('player_name') || 'Human1';
   let player2 = localStorage.getItem('player_opponent') || 'Human2';
-  // let score = 0;
   let gameCount = 0;
   let difficulty = difficultyEl.value;
   let mode = modeEl.value;
@@ -46,7 +47,6 @@ window.addEventListener('load', function () {
     document.getElementById("nameInput").placeholder = player2 || 'Human2';
     player2 = localStorage.getItem('player_opponent') || 'Human2';
     document.getElementById("nameInput").value = player2 || 'Human2';
-    // namebar.classList.add('show');
     if (mode == 'pvp') {
       namebar.classList.add('show');
     } else {
@@ -54,50 +54,37 @@ window.addEventListener('load', function () {
     }
   });
 
-  const themeToggle = document.getElementById('toggle-theme');
-  function setTheme(t) {
-    if (t === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      localStorage.setItem('rg_theme', t);
-      themeToggle.textContent = '☀️ Light'
-    }
-    if (t === 'light') {
-      document.documentElement.setAttribute('data-theme', 'light');
-      localStorage.setItem('rg_theme', t);
-      themeToggle.textContent = '🌙 Dark'
-    }
-  }
-  if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
-  setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
-
-
   //start game
   document.getElementById("startGame").addEventListener("click", () => {
     startGame();
   });
 
-  // grid setup and start new game
-  function startGame() {
-    // Ask Player Name
-    if (modeEl.value === 'pvc') {
-      player1 = localStorage.getItem('player_name') || "Human";
-      player2 = "Computer";
-    } else if (modeEl.value === 'pvp') {
-      player1 = localStorage.getItem('player_name') || "Human1";
-      player2 = localStorage.getItem('player_opponent') || "Human";
-    }
+  function computeCellSize() {
+    const rect = gridWrap.getBoundingClientRect();
+    const availW = Math.max(40, rect.width - 12);
+    const availH = Math.max(40, rect.height - 12);
+    const N = size;
+    const gap = 3;
+    const sizeW = Math.floor((availW - gap * (N - 1)) / N);
+    const sizeH = Math.floor((availH - gap * (N - 1)) / N);
+    let gsize = Math.max(16, Math.min(sizeW, sizeH));
+    gsize = Math.max(16, Math.min(gsize, 96));
+    document.documentElement.style.setProperty('--cell-size', gsize + 'px');
+  }
 
-    board = Array(size).fill().map(() => Array(size).fill(''));
-    boardEl.innerHTML = '';
+  function buildGrid() {
     size = parseInt(document.getElementById('gridSize').value);
-    // grid size setup
-    boardEl.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
-    boardEl.style.gridTemplateRows = `repeat(${size}, 1fr)`;
+    computeCellSize();
+    board = Array(size).fill().map(() => Array(size).fill(''));
+
+    boardEl.style.gridTemplateColumns = `repeat(${size}, var(--cell-size))`;
+    boardEl.style.gridTemplateRows = `repeat(${size}, var(--cell-size)`;
+    boardEl.innerHTML = '';
     currentPlayer = 'x';
     currentPlayer = startingPlayer;
     gameOver = false;
     timer = true;
-    // grid setup
+
     for (let y = 0; y < size; y++) {
       for (let x = 0; x < size; x++) {
         const cell = document.createElement('div');
@@ -108,6 +95,19 @@ window.addEventListener('load', function () {
         boardEl.appendChild(cell);
       }
     }
+  }
+
+  // grid setup and start new game
+  function startGame() {
+    if (modeEl.value === 'pvc') {
+      player1 = localStorage.getItem('player_name') || "Human";
+      player2 = "Computer";
+    } else if (modeEl.value === 'pvp') {
+      player1 = localStorage.getItem('player_name') || "Human1";
+      player2 = localStorage.getItem('player_opponent') || "Human";
+    }
+
+    buildGrid();
     startTimer();
 
     if (modeEl.value === 'pvc' && currentPlayer === 'o') {
@@ -387,6 +387,7 @@ window.addEventListener('load', function () {
   }
 
   const namebar = document.getElementById('namebar');
+  namebar.classList.remove('show');
   if (mode == 'pvp') {
     document.getElementById("nameInput").placeholder = player2 || 'Human2';
     document.getElementById("nameInput").value = player2 || 'Human2';
@@ -429,12 +430,11 @@ window.addEventListener('load', function () {
     }
     let player_name = winnerName;
     let player_opponent = opponent;
-    saveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+    lcsaveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
 
-    window.submitScore &&
-      window.submitScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+    saveScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
   }
   document.addEventListener('DOMContentLoaded', () => {
-    localrenderLeaderboard();
+    lcrenderLeaderboard();
   });
 });

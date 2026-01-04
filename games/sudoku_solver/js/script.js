@@ -1,6 +1,12 @@
 import { textToSpeechEng } from './speak.js';
 import { startTimer, stopTimer } from './timer.js';
 import { playSound } from './sound.js';
+// import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
+import { shareScore } from './share.js';
+
+// export let timer = false;
+export let gameName = 'mastermindsolverauto';
+export let score = 0;
 
 // sizes with box rows/cols 
 const sizes = [
@@ -615,18 +621,6 @@ el.undoBtn.addEventListener('click', () => doUndo());
 // prev or next solution
 el.prevSol.addEventListener('click', () => { textToSpeechEng('Previous'); if (solutions.length === 0) return; solIndex = (solIndex - 1 + solutions.length) % solutions.length; applySolution(solutions[solIndex]); updateSolNav(); });
 el.nextSol.addEventListener('click', () => { textToSpeechEng('Next'); if (solutions.length === 0) return; solIndex = (solIndex + 1) % solutions.length; applySolution(solutions[solIndex]); updateSolNav(); });
-
-//theme change
-el.themeToggle.addEventListener('click', () => {
-    document.body.classList.toggle("dark");
-    if (document.body.classList.contains("dark")) {
-        el.themeToggle.innerText = "☀️ Light";
-        textToSpeechEng('Theme Light');
-    } else {
-        el.themeToggle.innerText = "🌙 Dark";
-        textToSpeechEng('Theme Dark');
-    }
-});
 
 //reset yes button
 el.yesBtn.addEventListener('click', () => {

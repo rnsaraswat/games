@@ -1,10 +1,13 @@
         // import { updateTimer } from './timer.js';
         import { playSound } from './sound.js';
         import { textToSpeechEng } from './speak.js';
-        import { startTimer} from './timer.js';
+        import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
+        import { shareScore } from './share.js';
 
         // define variables
         export let timer = false;
+        export let gameName = 'mastermindsolverauto';
+        export let score = 0;
         let slots = 4;
         let nColors = 6;
         let colors = [];
@@ -284,6 +287,8 @@
                     visualEl.appendChild(msgSecret);
                     renderGuessRow(new Array(slots).fill(c), fb);
 
+                    score = (slots * nColors - guess.length) * 10 * allowDuplicates ? 3 : 1;
+                    shareScore(gameName, score);
                     solverRunning = false;
                     return;
                 }
@@ -366,19 +371,19 @@
         }
 
         //toggle theme
-        const themeToggle = document.getElementById('toggle-theme');
-        function setTheme(t) {
-          if (t === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            localStorage.setItem('rg_theme', t);
-            themeToggle.textContent = '☀️ Light'
-          }
-          if (t === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            localStorage.setItem('rg_theme', t);
-            themeToggle.textContent = '🌙 Dark'
-          }
-        }
-        if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
-        setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+        // const themeToggle = document.getElementById('toggle-theme');
+        // function setTheme(t) {
+        //   if (t === 'dark') {
+        //     document.documentElement.setAttribute('data-theme', 'dark');
+        //     localStorage.setItem('rg_theme', t);
+        //     themeToggle.textContent = '☀️ Light'
+        //   }
+        //   if (t === 'light') {
+        //     document.documentElement.setAttribute('data-theme', 'light');
+        //     localStorage.setItem('rg_theme', t);
+        //     themeToggle.textContent = '🌙 Dark'
+        //   }
+        // }
+        // if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+        // setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
         

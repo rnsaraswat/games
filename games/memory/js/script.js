@@ -3,17 +3,18 @@
 import { startTimer,seconds, minutes, hours, timerInterval } from './timer.js';
 // import { launchConfetti, stopConfetti } from './confetti.js';
 import { playSound } from './sound.js';
-// import { loadBest, saveBest } from './best_score.js';
-import { themeToggle } from './theme.js';
 import { textToSpeechEng } from './speak.js';
-import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
-// import { saveToLeaderboard } from './leaderboard.js';
-// import { timer } from './script.js';
+// import { loadBest, saveBest } from './best_score.js';
+import { shareScore } from './share.js';
+import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
 
 export const levelSel = document.getElementById('level');
 export const themeSel = document.getElementById('theme');
 export let timer = false;
+export let gameName = 'memory';
 export let moves = 0; 
+export let score = 0;
 export let totalTiles = 0;
 
 window.addEventListener('load', function () {
@@ -324,6 +325,8 @@ function onWin() {
     // loadBest();
     wintxt.style.display = 'block';
     wintxt.innerHTML = `🎉${player1} Won!🎉(⏱️${hours}:${minutes}:${seconds}, Moves:${moves})`;
+    shareScore(gameName, score);
+
     // wintxt.textContent = `(⏱️${hrs}:${min}:${sec}`;
     // winbar.classList.add('show');
     // singleColorRow.style.display = colorModeSel.value === 'single' ? 'flex' : 'none';
@@ -355,24 +358,23 @@ function updateleaderboard() {
     let filed4 = "-";
     let email = localStorage.getItem('email') || '-';
     const created_at = new Date();
-    let score = totalTiles * 100 - moves * 10;
+    score = totalTiles * 100 - moves * 10;
     if(difficulty == 'expert') { score = score + 500} 
     else if(difficulty == 'hard') { score = score + 400} 
     else if(difficulty == 'medium') { score = score + 300 }
     else if(difficulty == 'easy') { score = score + 200 }
     else if(difficulty == 'veryeasy') { score = score + 100 }
   
-    saveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
+    lcsaveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
 
     // const entry = { player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at };
     // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
     // boardData.push(entry);
     // localStorage.setItem("leaderboard", JSON.stringify(boardData));
   
-    window.submitScore &&
-      window.submitScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+    saveScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
   }
   document.addEventListener('DOMContentLoaded', () => {
-    localrenderLeaderboard();
+    lcrenderLeaderboard();
 });
   });

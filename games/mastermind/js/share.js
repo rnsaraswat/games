@@ -1,4 +1,4 @@
-import { gameName, score } from '../js/script.js';
+import { gameName, score } from './script.js';
 
 export async function shareScore(gameName, score = 0) {
 

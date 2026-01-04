@@ -2,8 +2,9 @@ import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
 import { launchFireworks } from './edgeFireWorks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
-import { shareScore } from '../../../leaderboard/share.js';
-import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
+import { shareScore } from './share.js';
+import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
 
 export let timer = false;
 export let gameName = 'mastermind';
@@ -55,7 +56,6 @@ function finddifficulty() {
     } else { difficulty = 'expert'; }
     document.getElementById("diffcultydisplay").textContent = difficulty;
 }
-
 
 const colorList = ["#FF0000", "#8b0000", "#fa8072", "#00FF00",
     "#008000", "#006400", "#9acd32", "#008080", "#0000FF", "#000080",
@@ -443,22 +443,6 @@ function disableGame() {
     document.getElementById("colorPopup").style.display = "none";
 }
 
-const themeToggle = document.getElementById('toggle-theme');
-function setTheme(t) {
-    if (t === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('rg_theme', t);
-        themeToggle.textContent = '☀️ Light'
-    }
-    if (t === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('rg_theme', t);
-        themeToggle.textContent = '🌙 Dark'
-    }
-}
-if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
-setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
-
 function updateleaderboard() {
     let player_name = player1;
     let player_opponent = "-";
@@ -481,11 +465,10 @@ function updateleaderboard() {
     else if (difficulty == 'very hard') score = score + 400;
     else score = score + 500;
 
-    saveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
+    lcsaveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
 
-    window.submitScore &&
-        window.submitScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+    saveScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
 }
 document.addEventListener('DOMContentLoaded', () => {
-    localrenderLeaderboard();
+    lcrenderLeaderboard();
 });

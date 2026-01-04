@@ -41,41 +41,6 @@
   --win-text: gold;
 }
 
-
-@font-face {
-  font-family: 'HindiFontGajraj';
-  src: url('../../assets/font/GajrajOne-Regular.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'EnglishFontBangers';
-  src: url('../../assets/font/Bangers-Regular.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Digital';
-  src: url('../../assets/font/digital-italic.ttf') format('truetype');
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1.6vw;
-}
-
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
-  background: var(--bg);
-  color: var(--fg);
-}
-
 .app {
   height: 100vh;
   display: flex;
@@ -97,27 +62,6 @@ body {
   padding: 0.2vw;
   border-radius: 1vw;
   overflow: auto;
-}
-
-h1 {
-  text-align: center;
-  font-size: 2vw;
-  font-family: 'EnglishFontBangers', Arial, Helvetica, sans-serif;
-  color: var(--fg);
-  letter-spacing: .4vw;
-  text-shadow: 0 1px 0 #030303,
-    0 2px 0 #c9c9c9,
-    0 3px 0 #bbb,
-    0 4px 0 #b9b9b9,
-    0 5px 0 #aaa,
-    0 6px 1px var(--box-shadow),
-    0 0 5px var(--box-shadow),
-    0 1px 3px var(--box-shadow),
-    0 3px 5px var(--box-shadow),
-    0 5px 10px var(--box-shadow),
-    0 10px 10px var(--box-shadow),
-    0 20px 20px var(--box-shadow);
-  margin-bottom: 0.3vw;
 }
 
 /* #controls label { */
@@ -499,32 +443,6 @@ input[type="checkbox"]:hover {
   box-shadow: 0 1vw 4vw rgba(0, 0, 0, .45);
 }
 
-.namebar.show {
-  display: flex;
-}
-
-.namebar .row {
-  display: flex;
-  align-items: center;
-  gap: 0.8vw;
-  background: var(--bg);
-  padding: 0.6vh 0.8vw;
-  border-radius: 1vw;
-}
-
-.namebar label {
-  color: var(--fg);
-  font-size: 1.2vw;
-}
-
-.namebar input[type="text"] {
-  border: 0.1vw solid var(--cell-border);
-  background: var(--bg);
-  color: var(--fg);
-  border-radius: 0.8vw;
-  padding: 0.4vh 0.6vw;
-}
-
 /* Confetti canvas */
 #confettiCanvas {
   position: fixed;
@@ -533,31 +451,7 @@ input[type="checkbox"]:hover {
   z-index: 9999;
 }
 
-/* Leaderboard/Rules Popup */
-#leaderboardPopup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 2vw;
-  border-radius: 1vw;
-  display: none;
-  z-index: 10;
-  width: 80%;
-  height: 60%;
-  overflow-y: auto;
-  text-align: center;
-  border: 0.2vw solid var(--cell-border);
-  background: var(--bg);
-  color: var(--fg);
-}
 
-/* leaderboard/rules heading */
-h3 {
-  display: inline;
-  background: var(--bg);
-  color: var(--fg);
-}
 
 /* leaderboard Table */
 table,

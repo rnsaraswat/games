@@ -20,12 +20,12 @@
 // these line are added in javascript file
 //Sounds
     const sounds = {
-        tap: new Audio('assets/sound/tap-sound.mp3'),
-        key: new Audio('assets/sound/single-key-press.mp3'),
-        win: new Audio('assets/sound/winner-trumpets.mp3'),
-        loose: new Audio('assets/sound/Looser.mp3'),
-        bg: new Audio('assets/sound/bg-music.mp3'),
-        fire: new Audio('assets/sound/fireworks.mp3')
+        tap: new Audio('../../assets/sound/tap-sound.mp3'),
+        key: new Audio('../../assets/sound/single-key-press.mp3'),
+        win: new Audio('../../assets/sound/winner-trumpets.mp3'),
+        loose: new Audio('../../assets/sound/Looser.mp3'),
+        bg: new Audio('../../assets/sound/bg-music.mp3'),
+        fire: new Audio('../../assets/sound/fireworks.mp3')
     };
 
     let soundEnabled = false;

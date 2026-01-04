@@ -1,60 +1,3 @@
-:root {
-    --bg-color: #f0f0f0;
-    --text-color: #111;
-    --cell-bg: #fff;
-    --cell-bg-hover: #c1c1c1;
-    --cell-border: #333;
-    --box-shadow: rgba(0, 0, 0, 0.2);
-    --bg-hover: #d1d1d1;
-}
-
-[data-theme='dark'] {
-    --bg-color: #121212;
-    --text-color: #eee;
-    --cell-bg: #1e1e1e;
-    --cell-bg-hover: #5f5f5f;
-    --cell-border: #d9d8d8;
-    --box-shadow: rgba(255, 255, 255, 0.5);
-    --bg-hover: #454545;
-}
-@font-face {
-    font-family: 'HindiFontGajraj';
-    src: url('../../GajrajOne-Regular.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'EnglishFontBangers';
-    src: url('../../assets/font/Bangers-Regular.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Digital';
-    src: url('../../assets/font/digital-italic.ttf') format('truetype');
-  }
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-html,
-body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    font-family: Arial, sans-serif;
-    box-sizing: border-box;
-    background: var(--bg-color);
-    color: var(--text-color);
-    transition: background 0.3s, color 0.3s;
-    flex-wrap: wrap;
-    justify-content: center;
-    font-size: 1.6vw;
-}
-
 /* Layout Responsive */
 .container {
     /* display: flex;
@@ -74,7 +17,7 @@ body {
 }
 
 #left {
-    background: var(--bg-color);
+    background: var(--bg);
     padding: 0.1vw;
     flex: 0 0 30vw;
     display: flex;
@@ -84,27 +27,6 @@ body {
     /* max-width: 30vw; */
 }
 
-#left h1 {
-    text-align: center;
-    font-size: 4vw;
-    font-family: 'EnglishFontBangers', Arial, Helvetica, sans-serif;
-    color: var(--text-color);
-    letter-spacing: .8vw;
-    text-shadow: 0 1px 0 #030303,
-        0 2px 0 #c9c9c9,
-        0 3px 0 #bbb,
-        0 4px 0 #b9b9b9,
-        0 5px 0 #aaa,
-        0 6px 1px var(--box-shadow),
-        0 0 5px var(--box-shadow),
-        0 1px 3px var(--box-shadow),
-        0 3px 5px var(--box-shadow),
-        0 5px 10px var(--box-shadow),
-        0 10px 10px var(--box-shadow),
-        0 20px 20px var(--box-shadow);
-    margin-bottom: 1vw;
-}
-
 .button-group {
     display: flex;
     flex-wrap: wrap;
@@ -112,34 +34,6 @@ body {
     justify-content: center;
     margin-bottom: 1vw;
     width: 100%;
-}
-
-select,
-label,
-input,
-button {
-    padding: 0.2vw 0.4vw;
-    font-size: 1.6vw;
-    margin-top: 0.1vh;
-    transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-    cursor: pointer;
-    background: var(--bg-color);
-    color: var(--text-color);
-    border: 0.2vw solid var(--cell-border);
-    border-radius: 0.5vw;
-}
-
-select:hover {
-    background: var(--bg-hover);
-}
-
-input:hover {
-    background: var(--bg-hover);
-}
-
-button:hover {
-    background: var(--bg-hover);
 }
 
 button.primary {
@@ -230,28 +124,6 @@ button.primary:hover {
     box-shadow: 0 2vw 2.5vw 0 rgba(0, 0, 0, 0.2);
 }
 
-#heading {
-    /* flex: 1 1 100px; */
-    font-family: 'EnglishFontBangers', Arial, Helvetica, sans-serif;
-    text-align: center;
-    font-size: 3vw;
-    color: #0106008e;
-    letter-spacing: .5vw;
-    text-shadow: 0 0.1vw 0 #ccc,
-        0 0.2vw 0 #c9c9c9,
-        0 0.3vw 0 #bbb,
-        0 0.4vw 0 #b9b9b9,
-        0 0.5vw 0 #aaa,
-        0 0.6vw 0.1vw rgba(0, 0, 0, .1),
-        0 0 0.5vw rgba(0, 0, 0, .1),
-        0 0.1vw 0.3vw rgba(0, 0, 0, .3),
-        0 0.3vw 0.5vw rgba(0, 0, 0, .2),
-        0 0.5vw 1vw rgba(0, 0, 0, .25),
-        0 1vw 1vw rgba(0, 0, 0, .2),
-        0 2vw 2vw rgba(0, 0, 0, .15);
-}
-
-
 .msgr {
     /* width: 100px; */
     font-family: 'EnglishFontBangers', Arial, Helvetica, sans-serif;
@@ -273,45 +145,6 @@ button.primary:hover {
     background-color: white;
 }
 
-/* #menu {
-    position: absolute;
-    margin-top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    background-color: purple;
-    overflow-y:scroll;
-    overflow-x: hidden;
-} */
-
-/* #menu-heading {
-    position: relative;
-    margin-top: 0;
-    left: 0;
-    height: 5vw;
-    width: 100vw;
-    background-color: yellow;
-    font-size: 3vw;
-    line-height: 5vw;
-    text-align: center;
-    font-weight: 900;
-} */
-
-/* .lvl {
-    position: relative;
-    margin-top: 3vw;
-    left: 1vw;
-    right: 1vw;
-    width: calc(100vw - 3vw);
-    height: 8vw;
-    color: white;
-    background-color: darkgreen;
-    text-align: center;
-    font-size: 3vw;
-    font-weight: 600;
-    line-height: 8vw;
-    border-radius: 2vw;
-} */
 
 #level {
     z-index: 1;

@@ -2,8 +2,9 @@ import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
 import { launchFireworks } from './edgeFireWorks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
-import { shareScore } from '../../../leaderboard/share.js';
-import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
+import { shareScore } from './share.js';
+import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
 
 export const modeEl = document.getElementById('mode');
 export const difficultyEl = document.getElementById('difficulty');
@@ -55,22 +56,22 @@ window.addEventListener('load', function () {
     }
   });
 
-  //toggle theme
-  const themeToggle = document.getElementById('toggle-theme');
-  function setTheme(t) {
-    if (t === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      localStorage.setItem('rg_theme', t);
-      themeToggle.textContent = '☀️ Light'
-    }
-    if (t === 'light') {
-      document.documentElement.setAttribute('data-theme', 'light');
-      localStorage.setItem('rg_theme', t);
-      themeToggle.textContent = '🌙 Dark'
-    }
-  }
-  if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
-  setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+  // //toggle theme
+  // const themeToggle = document.getElementById('toggle-theme');
+  // function setTheme(t) {
+  //   if (t === 'dark') {
+  //     document.documentElement.setAttribute('data-theme', 'dark');
+  //     localStorage.setItem('rg_theme', t);
+  //     themeToggle.textContent = '☀️ Light'
+  //   }
+  //   if (t === 'light') {
+  //     document.documentElement.setAttribute('data-theme', 'light');
+  //     localStorage.setItem('rg_theme', t);
+  //     themeToggle.textContent = '🌙 Dark'
+  //   }
+  // }
+  // if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+  // setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
   //start game
   document.getElementById("startGame").addEventListener("click", () => {
@@ -445,16 +446,11 @@ window.addEventListener('load', function () {
     }
     if (difficulty == 'hard') { score = score + 500 } else if (difficulty == 'medium') { score = score + 200 }
 
-    saveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
-    //   const entry = { winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
-    // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-    // boardData.push(entry);
-    // localStorage.setItem("leaderboard", JSON.stringify(boardData));
+    lcsaveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
 
-    window.submitScore &&
-      window.submitScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+    saveScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
   }
   document.addEventListener('DOMContentLoaded', () => {
-    localrenderLeaderboard();
+    lcrenderLeaderboard();
   });
 });

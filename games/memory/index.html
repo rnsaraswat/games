@@ -5,18 +5,27 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Memory</title>
+    <meta name="description"
+    content="Ravindra Games Hub — collection of lightweight web games (memory) flip, match and win">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="rules.css">
+    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+    <link rel="stylesheet" href="../../commoncss.css">
+    <link rel="manifest" href="../../manifest.json" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <meta name="theme-color" content="#6200ee" />
 </head>
 
 <body>
     <div id="main">
-        <h1>Memory</h1>
+        <h1 class="h1-memory">Memory</h1>
         <header id="hdr">
             <!-- <div class="controls"> -->
-            <label>Level
-                <select id="level">
+                <button id="startBtn" class="button-primary-memory">🔄Start</button>
+            <label class="label-memory">Level
+                <select id="level" class="button-memory">
                     <option value="veryeasy">👶 Very Easy (4×4)</option>
                     <option value="easy">🙂 Easy (6×6)</option>
                     <option value="medium">🤔 Medium (8×8)</option>
@@ -24,8 +33,8 @@
                     <option value="expert" selected>🎓Expert (12×12)</option>
                 </select>
             </label>
-            <label>Theme
-                <select id="theme">
+            <label class="label-memory">Theme
+                <select id="theme" class="button-memory">
                     <option value="animals">🦁Animals</option>
                     <option value="beach">🏖️ Beach</option>
                     <option value="bird">🐦 Bird</option>
@@ -52,7 +61,7 @@
                     <option value="vegetable">🍅 Vegitable</option>
                 </select>
             </label>
-            <button id="startBtn" class="primary">Start</button>
+
             <!-- </div> -->
             <!-- <div class="stats"> -->
             <!-- <div>🏆 Best: <b id="best">—</b></div> -->
@@ -66,18 +75,17 @@
             <button class="primary" id="toggle-sound">🔇 Music:Off"</button>
             <p id="loading">Loading...</p> -->
             <!-- </div> -->
-            <button id="toggle-theme">☀️ Light</button>
+            <button id="toggle-theme" class="button-memory">☀️ Light</button>
             <!-- to sound on / off button -->
-            <button id="toggle-sound">🔇 Sound: Off"</button>
-            <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
-            <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
-            <div>🌀 Moves: <b id="moves">0</b></div>
-            <div id="timerdisplay">⏱️ 00:00:00</div>
-            <button class="primary" id="shareBtn">📤Sharing</button>
-
-            <button class="primary" id="toggle-feedback">📝Feedback</button>
-            <button class="primary"
-                onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+            <button id="toggle-sound" class="button-memory">🔇 Sound: Off"</button>
+            <button class="button-primary-memory" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global Leaderboard</button>
+            <button class="button-primary-memory" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local Leaderboard</button>
+            <button class="button-primary-memory" id="shareBtn">📤Sharing</button>
+            <button class="button-primary-memory" onclick="openGlobalFeedback()">💬 Feedback</button>
+            <button class="button-primary-memory"
+              onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+              <div class="label-memory">🌀 Moves: <b id="moves">0</b></div>
+              <div id="timer-display">⏱️ 00:00:00</div>
         </header>
     </div>
 
@@ -97,144 +105,94 @@
     </div> -->
 
     <p id="loading">Loading...</p>
+    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+    <div id="lcLeaderboardModal" class="lc-main-container"></div>
+    <div id="gbLeaderboardModal" class="gb-main-container"></div>
     <!-- Display winning text -->
     <div id="winText">🎉 You Won! 🎉</div>
     <!-- fire crackers canvas -->
     <canvas id="confettiCanvas"></canvas>
-    <!-- <div class="namebar" id="namebar" aria-live="polite">
-        <div class="row">
-            <label for="nameInput">Player Name :
-                <input type="text" id="nameInput" placeholder="Human" value="Human">
-            </label>
-            <button id="name" class="primary">Ok</button>
-        </div>
-    </div> -->
+    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
+    <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+    <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <script type="module" src="js/script.js"></script>
     <!-- <script type="module" src="js/rules.js"></script> -->
-    <script type="module">
+    <!-- <script type="module">
         import { shareScore } from '../../leaderboard/share.js';
         document.getElementById("shareBtn").addEventListener("click", async () => {
             shareScore("memory", 0);
         });
-    </script>
-    <script type="module">
-        import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
-        window.sortTable = sortTable;
-        window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
-            try {
-                await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
-            } catch (e) {
-                document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
-            }
-        };
-        document.addEventListener('DOMContentLoaded', () => {
-            renderLeaderboard('memory');
-        });
-    </script>
-
-    <script type="module">
-        import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
-        document.addEventListener('DOMContentLoaded', () => {
-            localrenderLeaderboard();
-        });
-    </script>
-
+    </script> -->
     <script>
-        function hideFeedback() {
-            document.getElementById("feedbackPopup").style.display = 'none';
-        };
+    const themeToggle = document.getElementById('toggle-theme');
+    function setTheme(t) {
+      if (t === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('rg_theme', t);
+        themeToggle.textContent = '☀️ Light'
+      }
+      if (t === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('rg_theme', t);
+        themeToggle.textContent = '🌙 Dark'
+      }
+    }
+    if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+    setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
-        function hideLB() {
-            document.getElementById("leaderboardPopup").style.display = 'none';
-        };
+    function openGlobalLeaderboard() {
+      document.getElementById("gbLeaderboardModal").style.display = 'flex';
+    };
 
-        function hideLLB() {
-            document.getElementById("localleaderboardPopup").style.display = 'none';
-        };
-
-        function clearLLB() {
-            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
-                localStorage.removeItem('leaderboard');
-                alert("All games Local Leaderboard Data is Cleared");
-                textToSpeechEng('Local Leaderboard data cleared');
-            }
-        };
-
-        fetch('../../leaderboard/leaderboard.html')
-            .then(response => response.text())
-            .then(htmlText => {
-                document.getElementById('leaderboardPopup').innerHTML = htmlText;
-            });
-
-        fetch('../../leaderboard/localleaderboard.html')
-            .then(response => response.text())
-            .then(htmlText => {
-                document.getElementById('localleaderboardPopup').innerHTML = htmlText;
-            });
-
-        fetch('../../leaderboard/feedback.html')
-            .then(response => response.text())
-            .then(htmlText => {
-                document.getElementById('feedbackPopup').innerHTML = htmlText;
-            });
-
-        document.getElementById("leaderboardPopup").style.display = 'none';
-        document.getElementById("localleaderboardPopup").style.display = 'none';
-        document.getElementById("feedbackPopup").style.display = 'none';
-
-        document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-            if (document.getElementById("toggle-leaderboard").style.display === 'block') {
-                document.getElementById("leaderboardPopup").style.display = 'none';
-                return;
-            } else {
-                document.getElementById("leaderboardPopup").style.display = 'block';
-                loadCSS()
-            }
-        });
-
-        document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
-            if (document.getElementById("leaderboardPopup").style.display === 'block') {
-                document.getElementById("localleaderboardPopup").style.display = 'none';
-                return;
-            } else {
-                document.getElementById("localleaderboardPopup").style.display = 'block';
-                loadCSS();
-            }
-        });
+    function closeGlobalLeaderboard() {
+      document.getElementById("gbLeaderboardModal").style.display = 'none';
+    };
 
 
-        document.getElementById("toggle-feedback").addEventListener("click", () => {
-            if (document.getElementById("feedbackPopup").style.display === 'block') {
-                document.getElementById("feedbackPopup").style.display = 'none';
-                return;
-            } else {
-                document.getElementById("feedbackPopup").style.display = 'block';
-                loadfeedbakCSS();
-            }
-        });
+    fetch('../../leaderboard/gbleaderboard.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
+        document.getElementById("gbLeaderboardModal").style.display = 'none';
+      });
 
-        function loadfeedbakCSS() {
-            var head = document.head;
-            var link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = '../../leaderboard/feedback.css';
-            head.appendChild(link);
-        }
+    function openLocalLeaderboard() {
+      document.getElementById("lcLeaderboardModal").style.display = 'flex';
+    };
 
-        function loadCSS() {
-            var head = document.head;
-            var link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = '../../leaderboard/leaderboard.css';
-            head.appendChild(link);
-        }
+    function closeLocalLeaderboard() {
+      document.getElementById("lcLeaderboardModal").style.display = 'none';
+    };
 
-        window.onload = function () {
-            loadCSS();
-            loadfeedbakCSS();
-        };
+    function clearLLB() {
+      if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+        localStorage.removeItem('leaderboard');
+        alert("All games Local Leaderboard Data is Cleared");
+        textToSpeechEng('Local Leaderboard data cleared');
+      }
+    };
+    
+    fetch('../../leaderboard/lcleaderboard.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
+        document.getElementById("lcLeaderboardModal").style.display = 'none';
+      });
+
+    function openGlobalFeedback() {
+      document.getElementById("gb-feedbackModal").style.display = 'flex';
+    };
+
+    function closeGlobalFeedback() {
+      document.getElementById("gb-feedbackModal").style.display = 'none';
+    };
+
+    fetch('../../leaderboard/gbfeedback.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+        document.getElementById("gb-feedbackModal").style.display = 'none';
+      });
 
         (async () => {
             const GAME_NAME = "Memory Game";
@@ -273,7 +231,7 @@
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {
                 navigator.serviceWorker
-                    .register("./sw.js")
+                    .register("../../sw.js")
                     .then(() => console.log("SW registered"))
                     .catch((err) => console.log("SW error", err));
             });

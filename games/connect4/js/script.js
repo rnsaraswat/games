@@ -2,8 +2,9 @@ import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
 import { launchFireworks } from './edgeFireWorks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
-import { shareScore } from '../../../leaderboard/share.js';
-import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
+import { shareScore } from './share.js';
+import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
 
 export let timer = false;
 export let winnerName;
@@ -316,14 +317,13 @@ window.addEventListener('load', function () {
         let email = localStorage.getItem('email') || '-';
         const created_at = new Date();
     
-        saveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+        lcsaveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
     
-        window.submitScore &&
-          window.submitScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+        saveScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
       }
 
       document.addEventListener('DOMContentLoaded', () => {
-        localrenderLeaderboard();
+        lcrenderLeaderboard();
       });
 });
 

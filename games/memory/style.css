@@ -1,6 +1,4 @@
 :root {
-    --bg: #f0f0f0;
-    --fg: #222;
     --muted: #a9a9b3;
     --ok: #22c55e;
     --card: #2a2a31;
@@ -8,73 +6,17 @@
     --gap: 0.3vw;
     --win-text: gold;
     --card-size: 96px;
-    --cell-border: #333;
-    --box-shadow: rgba(0, 0, 0, 0.2);
-    --shadow: 0 0.6vw 2vw rgba(0, 0, 0, .08);
 }
 
 [data-theme='dark']  {
-    --bg: #454545;
-    --fg: #eee;
-    --cell-border: #d9d8d8;
-    --box-shadow: rgba(255, 255, 255, 0.3);
     --card: #0b1223;
-    --shadow: 0 0.6vw 2vw rgba(0, 0, 0, .35);
     --win-text: rgb(251, 0, 255);
 }
 
-
-@font-face {
-    font-family: 'HindiFontGajraj';
-    src: url('../../assets/font/GajrajOne-Regular.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'EnglishFontBangers';
-    src: url('../../assets/font/Bangers-Regular.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Digital';
-    src: url('../../assets/font/digital-italic.ttf') format('truetype');
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 1.6vw;
-}
-
-/* html,
-body {
-    height: 100%;
-    overflow: hidden;
-} */
-
-html,
-body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-    background: var(--bg);
-    color: var(--fg);
-    display: flex;
-    flex-direction: column;
-    transition: background 0.3s, color 0.3s;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-/* Layout Responsive */
-/* top */
 #main {
     border: 0.2vw solid var(--cell-border);
     background: var(--bg);
-    color: var(--fg);
+    color: var(--text);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -84,7 +26,7 @@ body {
 header {
     padding: 0.2vw 0.2vw;
     background: var(--bg);
-    color: var(--fg);
+    color: var(--text);
     display: flex;
     gap: 0.5vw;
     flex-wrap: wrap;
@@ -94,28 +36,6 @@ header {
     box-shadow: 0 1vw 4vw var(--box-shadow);
 }
 
-h1 {
-    text-align: center;
-    font-size: 1.5vw;
-    font-family: 'EnglishFontBangers', Arial, Helvetica, sans-serif;
-    color: var(--text-color);
-    letter-spacing: .2vw;
-    text-shadow: 0 1px 0 #030303,
-        0 2px 0 #c9c9c9,
-        0 3px 0 #bbb,
-        0 4px 0 #b9b9b9,
-        0 5px 0 #aaa,
-        0 6px 1px var(--box-shadow),
-        0 0 5px var(--box-shadow),
-        0 1px 3px var(--box-shadow),
-        0 3px 5px var(--box-shadow),
-        0 5px 10px var(--box-shadow),
-        0 10px 10px var(--box-shadow),
-        0 20px 20px var(--box-shadow);
-    margin-bottom: 0.3vw;
-    width: 18%;
-}
-
 .controls {
     display: flex;
     gap: 0.8vw;
@@ -123,19 +43,11 @@ h1 {
     align-items: center;
 }
 
-select,
-button {
-    background: var(--bg);
-    color: var(--fg);
-    border: 0.1vw solid var(--cell-border);
-    border-radius: 1vw;
-    padding: 0.7vh 1vw;
-    font-size: 1.2vw;
-    cursor: pointer;
-    box-shadow: 0 1vw 4vw var(--box-shadow);
+.h1-memory {
+    font-size: 2vw;
 }
 
-button.primary {
+.button-primary-memory {
     gap: 0.8vw;
     align-items: center;
     flex-wrap: wrap;
@@ -158,39 +70,82 @@ button.primary {
     box-shadow: 0 1vw 4vw var(--box-shadow);
 }
 
-button.primary:hover {
-    opacity: 0.6;
+.button-primary-memory:hover {
+    background: linear-gradient(180deg, #059669, #10b981);
 }
 
-/* .buttonleadderboard {
-    padding: 0.5vh 1vw;
-    background: #4CAF50;
+.button-memory {
+    gap: 0.8vw;
+    align-items: center;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0.2vw 1.2vw;
+    margin: 1vw 0.2vw 0.5vw 0.2vw;
+    font-size: 1.6vw;
+    display: inline-block;
+    margin-top: 0.1vh;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+    border-radius: 0.5vw;
+    background: var(--bg);
+    color: var(--text);
+    /* background: linear-gradient(90deg, var(--accent), #7c3aed); */
+    /* color: #fff; */
+    /* border-color: transparent; */
+    /* background: linear-gradient(180deg, #10b981, #059669); */
+    /* border: none; */
+    /* box-shadow: 0 1vw 4vw var(--box-shadow); */
+}
+
+.button-memory:hover {
+    background: var(--bg-hover);
+}
+
+.label-memory {
+    gap: 0.8vw;
+    align-items: center;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0px 0px;
+    margin: 0px;
+    font-size: 1.6vw;
+    display: inline-block;
+    margin-top: 0.1vh;
+    transition: background-color 0.3s, transform 0.2s;
+    /* box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow); */
+    /* border-radius: 0.5vw; */
+    background: none;
+    color: var(--text);
+    /* background: linear-gradient(90deg, var(--accent), #7c3aed); */
+    /* color: #fff; */
+    /* border-color: transparent; */
+    /* background: linear-gradient(180deg, #10b981, #059669); */
     border: none;
-    color: var(--fg);
-    cursor: pointer;
+    /* box-shadow: 0 1vw 4vw var(--box-shadow); */
 }
 
-.buttonleadderboard:hover {
-    background: #45a049;
-    color: var(--fg);
+/* .label-memory:hover {
+    background: var(--bg-hover);
 } */
 
 .stats {
     display: flex;
     gap: 1.4vw;
-    color: var(--fg);
+    color: var(--text);
     background: var(--bg);
     font-size: .1.2vw;
     margin-left: 0.8vw;
 }
 
 .stats b {
-    color: var(--fg);
+    color: var(--text);
     background: var(--bg);
 }
 
-/* Layout Responsive */
-/* Board takes the rest of the screen */
 /* bottom */
 .board-wrap {
     position: relative;
@@ -198,7 +153,7 @@ button.primary:hover {
 }
 
 .board {
-    position: absolute;
+    /* position: absolute; */
     inset: 0;
     top: 0;
     /* we leave 0 padding; sizing is pure JS to fit viewport */
@@ -273,6 +228,20 @@ button.primary:hover {
     outline: 0.3vw solid var(--ok);
 }
 
+#timer-display{
+    font-family: 'Digital', Arial, Helvetica, sans-serif;
+    text-align: center;
+    width: auto;
+    height: auto;
+    font-size: 1.6vw;
+    padding: 0px;
+    margin: 0px;
+    /* background: var(--bg); */
+    color: var(--text);
+    border: none;
+    font-size: 1.6vw;
+
+  }
 
 /* Confetti canvas */
 #confettiCanvas {
@@ -287,6 +256,25 @@ button.primary:hover {
         left: 0.8vw;
         right: 0.8vw;
         transform: none;
+    }
+
+    .h1-memory {
+        font-size: 4vw;
+    }
+
+    .label-memory {
+        font-size: 3vw;
+    }
+
+    .button-memory {
+        font-size: 3vw;
+    }
+    .button-primary-memory {
+        font-size: 3vw;
+    }
+
+    #timer-display{
+        font-size: 3vw;
     }
 }
 
@@ -306,26 +294,9 @@ button.primary:hover {
     text-align: center;
     border: 0.2vw solid var(--cell-border);
     background: var(--bg);
-    color: var(--fg);
+    color: var(--text);
 }
 
-h3 {
-    display: inline;
-    background: var(--bg);
-    color: var(--fg);
-}
-
-table,
-th,
-td {
-    border: 0.1vw solid var(--cell-border);
-    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-    margin: auto;
-    text-align: center;
-    padding: 0.1vw;
-    background: var(--bg);
-    color: var(--fg);
-}
 
 /* display wining text */
 #winText {
@@ -341,49 +312,4 @@ td {
     z-index: 1001;
     transition: opacity 0.5s ease, transform 0.5s ease;
     pointer-events: none;
-}
-
-/* Win panel on main screen */
-.namebar {
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 1vw;
-    background: var(--bg);
-    color: var(--fg);
-    border: 0.1vw solid var(--cell-border);
-    border-radius: 1.4vw;
-    padding: 1vw;
-    z-index: 10001;
-    display: none;
-    gap: 1vw;
-    align-items: center;
-    flex-wrap: wrap;
-    box-shadow: 0 1vw 4vw rgba(0, 0, 0, .45);
-}
-
-.namebar.show {
-    display: flex;
-}
-
-.namebar .row {
-    display: flex;
-    align-items: center;
-    gap: 0.8vw;
-    background: var(--bg);
-    padding: 0.6vh 0.8vw;
-    border-radius: 1vw;
-}
-
-.namebar label {
-    color: var(--fg);
-    font-size: 1.2vw;
-}
-
-.namebar input[type="text"] {
-    border: 0.1vw solid var(--cell-border);
-    background: var(--bg);
-    color: var(--fg);
-    border-radius: 0.8vw;
-    padding: 0.4vh 0.6vw;
 }

@@ -1,6 +1,4 @@
 :root {
-    --bg: #f0f0f0;
-    --text: #111;
     --border: #222325d4;
     --border-highlight: #eeff00;
     --accent: #22d3ee;
@@ -8,7 +6,6 @@
     --note: #8a8f99;
     --solved: #135fc4;
     --numpad-bg: #fff;
-    --box-shadow: rgba(0, 0, 0, 0.2);
     --cell-min: 25px;
     --cell-max: 96px;
     --cell-size: 20px;
@@ -16,10 +13,8 @@
 }
 
 body.dark {
-    --bg: #121212;            
     --cell-min: 25px;
     --cell-max: 96px;
-    --text: #e5e7eb;
     --border: #ffffffd9;
     --border-highlight: #fff700;
     --accent: #22d3ee;
@@ -27,41 +22,7 @@ body.dark {
     --note: #7f8b9a;
     --solved: #82b1ff;
     --numpad-bg: #0b1530;
-    --box-shadow: rgba(255, 255, 255, 0.5);
     --cell-alt-bg: #595959;
-}
-
-@font-face {
-    font-family: 'HindiFontGajraj';
-    src: url('../../assets/font/GajrajOne-Regular.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'EnglishFontBangers';
-    src: url('../../assets/font/Bangers-Regular.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Digital';
-    src: url('../../assets/font/digital-italic.ttf') format('truetype');
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 1.6vw;
-}
-
-html,
-body {
-    height: 100%;
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: Inter, Segoe UI, Roboto, Arial;
-    overflow: hidden
 }
 
 .app {
@@ -88,42 +49,7 @@ body {
     overflow: auto;
 }
 
-h1 {
-    text-align: center;
-    font-size: 2vw;
-    font-family: 'EnglishFontBangers', Arial, Helvetica, sans-serif;
-    color: var(--fg);
-    letter-spacing: .2vw;
-    text-shadow: 0 1px 0 #030303,
-        0 2px 0 #c9c9c9,
-        0 3px 0 #bbb,
-        0 4px 0 #b9b9b9,
-        0 5px 0 #aaa,
-        0 6px 1px var(--box-shadow),
-        0 0 5px var(--box-shadow),
-        0 1px 3px var(--box-shadow),
-        0 3px 5px var(--box-shadow),
-        0 5px 10px var(--box-shadow),
-        0 10px 10px var(--box-shadow),
-        0 20px 20px var(--box-shadow);
-    margin-bottom: 0.3vw;
-}
 
-select,
-label {
-    padding: 0.6vw 1vw;
-    font-size: 1.6vw;
-    margin: 0.2vw 0.2vw;
-    /* margin-top: 0.1vh; */
-    transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-    border-radius: 0.5vw;
-    /* cursor: pointer; */
-    background: var(--bg);
-    color: var(--text);
-    /* border: 0.2vw solid var(--border); */
-    /* border: 0.2vw solid var(--cell-border); */
-}
 #lebelMaxSol {
     padding: 0.6vw 1vw;
 }

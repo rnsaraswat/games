@@ -1,3 +1,8 @@
+:root {
+  --cell-size: 20px;
+  --win-text: gold;
+}
+
 #container {
   height: 100vh;
   display: flex;
@@ -21,17 +26,8 @@
   overflow: auto;
 }
 
-.Other-Buttons {
-  text-align: center;
-}
-
 .button-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 10px;
+  text-align: center;
 }
 
 button.primary {
@@ -74,7 +70,7 @@ button.primary:hover {
 
 #right {
   flex: 1;
-  display: grid;
+  display: flex;
   align-items: start;
   justify-content: center;
   overflow: hidden;
@@ -82,7 +78,7 @@ button.primary:hover {
 }
 
 #grid {
-  width: min(100vmin, 100%);
+  /* width: min(100vmin, 100%); */
   /* height: min(100vmin, 100%); */
   display: grid;
   gap: 1px;
@@ -123,14 +119,6 @@ button.primary:hover {
 .cell.win {
   background: gold !important;
   color: black !important;
-}
-
-#timer-display {
-  font-family: 'Digital', Arial, Helvetica, sans-serif;
-  font-size: 15px;
-  text-align: center;
-  font-weight: bold;
-  color: var(--text);
 }
 
 @media (max-aspect-ratio: 1/1),
@@ -184,7 +172,20 @@ button.primary:hover {
   pointer-events: none;
 }
 
-/* .name-main-container {
+#timer-display{
+  font-family: 'Digital', Arial, Helvetica, sans-serif;
+  text-align: center;
+  width: auto;
+  height: auto;
+  font-size: 15px;
+  padding: 5px 5px;
+  margin: 5px 2px 5px 2px;
+  background: var(--bg);
+  color: var(--text);
+  border: none;
+}
+
+.name-main-container {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -196,7 +197,6 @@ button.primary:hover {
   border: 2px solid #333;
   z-index: 10;
 
-  display: flex;
   flex-direction: column;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
@@ -212,7 +212,6 @@ button.primary:hover {
 }
 
 .name-mid-section {
-
   flex: 1;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
@@ -227,7 +226,7 @@ button.primary:hover {
 .name-footer-section {
   display: flex;
   justify-content: space-around;
-} */
+}
 
 .name-primary-button {
   padding: 10px 12px;
@@ -250,7 +249,7 @@ button.primary:hover {
 #namebar.show {
   display: flex;
 }
-
+/* 
 #leaderboardPopup {
   position: fixed;
   top: 50%;
@@ -269,12 +268,6 @@ button.primary:hover {
   color: var(--text);
 }
 
-h3 {
-  display: inline;
-  background: var(--bg);
-  color: var(--text);
-}
-
 .popupWindow {
   position: fixed;
   top: 50%;
@@ -284,8 +277,8 @@ h3 {
   border-radius: 10px;
   display: none;
   z-index: 10;
-  width: 80%;
-  height: 80%;
+  width: 95%;
+  height: 95%;
   overflow-x: hidden;
   overflow-y: auto;
   text-align: center;
@@ -307,4 +300,4 @@ h3 {
   margin-top: 20px;
   height: calc(100% - 20px);
   overflow-y: auto;
-}
+} */

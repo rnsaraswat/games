@@ -1,19 +1,19 @@
 import { textToSpeechEng } from './speak.js';
 
 document.getElementById("toggle-rules").addEventListener("click", () => {
-    if (document.getElementById("toggle-rules").textContent === "View Rules") {
+    if (document.getElementById("toggle-rules").textContent === "📜View Rules") {
         document.getElementById("toggle-rules").textContent = "Hide Rules";
         textToSpeechEng('Open Rules');
         showRules();
     } else {
-        document.getElementById("toggle-rules").textContent = "View Rules"
+        document.getElementById("toggle-rules").textContent = "📜View Rules"
         textToSpeechEng('Close Rules');
         document.getElementById("rulesPopup").style.display = "none";
     }
 });
 
 document.getElementById("hide-rules").addEventListener("click", () => {
-    document.getElementById("toggle-rules").textContent = "View Rules"
+    document.getElementById("toggle-rules").textContent = "📜View Rules"
     textToSpeechEng('Close Rules');
     document.getElementById("rulesPopup").style.display = "none";
 });

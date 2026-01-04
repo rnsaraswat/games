@@ -5,7 +5,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Sudoku Solver</title>
+    <meta name="description"
+    content="Ravindra Games Hub — collection of lightweight web games (Sudoku Solver) Solve number game in squre">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+    <link rel="stylesheet" href="../../commoncss.css">
+    <link rel="manifest" href="../../manifest.json" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <meta name="theme-color" content="#6200ee" />
 </head>
 
@@ -14,23 +20,23 @@
         <div class="main">
             <aside class="controls">
                 <h1>Sudoku Solver</h1>
-                <label>Size</label>
+                <label>Size = </label>
                 <select id="sizeSelect"></select>
                 <!-- <button class="btn" id="newBtn">New Game</button> -->
                 <!-- <button class="btn" id="startBtn">Start / Fill</button> -->
-                <label id="lebelMaxSol" for="maxSolutions">Max Solutions <input id="maxSolutions" class="lebelMaxSolVal"
-                        type="number" value="1" min="1" max="100" /></label>
+                <label id="lebelMaxSol" for="maxSolutions">Max Solutions = </label><input id="maxSolutions" class="lebelMaxSolVal"
+                        type="number" value="1" min="1" max="100" />
 
-                <button class="primary" id="solveBtn">🔓 Solve</button>
+                <button class="button-primary" id="solveBtn">🔓 Solve</button>
                 <button class="btn" id="unsolveBtn">🔒Unsolve</button>
                 <button class="btn" id="resetBtn">🔄 Reset</button>
                 <button class="btn" id="undoBtn">↶ Undo</button>
-                <button class="btn" id="themeToggle">🌙 Dark</button>
+                <button class="btn" id="toggle-theme">🌙 Dark</button>
                 <button class="btn" id="toggle-sound">🔇 Music:Off"</button>
-                <button class="primary" id="shareBtn">📤Sharing</button>
+                <button class="button-primary" id="shareBtn">📤Sharing</button>
 
-                <button class="primary" id="toggle-feedback">📝Feedback</button>
-                <button class="primary"
+                <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+                <button class="button-primary"
                     onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
                 <div id="info">
                     <!-- <label><input type="checkbox" id="altBgToggle"> Alternate subgrid bg</label> -->
@@ -38,7 +44,7 @@
 
                     <div class="info">
                         <!-- <div>Timer</div> -->
-                        <div id="timer">⏱ 00:00:00</div>
+                        <div id="timer-display">⏱️ 00:00:00</div>
                         <button class="btn" id="pauseBtn">⏸Pause</button>
                         <div id="filledInfo">Filled: 0</div>
                         <div id="remainInfo">Empty: 0</div>
@@ -49,9 +55,9 @@
 
                     <div class="info">
                         <div class="small">Solutions</div>
-                        <button class="btn" id="prevSol">⏮️ ⏪ Prev</button>
+                        <button class="btn" id="prevSol">First⏮️ ⏪Prev</button>
                         <div id="solIndex">0 / 0</div>
-                        <button class="btn" id="nextSol">⏩ ⏭️ Next</button>
+                        <button class="btn" id="nextSol">Next⏩ ⏭️last</button>
                     </div>
                     <div class="status" id="status">Ready — select size and click Start</div>
             </aside>
@@ -61,7 +67,7 @@
             </section>
         </div>
     </div>
-    <div id="feedbackPopup" class="popupWindow"></div>
+    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
     <!-- Warning popup window -->
     <div class="warnbar" id="warnbar" aria-live="polite">
         <div class="row">
@@ -78,47 +84,45 @@
             <button id="confirmNo" class="primary">No</button>
         </div>
     </div>
+    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
     <script type="module" src="js/script.js"></script>
-    <script type="module">
+    <!-- <script type="module">
         import { shareScore } from '../../leaderboard/share.js';
         document.getElementById("shareBtn").addEventListener("click", async () => {
             shareScore("5inARow", 0);
         });
-    </script>
+    </script> -->
     <script>
-        function hideFeedback() {
-            document.getElementById("feedbackPopup").style.display = 'none';
+        const themeToggle = document.getElementById('toggle-theme');
+        function setTheme(t) {
+            if (t === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '☀️ Light'
+            }
+            if (t === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '🌙 Dark'
+            }
+        }
+        if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+        setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+
+        function openGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'flex';
         };
-        fetch('../../leaderboard/feedback.html')
+
+        function closeGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'none';
+        };
+
+        fetch('../../leaderboard/gbfeedback.html')
             .then(response => response.text())
             .then(htmlText => {
-                document.getElementById('feedbackPopup').innerHTML = htmlText;
+                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+                document.getElementById("gb-feedbackModal").style.display = 'none';
             });
-
-        document.getElementById("feedbackPopup").style.display = 'none';
-
-        document.getElementById("toggle-feedback").addEventListener("click", () => {
-            if (document.getElementById("feedbackPopup").style.display === 'block') {
-                document.getElementById("feedbackPopup").style.display = 'none';
-                return;
-            } else {
-                document.getElementById("feedbackPopup").style.display = 'block';
-                loadfeedbakCSS();
-            }
-        });
-
-        function loadfeedbakCSS() {
-            var head = document.head;
-            var link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = '../../leaderboard/feedback.css';
-            head.appendChild(link);
-        }
-        window.onload = function () {
-            loadCSS();
-            loadfeedbakCSS();
-        };
 
         (async () => {
             const GAME_NAME = "Sudoku Solver";
@@ -156,7 +160,7 @@
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {
                 navigator.serviceWorker
-                    .register("./sw.js")
+                    .register("../../sw.js")
                     .then(() => console.log("SW registered"))
                     .catch((err) => console.log("SW error", err));
             });

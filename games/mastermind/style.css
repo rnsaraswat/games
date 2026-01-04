@@ -1,63 +1,11 @@
 :root {
-    --bg: #f0f0f0;
-    --text: #222;
-    --cell-border: #333;
-    --box-shadow: rgba(0, 0, 0, 0.2);
     --card: #fff;
-    --muted: #d0d7de;
-    --accent: #4f46e5;
     --good: #16a34a;
     --bad: #dc2626;
-    --shadow: 0 6px 20px rgba(0, 0, 0, .08);
 }
 
 [data-theme='dark'] {
-    --bg: #454545;
-    --text: #eee;
-    --cell-border: #d9d8d8;
-    --box-shadow: rgba(255, 255, 255, 0.3);
     --card: #0b1223;
-    --muted: #273248;
-    --accent: #818cf8;
-    --shadow: 0 6px 20px rgba(0, 0, 0, .35);
-}
-
-@font-face {
-    font-family: 'HindiFontGajraj';
-    src: url('assets/font/GajrajOne-Regular.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'EnglishFontBangers';
-    src: url('../../assets/font/Bangers-Regular.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Digital';
-    src: url('../../assets/font/digital-italic.ttf') format('truetype');
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 1.6vw;
-}
-
-html,
-body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    font-family: Arial, sans-serif;
-    box-sizing: border-box;
-    background: var(--bg);
-    color: var(--text);
-    transition: background 0.3s, color 0.3s;
-    flex-wrap: wrap;
-    justify-content: center;
 }
 
 /* Layout Responsive */
@@ -84,36 +32,6 @@ body {
     max-width: 30vw;
 }
 
-h1 {
-    text-align: center;
-    font-size: 3vw;
-    font-family: 'EnglishFontBangers', Arial, Helvetica, sans-serif;
-    color: var(--text-color);
-    letter-spacing: .8vw;
-    text-shadow: 0 1px 0 #030303,
-        0 2px 0 #c9c9c9,
-        0 3px 0 #bbb,
-        0 4px 0 #b9b9b9,
-        0 5px 0 #aaa,
-        0 6px 1px var(--box-shadow),
-        0 0 5px var(--box-shadow),
-        0 1px 3px var(--box-shadow),
-        0 3px 5px var(--box-shadow),
-        0 5px 10px var(--box-shadow),
-        0 10px 10px var(--box-shadow),
-        0 20px 20px var(--box-shadow);
-    margin-bottom: 0.3vw;
-}
-
-h3 {
-    text-align: center;
-    margin: 0;
-    margin: 0.4vw;
-    padding: 0.5vw;
-    background: var(--bg-color);
-    color: var(--text-color);
-}
-
 .button-group {
     display: flex;
     flex-wrap: wrap;
@@ -126,43 +44,17 @@ h3 {
     box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
 }
 
-select,
-button,
-label,
-input [type="number"] {
-    padding: 0.2vw 0.3vw;
-    transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-    border: 0.1vw solid var(--cell-border);
-    background: var(--bg-color);
-    color: var(--text-color);
-    font-size: 1.6vw;
-    border-radius: 0.5vw;
-}
-
-select:hover {
-    background: var(--bg-hover);
-}
-
-input:hover {
-    background: var(--bg-hover);
-}
-
-button:hover {
-    background: var(--bg-hover);
-}
-
 .message {
     width: 100%;
     text-align: center;
-    background: var(--bg-color);
+    background: var(--bg);
     margin-top: 0.1vh;
     padding: 1vw;
     border: 0.3vw dashed var(--box-shadow);
-    color: var(--text-color);
+    color: var(--text);
     font-weight: bold;
-    font-size: 1.5vw;
-    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+    /* font-size: 1.5vw; */
+    box-shadow: 0 5px 25px 0 var(--box-shadow);
 }
 
 
@@ -355,15 +247,18 @@ button {
     font-size: 1.3vw
 }
 
-#timerdisplay {
+#timer-display{
     font-family: 'Digital', Arial, Helvetica, sans-serif;
-    display: grid;
-    align-items: center;
-    font-size: 1.6vw;
-    font-weight: bold;
-    color: var(--text-color);
-    /* font-variant-numeric: tabular-nums; */
-}
+    text-align: center;
+    width: auto;
+    height: auto;
+    font-size: 15px;
+    padding: 5px 5px;
+    margin: 5px 2px 5px 2px;
+    background: var(--bg);
+    color: var(--text);
+    border: none;
+  }
 
 /* Portrait (Top-Bottom layout) */
 @media (max-aspect-ratio: 1/1) {
@@ -410,27 +305,6 @@ button {
         font-size: 3.6vw;
     }
 }
-
-table,
-th,
-td {
-    border: 0.1vw solid var(--cell-border);
-    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-    margin: auto;
-    text-align: center;
-    padding: 0.1vw;
-}
-
-/* #displayTime {
-    font-family: 'Digital', Arial, Helvetica, sans-serif;
-    text-align: center;
-    width: auto;
-    height: auto;
-    font-size: 1.5vw;
-    padding: 1vw 1vw;
-    color: var(--text);
-    border: none;
-} */
 
 /* submenu display css */
 .menu {

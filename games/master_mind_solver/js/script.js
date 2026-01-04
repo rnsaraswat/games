@@ -1,9 +1,12 @@
-import { startTimer } from './timer.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
+import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
+import { shareScore } from './share.js';
 
 // define variables
 export let timer = false;
+export let gameName = 'mastermindsolver';
+export let score = 0;
 
 let slots = 4;
 let nColors = 6;
@@ -341,6 +344,8 @@ async function startSolver() {
             msgSecret.style.fontWeight = 'bold';
             visualEl.appendChild(msgSecret);
 
+            score = (slots * nColors - guess.length) * 10 * allowDuplicates ? 3 : 1;
+            shareScore(gameName, score);
             solverRunning = false;
             return;
         }
@@ -448,20 +453,3 @@ function shuffle(arr) {
     }
     return arr
 }
-
-//toggle theme
-const themeToggle = document.getElementById('toggle-theme');
-function setTheme(t) {
-  if (t === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    localStorage.setItem('rg_theme', t);
-    themeToggle.textContent = '☀️ Light'
-  }
-  if (t === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
-    localStorage.setItem('rg_theme', t);
-    themeToggle.textContent = '🌙 Dark'
-  }
-}
-if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
-setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');

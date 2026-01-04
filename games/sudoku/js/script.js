@@ -1,15 +1,18 @@
 import { textToSpeechEng } from './speak.js';
 // import { loadBest, saveBest } from './best_score.js';
-import { startTimer, stopTimer, pauseResumeTimer, seconds, minutes, hours } from './timer_date.js';
+import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
 import { launchConfetti } from './confetti.js';
 import { playSound } from './sound.js';
-// import { saveToLeaderboard } from './leaderboard.js';
-import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
+import { shareScore } from './share.js';
+import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
 
 export const sizeSel = document.getElementById('sizeSel');
 export const diffSel = document.getElementById('diffSel');
 export let timer = false;
 export let winnerName;
+export let gameName = 'sudoku';
+export let score = 0;
 
 // export let player1 = "ABC";
 export const state = {
@@ -692,6 +695,7 @@ export const state = {
         // saveToLeaderboard(hrs, min, sec);
         flash(statusText, 'ok');
         launchConfetti();
+        shareScore(gameName, score);
         return true;
     }
 
@@ -775,11 +779,7 @@ export const state = {
                 for (let i = 0; i < state.N * state.N; i++) grid.children[i].classList.remove('conflict');
             }
         });
-        themeBtn.addEventListener('click', () => {
-            const cur = document.documentElement.getAttribute('data-theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
-            themeBtn.innerText = (cur === 'dark' ? '🌙dark' : '☀️light');
-        });
+
         document.addEventListener('keydown', (e) => {
             if (state.selected < 0) return;
             if (state.revealMode) return;
@@ -802,7 +802,6 @@ export const state = {
 
     function updateleaderboard() {
         winnerName = player1;
-        // let score = 0;
         let opponent = "-"
         let game_id = 'sudoku';
         let gsize = `${state.N}x${state.N}`;
@@ -817,15 +816,14 @@ export const state = {
         const created_at = new Date();
         score = (state.N * state.N - state.hintCount - state.undo.length - state.redo.length) * 10;
       
-        saveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
+        lcsaveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
 
         // const entry = { winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
         // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
         // boardData.push(entry);
         // localStorage.setItem("leaderboard", JSON.stringify(boardData));
       
-        window.submitScore &&
-          window.submitScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+        saveScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
       }
 
     // get player name
