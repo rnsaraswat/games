@@ -1,8 +1,11 @@
-import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
-import { shareScore } from '../../leaderboard/share.js';
+import { shareScore } from './share.js';
+import { saveScore } from '../../leaderboard/gbleaderboard.js';
+import { lcsaveToLeaderboard } from '../../leaderboard/lcleaderboard.js';
 
 // export let player1 = localStorage.getItem('player_name') || 'Human1';
 // export let email = localStorage.getItem('email') || '-';
+export let gameName = 'tictactoe';
+export let score = 0;
 
 window.addEventListener('load', function () {
     const loading = document.getElementById('loading');
@@ -16,7 +19,7 @@ window.addEventListener('load', function () {
     const modeEl = document.getElementById('mode');
     const leaderboardEl = document.getElementById('leaderboard');
     const canvas = document.getElementById('fireworksCanvas');
-    const namebar = document.getElementById('namebar');
+    // const namebar = document.getElementById('namebar');
 
     let board = [];
     let gridSize = 3;
@@ -31,12 +34,11 @@ window.addEventListener('load', function () {
     let humanScore = 0;
     let aiScore = 0;
     let draws = 0;
-    let score = 0;
     let gameCount = 0;
     let winnerName;
-    let gameName = 'tictactoe';
+
     let theme = localStorage.getItem('rg_theme') || 'dark';
-    // let player1 = localStorage.getItem('player_name') || 'Human1';
+    let player1 = localStorage.getItem('player_name') || 'Human1';
     let player2 = localStorage.getItem('player_opponent') || 'Human2';
     let difficulty = difficultyEl.value;
     let mode = "pvc";
@@ -48,37 +50,33 @@ window.addEventListener('load', function () {
     namebar.classList.remove('show');
     modeEl.addEventListener('change', function (e) {
         mode = e.target.value;
+        document.getElementById("player1").textContent = player1;
         document.getElementById("nameInput").placeholder = player2 || 'Human2';
-        player2 = localStorage.getItem('player_opponent') || 'Human2';
-        document.getElementById("nameInput").value = player2 || 'Human2';
-        // namebar.classList.add('show');
+        player2 = document.getElementById("nameInput").value;
         if (mode == 'pvp') {
-          namebar.classList.add('show');
+            namebar.classList.add('show');
         } else {
-          namebar.classList.remove('show');
+            namebar.classList.remove('show');
+            player2 = "Computer";
         }
-      });
+    });
 
-    const themeToggle = document.getElementById('toggle-theme');
-    function setTheme(t) {
-      if (t === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('rg_theme', t);
-        themeToggle.textContent = '☀️ Light'
-      }
-      if (t === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('rg_theme', t);
-        themeToggle.textContent = '🌙 Dark'
-      }
-    }
-    if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
-    setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+    //   namebar = document.getElementById('namebar');
+    // namebar.classList.remove('show');
+    // if (mode == 'pvp') {
+    //     document.getElementById("nameInput").placeholder = player2 || 'Human2';
+    //     document.getElementById("nameInput").value = player2 || 'Human2';
+    //     namebar.classList.add('show');
+    // }
+    document.getElementById("name").addEventListener("click", () => {
+        namebar.classList.remove('show');
+        player2 = document.getElementById("nameInput").value;
+        messageEl.innerText = "Click New game to play";
+    });
 
-    
     document.getElementById("startGame").addEventListener("click", () => {
-    console.log("startGame");
-    startGame();
+        console.log("startGame");
+        startGame();
     });
 
     // const namebar = document.getElementById('namebar');
@@ -86,10 +84,10 @@ window.addEventListener('load', function () {
         if (modeEl.value === 'pvc') {
             player1 = localStorage.getItem('player_name') || "Human";
             player2 = "Computer";
-          } else if (modeEl.value === 'pvp') {
+        } else if (modeEl.value === 'pvp') {
             player1 = localStorage.getItem('player_name') || "Human1";
             player2 = localStorage.getItem('player_opponent') || "Human";
-          }
+        }
         board = Array(gridSize).fill().map(() => Array(gridSize).fill(''));
         boardEl.innerHTML = '';
         boardEl.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
@@ -373,16 +371,16 @@ window.addEventListener('load', function () {
 
     // const namebar = document.getElementById('namebar');
     if (mode == 'pvp') {
-      document.getElementById("nameInput").placeholder = player2 || 'Human2';
-      document.getElementById("nameInput").value = player2 || 'Human2';
-      namebar.classList.add('show');
+        document.getElementById("nameInput").placeholder = player2 || 'Human2';
+        document.getElementById("nameInput").value = player2 || 'Human2';
+        namebar.classList.add('show');
     }
 
-    document.getElementById('name').addEventListener('click', () => {
-        console.log("ok");
-      player2 = document.getElementById("nameInput").value;
-      namebar.classList.remove('show');
-    });
+    // document.getElementById('name').addEventListener('click', () => {
+    //     console.log("ok");
+    //   player2 = document.getElementById("nameInput").value;
+    //   namebar.classList.remove('show');
+    // });
 
     function updateleaderboard() {
         winnerName = currentPlayer === 'x' ? player1 : player2;
@@ -415,14 +413,13 @@ window.addEventListener('load', function () {
             finalScore = score + 100;
         }
 
-        saveToLeaderboard(winnerName, opponent, email, size, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
+        lcsaveToLeaderboard(winnerName, opponent, email, size, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
         // const entry = {winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at};
         //     const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
         //     boardData.push(entry);
         //     localStorage.setItem("leaderboard", JSON.stringify(boardData));
 
-        window.submitScore &&
-            window.submitScore(winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+        saveScore(winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -569,7 +566,7 @@ window.addEventListener('load', function () {
     //     winText.textContent = `🎉 ${winner} Won! 🎉`;
     //     winText.style.opacity = 1;
     //     winText.style.transform = "translate(-50%, -50%) scale(1.2)";
-    
+
     //     // Hide text after 3 seconds
     //     setTimeout(() => {
     //         winText.style.opacity = 0;

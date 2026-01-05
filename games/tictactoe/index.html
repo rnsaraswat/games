@@ -4,8 +4,17 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#6200ee" />
     <title>Tic Tac Toe</title>
+      <meta name="description"
+  content="Ravindra Games Hub — collection of lightweight web games (Tic tac Toe) Classic & Action-Oriented X vs O game">
+  <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+  <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+  <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+  <link rel="stylesheet" href="../../commoncss.css">
+  <link rel="manifest" href="../../manifest.json" />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta name="theme-color" content="#6200ee" />
+
     <style>
         :root {
             --bg-color: #f0f0f0;
@@ -355,8 +364,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 40%;
-            height: 27%;
+            width: 60%;
+            height: 30%;
             bottom: 1vw;
             background: var(--bg);
             color: var(--text);
@@ -397,6 +406,8 @@
             border-radius: 0.8vw;
             padding: 0.4vh 0.6vw;
         }
+
+
     </style>
 </head>
 
@@ -418,17 +429,16 @@
                     <option value="hard" selected>🙁 Hard</option>
                 </select>
                 <button id="toggle-theme">☀️ Light</button>
-                <!-- to background music on / off button -->
                 <button id="toggle-sound">🔇 Music:Off"</button>
-                <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
-                <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
-                <button class="primary" id="shareBtn">📤Sharing</button>
-
-                <button class="primary" id="toggle-feedback">📝Feedback</button>
-                <button class="primary"
+                <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global
+                    Leaderboard</button>
+                  <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+                    Leaderboard</button>
+                  <button class="button-primary" id="shareBtn">📤Sharing</button>
+                  <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+                  <button class="button-primary"
                     onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
-                </div>
-                <div id="timerdisplay">⏱️ 00:00:00</div>
+                  <div id="timer-display">⏱️ 00:00:00</div>
             <div id="message">Click New Game to play</div>
             <p id="loading">Loading...</p>
         </div>
@@ -437,11 +447,9 @@
             <div id="board"></div>
         </div>
     </div>
-    <div id="leaderboardPopup" class="popupWindow">
-    </div>
-    <div id="localleaderboardPopup" class="popupWindow">
-    </div>
-    <div id="feedbackPopup" class="popupWindow"></div>
+    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+    <div id="lcLeaderboardModal" class="lc-main-container"></div>
+    <div id="gbLeaderboardModal" class="gb-main-container"></div>
     <div id="winText">🎉 You Won! 🎉</div>
     <div class="namebar" id="namebar" aria-live="polite">
         <div class="row">
@@ -452,15 +460,17 @@
             <button id="name" class="primary">Ok</button>
         </div>
     </div>
-
+    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
+    <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+    <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <script type="module" src="tictactoe.js"></script>
-    <script type="module">
+    <!-- <script type="module">
         import { shareScore } from '../../leaderboard/share.js';
         document.getElementById("shareBtn").addEventListener("click", async () => {
             shareScore("tictactoe", 0);
         });
-    </script>
-    <script type="module">
+    </script> -->
+    <!-- <script type="module">
         import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
         window.sortTable = sortTable;
@@ -481,103 +491,78 @@
         document.addEventListener('DOMContentLoaded', () => {
             localrenderLeaderboard('tictactoe');
         });
-    </script>
+    </script> -->
 
     <script>
-                function hideFeedback() {
-            document.getElementById("feedbackPopup").style.display = 'none';
-        };
+    const themeToggle = document.getElementById('toggle-theme');
+    function setTheme(t) {
+      if (t === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('rg_theme', t);
+        themeToggle.textContent = '☀️ Light'
+      }
+      if (t === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('rg_theme', t);
+        themeToggle.textContent = '🌙 Dark'
+      }
+    }
+    if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+    setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
-        function hideLB() {
-            document.getElementById("leaderboardPopup").style.display = 'none';
-        };
+    function openGlobalLeaderboard() {
+      document.getElementById("gbLeaderboardModal").style.display = 'flex';
+    };
 
-        function hideLLB() {
-            document.getElementById("localleaderboardPopup").style.display = 'none';
-        };
+    function closeGlobalLeaderboard() {
+      document.getElementById("gbLeaderboardModal").style.display = 'none';
+    };
 
-        function clearLLB() {
-            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
-                localStorage.removeItem('leaderboard');
-                alert("All games Local Leaderboard Data is Cleared");
-                textToSpeechEng('Local Leaderboard data cleared');
-            }
-        };
 
-        fetch('../../leaderboard/leaderboard.html')
-            .then(response => response.text())
-            .then(htmlText => {
-                document.getElementById('leaderboardPopup').innerHTML = htmlText;
-            });
+    fetch('../../leaderboard/gbleaderboard.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
+        document.getElementById("gbLeaderboardModal").style.display = 'none';
+      });
 
-        fetch('../../leaderboard/localleaderboard.html')
-            .then(response => response.text())
-            .then(htmlText => {
-                document.getElementById('localleaderboardPopup').innerHTML = htmlText;
-            });
+    function openLocalLeaderboard() {
+      document.getElementById("lcLeaderboardModal").style.display = 'flex';
+    };
 
-            fetch('../../leaderboard/feedback.html')
-            .then(response => response.text())
-            .then(htmlText => {
-                document.getElementById('feedbackPopup').innerHTML = htmlText;
-            });
+    function closeLocalLeaderboard() {
+      document.getElementById("lcLeaderboardModal").style.display = 'none';
+    };
 
-        document.getElementById("leaderboardPopup").style.display = 'none';
-        document.getElementById("localleaderboardPopup").style.display = 'none';
-        document.getElementById("feedbackPopup").style.display = 'none';
+    function clearLLB() {
+      if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+        localStorage.removeItem('leaderboard');
+        alert("All games Local Leaderboard Data is Cleared");
+        textToSpeechEng('Local Leaderboard data cleared');
+      }
+    };
 
-        document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-            if (document.getElementById("toggle-leaderboard").style.display === 'block') {
-                document.getElementById("leaderboardPopup").style.display = 'none';
-                return;
-            } else {
-                document.getElementById("leaderboardPopup").style.display = 'block';
-                loadCSS()
-            }
-        });
+    fetch('../../leaderboard/lcleaderboard.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
+        document.getElementById("lcLeaderboardModal").style.display = 'none';
+      });
 
-        document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
-            if (document.getElementById("leaderboardPopup").style.display === 'block') {
-                document.getElementById("localleaderboardPopup").style.display = 'none';
-                return;
-            } else {
-                document.getElementById("localleaderboardPopup").style.display = 'block';
-                loadCSS();
-            }
-        });
+    function openGlobalFeedback() {
+      document.getElementById("gb-feedbackModal").style.display = 'flex';
+    };
 
-        document.getElementById("toggle-feedback").addEventListener("click", () => {
-            if (document.getElementById("feedbackPopup").style.display === 'block') {
-                document.getElementById("feedbackPopup").style.display = 'none';
-                return;
-            } else {
-                document.getElementById("feedbackPopup").style.display = 'block';
-                loadfeedbakCSS();
-            }
-        });
+    function closeGlobalFeedback() {
+      document.getElementById("gb-feedbackModal").style.display = 'none';
+    };
 
-        function loadfeedbakCSS() {
-            var head = document.head;
-            var link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = '../../leaderboard/feedback.css';
-            head.appendChild(link);
-        }
-
-        function loadCSS() {
-            var head = document.head;
-            var link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = '../../leaderboard/leaderboard.css';
-            head.appendChild(link);
-        }
-
-        window.onload = function () {
-            loadCSS();
-            loadfeedbakCSS();
-        };
+    fetch('../../leaderboard/gbfeedback.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+        document.getElementById("gb-feedbackModal").style.display = 'none';
+      });
 
         (async () => {
             const GAME_NAME = "TIC TAC TOE";
@@ -616,7 +601,7 @@
             if ("serviceWorker" in navigator) {
                 window.addEventListener("load", () => {
                     navigator.serviceWorker
-                        .register("./sw.js")
+                        .register("../../sw.js")
                         .then(() => console.log("SW registered"))
                         .catch((err) => console.log("SW error", err));
                 });

@@ -1,5 +1,10 @@
-import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
-import { shareScore } from '../../leaderboard/share.js';
+import { shareScore } from './share.js';
+import { saveScore } from '../../leaderboard/gbleaderboard.js';
+import { lcsaveToLeaderboard } from '../../leaderboard/lcleaderboard.js';
+
+export let score = 0;
+export let gameName = 'tictactoe';
+
 window.addEventListener('load', function () {
     const loading = document.getElementById('loading');
     loading.style.display = 'none';
@@ -10,7 +15,7 @@ window.addEventListener('load', function () {
     const toggleThemeBtn = document.getElementById("toggle-theme");
     const messageEl = document.getElementById('message');
     const canvas = document.getElementById('fireworksCanvas');
-    const timerDisplay = document.getElementById('timerdisplay');
+    const timerDisplay = document.getElementById('timer-display');
 
     let board = Array(9).fill("");
     let history = [];
@@ -21,8 +26,8 @@ window.addEventListener('load', function () {
     let currentPlayer = 'X';
     let turn = "X";
     let gameCount = 0;
-    let score = 0;
-    let gameName = 'tictactoe';
+    let moves = 0;
+
     let timer = false;
     let seconds = 0;
     let minutes = 0;
@@ -390,7 +395,7 @@ window.addEventListener('load', function () {
         let game_id = 'tictactoe';
         let size = '3x3';
         let elapsed = hours * 3600 + minutes * 60 + seconds;
-        // let moves = history.length;;
+        moves = history.length;
         let filed1 = 0;
         let filed2 = 0
         let filed3 = "-";
@@ -423,12 +428,11 @@ window.addEventListener('load', function () {
             finalScore = 9 * 10 - history.length * 2 + 50;
         }
 
-        saveToLeaderboard(player_name, player_opponent, email, size, difficulty, game_id, finalScore, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
-        window.submitScore &&
-            window.submitScore(player_name, player_opponent, email, size, difficulty, game_id, finalScore, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+        lcsaveToLeaderboard(player_name, player_opponent, email, size, difficulty, game_id, finalScore, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
+        saveScore(player_name, player_opponent, email, size, difficulty, game_id, finalScore, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
     }
     document.addEventListener('DOMContentLoaded', () => {
-        localrenderLeaderboard();
+        lcrenderLeaderboard();
     });
 
     // import { winnerName } from './script.js';

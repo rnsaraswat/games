@@ -609,7 +609,62 @@
             display: flex;
             justify-content: space-around;
         }
+
+        .namebar {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 30%;
+            bottom: 1vw;
+            background: var(--bg);
+            color: var(--text);
+            border: 0.1vw solid var(--cell-border);
+            border-radius: 1.4vw;
+            padding: 1vw;
+            z-index: 10001;
+            display: none;
+            gap: 1vw;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 1vw 4vw rgba(0, 0, 0, .45);
+        }
+
+        .namebar.show {
+            display: flex;
+        }
+
+        .namebar .row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8vw;
+            background: var(--bg);
+            padding: 0.6vh 0.8vw;
+            border-radius: 1vw;
+        }
+
+        .namebar label {
+            color: var(--text);
+            font-size: 1.2vw;
+        }
+
+        .namebar input[type="text"] {
+            border: 0.1vw solid var(--cell-border);
+            background: var(--bg);
+            color: var(--text);
+            border-radius: 0.8vw;
+            padding: 0.4vh 0.6vw;
+        }
     </style>
+    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+    <link rel="stylesheet" href="../../commoncss.css">
+    <link rel="manifest" href="../../manifest.json" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <meta name="theme-color" content="#6200ee" />
     <!-- <link rel="stylesheet" href="style.css" /> -->
 </head>
 
@@ -636,22 +691,31 @@
                 <button id="toggle-sound">🔇 Music:Off"</button>
                 <button class="primary-btn " id="local-toggle-leaderboard">🏆Local Leaderboard</button>
                 <button class="primary-btn " id="toggle-leaderboard">🌍 Global Leaderboard</button>
+                <button class="button-primary-memory" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
+                    Global Leaderboard</button>
+                <button class="button-primary-memory" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆
+                    Local Leaderboard</button>
                 <button class="primary-btn " id="shareBtn">📤Sharing</button>
 
                 <button class="primary-btn " id="toggle-feedback">📝Feedback</button>
-                <button id="openFeedback" class="primary-btn">💬 Feedback</button>
+                <button id="openFeedback" class="primary-btn" onclick="openGlobalFeedback()">💬 Global Feedback</button>
                 <button class="primary-btn "
                     onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
                 <div id="timerdisplay">⏱️ 00:00:00</div>
             </div>
             <div id="message"><br>Click New Game to play</div>
             <p id="loading">Loading...</p>
-
+            <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+            <div id="lcLeaderboardModal" class="lc-main-container"></div>
+            <div id="gbLeaderboardModal" class="gb-main-container"></div>
 
             <!-- Global Feedback Button -->
             <!-- <button id="openFeedback" class="primary-btn">💬 Feedback</button> -->
 
 
+            <script type="module" src="../../leaderboard/gbfeedback.js"></script>
+            <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+            <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
             <!-- Feedback Modal    main-container -->
             <div id="feedbackModal" class="modal">
                 <!--    header section -->
@@ -730,7 +794,7 @@
     </script>
     <script type="module" src="tictactoe1.js"></script>
     <script type="module">
-        import { shareScore } from '../../leaderboard/share.js';
+        import { shareScore } from './share.js';
         console.log("shareScore");
         document.getElementById("shareBtn").addEventListener("click", async () => {
             shareScore("tictactoe", 0);
@@ -1068,20 +1132,20 @@
 
         async function replyLike(id) {
             const { data, error } = await supabase.from('likes').select('*').eq('feedback_id', id).eq('name', window.name).maybeSingle();
-                if (error && error.code !== 'PGRST116') { console.error(error); return; }
+            if (error && error.code !== 'PGRST116') { console.error(error); return; }
 
-                if (!data) {
-                    await supabase.from('likes').insert([{ feedback_id: id, name: window.name, user_email: email }]);
-                    await supabase.rpc('update_reply_like', { fid: id, diff: 1 }); loadFeedback(); return;
-                }
+            if (!data) {
+                await supabase.from('likes').insert([{ feedback_id: id, name: window.name, user_email: email }]);
+                await supabase.rpc('update_reply_like', { fid: id, diff: 1 }); loadFeedback(); return;
+            }
 
-                const newLike = data.liked === 1 ? 0 : 1;
-                const diff = newLike === 1 ? 1 : -1;
+            const newLike = data.liked === 1 ? 0 : 1;
+            const diff = newLike === 1 ? 1 : -1;
 
-                await supabase.from('likes').update({ liked: newLike }).eq('id', data.id);
+            await supabase.from('likes').update({ liked: newLike }).eq('id', data.id);
 
-                await supabase.rpc('update_reply_like', { fid: id, diff });
-                loadFeedback();
+            await supabase.rpc('update_reply_like', { fid: id, diff });
+            loadFeedback();
         }
 
         async function replyDislike(id) {
@@ -1317,6 +1381,76 @@
             loadfeedbakCSS();
         };
 
+        const themeToggle = document.getElementById('toggle-theme');
+        function setTheme(t) {
+            if (t === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '☀️ Light'
+            }
+            if (t === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '🌙 Dark'
+            }
+        }
+        if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+        setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+
+        function openGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'none';
+        };
+
+
+        fetch('../../leaderboard/gbleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("gbLeaderboardModal").style.display = 'none';
+            });
+
+        function openLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'none';
+        };
+
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
+            }
+        };
+
+        fetch('../../leaderboard/lcleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("lcLeaderboardModal").style.display = 'none';
+            });
+
+        function openGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'flex';
+        };
+
+        function closeGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'none';
+        };
+
+        fetch('../../leaderboard/gbfeedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+                document.getElementById("gb-feedbackModal").style.display = 'none';
+            });
+
         (async () => {
             const GAME_NAME = "TIC TAC TOE";
             const GAME_SHORT = "tictactoe";
@@ -1355,7 +1489,7 @@
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {
                 navigator.serviceWorker
-                    .register("./sw.js")
+                    .register("../../sw.js")
                     .then(() => console.log("SW registered"))
                     .catch((err) => console.log("SW error", err));
             });
