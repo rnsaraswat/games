@@ -1,0 +1,31 @@
+<script type="module">
+    import { supabase } from "../supabaseClient.js";
+    async function completeLogin() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+
+        const name =
+        user.user_metadata?.full_name ||
+        user.user_metadata?.name ||
+        user.email ||
+        "Guest";
+
+        localStorage.setItem("player_name", name || "User");
+        localStorage.setItem("email", user.email || "");
+        localStorage.setItem("user_id", user.id || "");
+        document.body.innerHTML = `
+          <h2>Login Successful!</h2>
+          <p>Welcome, <b>${name}</b></p>
+          <p>Email: <b>${email}</b></p>
+          <a href="../index.html">Go to Home</a>
+        `;
+        // window.location.href = "../index.html";
+        setTimeout(() => {
+          window.location.href = "https://rnsaraswat.github.io/games/index.html";
+        }, 1500);
+      } else {
+        document.body.innerHTML = "<p>Login failed. Please try again.</p>";
+      }
+    }
+    completeLogin();
+  </script>
