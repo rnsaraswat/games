@@ -40,7 +40,7 @@
                     <button class="button-primary" id="shareBtn">📤Sharing</button>
                     <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
                     <button class="button-primary"
-                    onclick="window.location.href='https://rnsaraswat.github.io/games/auth/login.html'">🚪Sign in</button>
+                    onclick="window.location.href='auth/login.html'">🚪Sign in</button>
                     <button class="button-primary" id="themeToggle">☀️ Light</button>
                 </div>
                 <p id="welcom" class="lead">Welcome</p>
@@ -84,6 +84,9 @@
 
 
     <script>
+        export let gameName = 'Ravindra Games Hub';
+        export let score = 0;
+
         const games = [
             { id: 'memory', name: 'memory', title: 'Memory', desc: 'Flip, match, win', href: 'games/memory/index.html' },
             { id: 'rockpaperscissor', name: 'rockpaperscissor', title: 'Rock Paper Scissor', desc: 'Classic & Action-Oriented X vs O', href: 'games/rock_paper_scissor/index.html' },

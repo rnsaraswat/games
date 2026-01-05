@@ -40,7 +40,28 @@
       <p style="margin-top:12px;color:var(--muted)">After login you will be redirected back</p>
     </div>
   </div>
+  <div id="alreadyLoginPopup" class="login-popup">
+    <div class="login-popup-box">
+      <h3>Already Logged In</h3>
+
+      <button onclick="continueSession()">Continue</button>
+      <button class="login-danger" onclick="changeAccount()">Change Login</button>
+    </div>
+  </div>
   <script type="module" src="./auth.js"></script>
+  <script>
+    // Continue → Main Page
+    function continueSession() {
+      redirectAfterLogin(); 
+    }
+
+    // Change Login → Logout + Login Page
+    async function changeAccount() {
+      await supabase.auth.signOut();
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+  </script>
 </body>
 
 </html>

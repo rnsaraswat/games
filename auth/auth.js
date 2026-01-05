@@ -113,7 +113,6 @@ guestForm.addEventListener("submit", async e => {
   setTimeout(redirectAfterLogin, 1000);
 });
 
-
 // --- 4️⃣ Guest Login without email ---
 guestF.addEventListener("submit", async e => {
   e.preventDefault();
@@ -121,15 +120,10 @@ guestF.addEventListener("submit", async e => {
   const rand = Math.floor(Math.random() * 10000);
   const guestName = `${guname}${rand}` || `Gust${rand}`;
   const guemail = "-";
-  // localStorage.setItem('username', guestName);
-  // localStorage.setItem('email', '-');
-  // localStorage.setItem('id', guestName);
   saveUserLocally({ name: guname || "Guest", email: guemail, id: `${guname}${Math.floor(Math.random() * 10000)}` });
   statusDiv.textContent = `Welcome, ${guestName}!`;
   setTimeout(redirectAfterLogin, 1000);
 });
-
-
 
 // 🔹 Check current session (if already logged in)
 (async () => {
@@ -145,7 +139,6 @@ guestF.addEventListener("submit", async e => {
 
         // 🔸 Auto redirect हटाया
         document.getElementById("alreadyLoginPopup").style.display = "flex";
-
   }
 })();
 

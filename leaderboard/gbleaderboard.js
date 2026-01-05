@@ -6,7 +6,7 @@ import { textToSpeechEng } from './speak.js';
 const TABLE_NAME = "scores";
 
 let currentData = [];
-let currentSortColumn = null;
+let currentSortColumn = 7;
 let currentSortOrder = 'desc';
 let leaderboardData = [];
 let filteredData = [];

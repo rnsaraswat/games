@@ -3,7 +3,7 @@ import { textToSpeechEng } from './speak.js';
 const TABLE_NAME = "scores";
 
 let lccurrentData = [];
-let lccurrentSortColumn = null;
+let lccurrentSortColumn = 7;
 let lccurrentSortOrder = 'desc';
 let lcleaderboardData = [];
 let lcfilteredData = [];

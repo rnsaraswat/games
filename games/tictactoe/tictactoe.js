@@ -50,9 +50,7 @@ window.addEventListener('load', function () {
 
     namebar.classList.remove('show');
     modeEl.addEventListener('change', function (e) {
-        console.log("change mode", mode);
         mode = e.target.value;
-        console.log("change mode", mode);
         document.getElementById("player1").textContent = player1;
         document.getElementById("nameInput").placeholder = player2 || 'Human2';
         player2 = document.getElementById("nameInput").value;
@@ -62,7 +60,6 @@ window.addEventListener('load', function () {
             namebar.classList.remove('show');
             player2 = "Computer";
         }
-        console.log(player1, player2);
     });
 
     document.getElementById("name").addEventListener("click", () => {
