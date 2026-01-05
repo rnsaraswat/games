@@ -1,9 +1,14 @@
   <script type="module">
     import { supabase } from "../supabaseClient.js";
+
+    console.log("redirect.html");
     async function completeLogin() {
+    console.log("completeLogin");
       const { data: { user } } = await supabase.auth.getUser();
+        console.log(user);
       if (user) {
 
+        console.log(user);
         const name =
         user.user_metadata?.full_name ||
         user.user_metadata?.name ||
@@ -13,12 +18,19 @@
         localStorage.setItem("player_name", name || "User");
         localStorage.setItem("email", user.email || "");
         localStorage.setItem("user_id", user.id || "");
+        console.log(localStorage.getItem('rg_theme'), localStorage.getItem('player_name'), localStorage.getItem('player_opponent'), localStorage.getItem('user_id'));
+        console.log(player_name, email, user_id);
         document.body.innerHTML = `
           <h2>Login Successful!</h2>
           <p>Welcome, <b>${name}</b></p>
-          <p>Email: <b>${email}</b></p>
           <a href="../index.html">Go to Home</a>
         `;
+        // document.body.innerHTML = `
+        //   <h2>Login Successful!</h2>
+        //   <p>Welcome, <b>${name}</b></p>
+        //   <p>Email: <b>${user.email}</b></p>
+        //   <a href="../index.html">Go to Home</a>
+        // `;
         // window.location.href = "../index.html";
         setTimeout(() => {
           window.location.href = "https://rnsaraswat.github.io/games/index.html";
@@ -27,5 +39,7 @@
         document.body.innerHTML = "<p>Login failed. Please try again.</p>";
       }
     }
+    console.log("redirect.html end");
+
     completeLogin();
   </script>
