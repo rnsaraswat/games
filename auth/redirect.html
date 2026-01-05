@@ -8,7 +8,6 @@
         console.log(user);
       if (user) {
 
-        console.log(user);
         const name =
         user.user_metadata?.full_name ||
         user.user_metadata?.name ||
@@ -18,8 +17,7 @@
         localStorage.setItem("player_name", name || "User");
         localStorage.setItem("email", user.email || "");
         localStorage.setItem("user_id", user.id || "");
-        console.log(localStorage.getItem('rg_theme'), localStorage.getItem('player_name'), localStorage.getItem('player_opponent'), localStorage.getItem('user_id'));
-        // console.log(player_name, email, user_id);
+
         document.body.innerHTML = `
           <h2>Login Successful!</h2>
           <p>Welcome, <b>${name}</b></p>
