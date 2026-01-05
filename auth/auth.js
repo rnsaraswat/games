@@ -43,12 +43,16 @@ googleBtn.addEventListener("click", async () => {
 
 // 🔹 Facebook Login
 facebookBtn.addEventListener("click", async () => {
+  console.log("Facebook Login")
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "facebook",
     options: {
-      redirectTo: window.location.origin + "/auth/redirect.html",
+      // redirectTo: window.location.origin + "redirect.html"
+      redirectTo: "https://rnsaraswat.github.io/games/auth/redirect.html"
     },
   });
+  console.log("Facebook Login 1")
+
   if (error) showStatus("Facebook login failed: " + error.message, false);
 });
 
@@ -125,6 +129,8 @@ guestF.addEventListener("submit", async e => {
   setTimeout(redirectAfterLogin, 1000);
 });
 
+
+
 // 🔹 Check current session (if already logged in)
 (async () => {
   const { data: { session } } = await supabase.auth.getSession();
@@ -134,8 +140,12 @@ guestF.addEventListener("submit", async e => {
       email: session.user.email,
       id: session.user.id,
     });
-    showStatus("You are already logged in! Redirecting...");
-    setTimeout(redirectAfterLogin, 1000);
+    // showStatus("You are already logged in! Redirecting...");
+    // setTimeout(redirectAfterLogin, 1000);
+
+        // 🔸 Auto redirect हटाया
+        document.getElementById("alreadyLoginPopup").style.display = "flex";
+
   }
 })();
 
