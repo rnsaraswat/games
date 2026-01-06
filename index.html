@@ -33,15 +33,16 @@
             </div>
             <div class="hdrbtns">
                 <div class="hdr-child-div">
-                    <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global Leaderboard</button>
-                    <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local Leaderboard</button>
+                    <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
+                        Global Leaderboard</button>
+                    <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+                        Leaderboard</button>
                 </div>
                 <div class="hdr-child-div">
                     <button class="button-primary" id="shareBtn">📤Sharing</button>
                     <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
-                    <button class="button-primary"
-                    onclick="window.location.href='auth/login.html'">🚪Sign in</button>
-                    <button class="button-primary" id="themeToggle">☀️ Light</button>
+                    <button class="button-primary" onclick="window.location.href='auth/login.html'">🚪Sign in</button>
+                    <button class="button-primary" id="toggle-theme">☀️ Light</button>
                 </div>
                 <p id="welcom" class="lead">Welcome</p>
             </div>
@@ -75,17 +76,16 @@
     <script type="module" src="./leaderboard/gbfeedback.js"></script>
     <script type="module" src="./leaderboard/gbleaderboard.js"></script>
     <script type="module" src="./leaderboard/lcleaderboard.js"></script>
-    <script type="module">
+    <script type="module" src="./script.js"></script>
+
+    <!-- <script type="module">
         import { shareScore } from './leaderboard/share.js';
         document.getElementById("shareBtn").addEventListener("click", async () => {
             shareScore("-", 0);
         });
-    </script>
-
+    </script> -->
 
     <script>
-        export let gameName = 'Ravindra Games Hub';
-        export let score = 0;
 
         const games = [
             { id: 'memory', name: 'memory', title: 'Memory', desc: 'Flip, match, win', href: 'games/memory/index.html' },
@@ -111,7 +111,9 @@
         document.getElementById("welcom").textContent = `Welcome ${player_name}`;
         document.getElementById("welcom").style.alignContent = "center";
         const grid = document.getElementById('gamesGrid');
+        console.log(games);
         games.forEach(g => {
+            console.log(g);
             const card = document.createElement('article');
             card.className = 'game-card';
             card.dataset = g.id;
@@ -119,13 +121,12 @@
             grid.appendChild(card);
         });
 
-        // Theme toggle
-        const themeToggle = document.getElementById('themeToggle');
+        const themeToggle = document.getElementById('toggle-theme');
         function setTheme(t) {
             if (t === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
                 localStorage.setItem('rg_theme', t);
-                themeToggle.textContent = '☀️Light'
+                themeToggle.textContent = '☀️ Light'
             }
             if (t === 'light') {
                 document.documentElement.setAttribute('data-theme', 'light');
@@ -137,82 +138,58 @@
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
         function openGlobalLeaderboard() {
-      document.getElementById("gbLeaderboardModal").style.display = 'flex';
-    };
+            document.getElementById("gbLeaderboardModal").style.display = 'flex';
+        };
 
-    function closeGlobalLeaderboard() {
-      document.getElementById("gbLeaderboardModal").style.display = 'none';
-    };
+        function closeGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'none';
+        };
 
 
-    fetch('./leaderboard/gbleaderboard.html')
-      .then(response => response.text())
-      .then(htmlText => {
-        document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
-        document.getElementById("gbLeaderboardModal").style.display = 'none';
-      });
+        fetch('./leaderboard/gbleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("gbLeaderboardModal").style.display = 'none';
+            });
 
-    function openLocalLeaderboard() {
-      document.getElementById("lcLeaderboardModal").style.display = 'flex';
-    };
+        function openLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'flex';
+        };
 
-    function closeLocalLeaderboard() {
-      document.getElementById("lcLeaderboardModal").style.display = 'none';
-    };
+        function closeLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'none';
+        };
 
-    fetch('./leaderboard/lcleaderboard.html')
-      .then(response => response.text())
-      .then(htmlText => {
-        document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
-        document.getElementById("lcLeaderboardModal").style.display = 'none';
-      });
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
+            }
+        };
 
-    function openGlobalFeedback() {
-      document.getElementById("gb-feedbackModal").style.display = 'flex';
-    };
+        fetch('./leaderboard/lcleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("lcLeaderboardModal").style.display = 'none';
+            });
 
-    function closeGlobalFeedback() {
-      document.getElementById("gb-feedbackModal").style.display = 'none';
-    };
+        function openGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'flex';
+        };
 
-    fetch('./leaderboard/gbfeedback.html')
-      .then(response => response.text())
-      .then(htmlText => {
-        document.getElementById('gb-feedbackModal').innerHTML = htmlText;
-        document.getElementById("gb-feedbackModal").style.display = 'none';
-      });
-        (async () => {
-            const GAME_NAME = "Ravindra Games Hub";
-            const GAME_SHORT = "RGH Games";
+        function closeGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'none';
+        };
 
-            const res = await fetch("./manifest.json");
-            const manifest = await res.json();
-
-            manifest.short_name = GAME_SHORT;
-            manifest.name = GAME_NAME;
-
-            manifest.start_url = 'https://rnsaraswat.github.io/games/index.html';
-            manifest.scope = 'https://rnsaraswat.github.io/games/index.html';
-
-            // 🔥 icons ko absolute banane ka safety fix
-            manifest.icons = manifest.icons.map(icon => ({
-                ...icon,
-                src: new URL(icon.src, location.origin).href
-            }));
-
-            const blob = new Blob(
-                [JSON.stringify(manifest)],
-                { type: "application/json" }
-            );
-
-            const url = URL.createObjectURL(blob);
-
-            const link = document.createElement("link");
-            link.rel = "manifest";
-            link.href = url;
-            document.head.appendChild(link);
-        })();
-
+        fetch('./leaderboard/gbfeedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+                document.getElementById("gb-feedbackModal").style.display = 'none';
+            });
     </script>
 
     <script>
