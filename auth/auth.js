@@ -7,6 +7,16 @@ const guestForm = document.getElementById("guest-login");
 const guestF = document.getElementById("guest");
 const emailForm = document.getElementById("email-login");
 const statusDiv = document.getElementById("auth-status");
+const loginContinueButton = document.getElementById("login-continue-button");
+const loginChangeButton = document.getElementById("login-change-button");
+
+loginContinueButton.addEventListener("click", () => {
+  window.location.href = "../index.html";
+});
+
+loginChangeButton.addEventListener("click", () => {
+  window.location.href = "login.html";
+});
 
 // 🔹 Utility: Update Status Message
 function showStatus(msg, success = true) {
