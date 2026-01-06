@@ -21,13 +21,13 @@
 
 .login-header-section {
   padding: 2px;
-  background: var(--gb-bg);
-  color: var(--gb-text);
+  background: var(--bg);
+  color: var(--text);
   text-align: center;
 }
 
 .login-h2 {
-  background: var(--gb-bg);
+  background: var(--bg);
 }
 
 .login-form-box {
@@ -41,8 +41,8 @@
   align-items: center;
   gap: 10px;
   font-family: Arial, sans-serif;
-  background: var(--gb-bg);
-  color: var(--gb-text);
+  background: var(--bg);
+  color: var(--text);
   border-bottom: 1px solid var(--gb-border);
   justify-content: center;
   flex-wrap: wrap;
@@ -50,8 +50,8 @@
 
 .login-footer-section {
   padding: 2px;
-  background: var(--gb-bg);
-  color: var(--gb-text);
+  background: var(--bg);
+  color: var(--text);
   border-top: 2px solid #333;
   display: flex;
   justify-content: space-around;
@@ -111,7 +111,8 @@
 }
 
 .login-popup-box {
-  background: #fff;
+  background: var(--bg);
+  color: var(--text);
   padding: 20px;
   width: 280px;
   border-radius: 10px;

@@ -44,12 +44,12 @@
     <div class="login-popup-box">
       <h3>Already Logged In</h3>
 
-      <button onclick="continueSession()">Continue</button>
+      <button class="button-primary" onclick="continueSession()">Continue</button>
       <button class="login-danger" onclick="changeAccount()">Change Login</button>
     </div>
   </div>
   <script type="module" src="./auth.js"></script>
-  <script>
+  <script type="module">
         import { supabase } from "../supabaseClient.js";
     // Continue → Main Page
     function continueSession() {
