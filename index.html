@@ -111,9 +111,7 @@
         document.getElementById("welcom").textContent = `Welcome ${player_name}`;
         document.getElementById("welcom").style.alignContent = "center";
         const grid = document.getElementById('gamesGrid');
-        console.log(games);
         games.forEach(g => {
-            console.log(g);
             const card = document.createElement('article');
             card.className = 'game-card';
             card.dataset = g.id;
