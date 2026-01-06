@@ -50,9 +50,11 @@
   </div>
   <script type="module" src="./auth.js"></script>
   <script>
+        import { supabase } from "../supabaseClient.js";
     // Continue → Main Page
     function continueSession() {
-      redirectAfterLogin(); 
+      // redirectAfterLogin(); 
+      window.location.href = "../index.html";
     }
 
     // Change Login → Logout + Login Page
