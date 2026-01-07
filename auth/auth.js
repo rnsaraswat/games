@@ -17,8 +17,15 @@ loginContinueButton.addEventListener("click", () => {
 loginChangeButton.addEventListener("click", () => {
   // window.location.href = "login.html";
   document.getElementById("alreadyLoginPopup").style.display = "none";
+  changeAccount();
   window.location.href = "./login.html";
 });
+
+// Change Login → Logout + Login Page
+async function changeAccount() {
+  await supabase.auth.signOut();
+  localStorage.clear();
+}
 
 // 🔹 Utility: Update Status Message
 function showStatus(msg, success = true) {
@@ -82,13 +89,13 @@ emailForm.addEventListener("submit", async e => {
   if (!name) {
     showStatus("Please enter your name.", false);
     return;
-  } 
+  }
 
   try {
     // Supabase Magic Link Login (optional)
     const { data, error } = await supabase.auth.signInWithOtp({
       email,
-      options: { 
+      options: {
         emailRedirectTo: "https://rnsaraswat.github.io/games/auth/redirect.html"
       },
     });
@@ -117,9 +124,9 @@ guestForm.addEventListener("submit", async e => {
   if (!gname) {
     showStatus("Please enter your name.", false);
     return;
-  } 
+  }
 
-    saveUserLocally({ name: gname || "Guest", email: gemail, id: `${gname}${Math.floor(Math.random() * 10000)}` });
+  saveUserLocally({ name: gname || "Guest", email: gemail, id: `${gname}${Math.floor(Math.random() * 10000)}` });
 
   showStatus(`Welcome, ${gname}! Logging in as Guest...`);
   setTimeout(redirectAfterLogin, 1000);
@@ -149,8 +156,8 @@ guestF.addEventListener("submit", async e => {
     // showStatus("You are already logged in! Redirecting...");
     // setTimeout(redirectAfterLogin, 1000);
 
-        // 🔸 Auto redirect हटाया
-        document.getElementById("alreadyLoginPopup").style.display = "flex";
+    // 🔸 Auto redirect हटाया
+    document.getElementById("alreadyLoginPopup").style.display = "flex";
   }
 })();
 
