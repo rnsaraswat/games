@@ -5,12 +5,10 @@ export async function shareScore(gameName, score = 0) {
   console.log("shareScore",gameName, score);
 
   const siteName = "Ravindra Games Hub";
-  const gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
+  const gameLink = `https://rnsaraswat.github.io/games/index.html`;
 
   const textToShare =
     `${siteName}
-${gameName}
-Can you beat my Score: ${score}
 
 Play here:
 ${gameLink}`;
