@@ -15,8 +15,9 @@ loginContinueButton.addEventListener("click", () => {
 });
 
 loginChangeButton.addEventListener("click", () => {
+  // window.location.href = "login.html";
+  document.getElementById("alreadyLoginPopup").style.display = "none";
   window.location.href = "./login.html";
-  window.location.href = "login.html";
 });
 
 // 🔹 Utility: Update Status Message
