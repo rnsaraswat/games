@@ -15,6 +15,7 @@ loginContinueButton.addEventListener("click", () => {
 });
 
 loginChangeButton.addEventListener("click", () => {
+  window.location.href = "./login.html";
   window.location.href = "login.html";
 });
 
