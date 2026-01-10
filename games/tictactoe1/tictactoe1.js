@@ -2,15 +2,12 @@ import { shareScore } from './share.js';
 import { saveScore } from '../../leaderboard/gbleaderboard.js';
 import { lcsaveToLeaderboard } from '../../leaderboard/lcleaderboard.js';
 
-// export let player1 = localStorage.getItem('player_name') || 'Human1';
-// export let email = localStorage.getItem('email') || '-';
 export let gameName = 'tictactoe';
 export let score = 0;
 
 window.addEventListener('load', function () {
     const loading = document.getElementById('loading');
     loading.style.display = 'none';
-    console.log("load loading");
 
     const boardEl = document.getElementById("board");
     const difficultyEl = document.getElementById("difficulty");
@@ -75,7 +72,6 @@ window.addEventListener('load', function () {
     });
 
     document.getElementById("startGame").addEventListener("click", () => {
-        console.log("startGame");
         startGame();
     });
 
@@ -141,7 +137,8 @@ window.addEventListener('load', function () {
             switchStartingPlayer();
             playSound('win');
             launchFireworks();
-            shareScore(gameName, score);
+      showWinText();
+      shareScore(gameName, score);
             return;
         }
 
@@ -376,12 +373,6 @@ window.addEventListener('load', function () {
         namebar.classList.add('show');
     }
 
-    // document.getElementById('name').addEventListener('click', () => {
-    //     console.log("ok");
-    //   player2 = document.getElementById("nameInput").value;
-    //   namebar.classList.remove('show');
-    // });
-
     function updateleaderboard() {
         winnerName = currentPlayer === 'x' ? player1 : player2;
         let finalScore = score;
@@ -390,12 +381,10 @@ window.addEventListener('load', function () {
         let size = '3x3';
         let elapsed = hours * 3600 + minutes * 60 + seconds;
         gameCount = history.length;
-        // let moves = 0;
         let filed1 = 0;
         let filed2 = 0
         let filed3 = "-";
         let filed4 = "-";
-        // let email = localStorage.getItem('email') || '-';
         const created_at = new Date();
         if (modeEl.value === 'pvc' && currentPlayer === 'o') {
             messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;
@@ -414,10 +403,6 @@ window.addEventListener('load', function () {
         }
 
         lcsaveToLeaderboard(winnerName, opponent, email, size, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
-        // const entry = {winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at};
-        //     const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-        //     boardData.push(entry);
-        //     localStorage.setItem("leaderboard", JSON.stringify(boardData));
 
         saveScore(winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
     }
@@ -530,7 +515,7 @@ window.addEventListener('load', function () {
     let timerInterval;
     let startTime;
     let elapsedTime = 0;
-    const timerDisplay = document.getElementById('timerdisplay');
+    const timerDisplay = document.getElementById('timer-display');
 
     function startTimer() {
         clearInterval(timerInterval);
@@ -561,18 +546,18 @@ window.addEventListener('load', function () {
         speechSynthesis.speak(utterance);
     }
 
-    // function showWinText(winner) {
-    //     const winText = document.getElementById("winText");
-    //     winText.textContent = `🎉 ${winner} Won! 🎉`;
-    //     winText.style.opacity = 1;
-    //     winText.style.transform = "translate(-50%, -50%) scale(1.2)";
+    function showWinText(winner) {
+        const winText = document.getElementById("winText");
+        winText.textContent = `🎉 ${winner} Won! 🎉`;
+        winText.style.opacity = 1;
+        winText.style.transform = "translate(-50%, -50%) scale(1.2)";
 
-    //     // Hide text after 3 seconds
-    //     setTimeout(() => {
-    //         winText.style.opacity = 0;
-    //         winText.style.transform = "translate(-50%, -50%) scale(1)";
-    //     }, 3000);
-    // }
+        // Hide text after 3 seconds
+        setTimeout(() => {
+            winText.style.opacity = 0;
+            winText.style.transform = "translate(-50%, -50%) scale(1)";
+        }, 3000);
+    }
 
     class FireParticle {
         constructor(x, y, color, dx, dy, shape) {

@@ -4,12 +4,32 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description"
+  content="Ravindra Games Hub — collection of lightweight web games (tic tac toe) Classic & Action-Oriented X vs O game">
   <meta property="og:title" content="Score Sharing" />
   <meta property="og:description" content="See my score!" />
   <meta property="og:image" content="https://https://rnsaraswat.github.io.vercel.app/api/og?score=500" />
   <meta property="og:type" content="website" />
-
+  <link rel="stylesheet" href="../../commoncss.css">
+  <link rel="manifest" href="../../manifest.json" />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta name="theme-color" content="#6200ee" />
   <title>Tic Tac Toe</title>
+
+
+
+  <meta name="description"
+    content="Ravindra Games Hub — collection of lightweight web games (5 in a Row) Classic & Action-Oriented X vs O game">
+  <link rel="stylesheet" href="../../commoncss.css">
+  <!-- <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+  <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+  <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+  <link rel="stylesheet" href="../../commoncss.css"> -->
+  <link rel="manifest" href="../../manifest.json" />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta name="theme-color" content="#6200ee" />
+
+
   <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="../../style.css">
   <style>
@@ -18,8 +38,49 @@
       height: 100vh;
       margin: 0;
       font-family: Arial, sans-serif;
+      font-size: 15px;
       color: #fff;
       background: linear-gradient(to right, #ff7e5f, #feb47b);
+    }
+
+    #msg {
+      background: white;
+      width: 100%;
+      height: auto;
+      text-align: center;
+      margin-top: 1px;
+      padding: 5px 5px;
+      margin: 5px 2px 5px 2px;
+      border: 3px dashed var(--box-shadow);
+      font-weight: bold;
+      font-size: 15px;
+      background: var(--bg);
+      color: var(--text);
+      box-shadow: 0 5px 25px 0 var(--box-shadow);
+    }
+
+    #timer-display {
+      width: 100%;
+      font-family: 'Digital', Arial, Helvetica, sans-serif;
+      text-align: center;
+      height: auto;
+      font-weight: bold;
+      font-size: 25px;
+      padding: 5px 5px;
+      margin: 5px 2px 5px 2px;
+      background: var(--bg);
+      color: var(--text);
+      border: none;
+    }
+
+    .cell {
+      font-size: 40px;
+    }
+
+    .button-div {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
     #gameArea {
@@ -27,6 +88,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    .chip {
+      border-radius: 5px;
+      padding: 5px 10px;
+      font-size: 20px;
+      margin-top: 0.1vh;
+      margin: 5px;
     }
 
     #sidebar {
@@ -146,12 +215,12 @@
 
 <body>
   <div class="container">
-    <h2>Tic Tac Toe</h2>
+    <h1>Tic Tac Toe</h1>
 
     <div id="gameArea">
       <div id="board" class="tic-grid"></div>
     </div>
-    <div style="margin-top:12px">
+    <div class="button-div">
       <button id="reset" class="chip">Reset</button>
       <button id="local-toggle-leaderboard" class="chip">Local Leaderboard</button>
       <button id="toggle-leaderboard" class="chip">Global Leaderboard</button>
@@ -160,15 +229,15 @@
       <button class="primary" id="toggle-feedback">📝Feedback</button>
       <button class="primary"
         onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
-      <div id="timerdisplay">⏱️ 00:00:00</div>
+      <button id="shareBtn">Share on Facebook</button>
+      <button id="shareBtn1">Share on Twitter</button>
+      <button id="nativeShare">Share mobile</button>
+      <button id="shareBtn2">Share detect device</button>
     </div>
-    <p id="msg">Click in BOX to play</p>
-    <button id="shareBtn">Share on Facebook</button>
-    <button id="shareBtn1">Share on Twitter</button>
-    <button id="nativeShare">Share mobile</button>
-    <button id="shareBtn2">Share detect device</button>
 
   </div>
+  <p id="timer-display">⏱️ 00:00:00</p>
+  <p id="msg">Click in BOX to play</p>
   <div id="leaderboardPopup" class="popupWindow">
   </div>
   <div id="localleaderboardPopup" class="popupWindow">
@@ -192,10 +261,7 @@
   </div>
 
   <script type="module">
-    import { shareScore } from '../../leaderboard/share.js';
-    document.getElementById("shareBtn").addEventListener("click", async () => {
-      shareScore("tictactoe", 0);
-    });
+
   </script>
   <script type="module">
     import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
@@ -349,10 +415,10 @@
   </script>
 
   <script type="module">
-    import { shareScore } from '../../leaderboard/share.js';
     import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
-    let gameName = 'tictactoe';
-    let score = 0;
+    window.gameName = 'tictactoe';
+    window.score = 0;
+    window.winner;
 
     const boardEl = document.getElementById('board');
     let board = Array(9).fill(null), turn = 'X', over = false, moves = 0, startTime, currenttime, elapsed = 0;
@@ -374,11 +440,13 @@
           currenttime = new Date();
 
           elapsed = Math.floor((currenttime - startTime) / 1000);
-          const winner = board[a];
+          window.winner = board[a];
           document.getElementById("msg").textContent = "winner is " + winner;
           score = 9 * 10 - moves * 2 + 50;
           setTimeout(() => onGameOver(winner, winner === 'X' ? 100 : 50), 100);
-          shareScore(gameName, score);
+          // window.shareScoreCommon(gameName, score);
+          window.detectDevicePara();
+
           return;
         }
       }
@@ -414,11 +482,66 @@
     document.getElementById('reset').addEventListener('click', () => { board = Array(9).fill(null); over = false; moves = 0; render(); });
     render();
 
+    document.getElementById("shareBtn2").addEventListener("click", async () => {
+      window.detectDevicePara();
+    });
 
+    document.getElementById("shareBtn").addEventListener("click", async () => {
+      shareScoreCommon("tictactoe", 0);
+    });
   </script>
 
+  <script>
+    window.shareScoreCommon = async function (gameName, score = 0) {
 
-  <!-- <script>
+      const siteName = "Ravindra Games Hub";
+      let gameLink = `https://rnsaraswat.github.io/games/index.html`;
+      let textToShare;
+      if (gameName == '-') {
+        gameLink = `https://rnsaraswat.github.io/games/index.html`;
+
+        textToShare =
+          `${siteName}
+        Play here:
+    ${gameLink}`;
+      } else {
+        gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
+
+        textToShare =
+          `${siteName}
+    ${gameName}
+    Can you beat my Score: ${score}
+    
+    Play here:
+    ${gameLink}`;
+        console.log("gamelink", gameLink);
+      }
+
+      const imageUrl = "../../assets/icons/maskable-icon.png";
+
+      try {
+        await navigator.share({
+          title: siteName,
+          text: textToShare
+        });
+        console.log("try", gameLink);
+
+        const blob = await (await fetch(imageUrl)).blob();
+        const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file]
+          });
+          console.log("navigator.canShare && navigator.canShare", file, blob);
+        }
+
+      } catch (err) {
+        console.log("Share cancelled or failed", err);
+      }
+    }
+  </script>
+  <script>
     const currentScore = 420;
 
     // बनाएँ share URL (query param में score)
@@ -473,10 +596,12 @@
       return canvas;
     }
 
-  </script> -->
+  </script>
 
 
-  <!-- <script>
+  <script type="module">
+
+
     /* javascript code for share link/button for browser and mobile */
 
     // Detect Mobile Browser
@@ -484,68 +609,73 @@
       return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
     }
 
-    // document.getElementById("shareBtn2").addEventListener("click", async () => {
-    const score = 420;
-    const shareText = `I scored ${score} points! Try to beat me!`;
-    const shareURL = "https://yourdomain.com/share.html?score=" + score;
+    window.detectDevicePara = async function () {
+      score = 420;
+      const shareText = `I scored ${score} points! Try to beat me!`;
+      const shareURL = "https://yourdomain.com/share.html?score=" + score;
 
-    // --------------------------
-    // 📱 MOBILE SHARE
-    // --------------------------
-    if (isMobile() && navigator.share) {
-      try {
-        await navigator.share({
-          title: "My Score",
-          text: shareText,
-          url: shareURL
-        });
-        return;
-      } catch (e) { }
+      // --------------------------
+      // 📱 MOBILE SHARE
+      // --------------------------
+      if (isMobile() && navigator.share) {
+        try {
+          await navigator.share({
+            title: "My Score",
+            text: shareText,
+            url: shareURL
+          });
+          return;
+        } catch (e) { }
+      }
+
+      // --------------------------
+      // 💻 DESKTOP SHARE POPUP
+      // --------------------------
+
+      // Encode
+      const t = encodeURIComponent(shareText);
+      const u = encodeURIComponent(shareURL);
+
+      // Twitter
+      document.getElementById("twLink").href =
+        `https://twitter.com/intent/tweet?text=${t}&url=${u}`;
+
+      // WhatsApp Web
+      document.getElementById("waLink").href =
+        `https://web.whatsapp.com/send?text=${t}%20${u}`;
+
+      // Facebook Share
+      document.getElementById("fbLink").href =
+        `https://www.facebook.com/sharer/sharer.php?u=${u}`;
+
+      // Telegram Web
+      document.getElementById("tgLink").href =
+        `https://t.me/share/url?url=${u}&text=${t}`;
+
+      // // Instagram (guide to direct message)
+      document.getElementById("igLink").href =
+        `https://www.instagram.com/direct/inbox/`;
+
+      // Show Popup
+      document.getElementById("sharePopup").style.display = "flex";
+
+      document.getElementById("closePopup").addEventListener("click", () => {
+        document.getElementById("sharePopup").style.display = "none";
+      });
     }
+    // document.getElementById("shareBtn2").addEventListener("click", async () => {
 
-    // --------------------------
-    // 💻 DESKTOP SHARE POPUP
-    // --------------------------
-
-    // Encode
-    const t = encodeURIComponent(shareText);
-    const u = encodeURIComponent(shareURL);
-
-    // Twitter
-    document.getElementById("twLink").href =
-      `https://twitter.com/intent/tweet?text=${t}&url=${u}`;
-
-    // WhatsApp Web
-    document.getElementById("waLink").href =
-      `https://web.whatsapp.com/send?text=${t}%20${u}`;
-
-    // Facebook Share
-    document.getElementById("fbLink").href =
-      `https://www.facebook.com/sharer/sharer.php?u=${u}`;
-
-    // Telegram Web
-    document.getElementById("tgLink").href =
-      `https://t.me/share/url?url=${u}&text=${t}`;
-
-    // // Instagram (guide to direct message)
-    document.getElementById("igLink").href =
-      `https://www.instagram.com/direct/inbox/`;
-
-    // Show Popup
-    document.getElementById("sharePopup").style.display = "flex";
     // });
 
-    document.getElementById("closePopup").addEventListener("click", () => {
-      document.getElementById("sharePopup").style.display = "none";
-    });
-  </script> -->
+
+  </script>
 
 
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
-          .register("./sw.js")
+          .register("../../sw.js")
           .then(() => console.log("SW registered"))
           .catch((err) => console.log("SW error", err));
       });

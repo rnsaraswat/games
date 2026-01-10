@@ -157,12 +157,12 @@
     <button class="primary" onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
     <div id="timerdisplay">⏱️ 00:00:00</div>
   </div>
-  <script type="module">
+  <!-- <script type="module">
     import { shareScore } from '../../leaderboard/share.js';
     document.getElementById("shareBtn").addEventListener("click", async () => {
       shareScore("tictactoe", 0);
     });
-  </script>
+  </script> -->
   <script type="module">
     import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
 
@@ -316,7 +316,7 @@
 
   </script>
   <script type="module">
-    import { shareScore } from '../../leaderboard/share.js';
+    // import { shareScore } from '../../leaderboard/share.js';
     import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
     let gameName = 'tictactoe';
     let score = 0;
@@ -409,11 +409,61 @@
 
   </script>
 
+<script>
+  window.shareScoreCommon = async function (gameName, score = 0) {
+
+    const siteName = "Ravindra Games Hub";
+    let gameLink = `https://rnsaraswat.github.io/games/index.html`;
+    let textToShare;
+    if (gameName == '-') {
+      gameLink = `https://rnsaraswat.github.io/games/index.html`;
+
+      textToShare =
+        `${siteName}
+      Play here:
+  ${gameLink}`;
+    } else {
+      gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
+
+      textToShare =
+        `${siteName}
+  ${gameName}
+  Can you beat my Score: ${score}
+  
+  Play here:
+  ${gameLink}`;
+      console.log("gamelink", gameLink);
+    }
+
+    const imageUrl = "../../assets/icons/maskable-icon.png";
+
+    try {
+      await navigator.share({
+        title: siteName,
+        text: textToShare
+      });
+      console.log("try", gameLink);
+
+      const blob = await (await fetch(imageUrl)).blob();
+      const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file]
+        });
+        console.log("navigator.canShare && navigator.canShare", file, blob);
+      }
+
+    } catch (err) {
+      console.log("Share cancelled or failed", err);
+    }
+  }
+</script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
-          .register("./sw.js")
+          .register("../../sw.js")
           .then(() => console.log("SW registered"))
           .catch((err) => console.log("SW error", err));
       });

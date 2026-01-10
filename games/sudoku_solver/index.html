@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Sudoku Solver</title>
     <meta name="description"
-    content="Ravindra Games Hub — collection of lightweight web games (Sudoku Solver) Solve number game in squre">
+        content="Ravindra Games Hub — collection of lightweight web games (Sudoku Solver) Solve number game in squre">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
     <link rel="stylesheet" href="../../commoncss.css">
@@ -20,46 +20,38 @@
         <div class="main">
             <aside class="controls">
                 <h1>Sudoku Solver</h1>
-                <label>Size = </label>
-                <select id="sizeSelect"></select>
-                <!-- <button class="btn" id="newBtn">New Game</button> -->
-                <!-- <button class="btn" id="startBtn">Start / Fill</button> -->
-                <label id="lebelMaxSol" for="maxSolutions">Max Solutions = </label><input id="maxSolutions" class="lebelMaxSolVal"
-                        type="number" value="1" min="1" max="100" />
+                <div class="button-group">
+                    <label>Size = </label>
+                    <select id="sizeSelect"></select>
+                    <!-- <button class="btn" id="newBtn">New Game</button> -->
+                    <!-- <button class="btn" id="startBtn">Start / Fill</button> -->
+                    <label id="lebelMaxSol" for="maxSolutions">Max Solutions = </label><input id="maxSolutions"
+                        class="lebelMaxSolVal" type="number" value="1" min="1" max="100" />
 
-                <button class="button-primary" id="solveBtn">🔓 Solve</button>
-                <button class="btn" id="unsolveBtn">🔒Unsolve</button>
-                <button class="btn" id="resetBtn">🔄 Reset</button>
-                <button class="btn" id="undoBtn">↶ Undo</button>
-                <button class="btn" id="toggle-theme">🌙 Dark</button>
-                <button class="btn" id="toggle-sound">🔇 Music:Off"</button>
-                <button class="button-primary" id="shareBtn">📤Sharing</button>
+                    <button class="button-primary" id="solveBtn">🔓 Solve</button>
+                    <button class="btn" id="unsolveBtn">🔒Unsolve</button>
+                    <button class="btn" id="resetBtn">🔄 Reset</button>
+                    <button class="btn" id="undoBtn">↶ Undo</button>
+                    <button class="btn" id="toggle-theme">🌙 Dark</button>
+                    <button class="btn" id="toggle-sound">🔇 Music:Off</button>
+                    <button class="button-primary" id="shareBtn">📤Sharing</button>
 
-                <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
-                <button class="button-primary"
-                    onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
-                <div id="info">
-                    <!-- <label><input type="checkbox" id="altBgToggle"> Alternate subgrid bg</label> -->
-                    <!-- <label><input type="checkbox" id="notesToggle" checked> Notes</label> -->
+                    <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+                    <button class="button-primary"
+                        onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+                    <p id="filledInfo">Filled: 0</p>
+                    <p id="remainInfo">Empty: 0</p>
+                    <p id="totalInfo">Total: 0</p>
+                </div>
+                <div id="numpad" class="numpad"></div>
+                <div class="info">
+                    <div class="small">Solutions</div>
+                    <button class="btn" id="prevSol">First⏮️ ⏪Prev</button>
+                    <div id="solIndex">0 / 0</div>
+                    <button class="btn" id="nextSol">Next⏩ ⏭️last</button>
+                </div>
+                <div class="status" id="status">Ready — select size and click Start</div>
 
-                    <div class="info">
-                        <!-- <div>Timer</div> -->
-                        <div id="timer-display">⏱️ 00:00:00</div>
-                        <button class="btn" id="pauseBtn">⏸Pause</button>
-                        <div id="filledInfo">Filled: 0</div>
-                        <div id="remainInfo">Empty: 0</div>
-                        <div id="totalInfo">Total: 0</div>
-                    </div>
-
-                    <div id="numpad" class="numpad"></div>
-
-                    <div class="info">
-                        <div class="small">Solutions</div>
-                        <button class="btn" id="prevSol">First⏮️ ⏪Prev</button>
-                        <div id="solIndex">0 / 0</div>
-                        <button class="btn" id="nextSol">Next⏩ ⏭️last</button>
-                    </div>
-                    <div class="status" id="status">Ready — select size and click Start</div>
             </aside>
 
             <section class="board-wrap">

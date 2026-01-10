@@ -1,6 +1,4 @@
 :root {
-  --bg: #121212;
-  --fg: #e5e7eb;
   --muted: #94a3b8;
   --accent: #22d3ee;
   --border: #ffffffd9;
@@ -13,7 +11,6 @@
   --win-text: gold;
   --numpad-bg: #0b1530;
   --cell-size: 20px;
-  --box-shadow: rgba(255, 255, 255, 0.5);
   --cell-min: 20px;
   --cell-max: 96px;
   --subgrid-light: #f7f7f78a;
@@ -22,8 +19,6 @@
 }
 
 [data-theme="light"] {
-  --bg: #f0f0f0;
-  --fg: #111;
   --muted: #475569;
   --accent: #2563eb;
   --border: #222325d4;
@@ -34,7 +29,6 @@
   --wrong: #ff0000;
   --right: #04fe21fb;
   --numpad-bg: #fff;
-  --box-shadow: rgba(0, 0, 0, 0.2);
   --subgrid-light: #f7f7f7b8;
   --subgrid-dark: #00000017;
   --oppa: 0.4;
@@ -50,87 +44,50 @@
 .main {
   flex: 1;
   display: flex;
-  gap: 1vw;
-  padding: 0.5vw;
+  gap: 5px;
+  padding: 4px;
   align-items: stretch;
-  overflow: hidden;
+  overflow: hidden
 }
 
 .controls {
-  flex: 0 0 45%;
+  flex: 0 0 40%;
   background: var(--bg);
-  padding: 0.2vw;
-  border-radius: 1vw;
+  padding: 2px;
+  border-radius: 6px;
   overflow: auto;
 }
 
-/* #controls label { */
-/* select,
-label {
-  padding: 0.6vw 1vw;
-  font-size: 1.6vw;
-  margin: 0.2vw 0.2vw;
-  transition: background-color 0.3s, transform 0.2s;
-  box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-  border-radius: 0.5vw;
-  background: var(--bg);
-  color: var(--fg);
-} */
+.button-group {
+  text-align: center;
+}
 
 button.primary {
-  gap: 0.8vw;
+  gap: 8px;
   align-items: center;
   flex-wrap: wrap;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding: 0.4vw 0.4vw;
-  margin: 0.6vw 0.6vw;
-  font-size: 2vw;
   display: inline-block;
-  margin-top: 0.1vh;
   transition: background-color 0.3s, transform 0.2s;
-  box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-  border-radius: 0.5vw;
-  background: linear-gradient(90deg, #9762f1, #7c3aed);
+  box-shadow: 0 5px 25px 0 var(--box-shadow);
+  border-radius: 5px;
+  background: linear-gradient(90deg, var(--accent), #7c3aed);
   color: #fff;
   border-color: transparent;
   background: linear-gradient(180deg, #10b981, #059669);
-  border: none;
-  box-shadow: 0 1vw 4vw var(--box-shadow);
+  border: 2px solid #10b981;
+  box-shadow: 0 10px 40px var(--box-shadow);
 }
 
 button.primary:hover {
-  opacity: 0.6;
-}
-
-.controls .btn {
-  gap: 0.8vw;
-  align-items: center;
-  flex-wrap: wrap;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  padding: 0.4vw 0.4vw;
-  margin: 0.6vw 0.6vw;
-  font-size: 2vw;
-  display: inline-block;
-  transition: background-color 0.3s, transform 0.2s;
-  box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-  border-radius: 0.5vw;
-  background: var(--bg);
-  color: var(--fg);
-  border: 0.2vw solid var(--border);
-  cursor: pointer;
-}
-
-.controls .btn:hover {
-  opacity: var(--oppa);
+  background: linear-gradient(180deg, #059669, #10b981);
 }
 
 .numpad {
-  margin-top: 0.5vw;
-  margin-bottom: 0.5vw;
+  margin-top: 5px;
+  margin-bottom: 5px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -139,24 +96,22 @@ button.primary:hover {
   align-items: center;
   width: 100%;
   grid-template-columns: repeat(5, 1fr);
-  gap: 0.2vw;
-  padding: 0.2vw;
+  gap: 2px;
+  padding: 2px;
   background: var(--numpad-bg);
-  border-radius: 1vw;
-  box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+  border-radius: 2px;
+  box-shadow: 0 5px 25px 0 var(--box-shadow);
 }
 
 .nbtn {
-  height: 3vw;
-  width: 3vw;
-  border-radius: 0.8vw;
-  font-size: 1.6vw;
-  border: 0.2vw solid var(--border);
-  background: var(--bg);
+  width: 30px;
+  height: 30px;
   color: var(--fg);
+  font-size: 10px;
+  font-weight: 800;
   position: relative;
   cursor: pointer;
-  box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+  box-shadow: 0 5px 25px0 var(--box-shadow);
 }
 
 .nbtn:hover {
@@ -165,39 +120,11 @@ button.primary:hover {
 
 .nbtn .count {
   position: absolute;
-  right: 0.2vw;
-  bottom: 0.2vw;
+  right: 2px;
+  bottom: 2px;
   font-size: 0.8vw;
   color: var(--muted);
-  box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-}
-
-select,
-label {
-  padding: 0.4vw 0.4vw;
-  margin-top: 0.1vh;
-  transition: background-color 0.3s, transform 0.2s;
-  box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-  border-radius: 0.5vw;
-  cursor: pointer;
-  background: var(--bg);
-  color: var(--fg);
-  border: 0.2vw solid var(--border);
-}
-
-select {
-  font-size: 1.5vw;
-}
-
-label {
-  font-size: 2vw;
-}
-select:hover {
-  border: 0.2vw dotted var(--border);
-}
-
-input[type="checkbox"]:hover {
-  outline: 2px dotted var(--border);
+  box-shadow: 0 5px 25px 0 var(--box-shadow);
 }
 
 .board-wrap {
@@ -206,18 +133,18 @@ input[type="checkbox"]:hover {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 0.6vw;
+  padding: 6px;
 }
 
 .grid {
   width: 100%;
   height: 100%;
   display: grid;
-  gap: 0.1vw;
-  border-radius: 0.8vw;
-  padding: 0.6vw;
+  gap: 1px;
+  border-radius: 5px;
+  padding: 6px;
   background: transparent;
-  box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+  box-shadow: 0 5px 25px 0 var(--box-shadow);
   overflow: hidden;
 }
 
@@ -225,8 +152,8 @@ input[type="checkbox"]:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.1vw;
-  border: 0.1vw solid var(--border);
+  border-radius: 1px;
+  border: 1px solid var(--border);
   font-weight: 800;
   font-size: calc(var(--cell-size) * 0.50);
   position: relative;
@@ -263,7 +190,7 @@ input[type="checkbox"]:hover {
 }
 
 .highlight {
-  border: 0.5vw solid yellow;
+  border: 5px solid yellow;
 }
 
 /* solved reveal styles */
@@ -289,13 +216,13 @@ input[type="checkbox"]:hover {
 
 .reveal {
   position: absolute;
-  inset: 0.4vw;
+  inset: 4px;
   display: flex;
   font-size: calc(var(--cell-size) * 0.5);
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 0.6vw;
+  border-radius: 6px
 }
 
 .reveal .wrong {
@@ -314,38 +241,51 @@ input[type="checkbox"]:hover {
 #info {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
-  gap: 0.2vw;
-  color: var(--fg);
-  box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
   justify-content: center;
+  flex-wrap: wrap;
+  border-radius: 8px;
+  gap: 5px;
+  color: var(--fg);
 }
 
 #info>div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
   text-align: center;
-  padding: 0.2vw 0.3vw;
-  margin: 0.2vw 0.5vw;
-  border-radius: 1vw;
-  border: 0.2vw solid var(--border);
-  background: var(--bg);
+  padding: 2px;
   color: var(--fg);
-  cursor: pointer;
-  font-size: 1.6vw;
-  margin: 0.2vw;
+  font-size: 15px;
 
 }
 
 #statusText {
+  width: 100%;
   text-align: center;
-  padding: 0.8vw;
-  border-radius: 8px;
-  border: 0.2vw solid var(--border);
+  margin-top: 1px;
+  padding: 5px 5px;
+  margin: 5px 2px 5px 2px;
+  border: 3px dashed var(--box-shadow);
+  font-weight: bold;
+  font-size: 15px;
   background: var(--bg);
-  color: var(--fg);
-  font-size: 2vw;
-  margin-top: 0.5vw;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
-  min-height: 5vw;
+  color: var(--text);
+  box-shadow: 0 5px 25px 0 var(--box-shadow);
+}
+
+#timerInfo{
+  font-family: 'Digital', Arial, Helvetica, sans-serif;
+  text-align: center;
+  width: auto;
+  height: auto;
+  font-size: 15px;
+  padding: 5px 5px;
+  margin: 5px 2px 5px 2px;
+  background: var(--bg);
+  color: var(--text);
+  border: none;
 }
 
 @media (max-aspect-ratio:1/1){
@@ -359,10 +299,6 @@ input[type="checkbox"]:hover {
     padding: 0.2vw;
     border-radius: 1vw;
     overflow: auto;
-  }
-
-  h1 {
-    font-size: 3vw;
   }
 
   .numpad {
@@ -382,9 +318,6 @@ input[type="checkbox"]:hover {
     box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
   }
 
-  /* .nbtn {
-    height: 6.4vw;
-  } */
 
   label {
     font-size: 4vw;
@@ -408,7 +341,6 @@ input[type="checkbox"]:hover {
   }
 }
 
-/* display wining text */
 #winText {
   position: absolute;
   top: 10%;
@@ -424,26 +356,6 @@ input[type="checkbox"]:hover {
   pointer-events: none;
 }
 
-/* name asking */
-.namebar {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 1vw;
-  background: var(--bg);
-  color: var(--fg);
-  border: 0.1vw solid var(--cell-border);
-  border-radius: 1.4vw;
-  padding: 1vw;
-  z-index: 10001;
-  display: none;
-  gap: 1vw;
-  align-items: center;
-  flex-wrap: wrap;
-  box-shadow: 0 1vw 4vw rgba(0, 0, 0, .45);
-}
-
-/* Confetti canvas */
 #confettiCanvas {
   position: fixed;
   inset: 0;
@@ -451,69 +363,70 @@ input[type="checkbox"]:hover {
   z-index: 9999;
 }
 
-
-
-/* leaderboard Table */
-table,
-td {
-  border: 0.1vw solid var(--cell-border);
-  box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-  margin: auto;
-  text-align: center;
-  padding: 0.1vw;
-  background: var(--bg);
-  color: var(--fg);
-}
-
-/* for sticky header of table */
-th {
-  position: sticky;
-  top: 0;
-  /* Sticks to the top of the scroll container */
-  background-color: var(--bg);
-  z-index: 1;
-  /* Keeps header above scrolling content */
-  padding: 10px;
-  text-align: left;
-  border-bottom: 0.2vw solid var(--cell-border);
-}
-
-
-
-/* popup window with sicky haed */
-.popupWindow {
+.rules-main-container {
+  inset: 0;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 2vw;
-  border-radius: 1vw;
-  display: none;
+  padding: 5px;
+  border-radius: 5px;
   z-index: 10;
-  width: 80%;
-  height: 80%;
-  overflow-x: hidden;
+  width: 95%;
+  height: 95%;
   overflow-y: auto;
   text-align: center;
-  border: 0.2vw solid var(--cell-border);
-  background: var(--bg);
-  color: var(--fg);
+  border: 2px solid var(--gb-border);
+  background: var(--gb-bg);
+  color: var(--gb-text);
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
 }
 
-.popupHeadeer {
-  position: fixed;
-  /* Make the header sticky */
-  top: 0;
-  width: 100%;
-  /* Ensure it spans the full width of the popup */
-  padding: 1vw;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 10;
+.rules-header-section {
+  padding: 2px;
+  background: var(--gb-bg);
+  color: var(--gb-text);
+  text-align: center;
 }
 
-.popupContent {
-  margin-top: 3vw;
-  height: calc(100% - 3vw);
-  overflow-y: auto;
-  /* overflow-x: hidden; */
+.rulesPopupClose {
+  float: right;
+  cursor: pointer;
+  color: var(--gb-text);
+  background: var(--gb-bg);
+  border: 1px solid var(--gb-border);
+  transition: 0.5s ease-in-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  padding: 5px 10px;
+  border-radius: 4px;
+
+  background: linear-gradient(90deg, var(--accent), #7c3aed);
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(90deg, #b91010, #960505);
+  border: 2px solid #b91010;
+  box-shadow: 0 10px 40px var(--box-shadow);
+}
+
+.rulesPopupClose:hover {
+  background: linear-gradient(90deg, #960505, #b91010);
+  color: var(--gb-text);
+  transform: translateY(-2px);
+}
+
+.rulesh2 {
+  background: var(--gb-bg);
+}
+
+.rules-table-area {
+  flex: 1;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.rules-list {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }

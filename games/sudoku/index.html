@@ -2,108 +2,106 @@
 <html lang="hi">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Sudoku</title>
-    <meta name="description"
-        content="Ravindra Games Hub — collection of lightweight web games (Sudoku) Solve login puzzles of numbers">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
-    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
-    <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
-    <link rel="stylesheet" href="../../commoncss.css">
-    <link rel="manifest" href="../../manifest.json" />
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-    <meta name="theme-color" content="#6200ee" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sudoku</title>
+  <meta name="description"
+    content="Ravindra Games Hub — collection of lightweight web games (Sudoku) Solve login puzzles of numbers">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+  <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+  <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+  <link rel="stylesheet" href="../../commoncss.css">
+  <link rel="manifest" href="../../manifest.json" />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta name="theme-color" content="#6200ee" />
 </head>
 
 <body>
-    <div class="app">
-        <div class="main">
-            <aside class="controls">
-                <h1>Sudoku</h1>
-                <div style="display: inline-block;">
-                    <label>Board (N × N)
-                        <select id="sizeSel">
-                            <!-- standard ones -->
-                            <option value="4|2|2">4×4 [2×2]</option>
-                            <option value="6|2|3">6×6 [2x3]</option>
-                            <option value="8|2|4">8×8 [2x4]</option>
-                            <option value="9|3|3" selected>9×9 [3×3]</option>
-                            <option value="10|2|5">10×10 [2x5]</option>
-                            <option value="12|3|4">12×12 [3x4]</option>
-                            <option value="14|2|7">14×14 [2x7]</option>
-                            <option value="15|3|5">15×15 [3x5]</option>
-                            <option value="16|4|4">16×16 [4×4]</option>
-                            <option value="18|3|6">18×18 [3x6]</option>
-                            <option value="20|4|5">20×20 [4x5]</option>
-                            <option value="21|3|7">21×21 [3x7]</option>
-                            <option value="22|2|11">22×22 [2x11]</option>
-                            <option value="24|4|6">24×24 [4x6]</option>
-                            <option value="25|5|5">25×25 [5×5]</option>
-                        </select>
-                    </label>
-                    <label>Difficulty
-                        <select id="diffSel">
-                            <option value="learner">📖 Learner</option>
-                            <option value="easy">😊 Easy</option>
-                            <option value="medium" selected>🤔 Medium</option>
-                            <option value="hard">🤯 Hard</option>
-                            <option value="expert">🧑‍🔬 Expert</option>
-                        </select>
-                    </label>
-                </div>
-                <div style="display: inline-block;">
-                    <label><input type="checkbox" id="notesToggle"> Notes ✎</label>
-
-                    <button id="newBtn" class="primary">🔄 New Game</button>
-                    <button id="pauseBtn" class="btn">⏸ Pause</button>
-                    <button id="resetBtn" class="btn">🔄 Reset</button>
-                    <button id="undoBtn" class="btn">↶ Undo</button>
-                    <button id="redoBtn" class="btn">↷ Redo</button>
-                    <button id="hintBtn" class="btn">💡 Hint</button>
-                    <button id="checkBtn" class="btn">✔ Check</button>
-                    <button id="errorBtn" class="btn">Error Off</button>
-                    <button id="solveBtn" class="btn">🔓 Solve</button>
-                    <button id="toggle-theme" class="btn">☀️ Light</button>
-                    <button class="primary" id="toggle-sound">🔇 Music:Off"</button>
-                    <button class="primary" id="toggle-rules">View Rules</button>
-                    <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
-                        Global
-                        Leaderboard</button>
-                    <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
-                        Leaderboard</button>
-                    <button class="button-primary" id="shareBtn">📤Sharing</button>
-                    <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
-                    <button class="button-primary"
-                        onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
-                    <div id="info">
-                        <div id="timerInfo">⏱ 00:00</div>
-                        <div id="mistakeInfo">❌ 0</div>
-                        <div id="filledInfo">Filled: 0</div>
-                        <div id="remainInfo">Empty: 0</div>
-                        <!-- <div>🏆 Best: <b id="best">—</b></div> -->
-                    </div>
-                    <div id="numpad" class="numpad"></div>
-                    <div id="statusText">Ready</div>
-                    <p id="loading">Loading...</p>
-                </div>
-            </aside>
-            <section class="board-wrap">
-                <div id="gridContainer" class="grid"></div>
-            </section>
+  <div class="app">
+    <div class="main">
+      <aside class="controls">
+        <h1>Sudoku</h1>
+        <div class="button-group">
+          <label>Board (N × N) =</label>
+          <select id="sizeSel">
+            <!-- standard ones -->
+            <option value="4|2|2">4×4 [2×2]</option>
+            <option value="6|2|3">6×6 [2x3]</option>
+            <option value="8|2|4">8×8 [2x4]</option>
+            <option value="9|3|3" selected>9×9 [3×3]</option>
+            <option value="10|2|5">10×10 [2x5]</option>
+            <option value="12|3|4">12×12 [3x4]</option>
+            <option value="14|2|7">14×14 [2x7]</option>
+            <option value="15|3|5">15×15 [3x5]</option>
+            <option value="16|4|4">16×16 [4×4]</option>
+            <option value="18|3|6">18×18 [3x6]</option>
+            <option value="20|4|5">20×20 [4x5]</option>
+            <option value="21|3|7">21×21 [3x7]</option>
+            <option value="22|2|11">22×22 [2x11]</option>
+            <option value="24|4|6">24×24 [4x6]</option>
+            <option value="25|5|5">25×25 [5×5]</option>
+          </select>
+          <!-- <div style="display: inline-block;"> -->
+          <label><input type="checkbox" id="notesToggle"> Notes ✎</label>
+          <button id="newBtn" class="primary">🔄 New Game</button>
+          <label>Difficulty = </label>
+          <select id="diffSel">
+            <option value="learner">📖 Learner</option>
+            <option value="easy">😊 Easy</option>
+            <option value="medium" selected>🤔 Medium</option>
+            <option value="hard">🤯 Hard</option>
+            <option value="expert">🧑‍🔬 Expert</option>
+          </select>
+          <button id="pauseBtn" class="btn">⏸ Pause</button>
+          <button id="resetBtn" class="btn">🔄 Reset</button>
+          <button id="undoBtn" class="btn">↶ Undo</button>
+          <button id="redoBtn" class="btn">↷ Redo</button>
+          <button id="hintBtn" class="btn">💡 Hint</button>
+          <button id="checkBtn" class="btn">✔ Check</button>
+          <button id="errorBtn" class="btn">Error Off</button>
+          <button id="solveBtn" class="btn">🔓 Solve</button>
+          <button id="toggle-theme" class="btn">☀️ Light</button>
+          <button class="primary" id="toggle-sound">🔇 Music:Off</button>
+          <button class="primary" id="toggle-rules" onclick="openRules()">View Rules</button>
+          <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
+            Global
+            Leaderboard</button>
+          <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+            Leaderboard</button>
+          <button class="button-primary" id="shareBtn">📤Sharing</button>
+          <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+          <button class="button-primary"
+            onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+          <div id="info">
+            <div id="timerInfo">⏱ 00:00</div>
+            <div id="mistakeInfo">❌ 0</div>
+            <div id="filledInfo">Filled: 0</div>
+            <div id="remainInfo">Empty: 0</div>
+            <!-- <div>🏆 Best: <b id="best">—</b></div> -->
+          </div>
+          <div id="numpad" class="numpad"></div>
+          <div id="statusText">Ready</div>
+          <p id="loading">Loading...</p>
         </div>
+        <!-- </div> -->
+
+      </aside>
+      <section class="board-wrap">
+        <div id="gridContainer" class="grid"></div>
+      </section>
     </div>
+  </div>
 
-    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
-    <div id="lcLeaderboardModal" class="lc-main-container"></div>
-    <div id="gbLeaderboardModal" class="gb-main-container"></div>
+  <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+  <div id="lcLeaderboardModal" class="lc-main-container"></div>
+  <div id="gbLeaderboardModal" class="gb-main-container"></div>
 
-    <div id="winText">🎉 Completed 🎉</div>
-    <canvas id="confettiCanvas"></canvas>
+  <div id="winText">🎉 Completed 🎉</div>
+  <canvas id="confettiCanvas"></canvas>
 
-    <!-- Rules Popup -->
-    <div id="rulesPopup" class="popupWindow">
+  <!-- Rules Popup -->
+  <!-- <div id="rulesPopup" class="popupWindow">
         <div class="popupHeadeer">
             <h3>Game Rules</h3>
             <button class="primary" id="hide-rules">Hide Rules</button>
@@ -111,13 +109,25 @@
         <div class="popupContent">
             <ul id="RulesBox"></ul>
         </div>
+    </div> -->
+
+  <div id="RulesModal" class="rules-main-container">
+    <div class="rules-header-section">
+      <span id="rulesCloseBtn" class="rulesPopupClose" onclick="closeRules()">Close X</span>
+      <h2 class="rulesh2">Rules</h2>
     </div>
-    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
-    <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
-    <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
-    <script type="module" src="js/script.js"></script>
-    <script type="module" src="js/rules.js"></script>
-    <script>
+    <div id="rulesList" class="rules-table-area">
+      <ul id="RulesBox"></ul>
+    </div>
+  </div>
+
+
+  <script type="module" src="../../leaderboard/gbfeedback.js"></script>
+  <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+  <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
+  <script type="module" src="js/script.js"></script>
+  <script type="module" src="js/rules.js"></script>
+  <script>
     const themeToggle = document.getElementById('toggle-theme');
     function setTheme(t) {
       if (t === 'dark') {
@@ -188,49 +198,58 @@
         document.getElementById("gb-feedbackModal").style.display = 'none';
       });
 
-        (async () => {
-            const GAME_NAME = "Sudoku Game";
-            const GAME_SHORT = "sudoku";
+    document.getElementById("RulesModal").style.display = 'none';
+    function openRules() {
+      document.getElementById("RulesModal").style.display = 'flex';
+    };
 
-            const res = await fetch("../../manifest.json");
-            const manifest = await res.json();
+    function closeRules() {
+      document.getElementById("RulesModal").style.display = 'none';
+    };
 
-            manifest.short_name = GAME_SHORT;
-            manifest.name = GAME_NAME;
+    (async () => {
+      const GAME_NAME = "Sudoku Game";
+      const GAME_SHORT = "sudoku";
 
-            manifest.start_url = 'https://rnsaraswat.github.io/games/games/sudoku/index.html';
-            manifest.scope = 'https://rnsaraswat.github.io/games/games/sudoku/index.html';
+      const res = await fetch("../../manifest.json");
+      const manifest = await res.json();
 
-            // 🔥 icons ko absolute banane ka safety fix
-            manifest.icons = manifest.icons.map(icon => ({
-                ...icon,
-                src: new URL(icon.src, location.origin).href
-            }));
+      manifest.short_name = GAME_SHORT;
+      manifest.name = GAME_NAME;
 
-            const blob = new Blob(
-                [JSON.stringify(manifest)],
-                { type: "application/json" }
-            );
+      manifest.start_url = 'https://rnsaraswat.github.io/games/games/sudoku/index.html';
+      manifest.scope = 'https://rnsaraswat.github.io/games/games/sudoku/index.html';
 
-            const url = URL.createObjectURL(blob);
+      // 🔥 icons ko absolute banane ka safety fix
+      manifest.icons = manifest.icons.map(icon => ({
+        ...icon,
+        src: new URL(icon.src, location.origin).href
+      }));
 
-            const link = document.createElement("link");
-            link.rel = "manifest";
-            link.href = url;
-            document.head.appendChild(link);
-        })();
-    </script>
+      const blob = new Blob(
+        [JSON.stringify(manifest)],
+        { type: "application/json" }
+      );
 
-    <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-                navigator.serviceWorker
-                    .register("../../sw.js")
-                    .then(() => console.log("SW registered"))
-                    .catch((err) => console.log("SW error", err));
-            });
-        }
-    </script>
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("link");
+      link.rel = "manifest";
+      link.href = url;
+      document.head.appendChild(link);
+    })();
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("../../sw.js")
+          .then(() => console.log("SW registered"))
+          .catch((err) => console.log("SW error", err));
+      });
+    }
+  </script>
 </body>
 
 </html>

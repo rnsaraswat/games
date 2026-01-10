@@ -12,7 +12,7 @@
     --cell-alt-bg: #cbcacad6;
 }
 
-body.dark {
+[data-theme='dark'] {
     --cell-min: 25px;
     --cell-max: 96px;
     --border: #ffffffd9;
@@ -34,32 +34,33 @@ body.dark {
 .main {
     flex: 1;
     display: flex;
-    gap: 1vw;
-    padding: 0.8vw;
+    gap: 5px;
+    padding: 4px;
     align-items: stretch;
     overflow: hidden
 }
 
-/* controls */
 .controls {
     flex: 0 0 40%;
     background: var(--bg);
-    padding: 0.2vw;
-    border-radius: 1vw;
+    padding: 2px;
+    border-radius: 6px;
     overflow: auto;
 }
 
-
-#lebelMaxSol {
-    padding: 0.6vw 1vw;
-}
+.button-group {
+    text-align: center;
+  }
 
 @media (max-aspect-ratio:1/1), (max-width:768px),
 (max-height:720px) and (orientation:portrait) {
     .main {
         flex-direction: column
     }
-
+    .lebelMaxSolVal {
+        width: 15%;
+    }
+    
     .controls {
         flex: 0 0 auto;
         background: var(--bg);
@@ -73,65 +74,33 @@ body.dark {
         width: 100%;
     }
 
-    /* clamp cell size */
     :root {
         --cell-min: 1.2vw;
         --cell-max: 9vw;
     }
 }
 
-/* .controls .row, */
-/* .controls, */
-.controls .btn  {
-    gap: 0.8vw;
-    align-items: center;
-    flex-wrap: wrap;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding: 0.4vw 0.4vw;
-    margin: 0.6vw 0.6vw;
-    font-size: 1.6vw;
-    display: inline-block;
-    transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-    border-radius: 0.5vw;
-    background: var(--bg);
-    color: var(--text);
-    border: 0.2vw solid var(--border);
-    cursor: pointer;
-}
-
-.controls .btn:hover  {
-    opacity: 0.5;
-}
-
 button.primary {
-    gap: 0.8vw;
+    gap: 8px;
     align-items: center;
     flex-wrap: wrap;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 0.4vw 1vw;
-    margin: 0.6vw 1vw;
-    font-size: 1.6vw;
     display: inline-block;
-    margin-top: 0.1vh;
     transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-    border-radius: 0.5vw;
+    box-shadow: 0 5px 25px 0 var(--box-shadow);
+    border-radius: 5px;
     background: linear-gradient(90deg, var(--accent), #7c3aed);
     color: #fff;
     border-color: transparent;
     background: linear-gradient(180deg, #10b981, #059669);
-    color: var(--fg);
-    border: none;
-    box-shadow: 0 1vw 4vw var(--box-shadow);
+    border: 2px solid #10b981;
+    box-shadow: 0 10px 40px var(--box-shadow);
 }
 
 button.primary:hover {
-    opacity: 0.6;
+    background: linear-gradient(180deg, #059669, #10b981);
 } 
 
 .info {
@@ -139,10 +108,10 @@ button.primary:hover {
     flex-direction: row;
     justify-content: center;
     flex-wrap: wrap;
-    border-radius: 0.8vw;
-    gap: 0.2vw;
+    border-radius: 8px;
+    gap: 5px;
     color: var(--fg);
-    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+    /* box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow); */
 }
 
 .info>div {
@@ -152,39 +121,30 @@ button.primary:hover {
     align-content: center;
     justify-content: center;
     text-align: center;
-    padding: 0.2vw;
+    padding: 2px;
     color: var(--fg);
-    font-size: 1.2vw;
+    font-size: 15px;
 }
 
 .status {
-    margin-top: 0.5vw;
-    padding: 0.5vw;
-    border-radius: 0.8vw;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
-    min-height: 5vw;
-
+    width: 100%;
     text-align: center;
-    border-radius: 0.8vw;
-    border: 0.2vw solid var(--border);
+    margin-top: 1px;
+    padding: 5px 5px;
+    margin: 5px 2px 5px 2px;
+    border: 3px dashed var(--box-shadow);
+    font-weight: bold;
+    font-size: 15px;
     background: var(--bg);
-    color: var(--fg);
-    font-size: 1.6vw;
-    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+    color: var(--text);
+    box-shadow: 0 5px 25px 0 var(--box-shadow);
 }
 
 .lebelMaxSolVal {
     width: 15%;
-    padding-top: 0.4vh;
-    padding-bottom: 0.3vh;
-    padding-left: 0.8vw;
-    padding-right: 0.8vw;
-    font-size: 1.6vw;
     text-align: center;
     background: var(--bg);
     color: var(--fg);
-    border: 0.2vw solid var(--border);
-    border-radius: 0.8vw;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
     box-shadow: 0 2vw 2.5vw 0 rgba(0, 0, 0, 0.2);
@@ -194,25 +154,24 @@ button.primary:hover {
     transform: scale(1.05);
 } 
 
-/* board area */
 .board-wrap {
     flex: 1;
     display: grid;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    padding: 0.6vw
+    padding: 6px;
 }
 
 .board {
     width: 100%;
     height: 100%;
     display: grid;
-    gap: 0.1vw;
-    border-radius: 0.8vw;
+    gap: 1px;
+    border-radius: 8px;
     padding: 0.6vw;
     background: transparent;
-    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+    box-shadow: 0 5px 25px 0 var(--box-shadow);
     overflow: hidden;
 }
 
@@ -221,11 +180,11 @@ button.primary:hover {
     align-items: center;
     justify-content: center;
     position: relative;
-    border-radius: 0.1vw;
+    border-radius: 1px;
     border: 0.1vw solid var(--border);
     font-size: calc(var(--cell-size) * 0.50);
-    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-    user-select: none
+    box-shadow: 0 5px 25px 0 var(--box-shadow);
+    user-select: none;
 }
 
 .cell:hover {
@@ -244,10 +203,10 @@ button.primary:hover {
 
 .cell .notes {
     position: absolute;
-    inset: 0.1vw;
-    font-size: 0.5vw;
+    inset: 1px;
+    font-size: 5px;
     display: grid;
-    gap: 0.1vw;
+    gap: 1px;
     opacity: 0.95
 }
 
@@ -294,8 +253,8 @@ button.primary:hover {
 }
 
 .numpad {
-    margin-top: 0.5vw;
-    margin-bottom: 0.5vw;
+    margin-top: 5px;
+    margin-bottom: 5px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -304,25 +263,22 @@ button.primary:hover {
     align-items: center;
     width: 100%;
     grid-template-columns: repeat(5, 1fr);
-    gap: 0.2vw;
-    padding: 0.2vw;
+    gap: 2px;
+    padding: 2px;
     background: var(--numpad-bg);
-    border-radius: 1vw;
-    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+    border-radius: 2px;
+    box-shadow: 0 5px 25px 0 var(--box-shadow);
 }
 
 .nbtn {
-    border-radius: 0.8vw;
-    border: 0.2vw solid var(--border);
-    background: var(--bg);
-    width: 3vw;
-    height: 3vw;
+    width: 30px;
+    height: 30px;
     color: var(--fg);
-    font-size: 1vw;
+    font-size: 10px;
     font-weight: 800;
     position: relative;
     cursor: pointer;
-    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+    box-shadow: 0 5px 25px0 var(--box-shadow);
 }
 
 .nbtn:hover {
@@ -336,13 +292,12 @@ button.primary:hover {
 
 .nbtn .counter {
     position: absolute;
-    right: 0.2vw;
-    top: 1.8vw;
-    font-size: 0.6vw;
+    right: 2px;
+    top: 2px;
+    font-size: 6px;
     color: var(--note);
 }
 
-/* avoid scrollbars on controls but allow internal scroll if narrow*/
 .controls::-webkit-scrollbar {
     width: 0.8vw;
     height: 0.8vw
@@ -350,10 +305,9 @@ button.primary:hover {
 
 .controls::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.06);
-    border-radius: 0.6vw
+    border-radius: 6px
 }
 
-/* Warn window */
 .warnbar {
     position: fixed;
     left: 50%;
@@ -361,15 +315,15 @@ button.primary:hover {
     transform: translate(-50%, -50%);
     background: var(--bg);
     color: var(--fg);
-    border: 0.1vw solid var(--cell-border);
-    border-radius: 1.4vw;
-    padding: 1vw;
+    border: 1px solid var(--cell-border);
+    border-radius: 1px;
+    padding: 10px;
     z-index: 10001;
     display: none;
-    gap: 1vw;
+    gap: 5px;
     align-items: center;
     flex-wrap: wrap;
-    box-shadow: 0 1vw 4vw rgba(0, 0, 0, .45);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .45);
 }
 
 .warnbar.show {
@@ -379,13 +333,13 @@ button.primary:hover {
 .warnbar .row {
     display: flex;
     align-items: center;
-    gap: 0.8vw;
+    gap: 8px;
     background: var(--bg);
-    padding: 0.6vh 0.8vw;
-    border-radius: 1vw;
+    padding: 6px 8px;
+    border-radius: 10px;
 }
 
 .warnbar label {
     color: var(--fg);
-    font-size: 1.2vw;
+    font-size: 12px;
 }

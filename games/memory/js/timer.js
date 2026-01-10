@@ -6,7 +6,7 @@ export let hours = 0;
 export let timerInterval;
 let startTime;
 let elapsedTime = 0;
-const timerDisplay = document.getElementById('timerdisplay');
+const timerDisplay = document.getElementById('timer-display');
 
 export function startTimer() {
     clearInterval(timerInterval);

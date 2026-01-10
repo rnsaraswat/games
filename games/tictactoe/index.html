@@ -5,69 +5,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tic Tac Toe</title>
-      <meta name="description"
-  content="Ravindra Games Hub — collection of lightweight web games (Tic tac Toe) Classic & Action-Oriented X vs O game">
-  <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
-  <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
-  <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
-  <link rel="stylesheet" href="../../commoncss.css">
-  <link rel="manifest" href="../../manifest.json" />
-  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-  <meta name="theme-color" content="#6200ee" />
+    <meta name="description"
+        content="Ravindra Games Hub — collection of lightweight web games (Tic tac Toe) Classic & Action-Oriented X vs O game">
+    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+    <link rel="stylesheet" href="../../commoncss.css">
+    <link rel="manifest" href="../../manifest.json" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <meta name="theme-color" content="#6200ee" />
 
     <style>
-        :root {
-            --bg-color: #f0f0f0;
-            --text-color: #111;
-            --cell-bg: #fff;
-            --cell-bg-hover: #c1c1c1;
-            --cell-border: #333;
-            --box-shadow: rgba(0, 0, 0, 0.2);
-            --bg-hover: #d1d1d1;
-        }
-
-        [data-theme='dark'] {
-            --bg-color: #121212;
-            --text-color: #eee;
-            --cell-bg: #1e1e1e;
-            --cell-bg-hover: #5f5f5f;
-            --cell-border: #d9d8d8;
-            --box-shadow: rgba(255, 255, 255, 0.5);
-            --bg-hover: #454545;
-        }
-
-        @font-face {
-            font-family: 'EnglishFontBangers';
-            src: url('../../assets/font/Bangers-Regular.ttf') format('truetype');
-        }
-
-        @font-face {
-            font-family: 'Digital';
-            src: url('../../assets/font/digital-italic.ttf') format('truetype');
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            font-family: Arial, sans-serif;
-            box-sizing: border-box;
-            background: var(--bg-color);
-            color: var(--text-color);
-            transition: background 0.3s, color 0.3s;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
         #container {
             display: flex;
             flex-direction: row;
@@ -81,7 +29,7 @@
         }
 
         #left {
-            background: var(--bg-color);
+            background: var(--bg);
             padding: 0.1vw;
             flex: 0 0 auto;
             display: flex;
@@ -91,59 +39,13 @@
             max-width: 40vw;
         }
 
-        #left h1 {
-            text-align: center;
-            font-size: 4vw;
-            font-family: 'EnglishFontBangers', Arial, Helvetica, sans-serif;
-            color: var(--text-color);
-            letter-spacing: .8vw;
-            text-shadow: 0 1px 0 #030303,
-                0 2px 0 #c9c9c9,
-                0 3px 0 #bbb,
-                0 4px 0 #b9b9b9,
-                0 5px 0 #aaa,
-                0 6px 1px var(--box-shadow),
-                0 0 5px var(--box-shadow),
-                0 1px 3px var(--box-shadow),
-                0 3px 5px var(--box-shadow),
-                0 5px 10px var(--box-shadow),
-                0 10px 10px var(--box-shadow),
-                0 20px 20px var(--box-shadow);
-            margin-bottom: 1vw;
-        }
-
-        h3 {
-            text-align: center;
-            margin: 0;
-            margin: 0.4vw;
-            padding: 0.5vw;
-            background: var(--bg-color);
-            color: var(--text-color);
-        }
-
         .button-group {
             display: flex;
             flex-wrap: wrap;
-            gap: 1vw;
+            gap: 5px;
             justify-content: center;
-            margin-bottom: 1vw;
+            margin-bottom: 10px;
             width: 100%;
-        }
-
-        select,
-        label,
-        input,
-        button {
-            padding: 1vw 1.2vw;
-            font-size: 1.6vw;
-            margin-top: 0.1vh;
-            transition: background-color 0.3s, transform 0.2s;
-            box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-            cursor: pointer;
-            background: var(--bg-color);
-            color: var(--text-color);
-            border: 0.2vw solid var(--cell-border);
-            border-radius: 1vw;
         }
 
         .scoreboard {
@@ -160,19 +62,6 @@
 
         button:hover {
             background: var(--bg-hover);
-        }
-
-        p {
-            display: inline;
-            padding: 1vw 1.2vw;
-            font-size: 1.6vw;
-            margin-top: 1vh;
-            transition: background-color 0.3s, transform 0.2s;
-            box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-            cursor: pointer;
-            background: var(--bg-color);
-            color: var(--text-color);
-            border: 0.2vw solid var(--cell-border);
         }
 
         button.primary {
@@ -202,30 +91,22 @@
             opacity: 0.6;
         }
 
-
-        table,
-        th,
-        td {
-            border: 1px solid var(--cell-border);
-            box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-        }
-
         #message {
             width: 100%;
             text-align: center;
-            background: var(--bg-color);
+            background: var(--bg);
             margin-top: 1vh;
             margin-bottom: 1vh;
             padding: 1vw;
             border: 0.3vw dashed var(--box-shadow);
-            color: var(--text-color);
+            color: var(--text);
             font-weight: bold;
             font-size: 1.5vw;
             box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
         }
 
         #right {
-            background: var(--bg-color);
+            background: var(--bg);
             flex: 1;
             display: flex;
             align-items: center;
@@ -234,15 +115,12 @@
         }
 
         #board {
-            /* width: 100%;
-            max-width: 22vw; */
             aspect-ratio: 1/1;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 0.2vw;
             margin: 0 auto;
         }
-
 
         .cell.disabled {
             pointer-events: none;
@@ -255,7 +133,7 @@
             background-repeat: no-repeat;
             background-size: 200% 100%;
             font-size: 0;
-            border: 0.2vw solid var(--text-color);
+            border: 0.2vw solid var(--text);
             background-color: var(--cell-bg);
             background-position: center center;
         }
@@ -285,11 +163,17 @@
             }
         }
 
-        #timerdisplay {
+        #timer-display {
             font-family: 'Digital', Arial, Helvetica, sans-serif;
-            font-size: 1.8vw;
-            font-weight: bold;
-            color: var(--text-color);
+            text-align: center;
+            width: 100%;
+            height: auto;
+            font-size: 15px;
+            padding: 5px 5px;
+            margin: 5px 2px 5px 2px;
+            background: var(--bg);
+            color: var(--text);
+            border: none;
         }
 
         /* 🧭 Portrait (Top-Bottom layout) */
@@ -309,14 +193,8 @@
                 width: 100%;
             }
 
-            select,
-            label,
-            input,
-            button {
-                padding: 1vw 2vw;
-                margin: 1vw 0.5vw 0.1vw 0.5vw;
-                font-size: 3vw;
-                margin-top: 0.1vh;
+            .button-group {
+                gap: 5px;
             }
 
             button.primary {
@@ -325,11 +203,11 @@
                 font-size: 3vw;
             }
 
-            #timerdisplay {
+            #timer-display {
                 font-size: 3vw;
             }
 
-            #message  {
+            #message {
                 font-size: 3vw;
             }
         }
@@ -359,55 +237,70 @@
             pointer-events: none;
         }
 
-        .namebar {
+        .name-main-container {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            display: none;
+
             width: 60%;
             height: 30%;
-            bottom: 1vw;
+            border: 2px solid #333;
+            z-index: 10;
             background: var(--bg);
-            color: var(--text);
-            border: 0.1vw solid var(--cell-border);
-            border-radius: 1.4vw;
-            padding: 1vw;
-            z-index: 10001;
-            display: none;
-            gap: 1vw;
-            align-items: center;
-            flex-wrap: wrap;
-            box-shadow: 0 1vw 4vw rgba(0, 0, 0, .45);
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        .namebar.show {
-            display: flex;
+        .name-top-section {
+            width: 100%;
+            padding: 8px;
+            border-radius: 2px;
+            color: white;
+            text-align: center;
         }
 
-        .namebar .row {
+        .name-mid-section {
+            flex: 1;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 0.8vw;
-            background: var(--bg);
-            padding: 0.6vh 0.8vw;
-            border-radius: 1vw;
+            text-align: center;
+            align-items: stretch;
+            justify-content: center;
+            gap: 10px;
         }
 
-        .namebar label {
-            color: var(--text);
-            font-size: 1.2vw;
+        .name-footer-section {
+            display: flex;
+            justify-content: space-around;
         }
 
-        .namebar input[type="text"] {
-            border: 0.1vw solid var(--cell-border);
-            background: var(--bg);
-            color: var(--text);
-            border-radius: 0.8vw;
-            padding: 0.4vh 0.6vw;
+        .name-primary-button {
+            padding: 10px 12px;
+            margin: 0px;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 5px 25px 0 var(--box-shadow);
+            border-radius: 5px;
+            background: linear-gradient(90deg, var(--accent), #7c3aed);
+            color: #fff;
+            border-color: transparent;
+            background: linear-gradient(180deg, #10b981, #059669);
+            border: none;
+            box-shadow: 0 10px 40px var(--box-shadow);
         }
 
+        .name-primary-button:hover {
+            background: linear-gradient(180deg, #059669, #10b981);
+        }
 
+        #namebar.show {
+            display: flex;
+        }
     </style>
 </head>
 
@@ -432,13 +325,14 @@
                 <button id="toggle-sound">🔇 Music:Off"</button>
                 <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global
                     Leaderboard</button>
-                  <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+                <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
                     Leaderboard</button>
-                  <button class="button-primary" id="shareBtn">📤Sharing</button>
-                  <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
-                  <button class="button-primary"
+                <button class="button-primary" id="shareBtn">📤Sharing</button>
+                <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+                <button class="button-primary"
                     onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
-                  <div id="timer-display">⏱️ 00:00:00</div>
+            </div>
+            <div id="timer-display">⏱️ 00:00:00</div>
             <div id="message">Click New Game to play</div>
             <p id="loading">Loading...</p>
         </div>
@@ -451,7 +345,7 @@
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
     <div id="gbLeaderboardModal" class="gb-main-container"></div>
     <div id="winText">🎉 You Won! 🎉</div>
-    <div class="namebar" id="namebar" aria-live="polite">
+    <!-- <div class="namebar" id="namebar" aria-live="polite">
         <div class="row">
             <div>Player Name : <span id="player1"></span></div>
             <label for="nameInput">Other Player Name :
@@ -459,110 +353,93 @@
             </label>
             <button id="name" class="primary">Ok</button>
         </div>
+    </div> -->
+    <div class="name-main-container" id="namebar">
+        <div class="name-top-section">Player Name : <span id="player1"></span></div>
+        <div class="name-mid-section">
+            <label class="name-mid-section" for="nameInput">Other Player Name :
+                <input type="text" id="nameInput" placeholder="ABC" value="ABC">
+            </label>
+        </div>
+        <div class="name-footer-section">
+
+            <button id="name" class="name-primary-button">Ok</button>
+        </div>
     </div>
     <script type="module" src="../../leaderboard/gbfeedback.js"></script>
     <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
     <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <script type="module" src="tictactoe.js"></script>
-    <!-- <script type="module">
-        import { shareScore } from '../../leaderboard/share.js';
-        document.getElementById("shareBtn").addEventListener("click", async () => {
-            shareScore("tictactoe", 0);
-        });
-    </script> -->
-    <!-- <script type="module">
-        import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
+    <script>
+        const themeToggle = document.getElementById('toggle-theme');
+        function setTheme(t) {
+            if (t === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '☀️ Light'
+            }
+            if (t === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '🌙 Dark'
+            }
+        }
+        if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+        setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
-        window.sortTable = sortTable;
-        window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
-            try {
-                await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
-            } catch (e) {
-                document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
+        function openGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'none';
+        };
+
+
+        fetch('../../leaderboard/gbleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("gbLeaderboardModal").style.display = 'none';
+            });
+
+        function openLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'none';
+        };
+
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
             }
         };
-        document.addEventListener('DOMContentLoaded', () => {
-            renderLeaderboard('tictactoe');
-        });
-    </script>
 
-    <script type="module">
-        import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
-        document.addEventListener('DOMContentLoaded', () => {
-            localrenderLeaderboard('tictactoe');
-        });
-    </script> -->
+        fetch('../../leaderboard/lcleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("lcLeaderboardModal").style.display = 'none';
+            });
 
-    <script>
-    const themeToggle = document.getElementById('toggle-theme');
-    function setTheme(t) {
-      if (t === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('rg_theme', t);
-        themeToggle.textContent = '☀️ Light'
-      }
-      if (t === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('rg_theme', t);
-        themeToggle.textContent = '🌙 Dark'
-      }
-    }
-    if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
-    setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+        function openGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'flex';
+        };
 
-    function openGlobalLeaderboard() {
-      document.getElementById("gbLeaderboardModal").style.display = 'flex';
-    };
+        function closeGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'none';
+        };
 
-    function closeGlobalLeaderboard() {
-      document.getElementById("gbLeaderboardModal").style.display = 'none';
-    };
-
-
-    fetch('../../leaderboard/gbleaderboard.html')
-      .then(response => response.text())
-      .then(htmlText => {
-        document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
-        document.getElementById("gbLeaderboardModal").style.display = 'none';
-      });
-
-    function openLocalLeaderboard() {
-      document.getElementById("lcLeaderboardModal").style.display = 'flex';
-    };
-
-    function closeLocalLeaderboard() {
-      document.getElementById("lcLeaderboardModal").style.display = 'none';
-    };
-
-    function clearLLB() {
-      if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
-        localStorage.removeItem('leaderboard');
-        alert("All games Local Leaderboard Data is Cleared");
-        textToSpeechEng('Local Leaderboard data cleared');
-      }
-    };
-
-    fetch('../../leaderboard/lcleaderboard.html')
-      .then(response => response.text())
-      .then(htmlText => {
-        document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
-        document.getElementById("lcLeaderboardModal").style.display = 'none';
-      });
-
-    function openGlobalFeedback() {
-      document.getElementById("gb-feedbackModal").style.display = 'flex';
-    };
-
-    function closeGlobalFeedback() {
-      document.getElementById("gb-feedbackModal").style.display = 'none';
-    };
-
-    fetch('../../leaderboard/gbfeedback.html')
-      .then(response => response.text())
-      .then(htmlText => {
-        document.getElementById('gb-feedbackModal').innerHTML = htmlText;
-        document.getElementById("gb-feedbackModal").style.display = 'none';
-      });
+        fetch('../../leaderboard/gbfeedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+                document.getElementById("gb-feedbackModal").style.display = 'none';
+            });
 
         (async () => {
             const GAME_NAME = "TIC TAC TOE";
@@ -597,16 +474,16 @@
         })();
 
     </script>
-        <script>
-            if ("serviceWorker" in navigator) {
-                window.addEventListener("load", () => {
-                    navigator.serviceWorker
-                        .register("../../sw.js")
-                        .then(() => console.log("SW registered"))
-                        .catch((err) => console.log("SW error", err));
-                });
-            }
-        </script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("../../sw.js")
+                    .then(() => console.log("SW registered"))
+                    .catch((err) => console.log("SW error", err));
+            });
+        }
+    </script>
 </body>
 
 </html>

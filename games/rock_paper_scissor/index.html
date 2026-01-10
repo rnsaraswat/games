@@ -17,31 +17,24 @@
 </head>
 
 <body>
-    <div class="app">
+    <div class="container">
         <div class="main">
-            <aside class="controls">
+            <div id="left" class="section">
                 <h1>Rock Paper Scissors</h1>
-                <div class="inlinewidth">
-                    <div>
-                        <label class="label" for="match-length">Match Length</label>
-                        <select id="match-length" aria-controls="score result">
-                            <option value="3">Best of 3</option>
-                            <option value="5" selected>Best of 5</option>
-                            <option value="7">Best of 7</option>
-                            <option value="9">Best of 9</option>
-                        </select>
-                        <!-- </div>
-                    <div> -->
-                        <label class="label" for="difficulty">Difficulty</label>
-                        <select id="difficulty">
-                            <option value="easy">😊 Easy</option>
-                            <option value="medium">🤔 Medium</option>
-                            <option value="hard" selected>🤯 Hard</option>
-                        </select>
-                    </div>
-                    <!-- </div>
-                
-                <div> -->
+                <div class="button-group">
+                    <label class="label" for="match-length">Match Length</label>
+                    <select id="match-length" aria-controls="score result">
+                        <option value="3">Best of 3</option>
+                        <option value="5" selected>Best of 5</option>
+                        <option value="7">Best of 7</option>
+                        <option value="9">Best of 9</option>
+                    </select>
+                    <label class="label" for="difficulty">Difficulty</label>
+                    <select id="difficulty">
+                        <option value="easy">😊 Easy</option>
+                        <option value="medium">🤔 Medium</option>
+                        <option value="hard" selected>🤯 Hard</option>
+                    </select>
                     <button id="reset" class="primaryColor">🔄 New Game</button>
                     <button id="toggle-theme">☀️ Light</button>
                     <button class="primary" id="toggle-sound">🔇 Music:Off</button>
@@ -61,42 +54,45 @@
                     <div id="match-winner" style="margin-top:8px;font-weight:700"></div>
                 </div>
                 <p id="loading">Loading...</p>
-            </aside>
-            <section class="board-wrap">
-                <div class="arena" role="group" aria-label="Play area">
-                    <div class="choice-box">
-                        <div class="choice-label">Your Choice</div>
-                        <div id="player-pick" class="choice-emoji">❓</div>
-                        <div class="choice-label" id="player-pick-name">-</div>
+            </div>
+
+            <section class="right">
+                <div>
+                    <div class="arena" role="group" aria-label="Play area">
+                        <div class="choice-box">
+                            <div class="choice-label">Your Choice</div>
+                            <div id="player-pick" class="choice-emoji">❓</div>
+                            <div class="choice-label" id="player-pick-name">-</div>
+                        </div>
+
+                        <div class="vs">VS</div>
+
+                        <div class="choice-box">
+                            <div class="choice-label">Computer Choice</div>
+                            <div id="computer-pick" class="choice-emoji">❔</div>
+                            <div class="choice-label" id="computer-pick-name">-</div>
+                        </div>
                     </div>
 
-                    <div class="vs">VS</div>
-
-                    <div class="choice-box">
-                        <div class="choice-label">Computer Choice</div>
-                        <div id="computer-pick" class="choice-emoji">❔</div>
-                        <div class="choice-label" id="computer-pick-name">-</div>
+                    <div class="pick-row" role="toolbar" aria-label="Moves">
+                        <button class="btn btn-primary pick" data-move="rock">🪨 Rock</button>
+                        <button class="btn btn-primary pick" data-move="paper">📄 Paper</button>
+                        <button class="btn btn-primary pick" data-move="scissors">✂️ Scissors</button>
                     </div>
-                </div>
-
-                <div class="pick-row" role="toolbar" aria-label="Moves">
-                    <button class="btn btn-primary pick" data-move="rock">🪨 Rock</button>
-                    <button class="btn btn-primary pick" data-move="paper">📄 Paper</button>
-                    <button class="btn btn-primary pick" data-move="scissors">✂️ Scissors</button>
-                </div>
-                <div class="controls-top">
-                    <div class="scoreboard">
-                        <div class="score">
-                            <div class="playersmall">You
-                                <div>
-                                    <div class="playersmall" id="player-score">0
+                    <div class="controls-top">
+                        <div class="scoreboard">
+                            <div class="score">
+                                <div class="playersmall">You
+                                    <div>
+                                        <div class="playersmall" id="player-score">0
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="score">
-                            <div class="playersmall">Computer</ div>
-                                <div class="playersmall" id="computer-score">0
+                            <div class="score">
+                                <div class="playersmall">Computer</ div>
+                                    <div class="playersmall" id="computer-score">0
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -125,25 +121,25 @@
     </script> -->
 
     <script>
-    const themeToggle = document.getElementById('toggle-theme');
-    function setTheme(t) {
-      if (t === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('rg_theme', t);
-        themeToggle.textContent = '☀️ Light'
-      }
-      if (t === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('rg_theme', t);
-        themeToggle.textContent = '🌙 Dark'
-      }
-    }
-    if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
-    setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+        const themeToggle = document.getElementById('toggle-theme');
+        function setTheme(t) {
+            if (t === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '☀️ Light'
+            }
+            if (t === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '🌙 Dark'
+            }
+        }
+        if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+        setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
-    function openGlobalLeaderboard() {
-      document.getElementById("gbLeaderboardModal").style.display = 'flex';
-    };
+        function openGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'flex';
+        };
 
         function openGlobalLeaderboard() {
             document.getElementById("gbLeaderboardModal").style.display = 'flex';
