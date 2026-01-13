@@ -1,18 +1,18 @@
 import { textToSpeechEng } from './speak.js';
 
 document.getElementById("toggle-rules").addEventListener("click", () => {
-    if (document.getElementById("toggle-rules").textContent === "📜View Rules") {
-        document.getElementById("toggle-rules").textContent = "Hide Rules";
+    if (document.getElementById("rulesPopup").style.display == "none") {
+        document.getElementById("rulesPopup").style.display == "flex";
         textToSpeechEng('Open Rules');
         showRules();
     } else {
-        document.getElementById("toggle-rules").textContent = "📜View Rules"
+        // document.getElementById("rulesPopup").style.display == "flex";
         textToSpeechEng('Close Rules');
         document.getElementById("rulesPopup").style.display = "none";
     }
 });
 
-document.getElementById("hide-rules").addEventListener("click", () => {
+document.getElementById("rulesCloseBtn").addEventListener("click", () => {
     document.getElementById("toggle-rules").textContent = "📜View Rules"
     textToSpeechEng('Close Rules');
     document.getElementById("rulesPopup").style.display = "none";
@@ -55,5 +55,5 @@ function showRules() {
 export function hideRules() {
     textToSpeechEng('Close Rules');
     document.getElementById("rulesPopup").style.display = "none";
-    document.getElementById("toggle-rules").textContent = "View Rules";
+    document.getElementById("toggle-rules").textContent = "📜View Rules";
 }

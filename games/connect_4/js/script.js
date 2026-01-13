@@ -28,7 +28,6 @@ window.addEventListener('load', function () {
   let startingPlayer = 'x';
   let gameOver = false;
   let history = [];
-  let theme = localStorage.getItem('rg_theme') || 'dark';
   let player1 = localStorage.getItem('player_name') || 'Human1';
   let player2 = localStorage.getItem('player_opponent') || 'Human2';
   let score = 0;
@@ -412,9 +411,8 @@ window.addEventListener('load', function () {
 
   function updateleaderboard() {
     winnerName = currentPlayer === 'x' ? player1 : player2;
-    // let score = 0;
     let opponent = player2;
-    let game_id = 'connect4';
+    let game_id = gameName;
     let gsize = `${gridSize}x${gridSize}`;
     let elapsed = hours * 3600 + minutes * 60 + seconds;
     gameCount = history.length;

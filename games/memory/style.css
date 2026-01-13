@@ -239,7 +239,6 @@ header {
     /* background: var(--bg); */
     color: var(--text);
     border: none;
-    font-size: 1.6vw;
 
   }
 
@@ -259,9 +258,14 @@ header {
     }
 
     .h1-memory {
-        letter-spacing: 2px;
-        padding: 1px;
-        margin: 1px;
+        writing-mode: vertical-rl; 
+        text-orientation: upright;   
+        display: flex;
+        align-items: center;  
+
+        letter-spacing: 5px;
+        padding: 10px;
+        margin: 0px;
         font-size: 15px;
     }
 
@@ -277,7 +281,7 @@ header {
     }
 
     #timer-display{
-        font-size: 15px;
+        font-size: 20px;
     }
 }
 

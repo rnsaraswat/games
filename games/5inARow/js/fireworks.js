@@ -28,7 +28,8 @@ window.addEventListener('resize', resizeCanvas);
 // create Crackers
 function createCracker(x, y) {
     // i is no particles (sparks) from each cracker
-    for (let i = 0; i < 100; i++) {
+    // for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 5; i++) {
         particles.push({
             x,
             y,
@@ -65,6 +66,7 @@ function animateCrackers() {
     }
 }
 
+
 function hslToRgbStr(hsl) {
     // Convert hsl string to rgb string for canvas fillStyle
     const temp = document.createElement("div");
@@ -77,7 +79,8 @@ function hslToRgbStr(hsl) {
 
 export function launchFireworks() {
     // i is no of crackers displayed
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 10; i++) {
+    // for (let i = 0; i < 100; i++) {
         // x -horizontal, y - vericle position of each crackers
         const x = Math.random() * canvas.width;
         // canvas.height/2 will display crackes on half height of window

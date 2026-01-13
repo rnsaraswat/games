@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Connect 4</title>
   <meta name="description"
-  content="Ravindra Games Hub — collection of lightweight web games (Connect 4) Classic & Action-Oriented Red (X) vs Yellow (O) game">
+    content="Ravindra Games Hub — collection of lightweight web games (Connect 4) Classic & Action-Oriented Red (X) vs Yellow (O) game">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
   <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
@@ -15,41 +16,45 @@
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <meta name="theme-color" content="#6200ee" />
 </head>
+
 <body>
   <div id="container" class="main-containef">
     <!-- Left Panel -->
     <div id="left" class="left-section">
       <h1>Connect 4</h1>
       <div class="button-group">
-        <label>Level
+        <label>Level</label>
           <select id="difficulty">Level
             <option value="easy">😊 Easy</option>
             <option value="medium">🤔 Medium</option>
             <option value="hard" selected>🤯 Hard</option>
           </select>
-        </label>
-        <button class="primary" id="newBtn">🔄 New Game</button>
+        
+        <button class="button-primary" id="newBtn">🔄 New Game</button>
         <button id="toggle-theme">☀️ Light</button>
-        <button id="toggle-sound">🔇 Music:Off"</button>
-        <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global Leaderboard</button>
-        <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local Leaderboard</button>
+        <button id="toggle-sound">🔇 Music:Off</button>
+        <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global
+          Leaderboard</button>
+        <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+          Leaderboard</button>
         <button class="button-primary" id="shareBtn">📤Sharing</button>
         <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
         <button class="button-primary"
           onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
         <div id="timer-display">⏱️ 00:00:00</div>
+        <div id="status">Turn: You (Red)</div>
+        <p id="loading" class="loading">Loading...</p>
       </div>
-      <div id="status">Turn: You (Red)</div>
-      <p id="loading">Loading...</p>
     </div>
     <!-- Right Grid -->
     <div id="right" class="left-section">
       <div id="boardHolder" class="board"></div>
     </div>
-    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
-    <div id="lcLeaderboardModal" class="lc-main-container"></div>
-    <div id="gbLeaderboardModal" class="gb-main-container"></div>
-    <canvas id="fireworksCanvas"></canvas>
+  </div>
+  <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+  <div id="lcLeaderboardModal" class="lc-main-container"></div>
+  <div id="gbLeaderboardModal" class="gb-main-container"></div>
+  <canvas id="fireworksCanvas"></canvas>
 
   <div id="winText">🎉 You Won! 🎉</div>
   <script type="module" src="../../leaderboard/gbfeedback.js"></script>
@@ -64,7 +69,13 @@
   </script> -->
 
 
-<script>
+  <script>
+    document.getElementById("gb-feedbackModal").style.display = 'none';
+    document.getElementById("lcLeaderboardModal").style.display = 'none';
+    document.getElementById("gbLeaderboardModal").style.display = 'none';
+    document.getElementById("winText").style.display = 'none';
+    // document.getElementById("rulesPopup").style.display = 'none';
+
     const themeToggle = document.getElementById('toggle-theme');
     function setTheme(t) {
       if (t === 'dark') {
@@ -112,7 +123,7 @@
         textToSpeechEng('Local Leaderboard data cleared');
       }
     };
-    
+
     fetch('../../leaderboard/lcleaderboard.html')
       .then(response => response.text())
       .then(htmlText => {
@@ -166,16 +177,17 @@
       link.href = url;
       document.head.appendChild(link);
     })();
-</script>
-<script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("../../sw.js")
-        .then(() => console.log("SW registered"))
-        .catch((err) => console.log("SW error", err));
-    });
-  }
-</script>
+  </script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("../../sw.js")
+          .then(() => console.log("SW registered"))
+          .catch((err) => console.log("SW error", err));
+      });
+    }
+  </script>
 </body>
+
 </html>

@@ -2,128 +2,135 @@
 <html lang="hi">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Memory</title>
-    <meta name="description"
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Memory</title>
+  <meta name="description"
     content="Ravindra Games Hub — collection of lightweight web games (memory) flip, match and win">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="rules.css">
-    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
-    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
-    <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
-    <link rel="stylesheet" href="../../commoncss.css">
-    <link rel="manifest" href="../../manifest.json" />
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-    <meta name="theme-color" content="#6200ee" />
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="rules.css">
+  <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+  <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+  <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+  <link rel="stylesheet" href="../../commoncss.css">
+  <link rel="manifest" href="../../manifest.json" />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta name="theme-color" content="#6200ee" />
 </head>
 
 <body>
-    <div id="main">
-        <h1 class="h1-memory">Memory</h1>
-        <header id="hdr">
-            <!-- <div class="controls"> -->
-                <button id="startBtn" class="button-primary-memory">🔄Start</button>
-            <label class="label-memory">Level
-                <select id="level" class="button-memory">
-                    <option value="veryeasy">👶 Very Easy (4×4)</option>
-                    <option value="easy">🙂 Easy (6×6)</option>
-                    <option value="medium">🤔 Medium (8×8)</option>
-                    <option value="hard">😥 Hard (10×10)</option>
-                    <option value="expert" selected>🎓Expert (12×12)</option>
-                </select>
-            </label>
-            <label class="label-memory">Theme
-                <select id="theme" class="button-memory">
-                    <option value="animals">🦁Animals</option>
-                    <option value="beach">🏖️ Beach</option>
-                    <option value="bird">🐦 Bird</option>
-                    <option value="city">🏙️ City Item</option>
-                    <option value="clothing">👕 Cloath</option>
-                    <option value="country">🏳️ Flags</option>
-                    <option value="Emoji">Emoji</option>
-                    <option value="food">🍎 Food</option>
-                    <option value="hall">🎃 Hallween</option>
-                    <option value="hero">🎭 Actor</option>
-                    <option value="houses">📺 House item</option>
-                    <option value="heroin" selected>🎭 Actress</option>
-                    <option value="items">📦 Items</option>
-                    <option value="Number">0️⃣ Number</option>
-                    <option value="occu">🧑‍🍳 Occupations</option>
-                    <option value="ocen">🦈 Ocen Animals</option>
-                    <option value="past">Past tense</option>
-                    <option value="planet">🪐 Solar System</option>
-                    <option value="plant">🌱 Plant</option>
-                    <option value="playground">🛝 playground</option>
-                    <option value="social">🤝 Social</option>
-                    <option value="toy">🧸 Toy</option>
-                    <option value="transport">🚗 Transportation</option>
-                    <option value="vegetable">🍅 Vegitable</option>
-                </select>
-            </label>
+  <div id="main">
+    <h1 class="h1-memory">Memory</h1>
+    <header id="hdr">
+      <!-- <div class="controls"> -->
+      <button id="startBtn" class="button-primary-memory">🔄Start</button>
+      <label class="label-memory">Level
+        <select id="level" class="button-memory">
+          <option value="veryeasy">👶 Very Easy (4×4)</option>
+          <option value="easy">🙂 Easy (6×6)</option>
+          <option value="medium">🤔 Medium (8×8)</option>
+          <option value="hard">😥 Hard (10×10)</option>
+          <option value="expert" selected>🎓Expert (12×12)</option>
+        </select>
+      </label>
+      <label class="label-memory">Theme
+        <select id="theme" class="button-memory">
+          <option value="animals">🦁Animals</option>
+          <option value="beach">🏖️ Beach</option>
+          <option value="bird">🐦 Bird</option>
+          <option value="city">🏙️ City Item</option>
+          <option value="clothing">👕 Cloath</option>
+          <option value="country">🏳️ Flags</option>
+          <option value="Emoji">Emoji</option>
+          <option value="food">🍎 Food</option>
+          <option value="hall">🎃 Hallween</option>
+          <option value="hero">🎭 Actor</option>
+          <option value="houses">📺 House item</option>
+          <option value="heroin" selected>🎭 Actress</option>
+          <option value="items">📦 Items</option>
+          <option value="Number">0️⃣ Number</option>
+          <option value="occu">🧑‍🍳 Occupations</option>
+          <option value="ocen">🦈 Ocen Animals</option>
+          <option value="past">Past tense</option>
+          <option value="planet">🪐 Solar System</option>
+          <option value="plant">🌱 Plant</option>
+          <option value="playground">🛝 playground</option>
+          <option value="social">🤝 Social</option>
+          <option value="toy">🧸 Toy</option>
+          <option value="transport">🚗 Transportation</option>
+          <option value="vegetable">🍅 Vegitable</option>
+        </select>
+      </label>
 
-            <!-- </div> -->
-            <!-- <div class="stats"> -->
-            <!-- <div>🏆 Best: <b id="best">—</b></div> -->
-            <!-- </div> -->
-            <!-- <div> -->
-            <!-- <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
+      <!-- </div> -->
+      <!-- <div class="stats"> -->
+      <!-- <div>🏆 Best: <b id="best">—</b></div> -->
+      <!-- </div> -->
+      <!-- <div> -->
+      <!-- <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
                 <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
                 <div id="timer-display">⏱️ 00:00:00</div>
             <button class="primary" id="toggle-rules">View Rules</button>
             <button class="primary" id="dark">☀️ Light</button>
             <button class="primary" id="toggle-sound">🔇 Music:Off"</button>
             <p id="loading">Loading...</p> -->
-            <!-- </div> -->
-            <button id="toggle-theme" class="button-memory">☀️ Light</button>
-            <!-- to sound on / off button -->
-            <button id="toggle-sound" class="button-memory">🔇 Sound: Off"</button>
-            <button class="button-primary-memory" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global Leaderboard</button>
-            <button class="button-primary-memory" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local Leaderboard</button>
-            <button class="button-primary-memory" id="shareBtn">📤Sharing</button>
-            <button class="button-primary-memory" onclick="openGlobalFeedback()">💬 Feedback</button>
-            <button class="button-primary-memory"
-              onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
-              <div class="label-memory">🌀 Moves: <b id="moves">0</b></div>
-              <div id="timer-display">⏱️00:00:00</div>
-        </header>
-    </div>
+      <!-- </div> -->
+      <button id="toggle-theme" class="button-memory">☀️ Light</button>
+      <!-- to sound on / off button -->
+      <button id="toggle-sound" class="button-memory">🔇 Sound: Off"</button>
+      <button class="button-primary-memory" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global
+        Leaderboard</button>
+      <button class="button-primary-memory" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+        Leaderboard</button>
+      <button class="button-primary-memory" id="shareBtn">📤Sharing</button>
+      <button class="button-primary-memory" onclick="openGlobalFeedback()">💬 Feedback</button>
+      <button class="button-primary-memory"
+        onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+      <div class="label-memory">🌀 Moves: <b id="moves">0</b></div>
+      <div id="timer-display">⏱️00:00:00</div>
+    </header>
+  </div>
 
-    <div class="board-wrap">
-        <main class="board" id="board" aria-label="Game board"></main>
-    </div>
-    <div id="leaderboardPopup" class="popupWindow">
-    </div>
-    <div id="localleaderboardPopup" class="popupWindow">
-    </div>
-    <div id="feedbackPopup" class="popupWindow"></div>
-    <!-- Rules Popup -->
-    <!-- <div id="rulesPopup">
+  <div class="board-wrap">
+    <main class="board" id="board" aria-label="Game board"></main>
+  </div>
+  <div id="leaderboardPopup" class="popupWindow">
+  </div>
+  <div id="localleaderboardPopup" class="popupWindow">
+  </div>
+  <div id="feedbackPopup" class="popupWindow"></div>
+  <!-- Rules Popup -->
+  <!-- <div id="rulesPopup">
         <h3>Game Rules</h3>
         <button class="primary" id="hide-rules">Hide Rules</button>
         <ul id="RulesBox"></ul>
     </div> -->
 
-    <p id="loading">Loading...</p>
-    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
-    <div id="lcLeaderboardModal" class="lc-main-container"></div>
-    <div id="gbLeaderboardModal" class="gb-main-container"></div>
-    <!-- Display winning text -->
-    <div id="winText">🎉 You Won! 🎉</div>
-    <!-- fire crackers canvas -->
-    <canvas id="confettiCanvas"></canvas>
-    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
-    <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
-    <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
-    <script type="module" src="js/script.js"></script>
-    <!-- <script type="module" src="js/rules.js"></script> -->
-    <!-- <script type="module">
+  <p id="loading" class="loading">Loading...</p>
+  <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+  <div id="lcLeaderboardModal" class="lc-main-container"></div>
+  <div id="gbLeaderboardModal" class="gb-main-container"></div>
+  <!-- Display winning text -->
+  <div id="winText">🎉 You Won! 🎉</div>
+  <!-- fire crackers canvas -->
+  <canvas id="confettiCanvas"></canvas>
+  <script type="module" src="../../leaderboard/gbfeedback.js"></script>
+  <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+  <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
+  <script type="module" src="js/script.js"></script>
+  <!-- <script type="module" src="js/rules.js"></script> -->
+  <!-- <script type="module">
         import { shareScore } from '../../leaderboard/share.js';
         document.getElementById("shareBtn").addEventListener("click", async () => {
             shareScore("memory", 0);
         });
     </script> -->
-    <script>
+  <script>
+    document.getElementById("gb-feedbackModal").style.display = 'none';
+    document.getElementById("gbLeaderboardModal").style.display = 'none';
+    document.getElementById("lcLeaderboardModal").style.display = 'none';
+    document.getElementById("winText").style.display = 'none';
+
     const themeToggle = document.getElementById('toggle-theme');
     function setTheme(t) {
       if (t === 'dark') {
@@ -171,7 +178,7 @@
         textToSpeechEng('Local Leaderboard data cleared');
       }
     };
-    
+
     fetch('../../leaderboard/lcleaderboard.html')
       .then(response => response.text())
       .then(htmlText => {
@@ -194,49 +201,49 @@
         document.getElementById("gb-feedbackModal").style.display = 'none';
       });
 
-        (async () => {
-            const GAME_NAME = "Memory Game";
-            const GAME_SHORT = "memory";
+    (async () => {
+      const GAME_NAME = "Memory Game";
+      const GAME_SHORT = "memory";
 
-            const res = await fetch("../../manifest.json");
-            const manifest = await res.json();
+      const res = await fetch("../../manifest.json");
+      const manifest = await res.json();
 
-            manifest.short_name = GAME_SHORT;
-            manifest.name = GAME_NAME;
+      manifest.short_name = GAME_SHORT;
+      manifest.name = GAME_NAME;
 
-            manifest.start_url = 'https://rnsaraswat.github.io/games/games/memory/index.html';
-            manifest.scope = 'https://rnsaraswat.github.io/games/games/memory/index.html';
+      manifest.start_url = 'https://rnsaraswat.github.io/games/games/memory/index.html';
+      manifest.scope = 'https://rnsaraswat.github.io/games/games/memory/index.html';
 
-            // 🔥 icons ko absolute banane ka safety fix
-            manifest.icons = manifest.icons.map(icon => ({
-                ...icon,
-                src: new URL(icon.src, location.origin).href
-            }));
+      // 🔥 icons ko absolute banane ka safety fix
+      manifest.icons = manifest.icons.map(icon => ({
+        ...icon,
+        src: new URL(icon.src, location.origin).href
+      }));
 
-            const blob = new Blob(
-                [JSON.stringify(manifest)],
-                { type: "application/json" }
-            );
+      const blob = new Blob(
+        [JSON.stringify(manifest)],
+        { type: "application/json" }
+      );
 
-            const url = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(blob);
 
-            const link = document.createElement("link");
-            link.rel = "manifest";
-            link.href = url;
-            document.head.appendChild(link);
-        })();
-    </script>
+      const link = document.createElement("link");
+      link.rel = "manifest";
+      link.href = url;
+      document.head.appendChild(link);
+    })();
+  </script>
 
-    <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-                navigator.serviceWorker
-                    .register("../../sw.js")
-                    .then(() => console.log("SW registered"))
-                    .catch((err) => console.log("SW error", err));
-            });
-        }
-    </script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("../../sw.js")
+          .then(() => console.log("SW registered"))
+          .catch((err) => console.log("SW error", err));
+      });
+    }
+  </script>
 </body>
 
 </html>

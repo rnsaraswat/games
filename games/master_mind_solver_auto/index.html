@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mastermind Solver by Computer Automatic</title>
     <meta name="description"
-        content="Ravindra Games Hub — collection of lightweight web games (mastermind Solver automatic) Guess the secret color code find the correct color code in correct pegs">
+        content="Ravindra Games Hub — collection of lightweight web games (mastermind Solver automatic) Computer Guess your secret color code find the correct color code in correct pegs automaticlly">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
     <link rel="stylesheet" href="../../commoncss.css">
@@ -20,35 +20,69 @@
     <div id="container">
         <!-- Left Panel -->
         <div id="left" class="section">
-            <h1>Mastermind Solver Auto</h1>
+            <h1 class="h1-mastermind-solver">Mastermind Solver Auto</h1>
             <div class="button-group">
-                <div class="button-group" style="border: 0.1vw solid var(--border);">
-                    <label for="slots">⁷⁷⁷ No of Slots:
-                        <input type="number" id="slots" min="1" max="12" value="4">
-                    </label>
-                    <label for="colors">📚 No of Colors:
-                        <input type="number" id="colors" min="1" max="20" value="6">
-
-                    </label>
+                <!-- <div class="button-group" style="border: 0.1vw solid var(--border);"> -->
+                    <label for="slots">⁷⁷⁷ No of slots:</label>
+                    <select id="slots">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4" selected>4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                      <option value="11">11</option>
+                      <option value="12">12</option>
+                    </select>
+                    <!-- <label for="slots">⁷⁷⁷ No of Slots:</label>
+                        <input type="number" id="slots" min="1" max="12" value="4"> -->
+                    <!-- <label for="colors">📚 No of Colors:</label>
+                        <input type="number" id="colors" min="1" max="20" value="6"> -->
+                        <label for="colors">📚 No of Colors:</label>
+                        <select id="colors">
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="6" selected>6</option>
+                          <option value="7">7</option>
+                          <option value="8">8</option>
+                          <option value="9">9</option>
+                          <option value="10">10</option>
+                          <option value="11">11</option>
+                          <option value="12">12</option>
+                          <option value="13">13</option>
+                          <option value="14">14</option>
+                          <option value="15">15</option>
+                          <option value="16">16</option>
+                          <option value="17">17</option>
+                          <option value="18">18</option>
+                          <option value="19">19</option>
+                          <option value="20">20</option>
+                        </select>
                     <label id="allowedDuplicates">👯Allow Duplicate Colors
-                        <input type="checkbox" id="buttonDuplicate" checked>
-                    </label>
+                        <input type="checkbox" id="buttonDuplicate" checked></label>
                     <button id="resetSecret" class="btn ghost">🔄 Reset secret</button>
                     <button id="randomSecret" class="btn">🎲Random secret</button>
-                </div>
-                <button class="primary" id="startSolve" class="btn">▶️ Start solver</button>
+                <!-- </div> -->
+                <button class="button-primary" id="startSolve" class="btn">▶️ Start solver</button>
                 <button id="toggle-theme">☀️ Light</button>
                 <button id="toggle-sound">🔇 Music:Off"</button>
-                <button class="primary" id="shareBtn">📤Sharing</button>
+                <button class="button-primary" id="shareBtn">📤Sharing</button>
 
-                <button class="primary" id="toggle-feedback">📝Feedback</button>
-                <button class="primary"
+                <button class="button-primary" id="toggle-feedback">📝Feedback</button>
+                <button class="button-primary"
                     onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
                 <div id="timer-display">⏱️ 00:00:00</div>
                 <div class="message" id="output">
                     Please Click on slot to select/change your secreate colors and press Start solver
                 </div>
-            </div>
+            <!-- </div> -->
         </div>
         <!-- Right Grid -->
         <div id="right">

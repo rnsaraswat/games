@@ -26,23 +26,23 @@ window.addEventListener('load', function () {
     const statusEl = document.getElementById('status');
     const difficultySelect = document.getElementById('difficulty');
 
-    const themeToggle = document.getElementById('toggle-theme');
-    function setTheme(t) {
-      if (t === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('rg_theme', t);
-        themeToggle.textContent = '☀️ Light'
-        textToSpeechEng('Theme dark');
-      }
-      if (t === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('rg_theme', t);
-        themeToggle.textContent = '🌙 Dark'
-        textToSpeechEng('Theme Light');
-      }
-    }
-    if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
-    setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+    // const themeToggle = document.getElementById('toggle-theme');
+    // function setTheme(t) {
+    //   if (t === 'dark') {
+    //     document.documentElement.setAttribute('data-theme', 'dark');
+    //     localStorage.setItem('rg_theme', t);
+    //     themeToggle.textContent = '☀️ Light'
+    //     textToSpeechEng('Theme dark');
+    //   }
+    //   if (t === 'light') {
+    //     document.documentElement.setAttribute('data-theme', 'light');
+    //     localStorage.setItem('rg_theme', t);
+    //     themeToggle.textContent = '🌙 Dark'
+    //     textToSpeechEng('Theme Light');
+    //   }
+    // }
+    // if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+    // setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
   
     function initBoard() {
         board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));

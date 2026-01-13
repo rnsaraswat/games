@@ -1,5 +1,3 @@
-// para to speeach in english
-// export function textToSpeechEng(text) {
 export function textToSpeechEng(text) {
     let speechSynthesis = window.speechSynthesis;
     let utterance = new SpeechSynthesisUtterance();

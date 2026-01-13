@@ -1,4 +1,3 @@
-/* ---------- Sounds (WebAudio) ---------- */
 let actx;
 function ensureAudio() {
     if (!actx) {
@@ -6,7 +5,6 @@ function ensureAudio() {
     }
 }
 
-// create different audio without sound files
 function beep(freq = 600, dur = 0.06, type = 'square', gain = 0.06) {
     ensureAudio();
     const now = actx.currentTime;
@@ -20,12 +18,9 @@ function beep(freq = 600, dur = 0.06, type = 'square', gain = 0.06) {
     osc.stop(now + dur);
 }
 
-//play flip sound
 const playFlip = () => beep(520, 0.05, 'square', 0.07);
 
-// play Match sound
 const playMatch = () => {
     beep(660, 0.06, 'sine', 0.06);
     setTimeout(() => beep(880, 0.06, 'sine', 0.06), 70);
 };
-/* ---------- Sounds (WebAudio) ---------- */

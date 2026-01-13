@@ -187,9 +187,9 @@ button.primary:hover {
     width: 100%;
   }
 
-  #message {
+  /* #message {
     font-size: 4.5vw;
-  }
+  } */
 
   button.primary {
     padding: 1vw 2vw;

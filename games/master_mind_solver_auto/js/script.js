@@ -49,12 +49,13 @@
         function renderPalette() {
             paletteEl.innerHTML = '';
             colors.forEach((c, idx) => {
-                const b = document.createElement('button');
+                const b = document.createElement('div');
                 b.className = 'colorBtn';
                 b.style.background = c;
                 b.textContent = idx; 
                 b.style.color = '#fff'; 
                 b.style.textShadow='0 0.1vw 0.2vw rgba(0,0,0,.6)'; 
+                b.style.fontSize = '1.6vw';
                 b.style.fontWeight = 'bold'; 
                 b.style.display = 'grid'; 
                 b.style.textAlign = 'center'; 
@@ -99,6 +100,7 @@
                     s.textContent = colors.indexOf(colors[secret[i]]); 
                     s.style.color = '#fff'; 
                     s.style.textShadow='0 0.1vw 0.2vw rgba(0,0,0,.6)'; 
+                    s.style.fontSize = '1.6vw';
                     s.style.fontWeight = 'bold'; 
                     s.style.display = 'grid'; 
                     s.style.textAlign = 'center'; 
@@ -188,7 +190,8 @@
             secretBoardEl = el('#secretBoard');
             paletteEl = el('#palette');
             visualEl = el('#visualGuesses');
-            el('#slots').oninput = () => {
+            el('#slots').onchange = () => {
+                // el('#slots').oninput = () => {
                 slots = parseInt(el('#slots').value);
                 // el('#slotsShow').textContent = slots; 
                 // log("no of Slots are " + slots);

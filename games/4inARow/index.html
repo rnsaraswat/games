@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>4 in a Row</title>
   <meta name="description"
-  content="Ravindra Games Hub — collection of lightweight web games (4 in a Row) Classic & Action-Oriented X vs O game">
+    content="Ravindra Games Hub — collection of lightweight web games (4 in a Row) Classic & Action-Oriented X vs O game">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
   <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
@@ -25,7 +25,30 @@
         <h1>4 IN A ROW</h1>
         <div class="button-group">
           <label for="gridSize">⊞ Grid Size:</label>
-          <input type="number" id="gridSize" min="5" max="20" value="9">
+          <select id="gridSize">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6" selected>6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+          </select>
+          <!-- <label for="gridSize">⊞ Grid Size:</label>
+          <input type="number" id="gridSize" min="5" max="20" value="9"> -->
           <button class="button-primary" id="startGame">🔄 New Game</button>
           <button id="undo-last">↩️ Undo</button>
           <select id="mode">
@@ -40,8 +63,10 @@
           <button id="toggle-theme">☀️ Light</button>
           <button id="toggle-sound">🔇 Music:Off"</button>
           <button id="toggle-rules">📜View Rules</button>
-          <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global Leaderboard</button>
-          <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local Leaderboard</button>
+          <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global
+            Leaderboard</button>
+          <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+            Leaderboard</button>
           <button class="button-primary" id="shareBtn">📤Sharing</button>
           <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
           <button class="button-primary"
@@ -50,7 +75,7 @@
         <div>
           <div id="timer-display">⏱️ 00:00:00</div>
           <div id="message">Select grid size <br>Click New Game to play</div>
-          <p id="loading">Loading...</p>
+          <p id="loading" class="loading">Loading...</p>
         </div>
       </div>
       <section id="right">
@@ -58,18 +83,16 @@
       </section>
     </div>
   </div>
-  <!-- <div id="localleaderboardPopup" class="popupWindow"></div> -->
-  <!-- <div id="feedbackModal" class="modal"> -->
   <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
   <div id="lcLeaderboardModal" class="lc-main-container"></div>
   <div id="gbLeaderboardModal" class="gb-main-container"></div>
-  <div id="rulesPopup" class="popupWindow">
-    <div class="popupHeadeer">
-      <h3>Game Rules</h3>
-      <button id="hide-rules">Hide Rules</button>
+  <div id="rulesPopup" class="rules-popup-window">
+    <div class="rules-header-section">
+      <span id="rulesCloseBtn" class="rules-popup-close">Close X</span>
+      <h2 class="rules-h2">Game Rules</h2>
     </div>
-    <div class="popupContent">
-      <ul id="RulesBox"></ul>
+    <div class="rules-content">
+      <p id="RulesBox"></p>
     </div>
   </div>
   <div id="winText">🎉 You Won! 🎉</div>
@@ -100,6 +123,11 @@
   </script>
 
   <script>
+    document.getElementById("gb-feedbackModal").style.display = 'none';
+    document.getElementById("lcLeaderboardModal").style.display = 'none';
+    document.getElementById("gbLeaderboardModal").style.display = 'none';
+    document.getElementById("winText").style.display = 'none';
+    document.getElementById("rulesPopup").style.display = 'none';
 
     const themeToggle = document.getElementById('toggle-theme');
     function setTheme(t) {
@@ -148,7 +176,7 @@
         textToSpeechEng('Local Leaderboard data cleared');
       }
     };
-    
+
     fetch('../../leaderboard/lcleaderboard.html')
       .then(response => response.text())
       .then(htmlText => {

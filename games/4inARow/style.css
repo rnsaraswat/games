@@ -54,7 +54,6 @@ button.primary:hover {
 }
 
 #message {
-  background: white;
   width: 100%;
   text-align: center;
   margin-top: 1px;
@@ -249,55 +248,66 @@ button.primary:hover {
 #namebar.show {
   display: flex;
 }
-/* 
-#leaderboardPopup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 20px;
-  border-radius: 10px;
-  display: none;
-  z-index: 10;
-  width: 80%;
-  height: 60%;
-  overflow-y: auto;
-  text-align: center;
-  border: 2px solid var(--cell-border);
-  background: var(--bg);
-  color: var(--text);
-}
 
-.popupWindow {
+.rules-popup-window {
+  inset: 0;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 20px;
-  border-radius: 10px;
-  display: none;
+  padding: 5px;
+  border-radius: 5px;
   z-index: 10;
   width: 95%;
   height: 95%;
-  overflow-x: hidden;
   overflow-y: auto;
   text-align: center;
-  border: 2px solid var(--cell-border);
+  border: 2px solid var(--border);
   background: var(--bg);
   color: var(--text);
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
 }
 
-.popupHeadeer {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  padding: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 10;
+.rules-header-section {
+  padding: 2px;
+  background: var(--bg);
+  color: var(--text);
+  text-align: center;
 }
 
-.popupContent {
+.rules-h2 {
+  background: var(--bg);
+}
+
+.rules-content {
   margin-top: 20px;
   height: calc(100% - 20px);
   overflow-y: auto;
-} */
+}
+
+.rules-popup-close {
+  float: right;
+  cursor: pointer;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  transition: 0.5s ease-in-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  padding: 5px 10px;
+  border-radius: 4px;
+
+  background: linear-gradient(90deg, var(--accent), #7c3aed);
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(90deg, #b91010, #960505);
+  border: 2px solid #b91010;
+  box-shadow: 0 10px 40px var(--box-shadow);
+}
+
+.rules-popup-close:hover {
+  background: linear-gradient(90deg, #960505, #b91010);
+  color: var(--text);
+  transform: translateY(-2px);
+}

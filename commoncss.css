@@ -140,33 +140,84 @@ input:hover {
 }
 
 p {
-  display: inline;
-  padding: 5px 5px;
-  margin: 5px 2px 5px 2px;
-  margin-top: 1vh;
-  transition: background-color 0.3s, transform 0.2s;
-  cursor: pointer;
+    display: inline;
+    padding: 5px 5px;
+    margin: 5px 2px 5px 2px;
+    margin-top: 1vh;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.loading {
+    font-size: 24px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    display: inline-block;
+    animation: loadingBlink 1.5s infinite;
+    text-align: center;
+    width: 100%;
+}
+
+.loading::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    text-align: left;
+    animation: loadingDots 2s infinite;
+}
+
+@keyframes loadingDots {
+    0% {
+        content: '';
+    }
+
+    25% {
+        content: '.';
+    }
+
+    50% {
+        content: '..';
+    }
+
+    75% {
+        content: '...';
+    }
+
+    100% {
+        content: '';
+    }
+}
+
+@keyframes loadingBlink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
 }
 
 table,
 td {
-  border: 0.1vw solid var(--cell-border);
-  box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
-  margin: auto;
-  text-align: center;
-  padding: 0.1vw;
-  background: var(--bg);
-  color: var(--text);
+    border: 0.1vw solid var(--cell-border);
+    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+    margin: auto;
+    text-align: center;
+    padding: 0.1vw;
+    background: var(--bg);
+    color: var(--text);
 }
 
 th {
-  position: sticky;
-  top: 0;
-  background-color: var(--bg);
-  z-index: 1;
-  padding: 10px;
-  text-align: left;
-  border-bottom: 0.2vw solid var(--cell-border);
+    position: sticky;
+    top: 0;
+    background-color: var(--bg);
+    z-index: 1;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 0.2vw solid var(--cell-border);
 }
 
 button {
@@ -203,11 +254,11 @@ button:hover {
     background: linear-gradient(180deg, #10b981, #059669);
     border: 2px solid #10b981;
     box-shadow: 0 10px 40px var(--box-shadow);
-  }
-  
-  .button-primary:hover {
+}
+
+.button-primary:hover {
     background: linear-gradient(180deg, #059669, #10b981);
-  }
+}
 
 @keyframes color {
     0% {
@@ -232,14 +283,14 @@ button:hover {
         margin-top: 0.1vh;
         font-size: 15px;
     }
-    
+
     label {
         padding: 5px 5px;
         margin: 5px 2px 5px 2px;
         margin-top: 1px;
         font-size: 15px;
     }
-    
+
     input {
         padding: 5px 5px;
         margin: 5px 2px 5px 2px;
@@ -311,4 +362,3 @@ button:hover {
     word-wrap: break-word;
     cursor: pointer;
 }
-

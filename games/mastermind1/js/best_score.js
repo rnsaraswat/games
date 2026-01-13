@@ -1,28 +1,4 @@
 
-// these line are added in index.html file
-// <div class="stats">
-//     <div>⏱ Time: <b id="timer-display">00:00:00</b></div>
-//     <div>🌀 Moves: <b id="moves">0</b></div>
-//     <div>🏆 Best: <b id="best">—</b></div>
-// </div> 
-
-// these line are added in style.css file
-// .stats {
-//     display: flex;
-//     gap: 1.4vw;
-//     color: var(--fg);
-//     background: var(--bg);
-//     font-size: .1.2vw;
-//     margin-left: 0.8vw;
-// }
-
-// .stats b {
-//     color: var(--fg);
-//     background: var(--bg);
-// }
-
-// these line are added in script.js javascript file
-/* ---------- Best Score (localStorage) ---------- */
 import { levelSel, themeSel, moves} from './script.js';
 import { hrs, min, sec } from './timer.js';
 

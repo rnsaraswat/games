@@ -25,22 +25,61 @@
       <h1>🎯Mastermind</h1>
       <div class="button-group">
         <div class="button-group" style="border: 0.1vw solid var(--cell-border);">
-          <label for="slotInput">⁷⁷⁷ No of Slots:
+          <label for="slotInput">⁷⁷⁷ No of slots:</label>
+          <select id="slotInput">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4" selected>4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+          </select>
+          <!-- <label for="slotInput">⁷⁷⁷ No of Slots:
             <input type="number" id="slotInput" min="1" max="12" value="4">
-          </label>
-          <label for="colorInput">📚 No of Colors:
+          </label> -->
+          <!-- <label for="colorInput">📚 No of Colors:
             <input type="number" id="colorInput" min="1" max="20" value="6">
 
-          </label>
-          <label>Max Attempts:
+          </label> -->
+          <label for="colorInput">📚 No of Colors:</label>
+          <select id="colorInput">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6" selected>6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+          </select>
+          <label>Max Attempts:</label>
             <input type="number" id="maxAttempts" min="4" max="20" value="12">
-          </label>
+          <button class="button-primary" id="buttonStart">🔄 New Game</button>
+          <p id="diffcultydisplay">Very Easy</p>
+        </div>
           <label id="allowedDuplicates">👯 Allow Duplicate Colors
             <input type="checkbox" id="buttonDuplicate" checked>
           </label>
-          <button class="primary" id="buttonStart">🔄 New Game</button>
-          <p id="diffcultydisplay">Very Easy</p>
-        </div>
+          <button id="toggle-rules">📜View Rules</button>
+
         <button id="undo-last">↩️ Undo</button>
         <button id="buttonEnd">🔚 End</button>
         <button id="toggle-theme">☀️ Light</button>
@@ -55,6 +94,7 @@
         <div class="message" id="output">
           Please Click on Circle to select your secreate colors and press Start
         </div>
+        <p id="loading" class="loading">Loading...</p>
       </div>
     </div>
     <!-- Right Grid -->
@@ -67,9 +107,19 @@
       <div class="log" id="log"></div>
     </div>
   </div>
+  <div id="rules-popup-window" class="rules-feedback-main-container"></div>
   <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
   <div id="lcLeaderboardModal" class="lc-main-container"></div>
   <div id="gbLeaderboardModal" class="gb-main-container"></div>
+  <div id="rulesPopup" class="rules-popup-window">
+    <div class="rules-header-section">
+      <span id="rulesCloseBtn" class="rules-popup-close">Close X</span>
+      <h2 class="rules-h2">Game Rules</h2>
+    </div>
+    <div class="rules-content">
+      <p id="RulesBox"></p>
+    </div>
+  </div>
   <canvas id="fireworksCanvas"></canvas>
   <div id="winText">🎉 You Won! 🎉</div>
   <canvas id="fireworksCanvas"></canvas>
@@ -77,14 +127,15 @@
   <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
   <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
   <script type="module" src="js/script.js"></script>
-  <!-- <script type="module">
-    import { shareScore } from '../../leaderboard/share.js';
-    document.getElementById("shareBtn").addEventListener("click", async () => {
-      shareScore("5inARow", 0);
-    });
-  </script> -->
-
+  <script type="module" src="js/rules.js"></script>
+  <script type="module" src="js/rules.js"></script>
   <script>
+    document.getElementById("gb-feedbackModal").style.display = 'none';
+    document.getElementById("lcLeaderboardModal").style.display = 'none';
+    document.getElementById("gbLeaderboardModal").style.display = 'none';
+    document.getElementById("winText").style.display = 'none';
+    document.getElementById("rulesPopup").style.display = 'none';
+
     const themeToggle = document.getElementById('toggle-theme');
     function setTheme(t) {
       if (t === 'dark') {
@@ -108,7 +159,6 @@
     function closeGlobalLeaderboard() {
       document.getElementById("gbLeaderboardModal").style.display = 'none';
     };
-
 
     fetch('../../leaderboard/gbleaderboard.html')
       .then(response => response.text())
@@ -187,7 +237,6 @@
             document.head.appendChild(link);
         })();
   </script>
-
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {

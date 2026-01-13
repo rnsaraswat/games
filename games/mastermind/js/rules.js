@@ -1,100 +1,50 @@
-// these line are added in index.html file
-// <!-- Rules Popup -->
-// <div id="rulesPopup">
-//     <h3>Game Rules</h3>
-//     <button class="buttondisplayrules" id="hide-rules">Hide Rules</button>
-//     <ul id="RulesBox"></ul>
-// </div>
-// <script type="module" src="js/rules.js"></script> 
-
-
-// these lines are added in style.css 
-// or save in file rules.css add link <link rel="stylesheet" href="rules.css"> in index.html header teg
-/* Leaderboard/Rules Popup */
-// #rulesPopup {
-//     position: fixed;
-//     top: 50%;
-//     left: 50%;
-//     transform: translate(-50%, -50%);
-//     padding: 2vw;
-//     border-radius: 1vw;
-//     display: none;
-//     z-index: 10;
-//     width: 80%;
-//     height: 60%;
-//     overflow-y: auto;
-//     text-align: center;
-//     border: 0.2vw solid var(--cell-border);
-//     background: var(--bg);
-//     color: var(--fg);
-// }
-
-// h3 {
-//     display: inline;
-//     background: var(--bg);
-//     color: var(--fg);
-// }
-
-// .buttondisplayrules {
-//     padding: 0.5vh 1vw;
-//     background: #4CAF50;
-//     border: none;
-//     color: var(--fg);
-//     cursor: pointer;
-// }
-
-// .buttondisplayrules:hover {
-//     background: #45a049;
-//     color: var(--fg);
-// }
-
-// these line are added in javascript file
 import { textToSpeechEng } from './speak.js';
 
-/* ---------- Rules Toggle  ---------- */
 document.getElementById("toggle-rules").addEventListener("click", () => {
-    if (document.getElementById("toggle-rules").textContent === "View Rules") {
-        document.getElementById("toggle-rules").textContent = "Hide Rules";
+    if (document.getElementById("rulesPopup").style.display == "none") {
+        document.getElementById("rulesPopup").style.display == "flex";
         textToSpeechEng('Open Rules');
         showRules();
     } else {
-        document.getElementById("toggle-rules").textContent = "View Rules"
         textToSpeechEng('Close Rules');
         document.getElementById("rulesPopup").style.display = "none";
     }
 });
 
-document.getElementById("hide-rules").addEventListener("click", () => {
-        document.getElementById("toggle-rules").textContent = "View Rules"
-        textToSpeechEng('Close Rules');
-        document.getElementById("rulesPopup").style.display = "none";
+document.getElementById("rulesCloseBtn").addEventListener("click", () => {
+    document.getElementById("toggle-rules").textContent = "📜View Rules"
+    textToSpeechEng('Close Rules');
+    document.getElementById("rulesPopup").style.display = "none";
 });
 
-/* ---------- Rules Display javaScript ---------- */
 function showRules() {
     let rule = document.getElementById("RulesBox");
     rule.style.textAlign = "left";
-    // all rules are write here with required HTML tegs
-    rule.innerHTML = `Players click on tile/card it take turns, flipping over two cards/tile at a time, trying to find matching pairs. <br>If the cards match, the player keeps them and gets another turn. <br>If they don't match, the cards are flipped back face down, and player click next tiles. <br>The game continues until all pairs are matched, and the player wins when all pair matched.<br>
-            <b>1. Setup:</B><br>
-            All the cards or tiles face down in a grid or random arrangement. <br>
-            For a standard deck of 8 to 150 cards, depending on the desired difficulty like easy/medium /hard.<br>
-            You can also play with other types of cards, like those with pictures or designs like furtes/anumals... etc., as long as there are matching pairs. <br>
-            For younger children/kids, easy level have only 16 cards of 8 picturs. <br>
-            <b>2. Gameplay:</b><br>
-            Players take turns flipping over two cards at a time.<br>
-            If the cards match, the player keeps the pair and gets another turn.<br>
-            If the cards don't match, they are flipped back face down, and player player take turns for next two cards.<br>
-            It's crucial to pay attention to the cards that are flipped over, even if they don't match, to help remember their locations for future turns.<br>
-            <b>3. Winning the Game:</b><br>
-            The game continues until all the pairs have been matched and collected.
-            The player take lesser moves/time to matched most pairs at the end of the game wins. <br>
-            <b>4. Memory Master:</b> <br>Players memorize their cards, in next turn try to match them.`;
+    rule.innerHTML = `<b>Game Setup:</b><br>
+    <br>
+    <b>Slots/Pegs:</b> Click on no of slotsPegs to choose slots/pegs between 1 to 12. Slots/pags should be > 0 and <= 12 and also slots/pegs <= no of colors<br>
+    <b>Colors:</b> Click on no of Colors to choose Colors between 1 to 20. Colors should be > 0 and <= 20 and also Colors >= no of slots<br>
+    <b>Allow Duplicate colors:</b> Click to tick ☑ for duplicate Colors allowed or untick ◻ duplicate Colors not allowed. duplicates allowed is harder the Duplicate not allowed.<br>
+    <b>Players:</b> Two (Code Maker & Code Breaker). Here You are Code breaker and other player is Computer (Code maker).
+    <b>Board:</b> Placed between players with the Code Shield facing the Maker.<br> 
+    <b>Computer (Code Maker):</b> Secretly places colored pegs in the slots/pegs (as per duplicates allowed or not) and covers with the shield (show ? only).<br> 
+<br>
+<b>Gameplay</b><br>
+<br>
+<b>Guess:</b> Click on white circle to to open submenu of colors to choose colors. the click on submenu colors to choose. You (Code Breaker) places your guess colored pegs in the first row (closest to them) as their guess. After select/choose all slots/pegs Colors click to submit button to submit toy guess.<br>
+<b>Feedback:</b> The Computer (Code Maker) uses key pegs to give clues: <br>
+<b>Black Key Peg:</b> Right color, right position (no indication of which peg). <br>
+<b>White Key Peg:</b> Right color, wrong position (no indication). <br>
+<b>No Peg:</b> guess Color not in the code. <br>
+<br>
+<b>Deduce:</b> The Code Breaker uses the feedback to make a more informed guess in the next row, using logic.<br> 
+<b>Repeat:</b> Steps game play steps continue until the code is cracked or all rows are used.<br>
+<br>
+<b>Winning</b><br>
+<br>
+<b>Game Over:</b> if black key pegs equal to no of Slots/pegs then code is cracked by player and game over. if no of attempt remain zero and black key pegs not equal to no of Slots/pegs then code is not cracked by player and game over.<br>
+<b>You (Code Breaker) wins:</b> By guessing the code in the fewest possible turns (max number attempt).
+<b>Computer (Code Maker) wins:</b> If the You (Code Breaker) runs out of attempts(guesses) before cracking the code.<br>
+`;
     document.getElementById("rulesPopup").style.display = "block";
-}
-
-export function hideRules() {
-    textToSpeechEng('Close Rules');
-    document.getElementById("rulesPopup").style.display = "none";
-    document.getElementById("toggle-rules").textContent = "View Rules";
 }

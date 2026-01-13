@@ -195,20 +195,6 @@ button.primary:hover {
         flex-direction: column;
     }
 
-    /* .board {
-        grid-template-columns: repeat(7, 4.4vw)
-    }
-
-    .cell {
-        width: 4.4vw;
-        height: 4.4vw;
-    }
-
-    .disc {
-        width: 3.8vw;
-        height: 3.8vw;
-    } */
-
     #left {
         width: 100%;
         max-width: 100%;

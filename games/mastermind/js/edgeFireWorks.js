@@ -138,7 +138,7 @@ class GroundCracker {
             'star5', 'star6', 'star7', 'star8', 'star9', 'star10',
             'star15', 'star16', 'star17', 'star18', 'star19', 'star20',
             'freehandOpen', 'freehandClosed'
-        ]; for (let i = 0; i < 60; i++) {
+        ]; for (let i = 0; i < 20; i++) {
             const angle = Math.random() * 2 * Math.PI;
             const speed = Math.random() * 4 + 1.5;
             const dx = Math.cos(angle) * speed;
@@ -202,7 +202,7 @@ export function launchFireworks() {
     const crackers = [];
 
     // Edges only - top, bottom, left, right (not center)
-    const edgeCrackers = 8;
+    const edgeCrackers = 4;
     const padding = 60;
 
     for (let i = 0; i < edgeCrackers; i++) {
