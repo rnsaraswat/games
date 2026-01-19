@@ -44,7 +44,7 @@
           </select>
           <!-- <div style="display: inline-block;"> -->
           <label><input type="checkbox" id="notesToggle"> Notes ✎</label>
-          <button id="newBtn" class="primary">🔄 New Game</button>
+          <button id="newBtn" class="button-primary">🔄 New Game</button>
           <label>Difficulty = </label>
           <select id="diffSel">
             <option value="learner">📖 Learner</option>
@@ -53,17 +53,17 @@
             <option value="hard">🤯 Hard</option>
             <option value="expert">🧑‍🔬 Expert</option>
           </select>
-          <button id="pauseBtn" class="btn">⏸ Pause</button>
-          <button id="resetBtn" class="btn">🔄 Reset</button>
-          <button id="undoBtn" class="btn">↶ Undo</button>
-          <button id="redoBtn" class="btn">↷ Redo</button>
-          <button id="hintBtn" class="btn">💡 Hint</button>
-          <button id="checkBtn" class="btn">✔ Check</button>
-          <button id="errorBtn" class="btn">Error Off</button>
+          <button id="pauseBtn">⏸ Pause</button>
+          <button id="resetBtn">🔄 Reset</button>
+          <button id="undoBtn">↶ Undo</button>
+          <button id="redoBtn">↷ Redo</button>
+          <button id="hintBtn">💡 Hint</button>
+          <button id="checkBtn">✔ Check</button>
+          <button id="errorBtn">Error Off</button>
           <button id="solveBtn" class="btn">🔓 Solve</button>
           <button id="toggle-theme" class="btn">☀️ Light</button>
-          <button class="primary" id="toggle-sound">🔇 Music:Off</button>
-          <button class="primary" id="toggle-rules" onclick="openRules()">View Rules</button>
+          <button id="toggle-sound">🔇 Music:Off</button>
+          <button id="toggle-rules">📜View Rules</button>
           <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
             Global
             Leaderboard</button>
@@ -74,10 +74,10 @@
           <button class="button-primary"
             onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
           <div id="info">
-            <div id="timerInfo">⏱ 00:00</div>
-            <div id="mistakeInfo">❌ 0</div>
-            <div id="filledInfo">Filled: 0</div>
-            <div id="remainInfo">Empty: 0</div>
+            <div id="mistakeInfo" class="info">❌ 0</div>
+            <div id="filledInfo" class="info">Filled: 0</div>
+            <div id="remainInfo" class="info">Empty: 0</div>
+            <div id="timer-display">⏱ 00:00:00</div>
             <!-- <div>🏆 Best: <b id="best">—</b></div> -->
           </div>
           <div id="numpad" class="numpad"></div>
@@ -101,23 +101,13 @@
   <canvas id="confettiCanvas"></canvas>
 
   <!-- Rules Popup -->
-  <!-- <div id="rulesPopup" class="popupWindow">
-        <div class="popupHeadeer">
-            <h3>Game Rules</h3>
-            <button class="primary" id="hide-rules">Hide Rules</button>
-        </div>
-        <div class="popupContent">
-            <ul id="RulesBox"></ul>
-        </div>
-    </div> -->
-
-  <div id="RulesModal" class="rules-main-container">
+  <div id="rulesPopup" class="rules-popup-window">
     <div class="rules-header-section">
-      <span id="rulesCloseBtn" class="rulesPopupClose" onclick="closeRules()">Close X</span>
-      <h2 class="rulesh2">Rules</h2>
+      <span id="rulesCloseBtn" class="rules-popup-close">Close X</span>
+      <h2 class="rules-h2">Game Rules</h2>
     </div>
-    <div id="rulesList" class="rules-table-area">
-      <ul id="RulesBox"></ul>
+    <div class="rules-content">
+      <p id="RulesBox"></p>
     </div>
   </div>
 
@@ -128,6 +118,13 @@
   <script type="module" src="js/script.js"></script>
   <script type="module" src="js/rules.js"></script>
   <script>
+    document.getElementById("gb-feedbackModal").style.display = 'none';
+    document.getElementById("lcLeaderboardModal").style.display = 'none';
+    document.getElementById("gbLeaderboardModal").style.display = 'none';
+    document.getElementById("winText").style.display = 'none';
+    document.getElementById("rulesPopup").style.display = 'none';
+
+
     const themeToggle = document.getElementById('toggle-theme');
     function setTheme(t) {
       if (t === 'dark') {
@@ -197,15 +194,6 @@
         document.getElementById('gb-feedbackModal').innerHTML = htmlText;
         document.getElementById("gb-feedbackModal").style.display = 'none';
       });
-
-    document.getElementById("RulesModal").style.display = 'none';
-    function openRules() {
-      document.getElementById("RulesModal").style.display = 'flex';
-    };
-
-    function closeRules() {
-      document.getElementById("RulesModal").style.display = 'none';
-    };
 
     (async () => {
       const GAME_NAME = "Sudoku Game";

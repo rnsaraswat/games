@@ -178,8 +178,8 @@ button.primary:hover {
 }
 
 .cell.selected {
-  font-size: calc(var(--cell-size) * 0.750);
-  -webkit-text-stroke: 0.1vw var(--user-fg);
+  font-size: calc(var(--cell-size) * 0.50);
+  -webkit-text-stroke: 1px var(--user-fg);
   color: transparent;
 }
 
@@ -190,7 +190,9 @@ button.primary:hover {
 }
 
 .highlight {
-  border: 5px solid yellow;
+  border: 3px solid yellow;
+  /* border-image: linear-gradient(to right, red, rgb(216, 10, 10)) 1;
+  color: red; */
 }
 
 /* solved reveal styles */
@@ -243,12 +245,12 @@ button.primary:hover {
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
-  border-radius: 8px;
   gap: 5px;
+  /* border-radius: 8px; */
   color: var(--fg);
 }
 
-#info>div {
+.info {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -258,8 +260,19 @@ button.primary:hover {
   padding: 2px;
   color: var(--fg);
   font-size: 15px;
-
 }
+
+#timer-display{
+  font-family: 'Digital', Arial, Helvetica, sans-serif;
+  text-align: center;
+  width: auto;
+  height: auto;
+  font-size: 20px;
+  /* background: var(--bg); */
+  color: var(--text);
+  border: none;
+}
+
 
 #statusText {
   width: 100%;
@@ -273,19 +286,6 @@ button.primary:hover {
   background: var(--bg);
   color: var(--text);
   box-shadow: 0 5px 25px 0 var(--box-shadow);
-}
-
-#timerInfo{
-  font-family: 'Digital', Arial, Helvetica, sans-serif;
-  text-align: center;
-  width: auto;
-  height: auto;
-  font-size: 15px;
-  padding: 5px 5px;
-  margin: 5px 2px 5px 2px;
-  background: var(--bg);
-  color: var(--text);
-  border: none;
 }
 
 @media (max-aspect-ratio:1/1){
@@ -318,6 +318,19 @@ button.primary:hover {
     box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
   }
 
+  .nbtn .count {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+
+  .board-wrap {
+    padding: 2px;
+  }
+
 
   label {
     font-size: 4vw;
@@ -333,12 +346,24 @@ button.primary:hover {
   button.primary {
     font-size: 4vw;
   }
-  #info>div {
-    font-size: 4vw;
+  .info {
+    font-size: 15px;
   }
   #statusText {
     font-size: 4vw;
   }
+
+  #timer-display{
+    font-size: 20px;
+  }
+
+  .grid {
+    gap: 0px;
+    border-radius: 1px;
+    padding: 1px;
+    overflow-y: auto;
+  }
+  
 }
 
 #winText {
@@ -363,7 +388,7 @@ button.primary:hover {
   z-index: 9999;
 }
 
-.rules-main-container {
+.rules-popup-window {
   inset: 0;
   position: fixed;
   top: 50%;
@@ -376,9 +401,9 @@ button.primary:hover {
   height: 95%;
   overflow-y: auto;
   text-align: center;
-  border: 2px solid var(--gb-border);
-  background: var(--gb-bg);
-  color: var(--gb-text);
+  border: 2px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
   flex-direction: column;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   overflow: hidden;
@@ -386,17 +411,28 @@ button.primary:hover {
 
 .rules-header-section {
   padding: 2px;
-  background: var(--gb-bg);
-  color: var(--gb-text);
+  background: var(--bg);
+  color: var(--text);
   text-align: center;
 }
 
-.rulesPopupClose {
+.rules-h2 {
+  background: var(--bg);
+}
+
+.rules-content {
+  margin-top: 20px;
+  height: calc(100% - 20px);
+  overflow-y: auto;
+  text-align: left;
+}
+
+.rules-popup-close {
   float: right;
   cursor: pointer;
-  color: var(--gb-text);
-  background: var(--gb-bg);
-  border: 1px solid var(--gb-border);
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
   transition: 0.5s ease-in-out;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   padding: 5px 10px;
@@ -410,23 +446,11 @@ button.primary:hover {
   box-shadow: 0 10px 40px var(--box-shadow);
 }
 
-.rulesPopupClose:hover {
+.rules-popup-close:hover {
   background: linear-gradient(90deg, #960505, #b91010);
-  color: var(--gb-text);
+  color: var(--text);
   transform: translateY(-2px);
 }
-
-.rulesh2 {
-  background: var(--gb-bg);
-}
-
-.rules-table-area {
-  flex: 1;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.rules-list {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
+#RulesBox {
+  text-align: left;
 }
