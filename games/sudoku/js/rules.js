@@ -135,7 +135,7 @@ Information window display the filled/empty cell and time during the game play.
 <br>
 <b><u>play:</b></u><br> 1. select grid size and level and pres new buttons.<br>
 2. to fill cell with number/alphabts first select the number/aphabets in numpad. the selected show the different, then click cell to fille that number in the cell.<br>
-3. to romove number/alphbets forn cell first select the back battuon, then click on cell to reomve the number/alphbets.<br>`;
+3. to romove number/alphbets forn cell first select the cell, then click on back button in numpad to reomve the number/alphbets.<br>`;
 
     document.getElementById("rulesPopup").style.display = "block";
 }

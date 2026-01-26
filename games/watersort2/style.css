@@ -1,0 +1,350 @@
+  #app {
+      display: flex;
+      height: 100%;
+  }
+
+  @media (orientation: landscape) {
+    #app {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #controls {
+        height: 30%;
+    }
+
+    #board {
+      width: 70%;
+      margin-top: 15px;
+  }
+
+    .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .tube {
+      width: 50px;
+      height: 180px;
+  }
+
+    /* #board {
+        height: 70%;
+    } */
+
+    h1 {
+        padding: 1px 1px;
+        margin: 2px 1px 2px 1px;
+        font-size: 15px;
+        margin-bottom: 1px;
+    }
+
+    button, input, label, select {
+      padding: 1px 1px;
+      margin: 2px 1px 2px 1px;
+      margin-bottom: 1px;
+  }
+
+  .button-primary {
+      gap: 2px;
+  }
+  #moves,
+  #leveldisplay {
+      padding: 2px 2px;
+      margin: 2px 1px 2px 1px;
+      margin-top: 1px;
+  }
+  .divtext {
+      padding: 2px 2px;
+      margin: 2px 1px 2px 1px;
+      margin-top: 1px;
+  }
+  .output-box {
+      margin-top: 2px;
+      padding: 2px;
+      min-height: 40px;
+  }
+  }
+
+  @media (orientation: portrait) {
+      #app {
+          flex-direction: column;
+          align-items: center;
+      }
+
+      #controls {
+          height: 31%;
+      }
+
+      #board {
+        width: 70%;
+        margin-top: 15px;
+    }
+
+      .button-group {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 2px;
+          justify-content: center;
+          width: 100%;
+      }
+
+      .tube {
+        width: 40px;
+        height: 160px;
+    }
+
+      /* #board {
+          height: 70%;
+      } */
+
+      h1 {
+          padding: 1px 1px;
+          margin: 2px 1px 2px 1px;
+          font-size: 15px;
+          margin-bottom: 1px;
+      }
+
+      button, input, label, select {
+        padding: 1px 1px;
+        margin: 2px 1px 2px 1px;
+        margin-bottom: 1px;
+    }
+
+    .button-primary {
+        gap: 2px;
+    }
+    #moves,
+    #leveldisplay {
+        padding: 2px 2px;
+        margin: 2px 1px 2px 1px;
+        margin-top: 1px;
+    }
+    .divtext {
+        padding: 2px 2px;
+        margin: 2px 1px 2px 1px;
+        margin-top: 1px;
+    }
+    .output-box {
+        margin-top: 2px;
+        padding: 2px;
+        min-height: 40px;
+    }
+  }
+
+  #controls {
+      display: flex;
+      gap: 2px;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      flex-direction: column;
+  }
+
+  .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      justify-content: center;
+      margin-bottom: 1px;
+      width: 100%;
+  }
+
+  #moves,
+  #leveldisplay {
+      padding: 5px 5px;
+      margin: 5px 2px 5px 2px;
+      margin-top: 2px;
+      transition: background-color 0.3s, transform 0.2s;
+      text-shadow: 2px 2px var(--text-shadow);
+      font-family: Arial, Helvetica, sans-serif;
+      text-align: center;
+      font-weight: bold;
+      color: var(--text);
+  }
+
+  .divtext {
+      padding: 5px 5px;
+      margin: 5px 2px 5px 2px;
+      margin-top: 2px;
+      transition: background-color 0.3s, transform 0.2s;
+      text-align: center;
+      text-shadow: 2px 2px var(--text-shadow);
+      color: var(--text);
+  }
+
+  .output-box {
+      width: 100%;
+      margin-top: 0.2vw;
+      padding: 0.2vw;
+      border: .3vw dashed var(--cell-border);
+      min-height: 4vw;
+      text-align: center;
+      font-weight: bold;
+      color: var(--text);
+      background: var(--bg);
+      box-shadow: 0 2vw 2.5vw 0 rgba(0, 0, 0, 0.2);
+  }
+
+  #timer-display {
+      font-family: 'Digital', Arial, Helvetica, sans-serif;
+      text-align: center;
+      width: auto;
+      height: auto;
+      font-size: 20px;
+      color: var(--text);
+      border: none;
+  }
+
+  #board {
+      display: flex;
+      flex-wrap: wrap;
+      align-content: center;
+      justify-content: center;
+      gap: 12px;
+  }
+
+  .tube {
+      /* width: 50px;
+      height: 180px; */
+      border: 3px solid var(--cell-border);
+      border-top: 8px double var(--cell-border);
+      border-radius: 0 0 20px 20px;
+      display: flex;
+      flex-direction: column-reverse;
+      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: center center;
+      z-index: 5;
+  }
+
+  .tube.selected {
+      transform: translateY(-20px);
+      box-shadow: 0 10px 20px rgba(255, 255, 255, 0.4);
+      border-color: #fff;
+  }
+
+  .tube.pouring {
+      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 10;
+  }
+
+  .layer {
+      height: calc(100% / 4.5);
+      transition: 2s linear;
+      z-index: 10;
+  }
+
+  .layerBottom {
+      height: calc(100% / 4.5);
+      border-radius: 0 0 18px 18px;
+      transition: height 12s ease-in-out;
+  }
+
+  .pause-container {
+      inset: 0;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 5px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      z-index: 10;
+      width: 95%;
+      height: 95%;
+      overflow-y: auto;
+      text-align: center;
+      border: 2px solid var(--gf-border);
+      background: var(--gf-bg);
+      color: var(--gf-text);
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  /* #rulesPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2vw;
+    border-radius: 1vw;
+    display: none;
+    z-index: 10;
+    width: 95%;
+    height: 95%;
+    overflow-y: auto;
+    text-align: center;
+    border: 0.2vw solid var(--cell-border);
+    background: var(--bg);
+    color: var(--text);
+} */
+
+.rules-popup-window {
+    inset: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 10;
+    width: 95%;
+    height: 95%;
+    overflow-y: auto;
+    text-align: center;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+  }
+  
+  .rules-header-section {
+    padding: 2px;
+    background: var(--bg);
+    color: var(--text);
+    text-align: center;
+  }
+  
+  .rules-h2 {
+    background: var(--bg);
+  }
+  
+  .rules-content {
+    height: calc(100% - 20px);
+    overflow-y: auto;
+    text-align: left;
+  }
+  
+  .rules-popup-close {
+    float: right;
+    cursor: pointer;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    transition: 0.5s ease-in-out;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 5px 10px;
+    border-radius: 4px;
+  
+    background: linear-gradient(90deg, var(--accent), #7c3aed);
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(90deg, #b91010, #960505);
+    border: 2px solid #b91010;
+    box-shadow: 0 10px 40px var(--box-shadow);
+  }
+  
+  .rules-popup-close:hover {
+    background: linear-gradient(90deg, #960505, #b91010);
+    color: var(--text);
+    transform: translateY(-2px);
+  }
+  #RulesBox {
+    text-align: left;
+  }

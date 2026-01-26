@@ -57,6 +57,7 @@ export const state = {
     // let player1 = "ABC";
     // let bestScore = JSON.parse(localStorage.getItem("bestScore") || "[]");
 
+
     // theme images used directly
     const size = {
         25: [[1, 17, 8, 14, 5, 6, 22, 18, 4, 10, 11, 2, 23, 9, 15, 16, 12, 3, 19, 25, 21, 7, 13, 24, 20], [6, 22, 18, 4, 10, 16, 12, 3, 19, 25, 1, 17, 8, 14, 5, 21, 7, 13, 24, 20, 11, 2, 23, 9, 15],[21, 7, 13, 24, 20, 1, 17, 8, 14, 5, 6, 22, 18, 4, 10, 11, 2, 23, 9, 15, 16, 12, 3, 19, 25],[11, 2, 23, 9, 15, 21, 7, 13, 24, 20, 16, 12, 3, 19, 25, 1, 17, 8, 14, 5, 6, 22, 18, 4, 10],[16, 12, 3, 19, 25, 11, 2, 23, 9, 15, 21, 7, 13, 24, 20, 6, 22, 18, 4, 10, 1, 17, 8, 14, 5],[5, 21, 12, 18, 9, 10, 1, 22, 8, 14, 15, 6, 2, 13, 19, 20, 16, 7, 23, 4, 25, 11, 17, 3, 24],[10, 1, 22, 8, 14, 20, 16, 7, 23, 4, 5, 21, 12, 18, 9, 25, 11, 17, 3, 24, 15, 6, 2, 13, 19],[25, 11, 17, 3, 24, 5, 21, 12, 18, 9, 10, 1, 22, 8, 14, 15, 6, 2, 13, 19, 20, 16, 7, 23, 4],[15, 6, 2, 13, 19, 25, 11, 17, 3, 24, 20, 16, 7, 23, 4, 5, 21, 12, 18, 9, 10, 1, 22, 8, 14],[20, 16, 7, 23, 4, 15, 6, 2, 13, 19, 25, 11, 17, 3, 24, 10, 1, 22, 8, 14, 5, 21, 12, 18, 9],[2, 18, 9, 15, 6, 7, 23, 19, 5, 11, 12, 3, 24, 10, 16, 17, 13, 4, 20, 1, 22, 8, 14, 25, 21],[7, 23, 19, 5, 11, 17, 13, 4, 20, 1, 2, 18, 9, 15, 6, 22, 8, 14, 25, 21, 12, 3, 24, 10, 16],[22, 8, 14, 25, 21, 2, 18, 9, 15, 6, 7, 23, 19, 5, 11, 12, 3, 24, 10, 16, 17, 13, 4, 20, 1],[12, 3, 24, 10, 16, 22, 8, 14, 25, 21, 17, 13, 4, 20, 1, 2, 18, 9, 15, 6, 7, 23, 19, 5, 11],[17, 13, 4, 20, 1, 12, 3, 24, 10, 16, 22, 8, 14, 25, 21, 7, 23, 19, 5, 11, 2, 18, 9, 15, 6],[4, 20, 11, 17, 8, 9, 25, 21, 7, 13, 14, 5, 1, 12, 18, 19, 15, 6, 22, 3, 24, 10, 16, 2, 23],[9, 25, 21, 7, 13, 19, 15, 6, 22, 3, 4, 20, 11, 17, 8, 24, 10, 16, 2, 23, 14, 5, 1, 12, 18],[24, 10, 16, 2, 23, 4, 20, 11, 17, 8, 9, 25, 21, 7, 13, 14, 5, 1, 12, 18, 19, 15, 6, 22, 3],[14, 5, 1, 12, 18, 24, 10, 16, 2, 23, 19, 15, 6, 22, 3, 4, 20, 11, 17, 8, 9, 25, 21, 7, 13],[19, 15, 6, 22, 3, 14, 5, 1, 12, 18, 24, 10, 16, 2, 23, 9, 25, 21, 7, 13, 4, 20, 11, 17, 8],[3, 19, 10, 16, 7, 8, 24, 20, 6, 12, 13, 4, 25, 11, 17, 18, 14, 5, 21, 2, 23, 9, 15, 1, 22],[8, 24, 20, 6, 12, 18, 14, 5, 21, 2, 3, 19, 10, 16, 7, 23, 9, 15, 1, 22, 13, 4, 25, 11, 17],[23, 9, 15, 1, 22, 3, 19, 10, 16, 7, 8, 24, 20, 6, 12, 13, 4, 25, 11, 17, 18, 14, 5, 21, 2],[13, 4, 25, 11, 17, 23, 9, 15, 1, 22, 18, 14, 5, 21, 2, 3, 19, 10, 16, 7, 8, 24, 20, 6, 12],[18, 14, 5, 21, 2, 13, 4, 25, 11, 17, 23, 9, 15, 1, 22, 8, 24, 20, 6, 12, 3, 19, 10, 16, 7],],
@@ -108,11 +109,32 @@ export const state = {
     updateHint();
     wintxt.style.display = 'none';
 
+    toggleElement(pauseBtn, true);
+    toggleElement(resetBtn, true);
+    toggleElement(undoBtn, true);
+    toggleElement(redoBtn, true);
+    toggleElement(hintBtn, true);
+    toggleElement(errorBtn, true);
+    toggleElement(checkBtn, true);
+    toggleElement(notesToggle, true);
+    toggleElement(solveBtn, true);
+    toggleElement(sizeSel, false);
+    toggleElement(diffSel, false);
+    toggleElement(newBtn, false);
+
     // this.document.getElementById("player1").textContent = player1;
+
+    let parsed = parseSizeValue(sizeSel.value);
 
     document.getElementById("diffSel").addEventListener("click", () => {
       difficulty = diffSel.value;
+      statusText.innerHTML = `difficulty ${diffSel.value} selected <br> Press new Game button to play`;
     });
+
+    sizeSel.addEventListener("click", () => {
+        parsed = parseSizeValue(sizeSel.value);
+        statusText.innerHTML = `Size ${parsed.N}x${parsed.N} [${parsed.R}x${parsed.C}] selected<br> Press new Game button to play`;
+      });
 
 
     // helpers
@@ -328,8 +350,8 @@ export const state = {
 
         for (let i = 0; i < state.N * state.N; i++) {
             const el = grid.children[i];
-            el.className = 'cell';
-                // el.classList.add("cell");
+            // el.className = 'cell';
+                el.classList.add("cell");
                 const r = rowOf(i), c = colOf(i);
             //   if (r % state.blockRows === 0) el.classList.add('top-border');
             //   if (c % state.blockCols === 0) el.classList.add('left-border');
@@ -464,10 +486,12 @@ export const state = {
     // selection by mouse
     function selectCell(i) {
         if(state.numSelected < 0) {
+            playSound('tap');
             statusText.textContent = "please Click Numpad number first ";
             return;
         }
         if (state.revealMode) return;
+        if (state.fixed[i]) return;
         state.selected = i;
         Array.from(grid.children).forEach(c => c.classList.remove('selected'));
         grid.children[i].classList.add('selected');
@@ -538,7 +562,7 @@ export const state = {
     function handleNumpadClick(n) {
         playSound('tap');
         state.numSelected = n;
-        statusText.textContent = "Click cell to fill number " + n;
+        statusText.innerHTML = `${n} selected, click empty cell to fill ${n}<br> press back button to empty selected cell`;
         const btns = Array.from(numpad.querySelectorAll('.nbtn'));
         btns.forEach(element => {
             state.highlightDigit = n;
@@ -651,6 +675,19 @@ export const state = {
         state.revealMode = true;
         drawBoard();
         stopTimer();
+        numpad.style.display = 'none';
+        toggleElement(pauseBtn, true);
+        toggleElement(resetBtn, true);
+        toggleElement(undoBtn, true);
+        toggleElement(redoBtn, true);
+        toggleElement(hintBtn, true);
+        toggleElement(errorBtn, true);
+        toggleElement(checkBtn, true);
+        toggleElement(notesToggle, true);
+        toggleElement(solveBtn, true);
+        toggleElement(sizeSel, false);
+        toggleElement(diffSel, false);
+        toggleElement(newBtn, false);
         // state.running = false;
         // clearInterval(timerInterval);
     }
@@ -673,6 +710,22 @@ export const state = {
         drawBoard();
         playSound('loose');
         stopTimer();
+        numpad.style.display = 'none';
+
+        toggleElement(pauseBtn, true);
+        toggleElement(resetBtn, true);
+        toggleElement(undoBtn, true);
+        toggleElement(redoBtn, true);
+        toggleElement(hintBtn, true);
+        toggleElement(errorBtn, true);
+        toggleElement(checkBtn, true);
+        toggleElement(notesToggle, true);
+        toggleElement(solveBtn, true);
+        toggleElement(sizeSel, false);
+        toggleElement(diffSel, false);
+        toggleElement(newBtn, false);
+
+
         // state.running = false;
         // clearInterval(timerInterval);
     }
@@ -691,11 +744,26 @@ export const state = {
         updateleaderboard();
         drawBoard();
         stopTimer();
+        numpad.style.display = 'none';
+
+        toggleElement(pauseBtn, true);
+        toggleElement(resetBtn, true);
+        toggleElement(undoBtn, true);
+        toggleElement(redoBtn, true);
+        toggleElement(hintBtn, true);
+        toggleElement(errorBtn, true);
+        toggleElement(checkBtn, true);
+        toggleElement(notesToggle, true);
+        toggleElement(solveBtn, true);
+        toggleElement(sizeSel, false);
+        toggleElement(diffSel, false);
+        toggleElement(newBtn, false);
+
         // state.running = false;
         // clearInterval(timerInterval);
         // saveBest();
         // loadBest();
-        statusText.textContent = `🎉${player1} Won!🎉(⏱️${hours * 3600}:${minutes * 60}:${seconds})`;
+        statusText.innerHTML = `🎉${player1} Won!🎉(⏱️${hours * 3600}:${minutes * 60}:${seconds})<br> Press "New Game" button to play new game`;
         wintxt.innerHTML = `🎉${player1} Won!🎉(⏱️${hours * 3600}:${minutes * 60}:${seconds})`;
         playSound('win');
         // saveToLeaderboard(hrs, min, sec);
@@ -708,7 +776,7 @@ export const state = {
 
     // show no of mistakes
     function updateMistakeUI() {
-        mistakeInfo.textContent = `❌ ${state.mistakes}`;
+        mistakeInfo.textContent = `Mistake: ${state.mistakes}`;
     }
 
     // update information filled/empty cells
@@ -735,12 +803,42 @@ export const state = {
     function newGame() {
         // player1 = document.getElementById("nameInput").value;
         // namebar.classList.remove('show');
-        const parsed = parseSizeValue(sizeSel.value);
+        parsed = parseSizeValue(sizeSel.value);
         state.N = parsed.N;
         state.blockRows = parsed.R;
         state.blockCols = parsed.C;
         state.symbols = SYMBOLS(state.N);
         wintxt.innerHTML = '';
+
+        // const newBtn = document.getElementById('newBtn');
+        // const pauseBtn = document.getElementById('pauseBtn');
+        // const resetBtn = document.getElementById('resetBtn');
+        // const undoBtn = document.getElementById('undoBtn');
+        // const redoBtn = document.getElementById('redoBtn');
+        // const hintBtn = document.getElementById('hintBtn');
+        // const checkBtn = document.getElementById('checkBtn');
+        // const errorBtn = document.getElementById('errorBtn');
+        // const solveBtn = document.getElementById('solveBtn');
+        // // const themeBtn = document.getElementById('themeBtn');
+        // const notesToggle = document.getElementById('notesToggle');
+        // const wintxt = document.getElementById('winText');
+        // const grid = document.getElementById('gridContainer');
+        // const gridWrap = document.querySelector('.board-wrap');
+        // const numpad = document.getElementById('numpad');
+
+        toggleElement(pauseBtn, false);
+        toggleElement(resetBtn, false);
+        toggleElement(undoBtn, false);
+        toggleElement(redoBtn, false);
+        toggleElement(hintBtn, false);
+        toggleElement(errorBtn, false);
+        toggleElement(checkBtn, false);
+        toggleElement(notesToggle, false);
+        toggleElement(solveBtn, false);
+        toggleElement(sizeSel, true);
+        toggleElement(diffSel, true);
+        toggleElement(newBtn, true);
+
         // build grid and numpad
         buildGrid();
         renderNumpad();
@@ -759,6 +857,8 @@ export const state = {
             drawBoard();
             statusText.textContent = 'Good luck!, click numpad number then click cell to fill';
             startTimer();
+            numpad.style.display = 'flex';
+
         }, 8);
         // loadBest();
         updateHint();
@@ -777,7 +877,7 @@ export const state = {
         notesToggle.addEventListener('change', () => state.notesMode = notesToggle.checked);
         errorBtn.addEventListener('click', () => {
             state.conflitMode = !state.conflitMode;
-            errorBtn.textContent = state.conflitMode ? 'Error On' : 'Error Off';
+            errorBtn.textContent = state.conflitMode ? '❌Error On' : '✅Error Off';
             if(state.conflitMode) {
                 markConflicts();
                 textToSpeechEng('Conflict On');
@@ -804,7 +904,7 @@ export const state = {
     function init() {
         // document.documentElement.setAttribute('data-theme', 'dark');
         attachEvents();
-        statusText.textContent = 'Select Grid them press <new game> Button to start';
+        statusText.innerHTML = 'Select Grid and Level <br> them press "new game" Button to play';
     }
 
     function updateleaderboard() {
@@ -833,5 +933,27 @@ export const state = {
       });
 
     init();
+
+
+
+
+    function toggleElement(elementId, isDisable) {
+        // const element = document.getElementById(elementId);
+        
+        if (elementId) { 
+            elementId.disabled = isDisable;
+            if (isDisable) {
+                elementId.style.opacity = "0.5";           // धुंधला (Dim) करें
+                elementId.style.cursor = "not-allowed";    // Cursor को 'not-allowed' करें
+                elementId.style.pointerEvents = "visiable";  
+            } else {
+                elementId.style.opacity = "1";             // वापस साफ़ दिखाएँ
+                elementId.style.cursor = "pointer";        // वापस हाथ वाला कर्सर (pointer) दिखाएँ
+                elementId.style.pointerEvents = "auto";    // क्लिक वापस चालू करें
+            }
+        } else {
+            console.error("Element with ID '" + elementId + "' not found.");
+        }
+    }
 
 });

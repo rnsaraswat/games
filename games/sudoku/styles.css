@@ -169,6 +169,8 @@ button.primary:hover {
 .cell.fixed {
   background: var(--fixed-bg);
   color: var(--fixed-fg);
+  cursor: not-allowed;
+  pointer-events: visible;
 }
 
 .cell.user {
@@ -453,4 +455,24 @@ button.primary:hover {
 }
 #RulesBox {
   text-align: left;
+}
+
+.pause-container {
+  inset: 0;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 10;
+  width: 95%;
+  height: 95%;
+  overflow-y: auto;
+  text-align: center;
+  border: 2px solid var(--gf-border);
+  background: var(--gf-bg);
+  color: var(--gf-text);
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }

@@ -55,13 +55,13 @@
           </select>
           <button id="pauseBtn">⏸ Pause</button>
           <button id="resetBtn">🔄 Reset</button>
-          <button id="undoBtn">↶ Undo</button>
-          <button id="redoBtn">↷ Redo</button>
+          <button id="undoBtn">↩️ Undo</button>
+          <button id="redoBtn">↪️ Redo</button>
           <button id="hintBtn">💡 Hint</button>
           <button id="checkBtn">✔ Check</button>
-          <button id="errorBtn">Error Off</button>
-          <button id="solveBtn" class="btn">🔓 Solve</button>
-          <button id="toggle-theme" class="btn">☀️ Light</button>
+          <button id="errorBtn">✅Error Off</button>
+          <button id="solveBtn">🔓 Solve</button>
+          <button id="toggle-theme">☀️ Light</button>
           <button id="toggle-sound">🔇 Music:Off</button>
           <button id="toggle-rules">📜View Rules</button>
           <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
@@ -74,7 +74,7 @@
           <button class="button-primary"
             onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
           <div id="info">
-            <div id="mistakeInfo" class="info">❌ 0</div>
+            <div id="mistakeInfo" class="info">Mistake: 0</div>
             <div id="filledInfo" class="info">Filled: 0</div>
             <div id="remainInfo" class="info">Empty: 0</div>
             <div id="timer-display">⏱ 00:00:00</div>
@@ -96,6 +96,9 @@
   <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
   <div id="lcLeaderboardModal" class="lc-main-container"></div>
   <div id="gbLeaderboardModal" class="gb-main-container"></div>
+  <div id="pauseModal" class="pause-container">
+    <button id="closePaused">Game Paused</button>
+  </div>
 
   <div id="winText">🎉 Completed 🎉</div>
   <canvas id="confettiCanvas"></canvas>
@@ -123,6 +126,7 @@
     document.getElementById("gbLeaderboardModal").style.display = 'none';
     document.getElementById("winText").style.display = 'none';
     document.getElementById("rulesPopup").style.display = 'none';
+    document.getElementById("pauseModal").style.display = 'none';
 
 
     const themeToggle = document.getElementById('toggle-theme');

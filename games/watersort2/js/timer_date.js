@@ -1,4 +1,4 @@
-import { state } from './script.js';
+// import { startTime, running  } from './gameLogic.js';
 import { textToSpeechEng } from './speak.js';
 
 export let seconds = 0;
@@ -6,6 +6,8 @@ export let minutes = 0;
 export let hours = 0;
 let elapsedTime = 0;
 export let timerInterval = null;
+let startTime = 0;
+let running = false;
 
 const timeDisplay = document.getElementById("timer-display");
 const button = document.getElementById("pauseBtn");
@@ -23,17 +25,17 @@ function formatTime(ms) {
 
 function updateTimer() {
     const now = Date.now();
-    elapsedTime = now - state.startTime;
-    timeDisplay.textContent = formatTime(elapsedTime);
+    elapsedTime = now - startTime;
+    timeDisplay.textContent = "⏱️" + formatTime(elapsedTime);
 }
 
 export function startTimer() {
-    if (!state.running) {
+    if (!running) {
         // ▶ START
-        state.startTime = Date.now() - elapsedTime;
+        startTime = Date.now() - elapsedTime;
         timerInterval = setInterval(updateTimer, 200);
         button.textContent = "⏸Pause";
-        state.running = true;
+        running = true;
     } else {
         document.getElementById("pauseModal").style.display = 'flex';
     }
@@ -41,43 +43,43 @@ export function startTimer() {
 
 export function stopTimer() {
     clearInterval(timerInterval);
-    state.running = false;
+    running = false;
 }
 
 button.addEventListener("click", () => {
-    if (!state.running) {
+    if (!running) {
         // ▶ RESUME
-        state.startTime = Date.now() - elapsedTime;
+        startTime = Date.now() - elapsedTime;
         timerInterval = setInterval(updateTimer, 200);
         document.getElementById("pauseModal").style.display = 'none';
         button.textContent = "⏸Pause";
         // textToSpeechEng('Resume');
-        state.running = true;
+        running = true;
     } else {
         // ⏸ PAUSE
         clearInterval(timerInterval);
         document.getElementById("pauseModal").style.display = 'flex';
         button.textContent = "▶Resume";
         // textToSpeechEng('Pause');
-        state.running = false;
+        running = false;
     }
 });
 
 closePaused.addEventListener("click", () => {
-    if (!state.running) {
+    if (!running) {
         // ▶ RESUME
-        state.startTime = Date.now() - elapsedTime;
+        startTime = Date.now() - elapsedTime;
         timerInterval = setInterval(updateTimer, 200);
         document.getElementById("pauseModal").style.display = 'none';
         button.textContent = "⏸Pause";
         // textToSpeechEng('Resume');
-        state.running = true;
+        running = true;
     } else {
         // ⏸ PAUSE
         clearInterval(timerInterval);
         document.getElementById("pauseModal").style.display = 'none';
         // button.textContent = "▶Resume";
         // textToSpeechEng('Pause');
-        state.running = false;
+        running = false;
     }
 });

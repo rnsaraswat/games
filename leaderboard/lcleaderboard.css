@@ -256,10 +256,46 @@
     box-shadow: 0 1px 4px var(--lc-box-shadow);
 }
 
-.gbClearPry:hover {
+.lcClearPry:hover {
     background: linear-gradient(90deg, #6eeb7f, #3aed3a);
 }
 
-.gbClearPry {
+.lcClearPry {
     background: linear-gradient(90deg, #ec7777, #ed3a3a);
 }
+
+  /* Portrait */
+  @media (orientation: portrait)  {
+    .lc-btn-container {
+        padding: 1px;
+        gap: 2px;
+    }
+    .lc-textarea {
+        margin: 2px 0;
+        padding: 3px;
+    }
+    .lcClearPry {
+        gap: 2px;
+        padding: 1px;
+        margin: 4px 1px 4px 1px;
+        font-size: 20pxvw;
+        margin-top: 0.1vh;
+        box-shadow: 0 1px 4px var(--gb-box-shadow);
+    }
+    .lclogin {
+        border-radius: 2px;
+        padding: 1px 2px;
+        margin-top: 2px;
+        margin: 1px;
+    }
+    .lc-pageInfo {
+        padding: 2px 1px;
+    }
+    .lc-leaderboard {
+        padding: 2px 1px;
+    }
+    .lcPopupClose {
+        padding: 2px 2px;
+        border-radius: 2px;
+    }
+  }
