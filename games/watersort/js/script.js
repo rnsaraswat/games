@@ -73,7 +73,7 @@ document.getElementById("startBtn").addEventListener('click', () => {
         start();
     } else {
         document.getElementById('startBtn').textContent = "Start";
-        Restart();
+        window.Restart();
     }
 });
 
@@ -134,31 +134,33 @@ window.OpenLevel = function (x) {
     // 0- first, 1- second, 2- third, 3- fourth, 4-fifth ... tubes
     // 0- bottom color, 1- Ist color from bottom, 2- IInd from bottom (1st from top), 3- top color
     w = water.map((a) => [...a]);
+    console.log(water, w);
     ApplyInfo();
     // updateTimer();
 }
 
 // window.ShowRules = function () {
-function ShowRules() {
-    document.getElementById("rules-page").style.display = "block";
-    setTimeout(function () {
-        document.getElementById("rules-page").style.opacity = "1";
-    }, 50);
-}
+// function ShowRules() {
+//     document.getElementById("rules-page").style.display = "block";
+//     setTimeout(function () {
+//         document.getElementById("rules-page").style.opacity = "1";
+//     }, 50);
+// }
 
 // window.HideRules = function () {
-function HideRules() {
-    setTimeout(function () {
-        document.getElementById("rules-page").style.display = "none";
-    }, 500);
-    document.getElementById("rules-page").style.opacity = "0";
-}
+// function HideRules() {
+//     setTimeout(function () {
+//         document.getElementById("rules-page").style.display = "none";
+//     }, 500);
+//     document.getElementById("rules-page").style.opacity = "0";
+// }
 
 window.Restart = function () {
     playSound('loose');
     moves = 0;
     water = w.map((a) => [...a]);
     won = false;
+    console.log(water, w);
     ApplyInfo(w);
 }
 
@@ -174,10 +176,10 @@ function Won() {
     clearInterval(timerInterval);
     won = true;
     document.getElementById('startBtn').textContent = "Start";
-    let heading = ["VERY EASY", "EASY", "MEDIUM1", "MEDIUM2", "HARD1", "HARD2", "VERY HARD1", "VERY HARD2", "EXPERT1", "EXPERT2", "IMPOSSIBLE"][noOfTubes - 2];
+    let heading = ["EASY", "EASY", "MEDIUM", "MEDIUM", "HARD", "HARD", "VERY HARD", "VERY HARD", "VERY HARD", "EXPERT", "EXPERT"][noOfTubes - 2];
     updateleaderboard();
     // disply winning message
-    level.innerHTML = `<div id="won" class="msgr">${player1} WON</div>`;
+    level.innerHTML = `<div id="won" class="msgr">${player1} WON!</div>`;
     score = (noOfTubes * noOfTubes) * 10 - moves * 1;
     shareScore(gameName, score);
 }
@@ -197,9 +199,10 @@ function shuffle(x) {
 
 
 function ApplyInfo(a = water) {
+    console.log(water, w)
     if (!won) {
         let d = 0;
-        heading = ["VERY EASY", "EASY", "MEDIUM", "MEDIUM", "HARD", "HARD", "VERY HARD", "VERY HARD", "EXPERT", "EXPERT", "IMPOSSIBLE"][noOfTubes - 2];
+        heading = ["EASY", "EASY", "MEDIUM", "MEDIUM", "HARD", "HARD", "VERY HARD", "VERY HARD", "VERY HARD", "EXPERT", "EXPERT"][noOfTubes - 2];
         document.getElementById("leveldisplay").textContent = heading;
         level.innerHTML = "";
         level.style.display = "block";
@@ -220,11 +223,12 @@ function ApplyInfo(a = water) {
 
 // check for test tube clicked
 window.Clicked = function (x) {
+    console.log(x)
     if (!transferring) {
         if (clicked.length == 0) {
             clicked.push(x);
             document.getElementsByClassName("test-tube")[x].style.transition = "0.2s linear";
-            document.getElementsByClassName("test-tube")[x].style.transform = "scale(1.08)";
+            document.getElementsByClassName("test-tube")[x].style.transform = "scale(1.1)";
         }
         else {
             clicked.push(x);
@@ -266,6 +270,7 @@ function TransferAnim(a, b) {
 }
 
 function Transfer(a, b) {
+    console.log(a,b)
     lequidTransferFromTube = a;
     lequidReceivedtoTube = b;
 
@@ -361,12 +366,12 @@ function WaterInc(p, q, b, count) {
 function updateleaderboard() {
     // let opponent = player2;
     let game_id = gameName;
-    let gsize = noOfTubes;
+    let gsize = `${noOfTubes+2}x${color}`;
     let elapsed = hours * 3600 + minutes * 60 + seconds;
     let filed1 = 0;
-    let filed2 = 0
+    let filed2 = 0;
     let filed3 = `tube=${noOfTubes}`;
-    let filed4 = "-";
+    let filed4 = `color=${color}`;
     let difficulty = heading;
     let email = localStorage.getItem('email') || '-';
     const created_at = new Date();

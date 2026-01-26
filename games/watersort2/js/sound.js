@@ -6,7 +6,8 @@ const sounds = {
     draw: new Audio('../../assets/sound/game-over-classic.mp3'),
     bg: new Audio('../../assets/sound/bg-music.mp3'),
     fire: new Audio('../../assets/sound/fireworks.mp3'),
-    flow: new Audio('../../assets/sound/water-flow1.mp3')
+    flow: new Audio('../../assets/sound/water-flow1.mp3'),
+    loose: new Audio('../../assets/sound/Looser.mp3')
   };
   
   // sounds.bg.loop = true;

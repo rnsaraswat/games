@@ -72,6 +72,7 @@ select.onchange = () => {
   const count = parseInt(select.value);
   level = levels[select.value];
   TOTAL_TUBES = select.value
+  stopTimer();
   newGame();
 };
 
@@ -91,12 +92,20 @@ function buildBoard() {
 document.getElementById("startBtn").addEventListener('click', () => {
   if (document.getElementById('startBtn').textContent == "Start") {
       document.getElementById('startBtn').textContent = "Restart";
+      stopTimer();
       newGame();
   } else {
       document.getElementById('startBtn').textContent = "Start";
       window.Restart();
   }
 });
+
+window.Restart = function () {
+  playSound('loose');
+  stopTimer();
+  moves = 0;
+  newGame();
+}
 
 function handleClick(i) {
   const tubes = document.querySelectorAll(".tube");
@@ -114,12 +123,14 @@ function handleClick(i) {
   }
 
   if (selected === i) {
+    playSound('error');
     tubes[selected].classList.remove("selected");
     selected = null;
     return;
   }
 
   if (!canPour(selected, i)) {
+    playSound('error');
     statusText.innerHTML = `click on tube to select transfer lequid from`;
     tubes[selected].classList.remove("selected");
     selected = null;

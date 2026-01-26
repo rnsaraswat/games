@@ -86,11 +86,16 @@
     </script> -->
 
     <script>
-
+        document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById("lcLeaderboardModal").style.display = 'none';
+        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        // document.getElementById("winText").style.display = 'none';
+        // document.getElementById("rulesPopup").style.display = 'none';
+        
         const games = [
             { id: 'memory', name: 'memory', title: 'Memory', desc: 'Flip, match, win', href: 'games/memory/index.html' },
             { id: 'rockpaperscissor', name: 'rockpaperscissor', title: 'Rock Paper Scissor', desc: 'Classic & Action-Oriented X vs O', href: 'games/rock_paper_scissor/index.html' },
-            { id: 'watersort', name: 'watersort', title: 'Water Sort', desc: 'Train your critical thinking', href: 'games/watersort/index.html' },
+            { id: 'watersort', name: 'watersort', title: 'Water Sort', desc: 'Train your critical thinking', href: 'games/watersort2/index.html' },
             { id: 'tictactoe', name: 'tictactoe', title: 'Tic Tac Toe', desc: "Challange Beat the HARD level against the computer", href: 'games/tictactoe/index.html' },
             { id: 'mastermind', name: 'mastermind', title: 'Master Mind', desc: 'Thinking without limits', href: 'games/mastermind/index.html' },
             { id: '5inARow', name: '5inarow', title: '5 in A Row', desc: "It's not just luck, it's strategy", href: 'games/5inARow/index.html' },
@@ -103,9 +108,10 @@
             { id: '3inARow', name: 'threeinarow', title: '3 in Row', desc: "It's not just luck, it's strategy X vs O", href: 'games/3inARow/index.html' },
             { id: 'mastermind1', name: 'mastermind', title: 'Mastermind', desc: 'Thinking without limits', href: 'games/mastermindtext/mastermind_text.html' },
             { id: 'tictactoe3', name: 'tictactoe', title: 'Tic Tac Toe Share', desc: "Three in a row to win X vs O", href: 'games/tictactoe3/index.html' },
+            { id: 'watersort1', name: 'watersort', title: 'Water Sort', desc: 'Train your critical thinking', href: 'games/watersort/index.html' },
             { id: 'project', name: 'Project', title: 'Project Share', desc: "Three in a row to win X vs O", href: 'games/project/index.html' }
         ];
-
+        
         const player_name = localStorage.getItem('player_name') || 'Guest';
 
         document.getElementById("welcom").textContent = `Welcome ${player_name}`;
