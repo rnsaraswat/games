@@ -280,7 +280,7 @@ button:hover {
 }
 
 @media (max-width:520px),
-(max-aspect-ratio: 1/1) {
+(max-aspect-ratio: 1/1), (orientation: portrait) {
 
     select {
         padding: 5px 5px;
@@ -302,7 +302,25 @@ button:hover {
         margin-top: 1px;
         font-size: 15px;
     }
+
+    .button-primary {
+        gap: 4px;
+    }
 }
+
+/* @media (orientation: portrait) {
+
+    select, label, input {
+        padding: 2px 2px;
+        margin: 2px 1px 2px 1px;
+        margin-top: 1px;
+        font-size: 15px;
+    }
+
+    .button-primary {
+        gap: 4px;
+    }
+} */
 
 .share-overlay {
     position: fixed;

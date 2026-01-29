@@ -347,10 +347,7 @@ function checkWin() {
     launchStarFireworks();
     setTimeout(() => {
       shareScore(gameName, score);
-    }, 1500);
-    // document.getElementById("fireworks").addEventListener('animationend', () => {
-    //   shareScore(gameName, score);
-    // });
+    }, 2500);
     updateleaderboard();
     statusText.textContent = "🎉 You Win!";
   }
@@ -405,7 +402,10 @@ function checkTubeCompleted(index) {
     const tubeEl = document.querySelector(
       `.tube[data-index='${index}']`
     );
-    if (tubeEl) tubeCracker(tubeEl);
+    if (tubeEl) {
+      tubeCracker(tubeEl);
+      playSound("fire3");
+    }
   }
 }
 
@@ -413,7 +413,8 @@ function updateleaderboard() {
   let opponent = "-"
   let game_id = gameName;
   let gsize = `${TOTAL_TUBES}x${TOTAL_TUBES - 2}`;
-  let elapsed = hours * 3600 + minutes * 60 + seconds;
+  let elapsed = Number(hours) * 3600 + Number(minutes) * 60 + Number(seconds);
+  console.log(elapsed, hours, minutes, seconds)
   let difficulty = level;
   // moves = 0;
   let filed1 = 0;
