@@ -1,6 +1,5 @@
 import { shareScore } from './share.js';
 import { startTimer, stopTimer, seconds, minutes, hours } from './timer_date.js';
-import { launchFireworks } from './randomFireWorks.js';
 import { playSound } from './sound.js';
 import { saveScore } from '../../../leaderboard/gbleaderboard.js';
 import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
@@ -18,39 +17,79 @@ document.addEventListener('DOMContentLoaded', () => {
 export let player1 = localStorage.getItem('player_name') || 'Human1';
 const movesDisplay = document.getElementById('moves');
 
+let initialGameState = null;
+let initialConfig = null;
+
 let selected = null;
 let levels = ["EASY", "EASY", "MEDIUM", "MEDIUM", "HARD", "HARD", "VERY HARD", "VERY HARD", "VERY HARD", "EXPERT", "EXPERT"];
 let level = levels[0];
-console.log(level, levels);
 let moves = 0;
 let undoCount = 2;
 
+const AVAILABLE_COLORS = ["#FF0000", "#8b0000", "#00FF00", "#006400", "#00bfff", "#0000FF", "#000080", "#ffd700", "#bdb76b", "#00FFFF", "#FF00FF", "#9932cc"];
 const statusText = document.getElementById("output");
 const select = document.getElementById("tubeSelect");
 level = levels[select.value];
 let TOTAL_TUBES = select.value;
+let colors = select.value - 2;
+let pool = [];
 updateUndoCount();
+
+
+select.onchange = () => {
+  const count = parseInt(select.value);
+  level = levels[select.value];
+  TOTAL_TUBES = select.value
+  colors = select.value - 2;
+  stopTimer();
+  newGame();
+  statusText.innerHTML = `${level} (${TOTAL_TUBES} selected), New game started, click on tube to transfer lequid from`;
+};
+
+document.getElementById("startBtn").addEventListener('click', () => {
+  stopTimer();
+  newGame();
+});
+
+document.getElementById("restartBtn").addEventListener('click', () => {
+  window.Restart();
+});
+
+window.Restart = function () {
+  playSound('loose');
+  if (!initialGameState) return;
+
+  gameState = JSON.parse(JSON.stringify(initialGameState));
+
+  if (initialConfig) {
+    TOTAL_TUBES = initialConfig.tubeCount;
+    pool = initialConfig.colors;
+    TUBE_SIZE = initialConfig.tubeSize;
+  }
+
+  selected = null;
+  buildBoard();
+  renderGame();
+}
 
 function newGame() {
   moves = 0;
   updateUndoCount();
   startTimer();
   level = levels[TOTAL_TUBES - 4];
-  console.log(level, levels);
 
   document.getElementById("leveldisplay").textContent = level;
   gameState = [];
+  const pickedColors = pickColorsForGame();
 
   for (let i = 0; i < TOTAL_TUBES; i++) gameState.push([]);
 
-  const colors = TOTAL_TUBES - 2;
-  const pool = [];
-
-  for (let c = 0; c < colors; c++) {
+  let pool = [];
+  pickedColors.forEach(color => {
     for (let i = 0; i < TUBE_SIZE; i++) {
-      pool.push(`hsl(${c * 360 / colors},70%,55%)`);
+      pool.push(color);
     }
-  }
+  });
 
   shuffle(pool);
 
@@ -62,19 +101,34 @@ function newGame() {
 
   statusText.innerHTML = `click on tube to select transfer lequid from`;
 
+  // 🔐 SAVE COPY for restart
+  initialGameState = JSON.parse(JSON.stringify(gameState));
+  initialConfig = {
+    tubeCount: TOTAL_TUBES,
+    colors: pool,
+    tubeSize: TUBE_SIZE
+  };
+
+  document.getElementById("restartBtn").disabled = false;
   history = [];
   buildBoard();
   renderGame();
 }
 
+function pickColorsForGame() {
+  const colorCount = TOTAL_TUBES - 2;
 
-select.onchange = () => {
-  const count = parseInt(select.value);
-  level = levels[select.value];
-  TOTAL_TUBES = select.value
-  stopTimer();
-  newGame();
-};
+  if (AVAILABLE_COLORS.length < colorCount) {
+    throw new Error("Not enough colors in AVAILABLE_COLORS");
+  }
+
+  // shuffle available colors
+  const shuffled = [...AVAILABLE_COLORS].sort(() => Math.random() - 0.5);
+
+  // pick exact required colors
+  return shuffled.slice(0, colorCount);
+}
+
 
 function buildBoard() {
   const board = document.getElementById("board");
@@ -87,24 +141,6 @@ function buildBoard() {
     tube.onclick = () => handleClick(i);
     board.appendChild(tube);
   });
-}
-
-document.getElementById("startBtn").addEventListener('click', () => {
-  if (document.getElementById('startBtn').textContent == "Start") {
-      document.getElementById('startBtn').textContent = "Restart";
-      stopTimer();
-      newGame();
-  } else {
-      document.getElementById('startBtn').textContent = "Start";
-      window.Restart();
-  }
-});
-
-window.Restart = function () {
-  playSound('loose');
-  stopTimer();
-  moves = 0;
-  newGame();
 }
 
 function handleClick(i) {
@@ -137,8 +173,8 @@ function handleClick(i) {
     return;
   }
 
-    playSound('click');
-    animateTubePour(selected, i);
+  playSound('click');
+  animateTubePour(selected, i);
   selected = null;
   statusText.innerHTML = `click on tube to select transfer lequid from`;
 }
@@ -147,9 +183,8 @@ function renderGame() {
   document.querySelectorAll(".tube").forEach((tube, i) => {
     tube.innerHTML = "";
     gameState[i].forEach((c, index) => {
-      console.log(c, index);
       const d = document.createElement("div");
-      if (index == 0) { d.classList.add("layerBottom");};
+      if (index == 0) { d.classList.add("layerBottom"); };
       // d.className = "layer";
       d.classList.add("layer");
       d.style.background = c;
@@ -182,7 +217,6 @@ function canPour(from, to) {
 }
 
 function animateTubePour(from, to) {
-  console.log(from,to)
   const tubes = document.querySelectorAll(".tube");
   const src = tubes[from];
   const tgt = tubes[to];
@@ -196,19 +230,19 @@ function animateTubePour(from, to) {
 
   const angle = getRotateDirection(s, t);
 
-  if (angle > 0){
+  if (angle > 0) {
     dx =
-    (t.left + t.width / 2) -
-    (s.left + s.width / 2) - 100;
+      (t.left + t.width / 2) -
+      (s.left + s.width / 2) - 90;
   } else {
     dx =
-    (t.left + t.width / 2) -
-    (s.left + s.width / 2) + 100;
+      (t.left + t.width / 2) -
+      (s.left + s.width / 2) + 90;
   }
 
-  const MOUTH_OFFSET = 120; 
-    dy =
-    (t.top + 5) -   
+  const MOUTH_OFFSET = 150;
+  dy =
+    (t.top + 5) -
     (s.top + MOUTH_OFFSET);
 
 
@@ -218,7 +252,8 @@ function animateTubePour(from, to) {
   `;
 
   setTimeout(() => {
-    playSound('flow');
+    finalizePour(from, to);
+    finalizePour(from, to);
     finalizePour(from, to);
   }, 300);
 
@@ -229,8 +264,6 @@ function animateTubePour(from, to) {
   }, 600);
 }
 
-
-// finalizePour stays SAME (logic correct)
 function finalizePour(from, to) {
   const fromTube = gameState[from];
   const toTube = gameState[to];
@@ -248,8 +281,12 @@ function finalizePour(from, to) {
   moves++;
   movesDisplay.textContent = moves;
   renderGame();
-  checkTubeFilled(to);
+  checkTubeCompleted(to);
   checkWin();
+
+  if (checkNoMovesLeft()) {
+    handleGameOver();
+  }
 }
 
 function getRotateDirection(srcRect, tgtRect) {
@@ -280,69 +317,126 @@ function undo() {
   renderGame();
 }
 
-function updateUndoCount(){
-  if (TOTAL_TUBES == 4) {undoCount = 1;}
-  else if (TOTAL_TUBES == 5) {undoCount = 1;}
-  else if (TOTAL_TUBES == 6) {undoCount = 2;}
-  else if (TOTAL_TUBES == 7) {undoCount = 2;}
-  else if (TOTAL_TUBES == 8) {undoCount = 3;}
-  else if (TOTAL_TUBES == 9) {undoCount = 3;}
-  else if (TOTAL_TUBES == 10) {undoCount = 4;}
-  else if (TOTAL_TUBES == 11) {undoCount = 4;}
-  else if (TOTAL_TUBES == 12) {undoCount = 4;}
-  else if (TOTAL_TUBES == 13) {undoCount = 5;}
-  else if (TOTAL_TUBES == 14) {undoCount = 5;}
+function updateUndoCount() {
+  if (TOTAL_TUBES == 4) { undoCount = 1; }
+  else if (TOTAL_TUBES == 5) { undoCount = 1; }
+  else if (TOTAL_TUBES == 6) { undoCount = 2; }
+  else if (TOTAL_TUBES == 7) { undoCount = 2; }
+  else if (TOTAL_TUBES == 8) { undoCount = 3; }
+  else if (TOTAL_TUBES == 9) { undoCount = 3; }
+  else if (TOTAL_TUBES == 10) { undoCount = 4; }
+  else if (TOTAL_TUBES == 11) { undoCount = 4; }
+  else if (TOTAL_TUBES == 12) { undoCount = 4; }
+  else if (TOTAL_TUBES == 13) { undoCount = 5; }
+  else if (TOTAL_TUBES == 14) { undoCount = 5; }
 
   undoBtn.textContent = `↩️ Undo(${undoCount})`;
 }
 
 document.getElementById('undoBtn').addEventListener('click', undo);
 
-function checkTubeFilled(index) {
-  const t = gameState[index];
-  if (
-    t.length === TUBE_SIZE &&
-    t.every(c => c === t[0])
-  ) {
-    noofFireWorks = 3;
-      launchFireworks(noofFireWorks);
+function checkWin() {
+  const win = gameState.every(t =>
+    t.length === 0 ||
+    (t.length === TUBE_SIZE && t.every(c => c === t[0]))
+  );
+
+  if (win) {
+    stopTimer();
+    playSound('win');
+    launchStarFireworks();
+    setTimeout(() => {
+      shareScore(gameName, score);
+    }, 1500);
+    // document.getElementById("fireworks").addEventListener('animationend', () => {
+    //   shareScore(gameName, score);
+    // });
+    updateleaderboard();
+    statusText.textContent = "🎉 You Win!";
   }
 }
 
-function checkWin() {
-    const win = gameState.every(t =>
-      t.length === 0 ||
-      (t.length === TUBE_SIZE && t.every(c => c === t[0]))
-    );
-  
-    if (win) {
-      stopTimer();
-      playSound('win');
-      noofFireWorks = 10;
-    launchFireworks(noofFireWorks);
+function checkNoMovesLeft() {
+  const n = gameState.length;
 
-      setTimeout(() => shareScore(gameName, score), 100);
-      updateleaderboard();
-      statusText.textContent = "🎉 You Win!";
+  for (let i = 0; i < n; i++) {
+    const src = gameState[i];
+    if (!Array.isArray(src) || src.length === 0) continue;
+
+    const srcTop = src[src.length - 1];
+
+    for (let j = 0; j < n; j++) {
+      if (i === j) continue;
+
+      const tgt = gameState[j];
+      if (!Array.isArray(tgt)) continue;
+
+      if (tgt.length >= TUBE_SIZE) continue;
+
+      if (tgt.length === 0) {
+        return false;
+      }
+
+      const tgtTop = tgt[tgt.length - 1];
+
+      if (tgtTop === srcTop) {
+        return false;
+      }
     }
   }
 
-  function updateleaderboard() {
-    let opponent = "-"
-    let game_id = gameName;
-    let gsize = `${TOTAL_TUBES}x${TOTAL_TUBES-2}`;
-    let elapsed = hours * 3600 + minutes * 60 + seconds;
-    let difficulty = level;
-    moves = 0;
-    let filed1 = 0;
-    let filed2 = 0
-    let filed3 = `tube=${TOTAL_TUBES}`;
-    let filed4 = `color=${TOTAL_TUBES-2}`;
-    let email = localStorage.getItem('email') || '-';
-    const created_at = new Date();
-    score = (TOTAL_TUBES * (TOTAL_TUBES - 2) * 10 - moves - elapsed);
-  
-    lcsaveToLeaderboard(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
+  return true;
+}
 
-    saveScore(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+function handleGameOver() {
+  playSound("loose");
+
+  setTimeout(() => {
+    statusText.textContent = "😢 You Loose! No moves left! Press Restart to play same game.";
+  }, 300);
+}
+
+function checkTubeCompleted(index) {
+  const tube = gameState[index];
+  if (
+    tube.length === TUBE_SIZE &&
+    tube.every(c => c === tube[0])
+  ) {
+    const tubeEl = document.querySelector(
+      `.tube[data-index='${index}']`
+    );
+    if (tubeEl) tubeCracker(tubeEl);
   }
+}
+
+function updateleaderboard() {
+  let opponent = "-"
+  let game_id = gameName;
+  let gsize = `${TOTAL_TUBES}x${TOTAL_TUBES - 2}`;
+  let elapsed = hours * 3600 + minutes * 60 + seconds;
+  let difficulty = level;
+  // moves = 0;
+  let filed1 = 0;
+  let filed2 = 0
+  let filed3 = `tube=${TOTAL_TUBES}`;
+  let filed4 = `color=${TOTAL_TUBES - 2}`;
+  let email = localStorage.getItem('email') || '-';
+  const created_at = new Date();
+  // Score = (Level × Tubes × 100 + Time + Moves - Undo) × DifficultyMultiplier
+  ["EASY", "EASY", "MEDIUM", "MEDIUM", "HARD", "HARD", "VERY HARD", "VERY HARD", "VERY HARD", "EXPERT", "EXPERT"];
+  if(level == "EASY") {
+    score = (Number(TOTAL_TUBES) * (Number(TOTAL_TUBES) - 2) * 100 - moves * 1 - Number(elapsed) + undoCount * 10) * 1;
+  } else if(level == "MEDIUM") {
+    score = (Number(TOTAL_TUBES) * (Number(TOTAL_TUBES) - 2) * 100 - moves * 1 - Number(elapsed) + undoCount * 10) * 1.5;
+  } else if(level == "HARD") {
+    score = (Number(TOTAL_TUBES) * (Number(TOTAL_TUBES) - 2) * 100 - moves * 1 - Number(elapsed) + undoCount * 10) * 2;
+  } else if(level == "VERY HARD") {
+    score = (Number(TOTAL_TUBES) * (Number(TOTAL_TUBES) - 2) * 100 - moves * 1 - Number(elapsed) + undoCount * 10) * 2.5;
+  } else if(level == "EXPERT") {
+    score = (Number(TOTAL_TUBES) * (Number(TOTAL_TUBES) - 2) * 100 - moves * 1 - Number(elapsed) + undoCount * 10) * 3;
+  }
+
+  lcsaveToLeaderboard(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
+
+  saveScore(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+}
