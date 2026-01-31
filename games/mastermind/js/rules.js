@@ -20,7 +20,7 @@ document.getElementById("rulesCloseBtn").addEventListener("click", () => {
 function showRules() {
     let rule = document.getElementById("RulesBox");
     rule.style.textAlign = "left";
-    rule.innerHTML = `<b>Game Setup:</b><br>
+    rule.innerHTML = `<h2>Connect 3 General Rules</h2><br><b>Game Setup:</b><br>
     <br>
     <b>Slots/Pegs:</b> Click on no of slotsPegs to choose slots/pegs between 1 to 12. Slots/pags should be > 0 and <= 12 and also slots/pegs <= no of colors<br>
     <b>Colors:</b> Click on no of Colors to choose Colors between 1 to 20. Colors should be > 0 and <= 20 and also Colors >= no of slots<br>

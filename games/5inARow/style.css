@@ -2,6 +2,7 @@
   --cell-size: 20px;
   --win-text: gold;
 }
+
 #container {
   height: 100vh;
   display: flex;
@@ -122,23 +123,24 @@ button.primary:hover {
   color: black !important;
 }
 
-#timer-display{
+#timer-display {
   font-family: 'Digital', Arial, Helvetica, sans-serif;
   text-align: center;
   width: auto;
   height: auto;
-  font-size: 15px;
+  font-size: 20px;
   padding: 5px 5px;
   margin: 5px 2px 5px 2px;
-  background: var(--bg);
+  /* background: var(--bg); */
   color: var(--text);
   border: none;
+  display: inline;
 }
 
 /* Portrait (Top-Bottom layout) */
 @media(max-aspect-ratio: 1/1),
 (max-width:768px),
-(max-height:720px) and (orientation:portrait)  {
+(max-height:720px) and (orientation:portrait) {
   /* #container {
     flex-direction: column;
   }
@@ -219,6 +221,10 @@ button.primary:hover {
   #winText {
     font-size: 40px;
   }
+
+  #timer-display {
+    font-size: 25px;
+  }
 }
 
 #fireworksCanvas {
@@ -257,6 +263,7 @@ button.primary:hover {
   height: 30%;
   border: 2px solid #333;
   z-index: 10;
+  background: var(--bg);
 
   flex-direction: column;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -309,4 +316,71 @@ button.primary:hover {
 
 #namebar.show {
   display: flex;
+}
+
+.rules-popup-window {
+  inset: 0;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 10;
+  width: 95%;
+  height: 95%;
+  overflow-y: auto;
+  text-align: center;
+  border: 2px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.rules-header-section {
+  padding: 2px;
+  background: var(--bg);
+  color: var(--text);
+  text-align: center;
+}
+
+.rules-h2 {
+  background: var(--bg);
+}
+
+.rules-content {
+  height: calc(100% - 20px);
+  overflow-y: auto;
+  text-align: left;
+}
+
+.rules-popup-close {
+  float: right;
+  cursor: pointer;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  transition: 0.5s ease-in-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  /* padding: 5px 10px; */
+  border-radius: 4px;
+
+  background: linear-gradient(90deg, var(--accent), #7c3aed);
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(90deg, #b91010, #960505);
+  border: 2px solid #b91010;
+  box-shadow: 0 10px 40px var(--box-shadow);
+}
+
+.rules-popup-close:hover {
+  background: linear-gradient(90deg, #960505, #b91010);
+  color: var(--text);
+  transform: translateY(-2px);
+}
+
+#RulesBox {
+  text-align: left;
 }

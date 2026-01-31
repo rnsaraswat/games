@@ -8,7 +8,6 @@ const sounds = {
     fire: new Audio('../../assets/sound/fireworks.mp3')
   };
   
-  // sounds.bg.loop = true;
   let soundEnabled = false;
   
   document.getElementById("toggle-sound").addEventListener("click", () => {

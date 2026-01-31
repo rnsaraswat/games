@@ -21,22 +21,20 @@ document.getElementById("rulesCloseBtn").addEventListener("click", () => {
 function showRules() {
     let rule = document.getElementById("RulesBox");
     rule.style.textAlign = "left";
-        rule.innerHTML = `<h2>4 in A Row General Rules</h2>
-        this game is very similer to <b>TIC TAC TOE</b> but it has more the 9 square (more then 3 rows and more 3 column)<br> 
-        4 in  a row rules are simple and straightforward. It is precisely their simplicity that makes finding the solution and solving these puzzles a true challenge.<br>
+        rule.innerHTML = `<h2>5 in A Row General Rules</h2>
+        this game is very similer to <b>TIC TAC TOE</b> but it has more the 9 square (more then 6 rows and more 6 column)<br> 
+        5 in a row rules are simple and straightforward. It is precisely their simplicity that makes finding the solution and solving these puzzles a true challenge.<br>
         <br>
-        To play 4 in  a row, the player only needs to be familiar with the X & O and be able to think logically.<br><b>The goal of this game is clear:</b> 4 in a row X or O in a row fill straight line — either horizontally, vertically, or diagonally.<br> The challenging part lies in the restrictions imposed on the player to be able to fill in the grid.<br>
+        To play 5 in  a row, the player only needs to be familiar with the X & O and be able to think logically.<br><b>The goal of this game is clear:</b> 5 in a row X or O in a row fill straight line — either horizontally, vertically, or diagonally.<br> The challenging part lies in the restrictions imposed on the player to be able to fill in the grid.<br>
 
-        <b>How to Play<b><br>
-        <b>Players and Board:<b> The game is for two players, typically assigned the symbols 'X' and 'O'. A grid is drawn, which has more then spaces (a square grid). <br>
+        <b>How to Play</b><br>
+        <b>Players and Board:</b> The game is for two players, typically assigned the symbols 'X' and 'O'. A grid is drawn, which has more then spaces (a square grid). <br>
         the availabe grid size is <br>
-        4x4 = 16 square<br>
         5x5 = 25 square<br>
         6x6 = 36 square<br>
         7x7 = 49 square<br>
         8x8 = 64 square<br>
         9x9 = 81 square<br>
-        10x10 = 100 square<br>
         10x10 = 100 square<br>
         11x11 = 121 square<br>
         12x12 = 144 square<br>
@@ -49,9 +47,9 @@ function showRules() {
         19x19 = 361 square<br>
         20x20 = 400 square<br>
 
-        <b>Taking Turns:<b> Players alternate placing their symbol (X or O) in an empty square on the grid. <br>
-        <b>Winning:<b> The first player to successfully place four of their symbols in a straight <br>line — either horizontally, vertically, or diagonally—wins the game. <br>
-<b>Drawing:</b> If all spaces on the grid are filled, and no player has achieved five in a row, the game ends in a tie, draw or "cat's game"<br>
+        <b>Taking Turns:</b> Players alternate placing their symbol (X or O) in an empty square on the grid. <br>
+        <b>Winning:</b> The first player to successfully place five of their symbols in a straight <br>line — either horizontally, vertically, or diagonally—wins the game. <br>
+        <b>Drawing:</b> If all spaces on the grid are filled, and no player has achieved five in a row, the game ends in a tie, draw or "cat's game"<br>
         <br>
         <b>Play Against Computer:</b> a single play can play against computer<br>
         <br>
@@ -82,7 +80,8 @@ Information window display the filled/empty cell and time during the game play.
 <u>Message:</u> display various message/instruction during game play. <br>
 <br>
 <b><u>play:</b></u><br> 1. select grid size and level and pres new buttons.<br>
-2. Click place mark X/O in squre, turn by turn n empty squre.<br>`;
+2. Click place mark X/O in squre, turn by turn n empty squre.<br>
+`;
     document.getElementById("rulesPopup").style.display = "block";
 }
 

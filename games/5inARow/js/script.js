@@ -1,7 +1,5 @@
 import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
 import { launchFireworks, showWinText } from './fireworks.js';
-import { launchConfetti } from './confetti.js';
-import { requestShare } from './sharedesktop.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
 import { shareScore } from './share.js';
@@ -76,6 +74,7 @@ window.addEventListener('load', function () {
 
   function buildGrid() {
     size = parseInt(document.getElementById('gridSize').value);
+    messageEl.innerHTML = `Grid Size ${size} Selected <br> Presss New Game to start Game`;
     computeCellSize();
     board = Array(size).fill().map(() => Array(size).fill(''));
 
@@ -158,9 +157,6 @@ window.addEventListener('load', function () {
       return;
     }
 
-    // onGameWin();
-    handleWin();
-
     board[y][x] = currentPlayer;
     playSound('click');
     history.push({ y, x, player: currentPlayer });
@@ -174,8 +170,12 @@ window.addEventListener('load', function () {
       clearInterval(timerInterval);
       switchStartingPlayer();
       playSound('win');
-      playConfetti();
-      // launchFireworks();
+      messageEl.textContent = `🎉 ${winnerName} Won! 🎉`;
+      launchFireworks();
+      // launchConfetti()
+      setTimeout(() => {
+        shareScore(gameName, score);
+      }, 5000);
       // shareScore(gameName, score);
       // showWinText();
       return;
@@ -391,102 +391,6 @@ window.addEventListener('load', function () {
     }
     return moves.length ? moves[Math.floor(Math.random() * moves.length)] : null;
   }
-
-  async function handleWin() {
-
-    console.log("Before confetti");
-    await launchConfetti();
-    console.log("Before confetti");
-    if (isMobile()) {
-    shareScore(gameName, score);
-    } else {
-      requestShare(gameName, score, "https://rnsaraswat.github.io/games/", "images/RGHlogo.jpg");
-    }
-
-  }
-
-  function isMobile() {
-    return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  }
-
-  function openDesktopShare() {
-    const popup = window.open("", "", "width=420,height=520");
-    const qr = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(location.href)}`;
-  
-    popup.document.write(`
-      <h3>Scan on Mobile to Share</h3>
-      <img src="${qr}">
-      <p>Open this game on mobile and share natively</p>
-    `);
-  }
-  
-  // async function onGameWin() {
-    // console.log("onGameWin()");
-    // launchConfetti();
-    // await playConfetti();   // ⏳ wait for animation
-    // console.log("playConfetti()");
-    // shareScore(gameName, score);           // ✅ share opens after confetti
-  // }
-
-  //simple method
-  // async function playConfetti() {
-  //   await launchFireworks();
-  //   shareScore(gameName, score);
-  //   // await playConfetti();   // 🎉 first animation
-  //   // shareMobile();          // 📤 then share
-  // }
-
-
-  // function playConfetti() {
-  //   return new Promise(resolve => {
-  //     launchFireworks();
-  //     setTimeout(resolve, 3000); // animation length
-  //   });
-  // }
-
-  // function launchConfetti() {
-  //   confetti({
-  //     particleCount: 200,
-  //     spread: 100,
-  //     origin: { y: 0.6 }
-  //   });
-  // }
-
-  // function playConfetti() {
-  //   console.log("playConfetti() para");
-
-  //   return new Promise(resolve => {
-  //     const duration = 2500; // animation duration (ms)
-  //     const end = Date.now() + duration;
-  //     console.log("Date.now() < end", Date.now(), end)
-
-  //     launchFireworks();
-
-  //     if (Date.now() < end) {
-  //       // launchFireworks();
-  //       console.log("Date.now() < end", Date.now(), end)
-  //     } else {
-  //       console.log("resolve");
-  //       resolve(); // ✅ animation finished
-  //     }
-
-  //     // (function frame() {
-  //     //   confetti({
-  //     //     particleCount: 4,
-  //     //     spread: 70,
-  //     //     origin: { y: 0.6 }
-  //     //   });
-
-  //     //   if (Date.now() < end) {
-  //     //     // requestAnimationFrame(frame);
-  //     // launchFireworks();
-  //     //   } else {
-  //     //     resolve(); // ✅ animation finished
-  //     //   }
-  //     // })();
-  //   });
-  // }
-
 
   const namebar = document.getElementById('namebar');
   namebar.classList.remove('show');

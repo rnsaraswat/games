@@ -59,7 +59,7 @@ class FireParticle {
         ctx.globalAlpha = this.alpha;
         ctx.fillStyle = this.color;
         // for neon display
-        ctx.shadowBlur = 40;
+        ctx.shadowBlur = 10;
         ctx.shadowColor = this.color;
         ctx.strokeStyle = this.color;
         ctx.translate(this.x, this.y);

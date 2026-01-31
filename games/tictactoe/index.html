@@ -371,6 +371,13 @@
     <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <script type="module" src="tictactoe.js"></script>
     <script>
+
+        document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById("lcLeaderboardModal").style.display = 'none';
+        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById("winText").style.display = 'none';
+        // document.getElementById("rulesPopup").style.display = 'none';
+
         const themeToggle = document.getElementById('toggle-theme');
         function setTheme(t) {
             if (t === 'dark') {

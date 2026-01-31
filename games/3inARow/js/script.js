@@ -2,19 +2,22 @@ import { startTimer, seconds, minutes, hours } from './timer.js';
 import { playSound } from './sound.js';
 import { launchFireworks } from './randomFireWorks.js';
 import { textToSpeechEng } from './speak.js';
-import { localrenderLeaderboard, saveToLeaderboard } from '../../../leaderboard/localleaderboard.js';
+import { shareScore } from './share.js';
+import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
 
-export let timer = false;
-export let winnerName;
 export const modeEl = document.getElementById('mode');
 export const difficultyEl = document.getElementById("difficulty");
+export let timer = false;
+export let winnerName;
+export let gameName = '3inARow';
+export let score = 0;
 
 window.addEventListener('load', function () {
   const loading = document.getElementById('loading');
   loading.style.display = 'none';
 
   const boardEl = document.getElementById("board");
-  const toggleThemeBtn = document.getElementById("toggle-theme");
   const messageEl = document.getElementById('message');
   const canvas = document.getElementById('fireworksCanvas');
 
@@ -32,30 +35,30 @@ window.addEventListener('load', function () {
   let draws = 0;
   let score = 0;
   let gameCount = 0;
-  let player1;
-  let player2;
+  let player1 = localStorage.getItem('player_name') || 'Human1';
+  let player2 = localStorage.getItem('player_opponent') || 'Human2';
   let difficulty = difficultyEl.value;
+  let mode = modeEl.value;
+
+  this.document.getElementById("player1").textContent = player1;
+
 
   document.getElementById("difficulty").addEventListener("click", () => {
     difficulty = difficultyEl.value;
   });
 
-  document.getElementById("toggle-theme").addEventListener("click", () => {
-    toggleTheme();
+  modeEl.addEventListener('change', function (e) {
+    mode = e.target.value;
+    document.getElementById("nameInput").placeholder = player2 || 'Human2';
+    player2 = localStorage.getItem('player_opponent') || 'Human2';
+    document.getElementById("nameInput").value = player2 || 'Human2';
+    if (mode == 'pvp') {
+      namebar.classList.add('show');
+    } else {
+      namebar.classList.remove('show');
+    }
   });
 
-  function toggleTheme() {
-    document.body.classList.toggle("dark");
-    if (document.body.classList.contains("dark")) {
-      toggleThemeBtn.innerText = "☀️ Light";
-      textToSpeechEng('Theme Dark');
-    } else {
-      toggleThemeBtn.innerText = "🌙 Dark";
-      textToSpeechEng('Theme Light');
-    }
-  }
-
-  //start game
   document.getElementById("startGame").addEventListener("click", () => {
     startGame();
   });
@@ -100,6 +103,30 @@ window.addEventListener('load', function () {
     }
   }
 
+  document.getElementById("undo-last").addEventListener("click", () => {
+    textToSpeechEng('Undo');
+    undoLast();
+  });
+
+  function undoLast() {
+    if (history.length === 0 || gameOver) return;
+    let undoCount = (modeEl.value === 'pvc') ? 2 : 1;
+
+    while (undoCount-- > 0 && history.length > 0) {
+      const last = history.pop();
+      board[last.y][last.x] = '';
+      const cell = document.querySelector(`.cell[data-y='${last.y}'][data-x='${last.x}']`).textContent = '';
+      if (cell) cell.className = 'cell';
+      currentPlayer = last.player;
+      if (modeEl.value === 'pvc' && currentPlayer === 'o') {
+        messageEl.textContent = `Computer (${currentPlayer}'s) turn`;
+      } else {
+        messageEl.textContent = `${currentPlayer === 'x' ? player1 : player2} (${currentPlayer}'s) turn`;
+      }
+      gameOver = false;
+    }
+  }
+
   function onCellClick(e) {
     if (gameOver) return;
 
@@ -115,20 +142,24 @@ window.addEventListener('load', function () {
     history.push({ y, x, player: currentPlayer });
     e.target.textContent = currentPlayer.toUpperCase();
     e.target.classList.add(currentPlayer);
+    launchFireworks();
 
     if (checkWin(x, y)) {
       updateleaderboard();
       timer = false;
       gameOver = true;
+      clearInterval(timerInterval);
       switchStartingPlayer();
       playSound('win');
       launchFireworks();
+      shareScore(gameName, score);
       return;
     }
 
     if (isBoardFull()) {
       messageEl.textContent = `It's a draw!`;
       timer = false;
+      clearInterval(timerInterval);
       gameOver = true;
       playSound('draw');
       switchStartingPlayer();
@@ -323,36 +354,89 @@ window.addEventListener('load', function () {
     return moves.length ? moves[Math.floor(Math.random() * moves.length)] : null;
   }
 
-  document.getElementById("undo-last").addEventListener("click", () => {
-    textToSpeechEng('Undo');
-    undoLast();
-  });
 
-  function undoLast() {
-    if (history.length === 0 || gameOver) return;
-    let undoCount = (modeEl.value === 'pvc') ? 2 : 1;
 
-    while (undoCount-- > 0 && history.length > 0) {
-      const last = history.pop();
-      board[last.y][last.x] = '';
-      const cell = document.querySelector(`.cell[data-y='${last.y}'][data-x='${last.x}']`).textContent = '';
-      if (cell) cell.className = 'cell';
-      currentPlayer = last.player;
-      if (modeEl.value === 'pvc' && currentPlayer === 'o') {
-        messageEl.textContent = `Computer (${currentPlayer}'s) turn`;
-      } else {
-        messageEl.textContent = `${currentPlayer === 'x' ? player1 : player2} (${currentPlayer}'s) turn`;
-      }
-      gameOver = false;
-    }
+  // function getWinner(b) {
+  //   const wins = [
+  //     [0, 1, 2], [3, 4, 5], [6, 7, 8],
+  //     [0, 3, 6], [1, 4, 7], [2, 5, 8],
+  //     [0, 4, 8], [2, 4, 6]
+  //   ];
+  //   for (let [a, b1, c] of wins) {
+  //     if (b[a] && b[a] === b[b1] && b[a] === b[c]) return b[a];
+  //   }
+  //   if (b.every(cell => cell !== "")) return "tie";
+  //   return null;
+  // }
+
+  // function getBestMove(level) {
+  //   let bestScore = -Infinity;
+  //   let move;
+  //   for (let i = 0; i < board.length; i++) {
+  //     if (board[i] === "") {
+  //       board[i] = ai;
+  //       let score = minimax(board, 0, false, level);
+  //       board[i] = "";
+  //       if (score > bestScore) {
+  //         bestScore = score;
+  //         move = i;
+  //       }
+  //     }
+  //   }
+  //   return move;
+  // }
+
+  // function minimax(b, depth, isMax, level) {
+  //   const winner = getWinner(b);
+  //   if (winner !== null) {
+  //     if (winner === ai) return 10 - depth;
+  //     else if (winner === human) return depth - 10;
+  //     return 0;
+  //   }
+
+  //   if ((level === "easy" && depth >= 1) || (level === "medium" && depth >= 2)) {
+  //     return 0; // simulate bad or random move
+  //   }
+
+  //   if (isMax) {
+  //     let best = -Infinity;
+  //     for (let i = 0; i < b.length; i++) {
+  //       if (b[i] === "") {
+  //         b[i] = ai;
+  //         best = Math.max(best, minimax(b, depth + 1, false, level));
+  //         b[i] = "";
+  //       }
+  //     }
+  //     return best;
+  //   } else {
+  //     let best = Infinity;
+  //     for (let i = 0; i < b.length; i++) {
+  //       if (b[i] === "") {
+  //         b[i] = human;
+  //         best = Math.min(best, minimax(b, depth + 1, true, level));
+  //         b[i] = "";
+  //       }
+  //     }
+  //     return best;
+  //   }
+  // }
+
+  const namebar = document.getElementById('namebar');
+  if (mode == 'pvp') {
+    document.getElementById("nameInput").placeholder = player2 || 'Human2';
+    document.getElementById("nameInput").value = player2 || 'Human2';
+    namebar.classList.add('show');
   }
+  document.getElementById('name').addEventListener('click', () => {
+    player2 = document.getElementById("nameInput").value;
+    namebar.classList.remove('show');
+  });
 
   function updateleaderboard() {
     winnerName = currentPlayer === 'x' ? player1 : player2;
-    let finalScore = score;
     let opponent = player2;
-    let game_id = '3inarow';
-    let gsize = `${size}x${size}`;
+    let game_id = gameName;
+    let gsize = `${gridSize}x${gridSize}`;
     let elapsed = hours * 3600 + minutes * 60 + seconds;
     gameCount = history.length;
     // let moves = 0;
@@ -364,99 +448,28 @@ window.addEventListener('load', function () {
     const created_at = new Date();
     if (modeEl.value === 'pvc' && currentPlayer === 'o') {
       messageEl.textContent = `Computer ${currentPlayer.toUpperCase()} wins!`;
-      filed3 = 'Player vs Player';
+      filed3 = 'Player vs Computer';
       filed4 = currentPlayer.toUpperCase();
       winnerName = 'Computer';
       opponent = player1;
-      finalScore = score + 50;
+      score = (gridSize * gridSize - history.length) * 10 + 100;
     } else {
       messageEl.textContent = `${currentPlayer === 'x' ? player1 : player2} ${currentPlayer.toUpperCase()} wins!`;
       winnerName = currentPlayer === 'x' ? player1 : player2;
       opponent = currentPlayer !== 'x' ? player1 : player2;
-      filed3 = 'Player vs Computer';
+      filed3 = 'Player vs Player';
       filed4 = currentPlayer.toUpperCase();
-      finalScore = score + 100;
+      score = (gridSize * gridSize - history.length) * 10 + 50;
     }
+    if (difficulty == 'hard') { score = score + 500 } else if (difficulty == 'medium') { score = score + 200 }
+    let player_name = winnerName;
+    let player_opponent = opponent;
 
-    saveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
-    // const entry = {winnerName, opponent, email, gsize, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at};
-    // const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-    // boardData.push(entry);
-    // localStorage.setItem("leaderboard", JSON.stringify(boardData));
+    lcsaveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
 
-    window.submitScore &&
-      window.submitScore(winnerName, opponent, email, gsize, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+    saveScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
   }
-
   document.addEventListener('DOMContentLoaded', () => {
-    localrenderLeaderboard();
+    lcrenderLeaderboard();
   });
-  function getWinner(b) {
-    const wins = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8],
-      [0, 3, 6], [1, 4, 7], [2, 5, 8],
-      [0, 4, 8], [2, 4, 6]
-    ];
-    for (let [a, b1, c] of wins) {
-      if (b[a] && b[a] === b[b1] && b[a] === b[c]) return b[a];
-    }
-    if (b.every(cell => cell !== "")) return "tie";
-    return null;
-  }
-
-  function getBestMove(level) {
-    let bestScore = -Infinity;
-    let move;
-    for (let i = 0; i < board.length; i++) {
-      if (board[i] === "") {
-        board[i] = ai;
-        let score = minimax(board, 0, false, level);
-        board[i] = "";
-        if (score > bestScore) {
-          bestScore = score;
-          move = i;
-        }
-      }
-    }
-    return move;
-  }
-
-  function minimax(b, depth, isMax, level) {
-    const winner = getWinner(b);
-    if (winner !== null) {
-      if (winner === ai) return 10 - depth;
-      else if (winner === human) return depth - 10;
-      return 0;
-    }
-
-    if ((level === "easy" && depth >= 1) || (level === "medium" && depth >= 2)) {
-      return 0; // simulate bad or random move
-    }
-
-    if (isMax) {
-      let best = -Infinity;
-      for (let i = 0; i < b.length; i++) {
-        if (b[i] === "") {
-          b[i] = ai;
-          best = Math.max(best, minimax(b, depth + 1, false, level));
-          b[i] = "";
-        }
-      }
-      return best;
-    } else {
-      let best = Infinity;
-      for (let i = 0; i < b.length; i++) {
-        if (b[i] === "") {
-          b[i] = human;
-          best = Math.min(best, minimax(b, depth + 1, true, level));
-          b[i] = "";
-        }
-      }
-      return best;
-    }
-  }
-
-  function switchStartingPlayer() {
-    startingPlayer = startingPlayer === 'x' ? 'o' : 'x';
-  }
 });

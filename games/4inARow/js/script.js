@@ -19,7 +19,6 @@ window.addEventListener('load', function () {
 
   const boardEl = document.getElementById('grid');
   const messageEl = document.getElementById('message');
-  const toggleThemeBtn = document.getElementById("toggle-theme");
   const gridWrap = document.getElementById('right');
   const canvas = document.getElementById('fireworksCanvas');
 
@@ -29,7 +28,6 @@ window.addEventListener('load', function () {
   let startingPlayer = 'x';
   let gameOver = false;
   let history = [];
-  let theme = localStorage.getItem('rg_theme') || 'dark';
   let player1 = localStorage.getItem('player_name') || 'Human1';
   let player2 = localStorage.getItem('player_opponent') || 'Human2';
   let gameCount = 0;
@@ -155,6 +153,7 @@ window.addEventListener('load', function () {
     history.push({ y, x, player: currentPlayer });
     e.target.textContent = currentPlayer.toUpperCase();
     e.target.classList.add(currentPlayer);
+    launchFireworks();
 
     if (checkWin(x, y)) {
       updateleaderboard();
@@ -374,15 +373,15 @@ window.addEventListener('load', function () {
     document.getElementById("nameInput").placeholder = player2 || 'Human2';
     document.getElementById("nameInput").value = player2 || 'Human2';
     namebar.classList.add('show');
-  // namebar.style.display = 'none';
+    // namebar.style.display = 'none';
 
-}
+  }
 
   document.getElementById('name').addEventListener('click', () => {
     player2 = document.getElementById("nameInput").value;
     localStorage.setItem("player_opponent", player2 || "Human2");
     namebar.classList.remove('show');
-});
+  });
 
   function updateleaderboard() {
     winnerName = currentPlayer === 'x' ? player1 : player2;
@@ -415,10 +414,10 @@ window.addEventListener('load', function () {
 
     lcsaveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
 
-      saveScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+    saveScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
   }
 
   document.addEventListener('DOMContentLoaded', () => {
     lcrenderLeaderboard();
-});
+  });
 });
