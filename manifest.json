@@ -1,8 +1,8 @@
 {
     "name": "Ravindra Games Hub",
     "short_name": "RGH Game",
-    "start_url": "/",
-    "scope": "/",
+    "start_url": "./",
+    "scope": ".",
     "orientation": "portrait",
     "display": "standalone",
     "background_color": "#ffffff",
