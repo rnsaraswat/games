@@ -12,7 +12,7 @@ const PRECACHE = [
     '/assets/font/Bangers-Regular.ttf',
     '/assets/font/BowlbyOne-Regular.ttf',
     '/assets/font/digital-italic.ttf',
-    'assets/sound/bg-music.mp3',
+    '/assets/sound/bg-music.mp3',
     '/assets/sound/card-flip.wav',
     '/assets/sound/card-match.wav',
     '/assets/sound/card-mismatched.wav',
