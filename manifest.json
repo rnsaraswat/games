@@ -1,7 +1,7 @@
 {
     "name": "Ravindra Games Hub",
     "short_name": "RGH Game",
-    "start_url": "rnsaraswat.github.io/games/index.html",
+    "start_url": "/",
     "scope": "/",
     "orientation": "portrait",
     "display": "standalone",
