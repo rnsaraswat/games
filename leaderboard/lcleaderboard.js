@@ -89,6 +89,7 @@ export async function lcrenderLeaderboard() {
     }));
     lcfilteredData = [...lcleaderboardData];
     lccurrentPage = 1;
+    lcsortTable(lccurrentSortColumn, lccurrentSortOrder)
     lcrenderTable();
 }
 

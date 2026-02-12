@@ -109,6 +109,7 @@ export async function renderLeaderboard() {
     }));
     filteredData = [...leaderboardData];
     currentPage = 1;
+    sortTable(currentSortColumn, currentSortOrder)
     renderTable();
 
   } catch (err) {
