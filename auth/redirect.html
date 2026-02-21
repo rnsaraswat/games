@@ -1,43 +1,47 @@
-  <script type="module">
-    import { supabase } from "../supabaseClient.js";
+<script type="module">
+  import { supabase } from "../supabaseClient.js";
 
-    console.log("redirect.html");
-    async function completeLogin() {
+  console.log("redirect.html");
+  async function completeLogin() {
     console.log("completeLogin");
-      const { data: { user } } = await supabase.auth.getUser();
-        console.log(user);
-      if (user) {
+    const { data: { user } } = await supabase.auth.getUser();
+    console.log(user);
+    if (user) {
 
-        const name =
+      const pad = (num) => num.toString().padStart(2, '0');
+      const date = new Date();
+      const guestName = `Guest${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
+
+      const name =
         user.user_metadata?.full_name ||
         user.user_metadata?.name ||
         user.email ||
-        "Guest";
+        guestName;
 
-        localStorage.setItem("player_name", name || "User");
-        localStorage.setItem("email", user.email || "");
-        localStorage.setItem("user_id", user.id || "");
+      localStorage.setItem("player_name", name || guestName);
+      localStorage.setItem("email", user.email || "-");
+      localStorage.setItem("user_id", user.id || `Guest${Math.floor(Math.random() * 10000)}`);
 
-        document.body.innerHTML = `
+      document.body.innerHTML = `
         <div style="display:grid;place-items:center;><h2>Login Successful!</h2>
           <p>Welcome, <b>${name}</b></p>
           <a href="../index.html">Go to Home</a></div>
         `;
-        // document.body.innerHTML = `
-        //   <h2>Login Successful!</h2>
-        //   <p>Welcome, <b>${name}</b></p>
-        //   <p>Email: <b>${user.email}</b></p>
-        //   <a href="../index.html">Go to Home</a>
-        // `;
-        // window.location.href = "../index.html";
-        setTimeout(() => {
-          window.location.href = "https://rnsaraswat.github.io/games/index.html";
-        }, 1500);
-      } else {
-        document.body.innerHTML = `<div style="display:grid;place-items:center;><p>Login failed. Please try again.</p></div>`;
-      }
+      // document.body.innerHTML = `
+      //   <h2>Login Successful!</h2>
+      //   <p>Welcome, <b>${name}</b></p>
+      //   <p>Email: <b>${user.email}</b></p>
+      //   <a href="../index.html">Go to Home</a>
+      // `;
+      // window.location.href = "../index.html";
+      setTimeout(() => {
+        window.location.href = "https://rnsaraswat.github.io/games/index.html";
+      }, 1500);
+    } else {
+      document.body.innerHTML = `<div style="display:grid;place-items:center;><p>Login failed. Please try again.</p></div>`;
     }
-    console.log("redirect.html end");
+  }
+  console.log("redirect.html end");
 
-    completeLogin();
-  </script>
+  completeLogin();
+</script>

@@ -112,7 +112,9 @@
             { id: 'project', name: 'Project', title: 'Project Share', desc: "Three in a row to win X vs O", href: 'games/project/index.html' }
         ];
         
-        const player_name = localStorage.getItem('player_name') || 'Guest';
+        const pad = (num) => num.toString().padStart(2, '0');
+        const date = new Date();
+        const player_name = localStorage.getItem('player_name') || `Guest${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
 
         document.getElementById("welcom").textContent = `Welcome ${player_name}`;
         document.getElementById("welcom").style.alignContent = "center";

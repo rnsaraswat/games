@@ -10,7 +10,7 @@ let startTime = 0;
 let running = false;
 
 const timeDisplay = document.getElementById("timer-display");
-const button = document.getElementById("pauseBtn");
+const pausebutton = document.getElementById("pauseBtn");
 const closePaused = document.getElementById("closePaused");
 
 function formatTime(ms) {
@@ -34,7 +34,7 @@ export function startTimer() {
         // ▶ START
         startTime = Date.now() - elapsedTime;
         timerInterval = setInterval(updateTimer, 200);
-        button.textContent = "⏸Pause";
+        pausebutton.textContent = "⏸Pause";
         running = true;
     } else {
         document.getElementById("pauseModal").style.display = 'flex';
@@ -46,22 +46,22 @@ export function stopTimer() {
     running = false;
 }
 
-button.addEventListener("click", () => {
+pausebutton.addEventListener("click", () => {
     if (!running) {
         // ▶ RESUME
         startTime = Date.now() - elapsedTime;
         timerInterval = setInterval(updateTimer, 200);
         document.getElementById("pauseModal").style.display = 'none';
-        button.textContent = "⏸Pause";
+        // button.textContent = "⏸Pause";
         // textToSpeechEng('Resume');
         running = true;
     } else {
         // ⏸ PAUSE
         clearInterval(timerInterval);
         document.getElementById("pauseModal").style.display = 'flex';
-        button.textContent = "▶Resume";
+        // button.textContent = "▶Resume";
         // textToSpeechEng('Pause');
-        running = false;
+        // running = false;
     }
 });
 
@@ -71,7 +71,7 @@ closePaused.addEventListener("click", () => {
         startTime = Date.now() - elapsedTime;
         timerInterval = setInterval(updateTimer, 200);
         document.getElementById("pauseModal").style.display = 'none';
-        button.textContent = "⏸Pause";
+        // button.textContent = "⏸Pause";
         // textToSpeechEng('Resume');
         running = true;
     } else {

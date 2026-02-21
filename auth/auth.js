@@ -10,6 +10,10 @@ const statusDiv = document.getElementById("auth-status");
 const loginContinueButton = document.getElementById("login-continue-button");
 const loginChangeButton = document.getElementById("login-change-button");
 
+const pad = (num) => num.toString().padStart(2, '0');
+const date = new Date();
+const guestName = `Guest${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
+
 loginContinueButton.addEventListener("click", () => {
   window.location.href = "../index.html";
 });
@@ -102,7 +106,7 @@ emailForm.addEventListener("submit", async e => {
 
     if (error) throw error;
 
-    saveUserLocally({ name: name || "Guest", email: email, id: `${name}${Math.floor(Math.random() * 10000)}` });
+    saveUserLocally({ name: name || guestName, email: email, id: `${name}${Math.floor(Math.random() * 10000)}` });
     showStatus("Login link sent to your email. Check inbox!", true);
   } catch (err) {
     showStatus("Email login failed: " + err.message, false);
@@ -126,7 +130,7 @@ guestForm.addEventListener("submit", async e => {
     return;
   }
 
-  saveUserLocally({ name: gname || "Guest", email: gemail, id: `${gname}${Math.floor(Math.random() * 10000)}` });
+  saveUserLocally({ name: gname || guestName, email: gemail, id: `${gname}${Math.floor(Math.random() * 10000)}` });
 
   showStatus(`Welcome, ${gname}! Logging in as Guest...`);
   setTimeout(redirectAfterLogin, 1000);
@@ -136,10 +140,12 @@ guestForm.addEventListener("submit", async e => {
 guestF.addEventListener("submit", async e => {
   e.preventDefault();
   const guname = document.getElementById("guname").value.trim();
-  const rand = Math.floor(Math.random() * 10000);
-  const guestName = `${guname}${rand}` || `Gust${rand}`;
+
+
+  // const rand = Math.floor(Math.random() * 10000);
+  guestName = `${guname}${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
   const guemail = "-";
-  saveUserLocally({ name: guname || "Guest", email: guemail, id: `${guname}${Math.floor(Math.random() * 10000)}` });
+  saveUserLocally({ name: guestName, email: guemail, id: `${guname}${Math.floor(Math.random() * 10000)}` });
   statusDiv.textContent = `Welcome, ${guestName}!`;
   setTimeout(redirectAfterLogin, 1000);
 });

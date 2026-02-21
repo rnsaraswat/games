@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Sort Puzzle</title>
+    <meta name="description"
+        content="Ravindra Games Hub — collection of lightweight web games (water sort) Train your critical thinking same colors water in one tube game">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+    <link rel="stylesheet" href="../../commoncss.css">
+    <link rel="manifest" href="../../manifest.json" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <meta name="theme-color" content="#6200ee" />
+</head>
+
+<body>
+    <!-- <div id="game"> -->
+    <div class="container">
+        <div class="main">
+            <h1>WATER SORT</h1>
+            <header id="hdr">
+                <label for="tubeInput">🧪 No of Tubes:</label>
+                <select id="tubeInput">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12" selected>12</option>
+                </select>
+                <button id="startBtn">🔄Start</button>
+                <button id="toggle-theme">☀️ Light</button>
+                <button id="toggle-sound">🔇 Music:Off"</button>
+                <button data-name="rules" id="rules-btn1" onclick="ShowRules();">📜RULES</button>
+                <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
+                    Global
+                    Leaderboard</button>
+                <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+                    Leaderboard</button>
+                <button class="button-primary" id="shareBtn">📤Sharing</button>
+                <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+                <button class="button-primary"
+                    onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+                <div class="divtext">🧮Moves: <span id="moves">0</span></div>
+                <div id="timer-display">⏱️ 00:00:00</div>
+            </header>
+            </div>
+                <!-- <div id="left" class="section">
+                <div id="menu">
+                <h1>WATER SORT</h1>
+                <div class="button-group"> -->
+                    <!-- </div> -->
+                    <!-- <div class="container" id="levelButton"> -->
+                    <!-- <label>No of Tubes:</label>
+                <input type="number" id="tubeInput" value="12" min="2" max="12" /> -->
+                    <!-- <label for="tubeInput">🧪 No of Tubes:</label>
+                    <select id="tubeInput">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12" selected>12</option>
+                    </select>
+                    <button id="startBtn">🔄Start</button>
+
+                    <div class="divtext">Level: <span id="leveldisplay">EASY</span></div> -->
+                    <!-- <button data-name="restart" id="restart" onclick="Restart();">Restart</button> -->
+                    <!-- <button data-name="level-menu" id="levelMenu" onclick="ShowMenu();">Select Level</button> -->
+                    <!-- <button id="toggle-theme">☀️ Light</button>
+                    <button id="toggle-sound">🔇 Music:Off"</button>
+                    <button data-name="rules" id="rules-btn1" onclick="ShowRules();">📜RULES</button>
+                    <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
+                        Global
+                        Leaderboard</button>
+                    <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+                        Leaderboard</button>
+                    <button class="button-primary" id="shareBtn">📤Sharing</button>
+                    <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+                    <button class="button-primary"
+                        onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+                    <div class="divtext">🧮Moves: <span id="moves">0</span></div>
+                    <div id="timer-display">⏱️ 00:00:00</div>
+                </div> -->
+                <div class="output-box" id="output">
+                    Please Select no of tubes select level and press start
+                </div>
+                <p id="loading" class="loading">Loading...</p>
+            </div>
+            <div id="right">
+                <!-- <div class="container" id="heading">WATER SORT PUZZLE</div> -->
+                <div id="button-container">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div id="level">
+            <div class="container" id="button-container">
+            </div>
+        </div> -->
+    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+    <div id="lcLeaderboardModal" class="lc-main-container"></div>
+    <div id="gbLeaderboardModal" class="gb-main-container"></div>
+    <div id="winText">🎉 You Won! 🎉</div>
+    <div id="rules-page">
+        <div id="rules">
+            <div id="rules-heading">RULES</div>
+            <div id="rules-text">To play Water Sort Puzzle, you <b>tap on a colored water tube to pick it up, then
+                    tap on another tube to pour the water into it.</b> You can only pour colored water into another
+                tube if both tubes have the same color at the top and if the receiving tube has enough space. The
+                goal is to sort all the colors into their respective tubes, with each tube containing only one
+                color. <br> <br>
+                <b>Here's a more detailed breakdown:</b><br> <br>
+                <b>Tapping:</b> Tap on a tube to select it and then tap on another tube to pour the water.<br>
+                <b>Pouring Rules:</b><br>
+                You can only pour water if the top color in both tubes is the same. <br>
+                You can only pour water into a tube that has enough space to accommodate the poured water. <br>
+                <b>Winning:</b> The game is won when all the tubes contain water of only one color and the tubes are
+                full. <br>
+                <b>Restarting:</b> You can restart a level at any time if you get stuck.<br>
+            </div>
+            <div id="back" onclick="HideRules();">BACK</div>
+        </div>
+    </div>
+    </div>
+    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
+    <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+    <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
+    <script type="module" src="js/script.js"></script>
+    <!-- <script type="module">
+        import { shareScore } from '../../leaderboard/share.js';
+        document.getElementById("shareBtn").addEventListener("click", async () => {
+            shareScore("watersort", 0);
+        });
+    </script> -->
+
+    <script>
+        document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById("lcLeaderboardModal").style.display = 'none';
+        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById("winText").style.display = 'none';
+        // document.getElementById("rulesPopup").style.display = 'none';
+
+        const themeToggle = document.getElementById('toggle-theme');
+        function setTheme(t) {
+            if (t === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '☀️ Light'
+            }
+            if (t === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '🌙 Dark'
+            }
+        }
+        if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+        setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+
+
+        function openGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'none';
+        };
+
+
+        fetch('../../leaderboard/gbleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("gbLeaderboardModal").style.display = 'none';
+            });
+
+        function openLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'none';
+        };
+
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
+            }
+        };
+
+        fetch('../../leaderboard/lcleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("lcLeaderboardModal").style.display = 'none';
+            });
+
+        function openGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'flex';
+        };
+
+        function closeGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'none';
+        };
+
+        fetch('../../leaderboard/gbfeedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+                document.getElementById("gb-feedbackModal").style.display = 'none';
+            });
+
+        (async () => {
+            const GAME_NAME = "Water Sort";
+            const GAME_SHORT = "watersort";
+
+            const res = await fetch("../../manifest.json");
+            const manifest = await res.json();
+
+            manifest.short_name = GAME_SHORT;
+            manifest.name = GAME_NAME;
+
+            manifest.start_url = 'https://rnsaraswat.github.io/games/games/watersort/index.html';
+            manifest.scope = 'https://rnsaraswat.github.io/games/games/watersort/index.html';
+
+            // 🔥 icons ko absolute banane ka safety fix
+            manifest.icons = manifest.icons.map(icon => ({
+                ...icon,
+                src: new URL(icon.src, location.origin).href
+            }));
+
+            const blob = new Blob(
+                [JSON.stringify(manifest)],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("link");
+            link.rel = "manifest";
+            link.href = url;
+            document.head.appendChild(link);
+        })();
+    </script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("../../sw.js")
+                    .then(() => console.log("SW registered"))
+                    .catch((err) => console.log("SW error", err));
+            });
+        }
+    </script>
+</body>
+
+</html>

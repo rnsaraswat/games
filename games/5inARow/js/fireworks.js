@@ -1,4 +1,5 @@
 import { playSound } from './sound.js';
+import { winnerName } from './script.js';
 // 🎉 Show You Won! Text and Fireworks
 const canvas = document.getElementById('fireworksCanvas');
 const ctx = canvas.getContext('2d');

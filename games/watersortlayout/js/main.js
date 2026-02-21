@@ -1,0 +1,1 @@
+import {initLevel} from './levels.js';import {render} from './renderer.js';initLevel();render(()=>{});

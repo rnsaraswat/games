@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description"
-  content="Ravindra Games Hub — collection of lightweight web games (tic tac toe) Classic & Action-Oriented X vs O game">
+    content="Ravindra Games Hub — collection of lightweight web games (tic tac toe) Classic & Action-Oriented X vs O game">
   <meta property="og:title" content="Score Sharing" />
   <meta property="og:description" content="See my score!" />
   <meta property="og:image" content="https://https://rnsaraswat.github.io.vercel.app/api/og?score=500" />
@@ -210,6 +210,35 @@
       border: none;
       border-radius: 8px;
     }
+
+
+    /* Desktop Share Popup (Custom UI)
+  CSS (minimal) */
+
+    .share-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.hidden { display: none; }
+
+.share-box {
+  background: #fff;
+  padding: 20px;
+  text-align: center;
+  border-radius: 12px;
+  width: 280px;
+}
+
+.share-logo { width: 80px; }
+.share-buttons button {
+  margin: 5px;
+}
+
   </style>
 </head>
 
@@ -224,16 +253,18 @@
       <button id="reset" class="chip">Reset</button>
       <button id="local-toggle-leaderboard" class="chip">Local Leaderboard</button>
       <button id="toggle-leaderboard" class="chip">Global Leaderboard</button>
-      <button class="primary" id="shareBtn">📤Sharing</button>
+      <!-- <button class="primary" id="sharing">📤Sharing main</button> -->
 
       <button class="primary" id="toggle-feedback">📝Feedback</button>
       <button class="primary"
         onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
-      <button id="shareBtn">Share on Facebook</button>
-      <button id="shareBtn1">Share on Twitter</button>
-      <button id="nativeShare">Share mobile</button>
-      <button id="shareBtn2">Share detect device</button>
-    </div>
+      <!-- <button id="shareScore">Share Score</button>
+      <button id="shareTwitter">Share on Twitter</button>
+      <button id="nativeShare">Share mobile</button> -->
+  <!-- --------------------1-------------------- -->
+      <!-- <button id="detectDevice">detect device Share</button> -->
+  <!-- --------------------1-------------------- -->
+</div>
 
   </div>
   <p id="timer-display">⏱️ 00:00:00</p>
@@ -243,7 +274,9 @@
   <div id="localleaderboardPopup" class="popupWindow">
   </div>
   <div id="feedbackPopup" class="popupWindow"></div>
-  <div id="sharePopup" class="share-popup">
+
+  <!-- --------------------1-------------------- -->
+  <!-- <div id="sharePopup" class="share-popup">
     <div class="share-box">
       <h3>Share Your Score</h3>
 
@@ -258,8 +291,30 @@
 
       <button id="closePopup">Close</button>
     </div>
-  </div>
+  </div> -->
+  <!-- --------------------1-------------------- -->
 
+
+  <!-- Desktop Share Popup (Custom UI)
+🔹 HTML (once in page) -->
+  <div id="sharePopup" class="share-popup hidden">
+    <div class="share-box">
+      <img src="../../assets/icons/RGHlogo.png" class="share-logo">
+      <h2>RNS Games</h2>
+      <h3 id="shareGame"></h3>
+      <p id="shareScore"></p>
+  
+      <div class="share-buttons">
+        <button onclick="shareWhatsApp()">WhatsApp</button>
+        <button onclick="shareTwitter()">Twitter</button>
+        <button onclick="shareFacebook()">Facebook</button>
+        <button onclick="copyLink()">Copy Link</button>
+      </div>
+  
+      <button class="close" onclick="closeShare()">✖</button>
+    </div>
+  </div>
+  
   <script type="module">
 
   </script>
@@ -286,6 +341,9 @@
     });
   </script>
 
+  <script>
+
+  </script>
   <script>
     function hideFeedback() {
       document.getElementById("feedbackPopup").style.display = 'none';
@@ -417,7 +475,9 @@
   <script type="module">
     import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
     window.gameName = 'tictactoe';
+    window.game = `Tic Tac Toe`
     window.score = 0;
+    window.shareLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`
     window.winner;
 
     const boardEl = document.getElementById('board');
@@ -445,7 +505,8 @@
           score = 9 * 10 - moves * 2 + 50;
           setTimeout(() => onGameOver(winner, winner === 'X' ? 100 : 50), 100);
           // window.shareScoreCommon(gameName, score);
-          window.detectDevicePara();
+          // window.detectDevicePara();
+          window.handleWin() ;
 
           return;
         }
@@ -478,198 +539,448 @@
       saveToLeaderboard(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
 
       window.submitScore && window.submitScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+
     }
+
     document.getElementById('reset').addEventListener('click', () => { board = Array(9).fill(null); over = false; moves = 0; render(); });
     render();
 
-    document.getElementById("shareBtn2").addEventListener("click", async () => {
-      window.detectDevicePara();
-    });
+      //--------------------1---------------------
 
-    document.getElementById("shareBtn").addEventListener("click", async () => {
-      shareScoreCommon("tictactoe", 0);
-    });
-  </script>
-
-  <script>
-    window.shareScoreCommon = async function (gameName, score = 0) {
-
-      const siteName = "Ravindra Games Hub";
-      let gameLink = `https://rnsaraswat.github.io/games/index.html`;
-      let textToShare;
-      if (gameName == '-') {
-        gameLink = `https://rnsaraswat.github.io/games/index.html`;
-
-        textToShare =
-          `${siteName}
-        Play here:
-    ${gameLink}`;
-      } else {
-        gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
-
-        textToShare =
-          `${siteName}
-    ${gameName}
-    Can you beat my Score: ${score}
+    // document.getElementById("detectDevice").addEventListener("click", async () => {
+    //   window.detectDevicePara();
     
-    Play here:
-    ${gameLink}`;
-        console.log("gamelink", gameLink);
-      }
+  // });
+  //--------------------1---------------------
 
-      const imageUrl = "../../assets/icons/maskable-icon.png";
+    // document.getElementById("sharing").addEventListener("click", async () => {
+    //   shareScoreCommon("tictactoe", 0);
+    // });
+  </script>
 
-      try {
-        await navigator.share({
-          title: siteName,
-          text: textToShare
-        });
-        console.log("try", gameLink);
+  <script>
 
-        const blob = await (await fetch(imageUrl)).blob();
-        const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
-
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file]
-          });
-          console.log("navigator.canShare && navigator.canShare", file, blob);
-        }
-
-      } catch (err) {
-        console.log("Share cancelled or failed", err);
-      }
-    }
   </script>
   <script>
-    const currentScore = 420;
+      //--------------------1---------------------
 
-    // बनाएँ share URL (query param में score)
-    function makeShareURL(score) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('score', score);
-      // optional: short path like /share?score=420
-      return url.toString();
-    }
+    // const currentScore = 420;
 
-    document.getElementById('copyBtn').addEventListener('click', async () => {
-      const url = makeShareURL(currentScore);
-      try {
-        await navigator.clipboard.writeText(url);
-        alert('Link copied to clipboard!');
-      } catch (e) {
-        prompt('Copy this link:', url);
-      }
-    });
+    // // बनाएँ share URL (query param में score)
+    // function makeShareURL(score) {
+    //   const url = new URL(window.location.href);
+    //   url.searchParams.set('score', score);
+    //   // optional: short path like /share?score=420
+    //   return url.toString();
+    // }
 
-    // Quick share to twitter / facebook (opens new window)
-    document.getElementById('shareBtn').addEventListener('click', () => {
-      const url = encodeURIComponent(makeShareURL(currentScore));
-      const text = encodeURIComponent(`I scored ${currentScore} points! Can you beat me?`);
+    // document.getElementById('copyBtn').addEventListener('click', async () => {
+    //   const url = makeShareURL(currentScore);
+    //   try {
+    //     await navigator.clipboard.writeText(url);
+    //     alert('Link copied to clipboard!');
+    //   } catch (e) {
+    //     prompt('Copy this link:', url);
+    //   }
+    // });
 
-      const facebook = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+      //--------------------1---------------------
 
-      window.open(facebook, '_blank', 'noopener');
-    });
-
-    function makeScoreImage(score) {
-      const canvas = document.createElement('canvas');
-      canvas.width = 1200;
-      canvas.height = 630;
-      const ctx = canvas.getContext('2d');
-
-      const img = new Image();
-      img.src = '../../assets/icons/maskable-icon.png';
-      ctx.fillStyle = '#0f172a';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 300, 100, 600, 300);
-
-      ctx.fillStyle = '#FFFFFF';
-      ctx.font = '70px Impact';
-      ctx.textAlign = 'center';
-      const text1Y = img.height + 60;
-      ctx.fillText('Ravindra games hub', canvas.width / 2, 460);
-
-      ctx.font = '40px Arial';
-      const text2Y = text1Y + 50;
-      ctx.fillText(`Can you beat my score=${score}`, canvas.width / 2, 510);
-      return canvas;
-    }
 
   </script>
 
 
-  <script type="module">
+  <script>
 
 
-    /* javascript code for share link/button for browser and mobile */
+    
+      function isMobile() {
+        // return (
+        //   navigator.share &&
+        //   /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+        // );
 
-    // Detect Mobile Browser
-    function isMobile() {
-      return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+        const ua = navigator.userAgent;
+    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+        return "Tablet";
     }
-
-    window.detectDevicePara = async function () {
-      score = 420;
-      const shareText = `I scored ${score} points! Try to beat me!`;
-      const shareURL = "https://yourdomain.com/share.html?score=" + score;
-
-      // --------------------------
-      // 📱 MOBILE SHARE
-      // --------------------------
-      if (isMobile() && navigator.share) {
-        try {
-          await navigator.share({
-            title: "My Score",
-            text: shareText,
-            url: shareURL
-          });
-          return;
-        } catch (e) { }
+    if (/Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+        return "Mobile";
+    }
+    return "Desktop";
       }
 
-      // --------------------------
-      // 💻 DESKTOP SHARE POPUP
-      // --------------------------
+      async function shareMobile(gameName, score, shareLink, logoUrl) {
+        
+  console.log("shareScore",gameName, score);
 
-      // Encode
-      const t = encodeURIComponent(shareText);
-      const u = encodeURIComponent(shareURL);
+const siteName = "Ravindra Games Hub";
+const gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
 
-      // Twitter
-      document.getElementById("twLink").href =
-        `https://twitter.com/intent/tweet?text=${t}&url=${u}`;
+const textToShare =
+  `${siteName}
+${gameName}
+Can you beat my Score: ${score}
 
-      // WhatsApp Web
-      document.getElementById("waLink").href =
-        `https://web.whatsapp.com/send?text=${t}%20${u}`;
+Play here:
+${gameLink}`;
 
-      // Facebook Share
-      document.getElementById("fbLink").href =
-        `https://www.facebook.com/sharer/sharer.php?u=${u}`;
+console.log("gamelink", gameLink);
+const imageUrl = "../../assets/icons/maskable-icon.png";
 
-      // Telegram Web
-      document.getElementById("tgLink").href =
-        `https://t.me/share/url?url=${u}&text=${t}`;
+try {
+  await navigator.share({
+    title: siteName,
+    text: textToShare
+  });
+  console.log("try", gameLink);
 
-      // // Instagram (guide to direct message)
-      document.getElementById("igLink").href =
-        `https://www.instagram.com/direct/inbox/`;
+  const blob = await (await fetch(imageUrl)).blob();
+  const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
 
-      // Show Popup
-      document.getElementById("sharePopup").style.display = "flex";
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    await navigator.share({
+      files: [file]
+    });
+  console.log("navigator.canShare && navigator.canShare", file, blob);
+}
 
-      document.getElementById("closePopup").addEventListener("click", () => {
-        document.getElementById("sharePopup").style.display = "none";
-      });
-    }
+} catch (err) {
+  console.log("Share cancelled or failed", err);
+}
+
+        // try {
+        //   const response = await fetch(logoUrl);
+        //   const blob = await response.blob();
+        //   const file = new File([blob], "logo.png", { type: blob.type });
+
+        //   await navigator.share({
+        //     title: gameName,
+        //     text:
+        //       `🏆 ${gameName}\n` +
+        //       `🎮 Score: ${score}\n` +
+        //       `🔥 Play now:`,
+        //     url: shareLink,
+        //     files: [file]
+        //   });
+
+        //   console.log("✅ Mobile share success");
+
+        // } catch (err) {
+        //   console.warn("❌ Mobile share failed:", err);
+        //   alert("Share cancelled or not supported");
+        // }
+      }
+
+      // Desktop JS Logic
+      let SHARE_DATA = {};
+
+      function openDesktopShare(gameName, score, shareLink) {
+        SHARE_DATA = { gameName, score, shareLink };
+
+        document.getElementById("shareGame").innerText = gameName;
+        document.getElementById("shareScore").innerText = "Score: " + score;
+        document.getElementById("sharePopup").classList.remove("hidden");
+      }
+
+      function closeShare() {
+        document.getElementById("sharePopup").classList.add("hidden");
+      }
+
+      function shareWhatsApp() {
+        open(
+          `https://wa.me/?text=${encodeURIComponent(
+            `${SHARE_DATA.gameName} | Score: ${SHARE_DATA.score}\n${SHARE_DATA.shareLink}`
+          )}`
+        );
+      }
+
+      function shareTwitter() {
+        open(
+          `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+            `${SHARE_DATA.gameName} | Score: ${SHARE_DATA.score}`
+          )}&url=${encodeURIComponent(SHARE_DATA.shareLink)}`
+        );
+      }
+
+      function shareFacebook() {
+        open(
+          `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+            SHARE_DATA.shareLink
+          )}`
+        );
+      }
+
+      function copyLink() {
+        navigator.clipboard.writeText(SHARE_DATA.shareLink);
+        alert("Link copied!");
+      }
+
+
+      // FINAL MERGED handleWin() (🔥 MOST IMPORTANT)
+      // async function window.handleWin(gameName, score) {
+    window.handleWin = async function () {
+        // await launchConfetti(); // ⏳ wait until animation ends
+
+        const link = "https://rnsaraswat.github.io/games/";
+        // const logo = "images/RGHlogo.jpg";
+        const logo = '../../assets/icons/RGHlogo.png';
+
+        if (isMobile() == "Mobile" || isMobile() == "Tablet" ) {
+          await shareMobile(gameName, score, link, logo);
+        } else if (isMobile() == "Desktop") {
+          openDesktopShare(gameName, score, link);
+        } else {
+          await shareMobile(gameName, score, link, logo);
+        }
+      }
+
+
+      //--------------------1---------------------
+      // this code working on both mobile and desktop in desktop style (on mobile also desktop style)
+      /* javascript code for share link/button for browser and mobile */
+    // Detect Mobile Browser
+    // function isMobile() {
+    //   return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+    // }
+
+
+    // window.detectDevicePara = async function () {
+    //   score = 420;
+    //   const shareText = `I scored ${score} points! Try to beat me!`;
+    //   const shareURL = "https://yourdomain.com/share.html?score=" + score;
+
+    //   // --------------------------
+    //   // 📱 MOBILE SHARE
+    //   // --------------------------
+    //   // if (isMobile() && navigator.share) {
+    //   if (isMobile() && navigator.share) {
+    //     try {
+    //       await navigator.share({
+    //         title: "My Score",
+    //         text: shareText,
+    //         url: shareURL
+    //       });
+    //       return;
+    //     } catch (e) { }
+    //   }
+
+
+    //   // --------------------------
+    //   // 💻 DESKTOP SHARE POPUP
+    //   // --------------------------
+
+    //   // Encode
+    //   const t = encodeURIComponent(shareText);
+    //   const u = encodeURIComponent(shareURL);
+
+    //   // Twitter
+    //   document.getElementById("twLink").href =
+    //     `https://twitter.com/intent/tweet?text=${t}&url=${u}`;
+
+    //   // WhatsApp Web
+    //   document.getElementById("waLink").href =
+    //     `https://web.whatsapp.com/send?text=${t}%20${u}`;
+
+    //   // Facebook Share
+    //   document.getElementById("fbLink").href =
+    //     `https://www.facebook.com/sharer/sharer.php?u=${u}`;
+
+    //   // Telegram Web
+    //   document.getElementById("tgLink").href =
+    //     `https://t.me/share/url?url=${u}&text=${t}`;
+
+    //   // // Instagram (guide to direct message)
+    //   document.getElementById("igLink").href =
+    //     `https://www.instagram.com/direct/inbox/`;
+
+    //   // Show Popup
+    //   document.getElementById("sharePopup").style.display = "flex";
+
+    //   document.getElementById("closePopup").addEventListener("click", () => {
+    //     document.getElementById("sharePopup").style.display = "none";
+    //   });
+    // }
     // document.getElementById("shareBtn2").addEventListener("click", async () => {
 
     // });
+      //--------------------1---------------------
 
 
   </script>
 
+<script>
+  //     async function shareScore(gameName, score = 0) {
+
+//       console.log("shareScore", gameName, score);
+
+//       const siteName = "Ravindra Games Hub";
+//       const gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
+
+//       const textToShare =
+//         `${siteName}
+// ${gameName}
+// Can you beat my Score: ${score}
+
+// Play here:
+// ${gameLink}`;
+
+//       console.log("gamelink", gameLink);
+//       const imageUrl = "../../assets/icons/maskable-icon.png";
+
+//       try {
+//         await navigator.share({
+//           title: siteName,
+//           text: textToShare
+//         });
+//         console.log("try", gameLink);
+
+//         const blob = await (await fetch(imageUrl)).blob();
+//         const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
+
+//         if (navigator.canShare && navigator.canShare({ files: [file] })) {
+//           await navigator.share({
+//             files: [file]
+//           });
+//           console.log("navigator.canShare && navigator.canShare", file, blob);
+//         }
+
+//       } catch (err) {
+//         console.log("Share cancelled or failed", err);
+//       }
+//     }
+
+    // document.getElementById("shareScore").addEventListener("click", async () => {
+    //   console.log("share.js button", gameName, score);
+    //   shareScore(gameName, score);
+    //   console.log("share.js button after", gameName, score);
+    // });
+
+//     document.getElementById("nativeShare").addEventListener("click", async () => {
+//       // console.log("share.js button",gameName, score);
+//       // shareScore(gameName, score);
+//       // console.log("share.js button after",gameName, score);
+//       console.log("shareScore", gameName, score);
+
+//       const siteName = "Ravindra Games Hub";
+//       const gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
+
+//       const textToShare =
+//         `${siteName}
+// ${gameName}
+// Can you beat my Score: ${score}
+
+// Play here:
+// ${gameLink}`;
+
+//       console.log("gamelink", gameLink);
+//       const imageUrl = "../../assets/icons/maskable-icon.png";
+
+//       try {
+//         await navigator.share({
+//           title: siteName,
+//           text: textToShare
+//         });
+//         console.log("try", gameLink);
+
+//         const blob = await (await fetch(imageUrl)).blob();
+//         const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
+
+//         if (navigator.canShare && navigator.canShare({ files: [file] })) {
+//           await navigator.share({
+//             files: [file]
+//           });
+//           console.log("navigator.canShare && navigator.canShare", file, blob);
+//         }
+
+//       } catch (err) {
+//         console.log("Share cancelled or failed", err);
+//       }
+//     });
+
+      // window.shareScoreCommon = async function (gameName, score = 0) {
+
+    //   const siteName = "Ravindra Games Hub";
+    //   let gameLink = `https://rnsaraswat.github.io/games/index.html`;
+    //   let textToShare;
+    //   if (gameName == '-') {
+    //     gameLink = `https://rnsaraswat.github.io/games/index.html`;
+
+    //     textToShare =
+    //       `${siteName}
+    //     Play here:
+    // ${gameLink}`;
+    //   } else {
+    //     gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
+
+    //     textToShare =
+    //       `${siteName}
+    // ${gameName}
+    // Can you beat my Score: ${score}
+    
+    // Play here:
+    // ${gameLink}`;
+    //     console.log("gamelink", gameLink);
+    //   }
+
+    //   const imageUrl = "../../assets/icons/maskable-icon.png";
+
+    //   try {
+    //     await navigator.share({
+    //       title: siteName,
+    //       text: textToShare
+    //     });
+    //     console.log("try", gameLink);
+
+    //     const blob = await (await fetch(imageUrl)).blob();
+    //     const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
+
+    //     if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    //       await navigator.share({
+    //         files: [file]
+    //       });
+    //       console.log("navigator.canShare && navigator.canShare", file, blob);
+    //     }
+
+    //   } catch (err) {
+    //     console.log("Share cancelled or failed", err);
+    //   }
+    // }
+
+      // // Quick share to twitter / facebook (opens new window)
+    // document.getElementById('shareTwitter').addEventListener('click', () => {
+    //   const url = encodeURIComponent(makeShareURL(currentScore));
+    //   const text = encodeURIComponent(`I scored ${currentScore} points! Can you beat me?`);
+
+    //   const facebook = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+
+    //   window.open(facebook, '_blank', 'noopener');
+    // });
+
+    // function makeScoreImage(score) {
+    //   const canvas = document.createElement('canvas');
+    //   canvas.width = 1200;
+    //   canvas.height = 630;
+    //   const ctx = canvas.getContext('2d');
+
+    //   const img = new Image();
+    //   img.src = '../../assets/icons/maskable-icon.png';
+    //   ctx.fillStyle = '#0f172a';
+    //   ctx.fillRect(0, 0, canvas.width, canvas.height);
+    //   ctx.drawImage(img, 300, 100, 600, 300);
+
+    //   ctx.fillStyle = '#FFFFFF';
+    //   ctx.font = '70px Impact';
+    //   ctx.textAlign = 'center';
+    //   const text1Y = img.height + 60;
+    //   ctx.fillText('Ravindra games hub', canvas.width / 2, 460);
+
+    //   ctx.font = '40px Arial';
+    //   const text2Y = text1Y + 50;
+    //   ctx.fillText(`Can you beat my score=${score}`, canvas.width / 2, 510);
+    //   return canvas;
+    // }
+</script>
 
   <script>
     if ("serviceWorker" in navigator) {

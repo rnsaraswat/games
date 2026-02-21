@@ -1,0 +1,1 @@
+export const TUBE_SIZE=4;export const COLORS=['red','blue','green','yellow','purple','cyan'];

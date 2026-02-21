@@ -298,6 +298,7 @@
     <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
     <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
     <link rel="stylesheet" href="../../commoncss.css">
+    <link rel="stylesheet" href="./shareDevice.css" />
     <link rel="manifest" href="../../manifest.json" />
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <meta name="theme-color" content="#6200ee" />
@@ -326,11 +327,13 @@
                 <button class="button-primary-memory" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆
                     Local Leaderboard</button>
                 <button class="primary-btn " id="shareBtn">📤Sharing</button>
+                <button class="primary-btn " id="nativeShare">📤Sharing Mobile Native Share</button>
+                <button id="shareDetectDevice">Share detect device</button>
                 <button id="openFeedback" class="primary-btn" onclick="openGlobalFeedback()">💬 Feedback</button>
                 <button class="primary-btn "
                     onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
-                </div>
-                <div id="timer-display">⏱️ 00:00:00</div>
+            </div>
+            <div id="timer-display">⏱️ 00:00:00</div>
             <div id="message"><br>Click New Game to play</div>
             <p id="loading">Loading...</p>
         </div>
@@ -355,12 +358,29 @@
             <button id="name" class="name-primary-button">Ok</button>
         </div>
     </div>
+    <div id="sharePopup" class="share-popup">
+        <div class="share-box-container">
+            <h3>Share Your Score</h3>
+
+            <div class="share-icons-group">
+                <a id="twLink" class="share-icons" target="_blank">twitter</a>
+                <a id="waLink" class="share-icons" target="_blank">whatapp</a>
+                <a id="fbLink" class="share-icons" target="_blank">Facebook</a>
+                <a id="tgLink" class="share-icons" target="_blank">Telegram</a>
+                <a id="igLink" class="share-icons" target="_blank">Instagram</a>
+                <button id="copyBtn" class="share-icons">Copy link</button>
+            </div>
+
+            <button id="closePopup">Close</button>
+        </div>
+    </div>
     <!-- <button onclick="report(${f.id})">🚩 Report</button> -->
     <script type="module" src="../../leaderboard/gbfeedback.js"></script>
     <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
     <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <canvas id="fireworksCanvas"></canvas>
     <script type="module" src="tictactoe1.js"></script>
+    <script type="module" src="js/shareDevice.js"></script>
     <script type="module">
         import { shareScore } from './share.js';
         document.getElementById("shareBtn").addEventListener("click", async () => {
@@ -368,6 +388,13 @@
         });
     </script>
     <script>
+
+        document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById("lcLeaderboardModal").style.display = 'none';
+        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById("winText").style.display = 'none';
+        // document.getElementById("rulesPopup").style.display = 'none';
+
         const themeToggle = document.getElementById('toggle-theme');
         function setTheme(t) {
             if (t === 'dark') {

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Water Sort Layout</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div id="app">
+    <div id="controls">
+      <h3>Controls</h3>
+      <label>
+        Tubes:
+        <select id="tubeSelect">
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+          <option>10</option>
+          <option>11</option>
+          <option selected>12</option>
+          <option>13</option>
+          <option>14</option>
+        </select>
+      </label>
+      <p id="status"></p>
+      <!-- controls के अंदर add करें -->
+      <button id="undoBtn">Undo</button>
+      <button id="restartBtn">Restart</button>
+      <!-- Undo+ (Extra Undos) Button -->
+      <button onclick="useUndoPlus()">⏪ Undo+</button>
+      <!-- Extra Empty Tube (1 time per level) Button -->
+      <button onclick="useExtraTube()">➕ Extra Tube</button>
+      <!-- WATER SOUND EFFECTS -->
+      <audio id="pourSound" src="../../assets/sound/water-flow1.mp3"></audio>
+      <audio id="winSound" src="../../assets/sound/winner-trumpets.mp3"></audio>
+      <!-- LEVEL SELECT SCREEN -->
+      <!-- <div id="levelScreen" class="level-screen">
+        <h2>Select Level</h2>
+        <div id="levelButtons"></div>
+      </div> -->
+
+      <p>Always 2 empty tubes</p>
+    </div>
+
+    <div id="gameArea">
+      <div id="tubeContainer"></div>
+    </div>
+  </div>
+
+  <script src="layout.js"></script>
+      <script src="gameLogic.js"></script>
+</body>
+
+</html>

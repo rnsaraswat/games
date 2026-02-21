@@ -1,0 +1,156 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body, html {
+    margin: 0;
+    height: 100%;
+    background: #111;
+    color: white;
+    font-family: Arial;
+  }
+  
+  /* Main wrapper */
+  .game-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+  }
+  
+  /* 🎮 Controls */
+  .controls {
+    width: 30%;
+    background: #222;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px;
+  }
+  
+  .controls button {
+    padding: 15px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  /* 🧪 Tubes Area */
+  .tubes-area {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 40px;
+  }
+  
+  /* Rows */
+  .row {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+  }
+  
+  /* Tubes */
+  .tube {
+    width: 60px;
+    height: 160px;
+    border: 3px solid #fff;
+    border-radius: 0 0 12px 12px;
+  }
+  
+  /* 3rd row alignment */
+  .row-4 {
+    gap: 50px;
+  }
+  
+  /* 📱 Portrait / Mobile */
+  @media (max-aspect-ratio: 3/4) {
+    .game-wrapper {
+      flex-direction: column;
+    }
+  
+    .controls {
+      width: 100%;
+      height: 30%;
+      flex-direction: row;
+      align-items: center;
+    }
+  
+    .tubes-area {
+      width: 100%;
+      height: 70%;
+    }
+  }
+  
+  /* 📺 Large screens (TV) */
+  @media (min-width: 1400px) {
+    .tube {
+      width: 80px;
+      height: 220px;
+    }
+  }
+
+  /* CSS (Liquid + Animation) */
+  .tube {
+    display: flex;
+    flex-direction: column-reverse;
+    overflow: hidden;
+    background: #000;
+    cursor: pointer;
+  }
+  
+  .layer {
+    width: 100%;
+    height: 25%;
+    transition: transform 0.4s ease;
+  }
+  
+  .selected {
+    outline: 4px solid yellow;
+  }
+  
+  /* Colors */
+  .red { background: red; }
+  .blue { background: dodgerblue; }
+  .green { background: limegreen; }
+  .yellow { background: gold; }
+  
+  
+
+body {
+    background: #111;
+    color: #fff;
+    font-family: Arial
+}
+
+.tube {
+    width: 60px;
+    height: 160px;
+    border: 3px solid #fff;
+    display: inline-flex;
+    flex-direction: column-reverse;
+    margin: 10px
+}
+
+.layer {
+    height: 25%
+}
+
+/* level screen css */
+.level-screen {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .level-screen button {
+    padding: 15px 25px;
+    margin: 10px;
+    font-size: 20px;
+  }
+  

@@ -465,6 +465,7 @@ button:hover {
 #timer-display {
     font-family: 'Digital', Arial, Helvetica, sans-serif;
     text-align: center;
+    align-content: center;
     width: auto;
     height: auto;
     font-size: 20px;
@@ -528,8 +529,8 @@ button:hover {
     display: flex;
     justify-content: center;
     z-index: 10;
-    width: 95%;
-    height: 95%;
+    width: 90%;
+    height: 90%;
     overflow-y: auto;
     text-align: center;
     border: 2px solid var(--gf-border);
@@ -537,6 +538,12 @@ button:hover {
     color: var(--gf-text);
     flex-direction: column;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+#resumeBtn{
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
 }
 
 .rules-popup-window {

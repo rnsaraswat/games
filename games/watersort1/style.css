@@ -1,0 +1,421 @@
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    padding: 0.1vw;
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    padding: 5px;
+    align-items: stretch;
+    overflow: hidden;
+    flex-direction: column;
+  }
+
+.section {
+  flex: 0 0 45%;
+  background: var(--bg);
+  padding: 2px;
+  border-radius: 10px;
+  overflow: auto;
+
+  /* width: 30%;
+  background: #222;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 15px;
+  padding: 20px; */
+}
+
+#left {
+    background: var(--bg);
+    padding: 0.1vw;
+    flex: 0 0 30vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 30vw;
+}
+
+/* #right { */
+#button-container{
+
+    /* width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4vw; */
+
+    background: var(--bg-color);
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0.1vw;
+    justify-content: center;
+    /* flex: 1;
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    overflow: hidden;
+    padding: 6px; */
+  }
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    justify-content: center;
+    margin-bottom: 1px;
+    width: 100%;
+    text-align: center;
+}
+/* 
+.board {
+    display: grid;
+    grid-template-columns: repeat(7, 8vw);
+    gap: 0.8vw;
+    padding: 1.2vw;
+    margin: 1vw;
+    background: var(--board);
+    border-radius: 12px;
+    width: max-content
+} */
+
+button.primary {
+    gap: 0.8vw;
+    align-items: center;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0.2vw 0.4vw;
+    margin: 0.2vw 0.2vw 0.5vw 0.2vw;
+    font-size: 1.6vw;
+    display: inline-block;
+    margin-top: 0.1vh;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 0.5vw 2.5vw 0 var(--box-shadow);
+    border-radius: 0.5vw;
+    background: linear-gradient(90deg, #9762f1, #7c3aed);
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(180deg, #10b981, #059669);
+    border: none;
+    box-shadow: 0 1vw 4vw var(--box-shadow);
+}
+
+button.primary:hover {
+    opacity: 0.6;
+}
+
+#moves, #leveldisplay {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2vw;
+    text-align: center;
+    font-weight: bold;
+    color: var(--text);
+  }
+
+.divtext {
+    text-align: center;
+    padding: 5px 5px;
+    margin: 5px 2px 5px 2px;
+    margin-top: 1vh;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#timer-display {
+    font-family: 'Digital', Arial, Helvetica, sans-serif;
+    text-align: center;
+    width: auto;
+    height: auto;
+    font-size: 15px;
+    padding: 5px 5px;
+    margin: 5px 2px 5px 2px;
+    /* background: var(--bg); */
+    color: var(--text);
+    border: none;
+  }
+
+.color-button {
+    text-align: center;
+    width: auto;
+    height: auto;
+    font-size: 1vw;
+    padding: 0.5vw 0.5vw;
+    background-color: rgb(100, 255, 100);
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 0.4vw;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 2vw 2.5vw 0 rgba(0, 0, 0, 0.2);
+}
+
+.color-button:hover {
+    transform: scale(1.05);
+}
+
+.color-div {
+    text-align: center;
+    width: auto;
+    height: auto;
+    font-size: 1vw;
+    padding: 0.5vw 0.5vw;
+    color: rgb(0, 0, 0);
+}
+
+.output-box {
+    margin-top: 1vw;
+    padding: 0.4vw;
+    border: .3vw dashed #999;
+    min-height: 4vw;
+    text-align: center;
+    font-weight: bold;
+    font-size: 2vw;
+    background-color: #f9f9f9;
+    box-shadow: 0 2vw 2.5vw 0 rgba(0, 0, 0, 0.2);
+}
+
+.msgr {
+    /* width: 100px; */
+    font-family: 'EnglishFontBangers', Arial, Helvetica, sans-serif;
+    font-size: 5vw;
+    font-weight: bold;
+    text-align: center;
+    align-items: top;
+    letter-spacing: 1vw;
+    color: rgb(0, 92, 0);
+    text-shadow: 0px 0px 0 rgb(10, 240, 10), 1px 1px 0 rgb(20, 230, 20), 2px 2px 0 rgb(30, 220, 30), 3px 3px 0 rgb(40, 210, 40), 4px 4px 0 rgb(50, 200, 50), 5px 5px 0 rgb(60, 190, 60), 6px 6px 0 rgb(70, 180, 70), 7px 7px 0 rgb(80, 170, 80), 8px 8px 0 rgb(90, 160, 90), 9px 9px 0 rgb(100, 150, 100), 10px 10px 0 rgb(110, 140, 110), 11px 11px 0 rgb(120, 130, 120), 12px 12px 0 rgba(0, 0, 0, 1), 13px 13px 1px rgba(0, 0, 0, 0.5), 0px 0px 14px rgba(0, 0, 0, .2);
+}
+
+#game {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: white;
+}
+
+
+#level {
+    z-index: 1;
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: white;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    /* display: none; */
+}
+
+.test-tube {
+    position: absolute;
+    height: 11.5vw;
+    width: 4.0vw;
+    border: 0.3vw solid rgb(150, 150, 150);
+    border-top: 0.4vw double rgb(150, 150, 150);
+    border-radius: 0.2vw 0.2vw 1vw 1vw;
+    border-color: var(--text);
+    background-position: 0 1vw;
+    overflow: hidden;
+    transition: 1s linear;
+    transform: rotate(0deg);
+}
+
+.colors {
+    position: absolute;
+    left: 0;
+    height: 2.5vw;
+    width: 4vw;
+}
+
+#won {
+    position: absolute;
+    top: 10vw;
+    left: 0;
+    width: 100vw;
+    text-align: center;
+    font-size: 6vw;
+    font-weight: 900;
+    font-family: 'EnglishFontBangers', Arial, Helvetica, sans-serif;
+}
+
+#white-bg {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 40px;
+    height: 10px;
+    background-color: var(--bg);
+    z-index: 1000;
+    transition: 1s;
+}
+
+#colorful-bg {
+    position: absolute;
+    width: 100%;
+    height: 0;
+    z-index: 1000;
+    transition: 1s;
+}
+
+#rules-btn {
+    position: fixed;
+    left: calc(100vw - 20vw);
+    top: calc(100vh - 5vw);
+    height: 5vw;
+    width: 20w;
+    background-color: lightgreen;
+    border-radius: 2vw 2vw 0 0;
+    text-align: center;
+    font-size: 2.5vw;
+    line-height: 5vw;
+    font-weight: 500;
+}
+
+#rules-page {
+    display: none;
+    z-index: 1000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: 0.5s linear;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#rules {
+    position: absolute;
+    top: 4vw;
+    left: 2vw;
+    height: calc(100vh - 8vw);
+    width: calc(100vw - 5vw);
+    background-color: white;
+    border-radius: 1vw;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#rules-heading {
+    position: absolute;
+    top: 1vw;
+    left: 0;
+    height: 3vw;
+    width: 100%;
+    font-size: 3vw;
+    font-weight: 800;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#rules-text {
+    position: absolute;
+    top: 5vw;
+    left: 5%;
+    width: 90%;
+    font-size: 2vw;
+    height: calc(100vh - 8vw - 11.2vw);
+    overflow-x: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#back {
+    position: absolute;
+    top: calc(100% - 12vw + 6.5vw + 1vw);
+    height: 4vw;
+    width: 10vw;
+    left: calc(100% - 10vw);
+    background-color: rgb(100, 255, 100);
+    font-size: 2vw;
+    line-height: 4vw;
+    text-align: center;
+    border-radius: 1vw 0 0 1vw;
+}
+
+.rain {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.drop {
+    width: .2vw;
+    height: 10vw;
+    position: absolute;
+    top: 10vw;
+    left: 10vw;
+    z-index: -1;
+}
+
+@media (max-aspect-ratio: 3/4)
+/* (max-width:640px),
+(max-aspect-ratio: 1/1)  */
+{
+    .container {
+        flex-direction: column;
+    }
+
+    .main {
+        flex-direction: column;
+      }
+
+      .section {
+        /* flex: 0 0 auto;
+        background: var(--bg);
+        padding: 2px;
+        border-radius: 10px;
+        overflow: auto; */
+        width: 100%;
+        height: 30%;
+        flex-direction: row;
+        align-items: center;
+      }
+
+    /* #left {
+        width: 100%;
+        max-width: 100%;
+        flex: 0 0 auto;
+    } */
+
+    #right {
+        width: 100%;
+        height: 70%;
+        /* flex: 1;
+        width: 100%; */
+    }
+
+
+    #message {
+        font-size: 4.5vw;
+    }
+
+    button.primary {
+        padding: 1vw 2vw;
+        margin: 0.1vw 0.5vw 0.1vw 0.5vw;
+        font-size: 2.5vw;
+    }
+
+    .button-group {
+        font-size: 5vw;
+    }
+
+    #timerdisplay {
+        font-size: 5vw;
+      }
+
+      #status {
+        font-size: 3vw;
+      }
+}

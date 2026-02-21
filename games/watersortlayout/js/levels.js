@@ -1,0 +1,1 @@
+import {TUBE_SIZE,COLORS} from './config.js';export let gameState=[];export function initLevel(){gameState=[[ 'red','blue','blue','red'],[],[]];}

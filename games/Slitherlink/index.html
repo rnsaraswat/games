@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Slitherlink Puzzle</title>
+    <meta name="description"
+        content="Ravindra Games Hub — collection of lightweight web games (Slitherlink) Connect the dots to form a single loop, zero crossings, pure logic.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+    <link rel="stylesheet" href="../../commoncss.css">
+    <link rel="manifest" href="../../manifest.json" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <meta name="theme-color" content="#6200ee" />
+</head>
+
+<body>
+    <div class="app">
+        <div class="controls">
+            <h1>Slitherlink</h1>
+            <div class="button-group">
+                <label for="sizeSel">⊞ Grid Size:</label>
+                <select id="sizeSel">
+                    <!-- <option value="4">4x4</option>
+                    <option value="5">6x6</option>
+                    <option value="7" selected>7x7</option>
+                    <option value="8">8x8</option>
+                    <option value="9">9x9</option>
+                    <option value="10">10x10</option>
+                    <option value="12">12x12</option>
+                    <option value="14">14x14</option>
+                    <option value="15">15x15</option>
+                    <option value="16">16x16</option>
+                    <option value="18">18x18</option>
+                    <option value="20">20x20</option>
+                    <option value="21">21x21</option>
+                    <option value="22">22x22</option>
+                    <option value="24">24x24</option>
+                    <option value="25">25x25</option>
+                    <option value="30">25x30</option> -->
+                </select>
+                <select id="diffSel">
+                    <option value="easy">😊Easy</option>
+                    <option value="medium">🤔Medium</option>
+                    <option value="hard" selected>🤯Hard</option>
+                    <option value="expert">🧑‍🔬Expert</option>
+                </select>
+                <button class="button-primary" id="newBtn">🔄 New Game</button>
+                <!-- <button class="button-primary" id="genBtn">Generate Unique</button> -->
+                <!-- <button id="importBtn">Import Puzzles</button> -->
+                <!-- <input id="fileInput" type="file" accept="application/json"> -->
+                <button id="resetBtn">🔄Reset</button>
+                <button id="solveBtn">🔓Solve</button>
+                <button id="checkBtn">✔Check</button>
+                <button id="undoBtn">↩️Undo</button>
+                <button id="redoBtn">↪️Redo</button>
+                <label class="switch"><input type="checkbox" id="errorToggle" checked>Show Errors</label>
+                <button id="toggle-theme">☀️ Light</button>
+                <button id="toggle-sound">🔇 Music:Off</button>
+                <button id="toggle-rules">📜View Rules</button>
+                <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global
+                    Leaderboard</button>
+                <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+                    Leaderboard</button>
+                <button class="button-primary" id="shareBtn">📤Sharing</button>
+                <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+                <button class="button-primary"
+                    onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+                <button id="pauseBtn">⏸Pause</button>
+                <div id="timer-display">⏱️ 00:00:00</div>
+            </div>
+
+            <!-- <div class="timer" id="timer">00:00</div> -->
+            <div id="status">Select grid size <br>Click New Game to play</div>
+            <p id="loading" class="loading">Loading...</p>
+        </div>
+        <div class="boardWrap">
+            <svg id="board" class="svgContainer"></svg>
+        </div>
+    </div>
+    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+    <div id="lcLeaderboardModal" class="lc-main-container"></div>
+    <div id="gbLeaderboardModal" class="gb-main-container"></div>
+    <div id="rulesPopup" class="rules-popup-window">
+        <div class="rules-header-section">
+            <span id="rulesCloseBtn" class="rules-popup-close">Close X</span>
+            <h1 class="rules-h2">Game Rules</h1>
+        </div>
+        <div class="rules-content">
+            <p id="RulesBox"></p>
+        </div>
+    </div>
+    <div id="winText">🎉 You Won! 🎉</div>
+    <canvas id="fireworksCanvas"></canvas>
+    <script type="module" src="js/rules.js"></script>
+    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
+    <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+    <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
+    <script type="module" src="js/script.js"></script>
+    <script type="module">
+        import { shareScore } from './js/share.js';
+        document.getElementById("shareBtn").addEventListener("click", async () => {
+            console.log("shareBtn clicked")
+            shareScore("4inARow", 0);
+        });
+    </script>
+
+    <script>
+        document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById("lcLeaderboardModal").style.display = 'none';
+        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById("winText").style.display = 'none';
+        document.getElementById("rulesPopup").style.display = 'none';
+
+        const themeToggle = document.getElementById('toggle-theme');
+        function setTheme(t) {
+            if (t === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '☀️ Light'
+            }
+            if (t === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '🌙 Dark'
+            }
+        }
+        if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+        setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+
+        function openGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'none';
+        };
+
+
+        fetch('../../leaderboard/gbleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("gbLeaderboardModal").style.display = 'none';
+            });
+
+        function openLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'none';
+        };
+
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
+            }
+        };
+
+        fetch('../../leaderboard/lcleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("lcLeaderboardModal").style.display = 'none';
+            });
+
+        function openGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'flex';
+        };
+
+        function closeGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'none';
+        };
+
+        fetch('../../leaderboard/gbfeedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+                document.getElementById("gb-feedbackModal").style.display = 'none';
+            });
+
+        (async () => {
+            const GAME_NAME = "Slitherlink";
+            const GAME_SHORT = "Slitherlink";
+
+            const res = await fetch("../../manifest.json");
+            const manifest = await res.json();
+
+            manifest.short_name = GAME_SHORT;
+            manifest.name = GAME_NAME;
+
+            manifest.start_url = 'https://rnsaraswat.github.io/games/games/Slitherlink/index.html';
+            manifest.scope = 'https://rnsaraswat.github.io/games/games/Slitherlink/index.html';
+
+            manifest.icons = manifest.icons.map(icon => ({
+                ...icon,
+                src: new URL(icon.src, location.origin).href
+            }));
+
+            const blob = new Blob(
+                [JSON.stringify(manifest)],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("link");
+            link.rel = "manifest";
+            link.href = url;
+            document.head.appendChild(link);
+        })();
+
+    </script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("../../sw.js")
+                    .then(() => console.log("SW registered"))
+                    .catch((err) => console.log("SW error", err));
+            });
+        }
+    </script>
+</body>
+
+</html>

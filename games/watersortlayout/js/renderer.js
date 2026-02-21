@@ -1,0 +1,1 @@
+import {gameState} from './levels.js';export function render(cb){const a=document.getElementById('tubesArea');a.innerHTML='';gameState.forEach((t,i)=>{const d=document.createElement('div');d.className='tube';d.dataset.index=i;d.onclick=()=>cb(i);t.forEach(c=>{const l=document.createElement('div');l.className='layer '+c;d.appendChild(l);});a.appendChild(d);});}

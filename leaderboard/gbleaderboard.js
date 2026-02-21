@@ -146,7 +146,7 @@ function renderTable() {
         <td class="gb-td">${Math.floor(row.elapsed / 3600)}:${Math.floor((row.elapsed % 3600) / 60)}:${row.elapsed % 60}</td>
         <td class="gb-td">${new Date(row.created_at).toLocaleString()}</td>
         <td class="gb-td">${!row.moves ? "-" : row.moves}</td>
-        <td class="gb-td">${!row.email ? "-" : row.email}</td>
+        <td class="gb-td">${!row.email ? "-" : "--"}</td>
         <td class="gb-td">${!row.filed1 ? "-" : row.filed1}</td>
         <td class="gb-td">${!row.filed2 ? "-" : row.filed2}</td>
         <td class="gb-td">${!row.filed3 ? "-" : row.filed3}</td>

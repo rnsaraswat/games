@@ -1,20 +1,24 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8" />
   <title>Game Page - Demo</title>
   <link rel="stylesheet" href="share.css">
 </head>
+
 <body>
   <h1>Demo Game</h1>
 
   <!-- ONE button per page (give it id) -->
-  <button id="shareBtn">Share Score</button>
+  <button id="shareBtn">Share Score Desktop</button>
+  <button id="shareBtn1">Share Score mobile</button>
+  <button class="button-primary" id="shareBtn2">📤Sharing</button>
 
   <!-- Loader for popup (will fetch and inject share-popup.html) -->
   <script>
     // share-popup loader: fetch and append; then dispatch event
-    (function() {
+    (function () {
       fetch("share-popup.html")
         .then(r => {
           if (!r.ok) throw new Error("popup not found");
@@ -39,17 +43,34 @@
   </script>
 
   <!-- main share system -->
-  <script src="share.js"></script>
+  <script   type="module" src="share.js"></script>
+  <script   type="module" src="sharedesktop.js"></script>
 
-  <script>
+  <script type="module">
+    import { shareScore } from './share.js';
+    import { requestShare } from './sharedesktop.js';
     // Example: attach share action (no inline onclick)
     document.addEventListener("DOMContentLoaded", () => {
       const btn = document.getElementById("shareBtn");
+      const btn1 = document.getElementById("shareBtn1");
       btn.addEventListener("click", () => {
         // call with object (robust): game, score, link, image
-        window.requestShare({ game: "Memory Game", score: 250, link: `https://rnsaraswat.github.io/games/`, image: "images/RGHlogo.jpg" });
+        requestShare({ game: "Memory Game", score: 250, link: `https://rnsaraswat.github.io/games/`, image: "images/RGHlogo.jpg" });
       });
+
+      btn1.addEventListener("click", () => {
+        // call with object (robust): game, score, link, image
+        const gameName = "Project";
+        const score = 0;
+        shareScore(gameName, score);
+        // window.shareMobile();
+      });
+
+      document.getElementById("shareBtn2").addEventListener("click", async () => {
+      shareScore("5inARow", 0);
+    });
     });
   </script>
 </body>
+
 </html>

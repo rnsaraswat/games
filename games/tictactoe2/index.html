@@ -150,11 +150,12 @@
     <div id="localleaderboardPopup" class="popupWindow">
     </div>
     <div id="feedbackPopup" class="popupWindow"></div>
-    
+
     <button class="primary" id="shareBtn">📤Sharing</button>
     <div id="sharePopup" class="share-popup"></div>
     <button class="primary" id="toggle-feedback">📝Feedback</button>
-    <button class="primary" onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+    <button class="primary"
+      onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
     <div id="timerdisplay">⏱️ 00:00:00</div>
   </div>
   <!-- <script type="module">
@@ -186,6 +187,12 @@
   </script>
 
   <script>
+    document.getElementById("gb-feedbackModal").style.display = 'none';
+    document.getElementById("lcLeaderboardModal").style.display = 'none';
+    document.getElementById("gbLeaderboardModal").style.display = 'none';
+    document.getElementById("winText").style.display = 'none';
+    // document.getElementById("rulesPopup").style.display = 'none';
+
     function hideFeedback() {
       document.getElementById("feedbackPopup").style.display = 'none';
     };
@@ -409,56 +416,56 @@
 
   </script>
 
-<script>
-  window.shareScoreCommon = async function (gameName, score = 0) {
+  <script>
+    window.shareScoreCommon = async function (gameName, score = 0) {
 
-    const siteName = "Ravindra Games Hub";
-    let gameLink = `https://rnsaraswat.github.io/games/index.html`;
-    let textToShare;
-    if (gameName == '-') {
-      gameLink = `https://rnsaraswat.github.io/games/index.html`;
+      const siteName = "Ravindra Games Hub";
+      let gameLink = `https://rnsaraswat.github.io/games/index.html`;
+      let textToShare;
+      if (gameName == '-') {
+        gameLink = `https://rnsaraswat.github.io/games/index.html`;
 
-      textToShare =
-        `${siteName}
+        textToShare =
+          `${siteName}
       Play here:
   ${gameLink}`;
-    } else {
-      gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
+      } else {
+        gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
 
-      textToShare =
-        `${siteName}
+        textToShare =
+          `${siteName}
   ${gameName}
   Can you beat my Score: ${score}
   
   Play here:
   ${gameLink}`;
-      console.log("gamelink", gameLink);
-    }
-
-    const imageUrl = "../../assets/icons/maskable-icon.png";
-
-    try {
-      await navigator.share({
-        title: siteName,
-        text: textToShare
-      });
-      console.log("try", gameLink);
-
-      const blob = await (await fetch(imageUrl)).blob();
-      const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
-
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          files: [file]
-        });
-        console.log("navigator.canShare && navigator.canShare", file, blob);
+        console.log("gamelink", gameLink);
       }
 
-    } catch (err) {
-      console.log("Share cancelled or failed", err);
+      const imageUrl = "../../assets/icons/maskable-icon.png";
+
+      try {
+        await navigator.share({
+          title: siteName,
+          text: textToShare
+        });
+        console.log("try", gameLink);
+
+        const blob = await (await fetch(imageUrl)).blob();
+        const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file]
+          });
+          console.log("navigator.canShare && navigator.canShare", file, blob);
+        }
+
+      } catch (err) {
+        console.log("Share cancelled or failed", err);
+      }
     }
-  }
-</script>
+  </script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {

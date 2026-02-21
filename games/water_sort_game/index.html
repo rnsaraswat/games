@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Water Sort Puzzle</title>
+    <link rel='stylesheet' href='css/style.css'>
+</head>
+
+<body>
+    <!-- <div id='tubesArea'></div> -->
+
+    <div class="game-wrapper">
+
+        <!-- Controls -->
+        <div class="controls">
+          <button>Undo</button>
+          <button>Restart</button>
+          <button>Hint</button>
+        </div>
+      
+        <!-- Tubes Area -->
+        <div class="tubes-area">
+      
+          <div class="row row-5">
+            <div class="tube"></div>
+            <div class="tube"></div>
+            <div class="tube center"></div>
+            <div class="tube"></div>
+            <div class="tube"></div>
+          </div>
+      
+          <div class="row row-5">
+            <div class="tube"></div>
+            <div class="tube"></div>
+            <div class="tube center"></div>
+            <div class="tube"></div>
+            <div class="tube"></div>
+          </div>
+      
+          <div class="row row-4">
+            <div class="tube"></div>
+            <div class="tube"></div>
+            <div class="tube"></div>
+            <div class="tube"></div>
+          </div>
+      
+        </div>
+      </div>
+      <div class="tube" data-index="0"></div>
+    <button onclick="useUndoPlus()">⏪ Undo+</button>
+
+      <audio id="pourSound" src="sounds/water-flow1.mp3"></audio>
+<audio id="winSound" src="sounds/winner-trumpets.mp3"></audio>
+      <div class="tube" data-index="1"></div>
+
+      <!-- LEVEL SELECT SCREEN
+🔹 HTML -->
+<!-- <div id="levelScreen" class="level-screen">
+  <h2>Select Level</h2>
+  <div id="levelButtons"></div>
+</div>
+
+    <script type='module' src='js/main.js'>
+        document.getElementById("levelScreen").style.display = 'none';
+    </script> -->
+</body>
+
+</html>

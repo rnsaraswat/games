@@ -4,15 +4,19 @@
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
 
+        const pad = (num) => num.toString().padStart(2, '0');
+      const date = new Date();
+      const guestName = `Guest${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
+
         const name =
         user.user_metadata?.full_name ||
         user.user_metadata?.name ||
         user.email ||
-        "Guest";
+        guestName;
 
-        localStorage.setItem("player_name", name || "User");
-        localStorage.setItem("email", user.email || "");
-        localStorage.setItem("user_id", user.id || "");
+        localStorage.setItem("player_name", name || guestName);
+        localStorage.setItem("email", user.email || "-");
+        localStorage.setItem("user_id", user.id || `Guest${Math.floor(Math.random() * 10000)}`);
         document.body.innerHTML = `
           <div style="display:grid;place-items:center;><h2>Login Successful!</h2>
           <p>Welcome, <b>${name}</b></p>

@@ -43,7 +43,7 @@
                         <option value="13">13 Tubes</option>
                         <option value="14">14 Tubes</option>
                     </select>
-                    <div class="divtext">Level: <span id="leveldisplay">EASY</span></div>
+                    <div class="divtext">Level: <span id="leveldisplay">1 (EASY)</span></div>
 
                     <button class="button-primary" id="startBtn">New Game</button>
                     <button id="restartBtn">Restart</button>
@@ -64,7 +64,7 @@
                     <div class="divtext">Moves: <span id="moves">0</span></div>
                     <div id="timer-display">⏱️ 00:00:00</div>
                     <div class="output-box" id="output">
-                        Please Select no of tubes to select level or press New Game for Easy Level (4 tubes)
+                        Please Select no of tubes to change level or press New Game for Easy Level (4 tubes)
                     </div>
                     <p id="loading" class="loading">Loading...</p>
                 </div>
@@ -76,7 +76,8 @@
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
     <div id="gbLeaderboardModal" class="gb-main-container"></div>
     <div id="pauseModal" class="pause-container">
-        <button id="closePaused">Game Paused</button>
+        <h2>Game Paused</h2>
+        <button id="resumeBtn">Resume</button>
     </div>
     <div id="winText">🎉 Completed 🎉</div>
     <canvas id="confettiCanvas"></canvas>
