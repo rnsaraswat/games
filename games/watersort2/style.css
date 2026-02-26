@@ -493,6 +493,7 @@ button:hover {
     transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
     transform-origin: center center;
     z-index: 5;
+    box-shadow: 0 5px 25px 0 var(--box-shadow);
 }
 
 .tube.selected {

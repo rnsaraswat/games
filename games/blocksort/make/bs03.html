@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Responsive Water Sort</title>
+<!-- <link rel="stylesheet" href="style.css"> -->
+<style>
+    *{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#111;
+  color:white;
+  font-family:Arial;
+}
+
+/* ===== MAIN LAYOUT ===== */
+.main{
+  width:100vw;
+  height:100vh;
+  display:grid;
+}
+
+/* Landscape (Width ज्यादा) */
+@media (orientation:landscape){
+  .main{
+    grid-template-columns:30% 70%;
+  }
+}
+
+/* Portrait (Height ज्यादा) */
+@media (orientation:portrait){
+  .main{
+    grid-template-rows:30% 70%;
+  }
+}
+
+/* ===== CONTROL PANEL ===== */
+.control-panel{
+  padding:2vmin;
+  display:flex;
+  flex-direction:column;
+  gap:2vmin;
+  justify-content:center;
+  align-items:center;
+  background:#1a1a1a;
+}
+
+/* ===== GAME AREA ===== */
+.game-area{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+
+#game{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:flex-end;
+  gap:2vmin;
+  width:100%;
+  height:100%;
+  padding:2vmin;
+}
+
+/* ===== TUBE ===== */
+.tube{
+  display:flex;
+  flex-direction:column-reverse;
+  align-items:center;
+  justify-content:flex-start;
+
+  aspect-ratio:1/3;
+  border:0.5vmin solid white;
+  border-radius:0 0 3vmin 3vmin;
+
+  flex: 1 1 calc(100% / 8); /* auto scaling */
+  max-width:8vmin;
+  min-width:5vmin;
+  padding:1vmin 0;
+}
+
+/* ===== BLOCK ===== */
+.block{
+  width:80%;
+  height:18%;
+  margin:2%;
+  border-radius:1vmin;
+}
+
+.selected{
+  transform:translateY(-10%);
+}
+
+body{
+  margin:0;
+  background:#050510;
+  font-family:Arial, sans-serif;
+  color:#0ff;
+  overflow:hidden;
+}
+
+.main{
+  width:100vw;
+  height:100vh;
+  display:grid;
+}
+
+@media (orientation:landscape){
+  .main{ grid-template-columns:30% 70%; }
+}
+
+@media (orientation:portrait){
+  .main{ grid-template-rows:30% 70%; }
+}
+
+.control-panel{
+  background:#0a0a20;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2vmin;
+  font-size:clamp(14px,2vmin,24px);
+}
+
+button, select{
+  padding:1vmin 2vmin;
+  background:#111;
+  color:#0ff;
+  border:1px solid #0ff;
+  cursor:pointer;
+}
+
+.game-area{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+
+#game{
+  display:grid;
+  width:95%;
+  height:95%;
+  gap:2vmin;
+  transition:all 0.4s ease;
+}
+
+/* Neon tube */
+.tube{
+  border:0.4vmin solid #0ff;
+  border-radius:0 0 3vmin 3vmin;
+  display:flex;
+  flex-direction:column-reverse;
+  align-items:center;
+  padding:1vmin 0;
+  box-shadow:0 0 15px #0ff;
+  transition:transform 0.3s ease;
+}
+
+.tube:hover{
+  transform:scale(1.05);
+}
+
+.block{
+  width:80%;
+  height:18%;
+  margin:2%;
+  border-radius:1vmin;
+  box-shadow:0 0 10px currentColor;
+}
+
+</style>
+</head>
+<body>
+
+<div class="main">
+
+  <div class="control-panel">
+    <h2>Water Sort</h2>
+    <select id="colorCount">
+        <option value="4">4 Colors</option>
+        <option value="6">6 Colors</option>
+        <option value="8">8 Colors</option>
+        <option value="10">10 Colors</option>
+        <option value="12">12 Colors</option>
+        <option value="16">16 Colors</option>
+        <option value="20">20 Colors</option>
+      </select>
+      
+      <button onclick="generateLevel()">New Level</button>
+    <div>⏱ <span id="time">00:00:00</span></div>
+    <div>🎯 Moves: <span id="moves">0</span></div>
+    <div>⭐ Score: <span id="score">0</span></div>
+    <button id="undoBtn">Undo</button>
+  </div>
+
+  <div class="game-area">
+    <div id="game"></div>
+  </div>
+
+</div>
+
+<!-- <script src="script.js"></script> -->
+<script>
+    const MAX_HEIGHT = 4;
+
+let tubes = [
+  ["red","green","red","green"],
+  ["green","green","red","red"],
+  [],
+  []
+];
+
+let selected = null;
+let fromIndex = null;
+let moveHistory = [];
+let moves = 0;
+let seconds = 0;
+let timerInterval;
+let isAnimating = false;
+
+const game = document.getElementById("game");
+
+// ---------------- INIT ----------------
+function init(){
+  render();
+  startTimer();
+}
+init();
+
+// // ---------------- RENDER ----------------
+// function render(){
+//   game.innerHTML = "";
+
+//   tubes.forEach((tube,i)=>{
+//     const div = document.createElement("div");
+//     div.className="tube";
+//     div.dataset.index=i;
+
+//     tube.forEach(color=>{
+//       const block=document.createElement("div");
+//       block.className="block";
+//       block.style.background=color;
+//       div.appendChild(block);
+//     });
+
+//     game.appendChild(div);
+//   });
+// }
+
+function calculateGrid(){
+
+const container = document.getElementById("game");
+const count = tubes.length;
+
+const cols = Math.ceil(Math.sqrt(count));
+const rows = Math.ceil(count / cols);
+
+container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+container.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+}
+
+// ---------------- CLICK ----------------
+game.addEventListener("click",function(e){
+
+  if(isAnimating) return;
+
+  const tubeDiv = e.target.closest(".tube");
+  if(!tubeDiv) return;
+
+  const index = parseInt(tubeDiv.dataset.index);
+
+  // SELECT
+  if(selected===null){
+    if(tubes[index].length===0) return;
+
+    selected = tubes[index][tubes[index].length-1];
+    fromIndex = index;
+    highlight(index);
+  }
+
+  // DROP
+  else{
+    if(isValidMove(fromIndex,index)){
+      animateMove(fromIndex,index);
+    }
+    clearHighlight();
+    selected=null;
+    fromIndex=null;
+  }
+});
+
+// ---------------- VALIDATION ----------------
+function isValidMove(from,to){
+
+  if(from===to) return false;
+  if(tubes[to].length>=MAX_HEIGHT) return false;
+
+  const movingColor = tubes[from][tubes[from].length-1];
+  const targetTop = tubes[to][tubes[to].length-1];
+
+  if(!targetTop) return true;
+  return movingColor===targetTop;
+}
+
+// ---------------- ANIMATION ----------------
+function animateMove(from,to){
+
+  isAnimating = true;
+
+  const fromTube = document.querySelectorAll(".tube")[from];
+  const toTube = document.querySelectorAll(".tube")[to];
+  const blockEl = fromTube.lastElementChild;
+
+  const startRect = blockEl.getBoundingClientRect();
+  const endRect = toTube.getBoundingClientRect();
+
+  const clone = blockEl.cloneNode(true);
+  document.body.appendChild(clone);
+
+  clone.style.position="fixed";
+  clone.style.left=startRect.left+"px";
+  clone.style.top=startRect.top+"px";
+  clone.style.width=startRect.width+"px";
+  clone.style.height=startRect.height+"px";
+  clone.style.margin=0;
+  clone.style.zIndex=1000;
+
+  blockEl.style.visibility="hidden";
+
+  const endX = endRect.left + (endRect.width/2 - startRect.width/2);
+  const endY = endRect.bottom - (tubes[to].length+1)*45;
+
+  const midX = (startRect.left + endX)/2;
+  const midY = Math.min(startRect.top,endY) - 120;
+
+  let startTime=null;
+  const duration=500;
+
+  function animate(time){
+
+    if(!startTime) startTime=time;
+    const progress=(time-startTime)/duration;
+
+    if(progress<1){
+
+      const x=quadraticBezier(progress,startRect.left,midX,endX);
+      const y=quadraticBezier(progress,startRect.top,midY,endY);
+
+      clone.style.left=x+"px";
+      clone.style.top=y+"px";
+
+      requestAnimationFrame(animate);
+
+    }else{
+
+      clone.remove();
+      blockEl.style.visibility="visible";
+
+      // DATA UPDATE AFTER ANIMATION
+      moveHistory.push(JSON.stringify(tubes));
+
+      const color = tubes[from].pop();
+      tubes[to].push(color);
+
+      moves++;
+      updateInfo();
+      render();
+      checkWin();
+
+      isAnimating=false;
+    }
+  }
+
+  requestAnimationFrame(animate);
+}
+
+function quadraticBezier(t,p0,p1,p2){
+  return (1-t)*(1-t)*p0 + 2*(1-t)*t*p1 + t*t*p2;
+}
+
+// ---------------- UNDO ----------------
+document.getElementById("undoBtn").onclick=function(){
+  if(moveHistory.length>0 && !isAnimating){
+    tubes=JSON.parse(moveHistory.pop());
+    moves--;
+    updateInfo();
+    render();
+  }
+};
+
+// ---------------- TIMER ----------------
+function startTimer(){
+  timerInterval=setInterval(()=>{
+    seconds++;
+    updateInfo();
+  },1000);
+}
+
+function formatTime(sec){
+  const h=Math.floor(sec/3600).toString().padStart(2,"0");
+  const m=Math.floor((sec%3600)/60).toString().padStart(2,"0");
+  const s=(sec%60).toString().padStart(2,"0");
+  return `${h}:${m}:${s}`;
+}
+
+// ---------------- SCORE ----------------
+function calculateScore(){
+  return Math.max(1000 - (moves*10 + seconds*2),0);
+}
+
+function updateInfo(){
+  document.getElementById("time").textContent=formatTime(seconds);
+  document.getElementById("moves").textContent=moves;
+  document.getElementById("score").textContent=calculateScore();
+}
+
+// ---------------- WIN ----------------
+function checkWin(){
+
+  const win = tubes.every(tube=>{
+    if(tube.length===0) return true;
+    if(tube.length!==MAX_HEIGHT) return false;
+    return tube.every(color=>color===tube[0]);
+  });
+
+  if(win){
+    clearInterval(timerInterval);
+    setTimeout(()=>{
+      alert("🎉 You Win! Score: "+calculateScore());
+    },300);
+  }
+}
+
+// ---------------- UI ----------------
+function highlight(index){
+  render();
+  const tubeDiv = document.querySelectorAll(".tube")[index];
+  tubeDiv.lastElementChild.classList.add("selected");
+}
+
+function clearHighlight(){
+  render();
+}
+
+    function render(){
+
+const game = document.getElementById("game");
+game.innerHTML="";
+
+const tubeCount = tubes.length;
+
+// dynamic width calculation
+let basis = Math.max(100/tubeCount, 8);
+
+tubes.forEach((tube,i)=>{
+  const div=document.createElement("div");
+  div.className="tube";
+  div.dataset.index=i;
+
+  div.style.flex = `1 1 ${basis}%`;
+
+  tube.forEach(color=>{
+    const block=document.createElement("div");
+    block.className="block";
+    block.style.background=color;
+    div.appendChild(block);
+  });
+
+  game.appendChild(div);
+});
+}
+
+
+
+let colors = [];
+let tubes = [];
+const MAX_HEIGHT = 4;
+
+function generateLevel(){
+
+  const colorCount = parseInt(document.getElementById("colorCount").value);
+
+  colors = [];
+  for(let i=0;i<colorCount;i++){
+    colors.push(`hsl(${i*360/colorCount},100%,50%)`);
+  }
+
+  tubes = [];
+
+  // solved state
+  colors.forEach(color=>{
+    tubes.push([color,color,color,color]);
+  });
+
+  // add 2 empty tubes
+  tubes.push([]);
+  tubes.push([]);
+
+  shuffleTubes(200); // random valid shuffles
+
+  render();
+  calculateGrid();
+}
+
+function shuffleTubes(times){
+
+  for(let i=0;i<times;i++){
+
+    let from = Math.floor(Math.random()*tubes.length);
+    let to = Math.floor(Math.random()*tubes.length);
+
+    if(isValidMove(from,to)){
+      const c = tubes[from].pop();
+      tubes[to].push(c);
+    }
+  }
+}
+
+window.addEventListener("resize", ()=>{
+  const game = document.getElementById("game");
+  game.style.transform="scale(0.95)";
+  setTimeout(()=>{
+    game.style.transform="scale(1)";
+  },200);
+});
+
+function render(){
+
+const game = document.getElementById("game");
+game.innerHTML="";
+
+tubes.forEach((tube,i)=>{
+
+  const div=document.createElement("div");
+  div.className="tube";
+  div.dataset.index=i;
+
+  tube.forEach(color=>{
+    const block=document.createElement("div");
+    block.className="block";
+    block.style.background=color;
+    div.appendChild(block);
+  });
+
+  game.appendChild(div);
+});
+
+calculateGrid();
+}
+
+</script>
+</body>
+</html>

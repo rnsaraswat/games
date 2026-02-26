@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Block Sort</title>
+    <meta name="description"
+        content="Ravindra Games Hub — collection of lightweight web games (water sort) Train your critical thinking same colors wate in one tube game">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+    <link rel="stylesheet" href="starFireworks.css">
+    <link rel="stylesheet" href="../../commoncss.css">
+    <link rel="manifest" href="../../manifest.json" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <meta name="theme-color" content="#6200ee" />
+</head>
+
+<body>
+    <!-- 
+    <div id="container"> -->
+    <div class="main">
+        <div id="left" class="control-panel">
+            <h1>Block Sort</h1>
+            <div class="button-group">
+                <select id="colorCount">
+                    <option value="2" selected>2 Colors</option>
+                    <option value="3">3 Colors</option>
+                    <option value="4">4 Colors</option>
+                    <option value="5">5 Colors</option>
+                    <option value="6">6 Colors</option>
+                    <option value="7">7 Colors</option>
+                    <option value="8">8 Colors</option>
+                    <option value="9">9 Colors</option>
+                    <option value="10">10 Colors</option>
+                    <option value="11">11 Colors</option>
+                    <option value="12">12 Colors</option>
+                    <option value="13">13 Colors</option>
+                    <option value="14">14 Colors</option>
+                    <option value="15">15 Colors</option>
+                    <option value="16">16 Colors</option>
+                    <option value="17">17 Colors</option>
+                    <option value="18">18 Colors</option>
+                </select>
+                <div class="divtext">Level: <span id="leveldisplay">1 (EASY)</span></div>
+
+                <button class="button-primary" id="startBtn">New Game</button>
+                <button id="restartBtn">Restart</button>
+                <button id="undoBtn">↩️ Undo</button>
+                <button id="pauseBtn">⏸ Pause</button>
+                <button id="toggle-theme">☀️ Light</button>
+                <button id="toggle-sound">🔇 Music:Off</button>
+                <button id="toggle-rules">📜View Rules</button>
+                <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
+                    Global
+                    Leaderboard</button>
+                <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+                    Leaderboard</button>
+                <button class="button-primary" id="shareBtn">📤Sharing</button>
+                <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+                <button class="button-primary"
+                    onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+                <div class="divtext">🎯 Moves: <span id="moves">0</span></div>
+                <div id="timer-display">⏱️ 00:00:00</div>
+                <div class="output-box" id="output">
+                    Please Select no of colors or press New Game for Easy (2 Colors)
+                </div>
+                <p id="loading" class="loading">Loading...</p>
+            </div>
+        </div>
+        <div class="game-area">
+            <div id="game"></div>
+        </div>
+    </div>
+    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+    <div id="lcLeaderboardModal" class="lc-main-container"></div>
+    <div id="gbLeaderboardModal" class="gb-main-container"></div>
+    <div id="pauseModal" class="pause-container">
+        <h2>Game Paused</h2>
+        <button id="resumeBtn">Resume</button>
+    </div>
+    <div id="winText">🎉 Completed 🎉</div>
+    <canvas id="confettiCanvas"></canvas>
+    <div id="fireworks"></div>
+
+    <div id="rulesPopup" class="rules-popup-window">
+        <div class="rules-header-section">
+            <span id="rulesCloseBtn" class="rules-popup-close">Close X</span>
+            <h2 class="rules-h2">Game Rules</h2>
+        </div>
+        <div class="rules-content">
+            <p id="RulesBox"></p>
+        </div>
+    </div>
+
+    <!-- <script src="js/config.js"></script> -->
+    <!-- <script src="js/layout.js"></script> -->
+    <script type="module" src="js/script.js"></script>
+    <!-- <script src="js/win.js"></script> -->
+    <script src="js/starFireworks.js"></script>
+    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
+    <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+    <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
+    <script type="module" src="js/rules.js"></script>
+    <script>
+        document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById("lcLeaderboardModal").style.display = 'none';
+        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById("winText").style.display = 'none';
+        document.getElementById("rulesPopup").style.display = 'none';
+        document.getElementById("pauseModal").style.display = 'none';
+
+        const themeToggle = document.getElementById('toggle-theme');
+        function setTheme(t) {
+            if (t === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '☀️ Light'
+            }
+            if (t === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '🌙 Dark'
+            }
+        }
+        if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+        setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+        function openGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'none';
+        };
+
+
+        fetch('../../leaderboard/gbleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("gbLeaderboardModal").style.display = 'none';
+            });
+
+        function openLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'none';
+        };
+
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
+            }
+        };
+
+        fetch('../../leaderboard/lcleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("lcLeaderboardModal").style.display = 'none';
+            });
+
+        function openGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'flex';
+        };
+
+        function closeGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'none';
+        };
+
+        fetch('../../leaderboard/gbfeedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+                document.getElementById("gb-feedbackModal").style.display = 'none';
+            });
+
+        (async () => {
+            const GAME_NAME = "Block Sort";
+            const GAME_SHORT = "blocksort";
+
+            const res = await fetch("../../manifest.json");
+            const manifest = await res.json();
+
+            manifest.short_name = GAME_SHORT;
+            manifest.name = GAME_NAME;
+
+            manifest.start_url = 'https://rnsaraswat.github.io/games/games/blocksort/index.html';
+            manifest.scope = 'https://rnsaraswat.github.io/games/games/blocksort/index.html';
+
+            // 🔥 icons ko absolute banane ka safety fix
+            manifest.icons = manifest.icons.map(icon => ({
+                ...icon,
+                src: new URL(icon.src, location.origin).href
+            }));
+
+            const blob = new Blob(
+                [JSON.stringify(manifest)],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("link");
+            link.rel = "manifest";
+            link.href = url;
+            document.head.appendChild(link);
+        })();
+    </script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("../../sw.js")
+                    .then(() => console.log("SW registered"))
+                    .catch((err) => console.log("SW error", err));
+            });
+        }
+    </script>
+</body>
+
+</html>

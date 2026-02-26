@@ -1,0 +1,170 @@
+#fireworks {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 9999;
+}
+
+/* 🚀 Rocket */
+.rocket {
+    position: absolute;
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(to top, #fff, #ffb347);
+    box-shadow:
+        0 0 10px #ff9800,
+        0 0 20px #ff9800;
+    animation: flyUp 0.8s ease-out forwards;
+}
+
+@keyframes flyUp {
+    to {
+        transform: translateY(-250px);
+        opacity: 0;
+    }
+}
+
+/* 💥 Blast particles */
+.spark {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    animation: sparkMove 1.1s ease-out forwards;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+
+}
+
+/* Neon Orange + Blue */
+.spark.red {
+    background: rgb(255, 0, 0);
+    box-shadow:
+        0 0 8px rgb(255, 0, 0),
+        0 0 16px rgb(255, 0, 0),
+        0 0 32px rgb(255, 0, 0);
+}
+
+.spark.green {
+    background: rgb(0, 128, 0);
+    box-shadow:
+        0 0 8px rgb(0, 128, 0),
+        0 0 16px rgb(0, 128, 0),
+        0 0 32px rgb(0, 128, 0);
+}
+
+.spark.blue {
+    background: rgb(0, 0, 255);
+    box-shadow: inset 0 0 8px rgb(0, 0, 255),
+        0 0 16px rgb(0, 0, 255),
+        0 0 32px rgb(0, 0, 255);
+}
+
+.spark.yellow {
+    background: rgb(255, 255, 0);
+    box-shadow: inset 0 0 8px rgb(255, 255, 0),
+        0 0 16px rgb(255, 255, 0),
+        0 0 32px rgb(255, 255, 0);
+}
+
+.spark.purple {
+    background: rgb(128, 0, 128);
+    box-shadow: inset 0 0 8px rgb(128, 0, 128),
+        0 0 16px rgb(128, 0, 128),
+        0 0 32px rgb(128, 0, 128);
+}
+
+.spark.aqua {
+    background: rgb(0, 255, 255);
+    box-shadow: inset 0 0 8px rgb(0, 255, 255),
+        0 0 16px rgb(0, 255, 255),
+        0 0 32px rgb(0, 255, 255);
+}
+
+.spark.coral {
+    background: rgb(255, 127, 80);
+    box-shadow: inset 0 0 8px rgb(255, 127, 80),
+        0 0 16px rgb(255, 127, 80),
+        0 0 32px rgb(255, 127, 80);
+}
+
+.spark.gray {
+    background: rgb(128, 128, 128);
+    box-shadow: inset 0 0 8px rgb(128, 128, 128),
+        0 0 16px rgb(128, 128, 128),
+        0 0 32px rgb(128, 128, 128);
+}
+
+.spark.gold {
+    background: rgb(255, 215, 0);
+    box-shadow: inset 0 0 8px rgb(255, 215, 0),
+        0 0 16px rgb(255, 215, 0),
+        0 0 32px rgb(255, 215, 0);
+}
+
+.spark.magneta {
+    background: rgb(255, 0, 255);
+    box-shadow: inset 0 0 8px rgb(255, 0, 255),
+        0 0 16px rgb(255, 0, 255),
+        0 0 32px rgb(255, 0, 255);
+}
+
+.spark.maroon {
+    background: rgb(128, 0, 0);
+    box-shadow: inset 0 0 8px rgb(128, 0, 0),
+        0 0 16px rgb(128, 0, 0),
+        0 0 32px rgb(128, 0, 0);
+}
+
+.spark.navy {
+    background: rgb(0, 0, 128);
+    box-shadow: inset 0 0 8px rgb(0, 0, 128),
+        0 0 16px rgb(0, 0, 128),
+        0 0 32px rgb(0, 0, 128);
+}
+
+.spark.orange {
+    background: #ff9800;
+    box-shadow: inset 0 0 8px #ff9800,
+        0 0 16px #ff9800,
+        0 0 32px #ff9800;
+}
+
+.spark.blue {
+    background: #00bfff;
+    box-shadow:
+        0 0 8px #00bfff,
+        0 0 16px #00bfff,
+        0 0 32px #00bfff;
+}
+
+.spark.salmon {
+    background: rgb(250, 128, 114);
+    box-shadow:
+        0 0 8px rgb(250, 128, 114),
+        0 0 16px rgb(250, 128, 114),
+        0 0 32px rgb(250, 128, 114);
+}
+
+.spark.voilet {
+    background: rgb(238, 130, 238);
+    box-shadow:
+        0 0 8px rgb(238, 130, 238),
+        0 0 16px rgb(238, 130, 238),
+        0 0 32px rgb(238, 130, 238);
+}
+
+.spark.white {
+    background: rgb(255, 255, 255);
+    box-shadow:
+        0 0 8px rgb(255, 255, 255),
+        0 0 16px rgb(255, 255, 255),
+        0 0 32px rgb(255, 255, 255);
+}
+
+@keyframes sparkMove {
+    to {
+        transform: translate(var(--dx), var(--dy));
+        opacity: 0;
+    }
+}

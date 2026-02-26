@@ -19,7 +19,7 @@
     --cell-bg: #1e1e1e;
     --cell-bg-hover: #5f5f5f;
     --cell-border: #d9d8d8;
-    --box-shadow: rgba(255, 255, 255, 0.5);
+    /* --box-shadow: rgba(255, 255, 255, 0.5); */
     --text-shadow: rgba(255, 255, 255, 0.5);
     --bg1: #353cfc;
     --bg2: #6d71fd;
@@ -99,7 +99,7 @@ select {
     margin: 5px 2px 5px 2px;
     margin-top: 1px;
     transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 5px 25px 0 var(--box-shadow);
+    box-shadow: 0 10px 10px 0 var(--box-shadow);
     background: var(--bg);
     color: var(--text);
     /* border: 2px solid var(--cell-border); */
@@ -133,7 +133,7 @@ input {
     margin: 5px 2px 5px 2px;
     margin-top: 1px;
     transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 5px 25px 0 var(--box-shadow);
+    box-shadow: 0 10px 10px 0 var(--box-shadow);
     background: var(--bg);
     color: var(--text);
     border: 2px solid var(--cell-border);
@@ -230,7 +230,7 @@ button {
     margin: 5px 2px 5px 2px;
     margin-top: 0.1vh;
     transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 5px 25px 0 var(--box-shadow);
+    box-shadow: 0 10px 10px 0 var(--box-shadow);
     background: var(--bg);
     color: var(--text);
     border: 2px solid var(--cell-border);
@@ -251,14 +251,14 @@ button:hover {
     flex-wrap: wrap;
     display: inline-block;
     transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 5px 25px 0 var(--box-shadow);
+    box-shadow: 0 10px 10px 0 var(--box-shadow);
     border-radius: 5px;
     background: linear-gradient(90deg, var(--accent), #7c3aed);
     color: #fff;
     border-color: transparent;
     background: linear-gradient(180deg, #10b981, #059669);
     border: 2px solid #10b981;
-    box-shadow: 0 10px 40px var(--box-shadow);
+    box-shadow: 0 10px 10px var(--box-shadow);
 }
 
 .button-primary:hover {

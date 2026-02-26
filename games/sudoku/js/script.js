@@ -907,6 +907,25 @@ export const state = {
         statusText.innerHTML = 'Select Grid and Level <br> them press "new game" Button to play';
     }
 
+        function toggleElement(elementId, isDisable) {
+        // const element = document.getElementById(elementId);
+        
+        if (elementId) { 
+            elementId.disabled = isDisable;
+            if (isDisable) {
+                elementId.style.opacity = "0.5";           // धुंधला (Dim) करें
+                elementId.style.cursor = "not-allowed";    // Cursor को 'not-allowed' करें
+                elementId.style.pointerEvents = "visiable";  
+            } else {
+                elementId.style.opacity = "1";             // वापस साफ़ दिखाएँ
+                elementId.style.cursor = "pointer";        // वापस हाथ वाला कर्सर (pointer) दिखाएँ
+                elementId.style.pointerEvents = "auto";    // क्लिक वापस चालू करें
+            }
+        } else {
+            console.error("Element with ID '" + elementId + "' not found.");
+        }
+    }
+    
     function updateleaderboard() {
         winnerName = player1;
         let opponent = "-"
@@ -937,23 +956,6 @@ export const state = {
 
 
 
-    function toggleElement(elementId, isDisable) {
-        // const element = document.getElementById(elementId);
-        
-        if (elementId) { 
-            elementId.disabled = isDisable;
-            if (isDisable) {
-                elementId.style.opacity = "0.5";           // धुंधला (Dim) करें
-                elementId.style.cursor = "not-allowed";    // Cursor को 'not-allowed' करें
-                elementId.style.pointerEvents = "visiable";  
-            } else {
-                elementId.style.opacity = "1";             // वापस साफ़ दिखाएँ
-                elementId.style.cursor = "pointer";        // वापस हाथ वाला कर्सर (pointer) दिखाएँ
-                elementId.style.pointerEvents = "auto";    // क्लिक वापस चालू करें
-            }
-        } else {
-            console.error("Element with ID '" + elementId + "' not found.");
-        }
-    }
+
 
 });

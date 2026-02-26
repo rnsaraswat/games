@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Multi tube Lavel json</title>
+    <style>
+        .admin-controls {
+            margin: 20px;
+            text-align: center;
+            padding: 15px;
+            border: 2px dashed #3498db;
+            border-radius: 10px;
+            background: #ebf5fb;
+        }
+
+        #downloadBtn {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #downloadBtn:hover {
+            background-color: #2ecc71;
+            transform: translateY(-2px);
+        }
+
+        #genStatus {
+            font-size: 14px;
+            color: #2c3e50;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Generate Multi tube Lavel json</h1>
+    <label>Max Levels:</label>
+    <input type="number" id="maxLevels" min="1" value="10">
+
+    <div class="admin-controls">
+        <button id="downloadBtn">
+            📥 Generate & Download 100 Levels
+        </button>
+        <p id="genStatus"></p>
+        <!-- <p id="displaylevels">Levels</p> -->
+
+    </div>
+
+
+    <!-- <script src="js/generate.js"> -->
+    <script>
+        let maxLevelsBtn = document.getElementById("maxLevels");
+        let maxLevels = parseInt(maxLevelsBtn.value);
+        const generateBtn = document.getElementById("downloadBtn");
+
+        maxLevelsBtn.onchange = () => {
+            maxLevels = parseInt(maxLevelsBtn.value);
+        };
+
+        generateBtn.onclick = () => {
+            downloadMultiModeJSON(maxLevels);
+        };
+
+
+        // function generateWaterSortLevel(difficulty = 'medium') {
+        //     const totalTubes = 14;
+        //     const fullTubes = 12;
+
+        //     // 1. Difficulty के हिसाब से कॉन्फ़िगरेशन सेट करें
+        //     let shuffles = 100;
+        //     if (difficulty === 'medium') shuffles = 300;
+        //     if (difficulty === 'hard') shuffles = 800;
+
+        //     // 2. Initial Solved State (12 भरी हुई, 2 खाली)
+        //     let tubes = [];
+        //     for (let i = 0; i < fullTubes; i++) {
+        //         tubes.push(new Array(4).fill(i)); // [0,0,0,0], [1,1,1,1]...
+        //     }
+        //     for (let i = 0; i < (totalTubes - fullTubes); i++) {
+        //         tubes.push([]);
+        //     }
+
+        //     // 3. Reverse Shuffling (मिक्सिंग लॉजिक)
+        //     for (let i = 0; i < shuffles; i++) {
+        //         let src = Math.floor(Math.random() * totalTubes);
+        //         let dst = Math.floor(Math.random() * totalTubes);
+
+        //         // लीगल रिवर्स मूव
+        //         if (src !== dst && tubes[src].length > 0 && tubes[dst].length < 4) {
+        //             // Hard मोड में हम कोशिश करते हैं कि एक जैसे रंग साथ न रहें
+        //             if (difficulty === 'hard') {
+        //                 let color = tubes[src][tubes[src].length - 1];
+        //                 let targetTop = tubes[dst][tubes[dst].length - 1];
+        //                 // अगर टारगेट के टॉप पर वही रंग है, तो हार्ड मोड में मूव न करें (ताकि मिक्सिंग ज्यादा हो)
+        //                 if (color === targetTop && Math.random() > 0.2) continue;
+        //             }
+
+        //             let unit = tubes[src].pop();
+        //             tubes[dst].push(unit);
+        //         }
+        //     }
+
+        //     // 4. Normalization (पक्का करना कि अंत में 12 भरी हों और 2 खाली)
+        //     let isNormalized = false;
+        //     while (!isNormalized) {
+        //         let lastTwoClean = true;
+        //         // आखिरी 2 ट्यूब्स (Index 12, 13) से पानी हटाकर पहली 12 में भरें
+        //         for (let i = fullTubes; i < totalTubes; i++) {
+        //             if (tubes[i].length > 0) {
+        //                 lastTwoClean = false;
+        //                 let color = tubes[i].pop();
+        //                 for (let target = 0; target < fullTubes; target++) {
+        //                     if (tubes[target].length < 4) {
+        //                         tubes[target].push(color);
+        //                         break;
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //         if (lastTwoClean) isNormalized = true;
+        //     }
+
+        //     return tubes;
+        // }
+        // generateAndSaveLevels(100);
+
+        function downloadLevelsJSON(count) {
+            const status = document.getElementById('genStatus');
+            status.innerText = "Generating levels, please wait...";
+
+            // थोड़ा डिले ताकि UI फ्रीज न हो
+            setTimeout(() => {
+                let allLevels = {};
+
+                for (let i = 1; i <= count; i++) {
+                    let diff = i <= 20 ? 'easy' : (i <= 60 ? 'medium' : 'hard');
+
+                    // generateWaterSortLevel आपका पिछला फंक्शन है
+                    allLevels[`level_${i}`] = {
+                        id: i,
+                        difficulty: diff,
+                        tubes: generateWaterSortLevel(diff)
+                    };
+                }
+
+                // JSON को फाइल में बदलें
+                const dataStr = JSON.stringify(allLevels, null, 2);
+                const blob = new Blob([dataStr], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+
+                // एक अदृश्य लिंक बनाकर क्लिक करें
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'levels.json';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                status.innerText = "✅ levels.json successfully downloaded!";
+            }, 100);
+        }
+
+
+
+
+        // डायनामिक लेवल जनरेटर (Updated)
+        function generateDynamicLevel(total, full, difficulty = 'medium') {
+            // 1. Initial Solved State
+            let tubes = [];
+            for (let i = 0; i < full; i++) {
+                tubes.push(new Array(4).fill(i));
+            }
+            for (let i = 0; i < (total - full); i++) {
+                tubes.push([]);
+            }
+
+            // 2. Shuffling logic based on difficulty
+            let shuffles = difficulty === 'easy' ? 100 : (difficulty === 'medium' ? 300 : 800);
+
+            for (let i = 0; i < shuffles; i++) {
+                let src = Math.floor(Math.random() * total);
+                let dst = Math.floor(Math.random() * total);
+                if (src !== dst && tubes[src].length > 0 && tubes[dst].length < 4) {
+                    let unit = tubes[src].pop();
+                    tubes[dst].push(unit);
+                }
+            }
+
+            // 3. Normalization (To ensure 'total - full' tubes are empty)
+            let isNormalized = false;
+            while (!isNormalized) {
+                let emptyCount = 0;
+                let lastTubesStart = full;
+                let clean = true;
+
+                for (let i = lastTubesStart; i < total; i++) {
+                    if (tubes[i].length > 0) {
+                        clean = false;
+                        let color = tubes[i].pop();
+                        for (let target = 0; target < full; target++) {
+                            if (tubes[target].length < 4) {
+                                tubes[target].push(color);
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (clean) isNormalized = true;
+            }
+            return tubes;
+        }
+
+
+        // Multi-Mode JSON Generator
+        function downloadMultiModeJSON(count) {
+            const status = document.getElementById('genStatus');
+            status.innerText = "Generating levels, please wait...";
+
+            let masterData = {};
+
+            // 4 ट्यूब्स से 14 ट्यूब्स तक लूप
+            for (let t = 4; t <= 20; t++) {
+                let full = t - 2; // आपकी शर्त: 2 खाली ट्यूब्स
+                let modeKey = `mode_${t}_tubes`;
+                masterData[modeKey] = [];
+                if (t == 4) count = 200;
+                else if (t == 5) count = 200;
+                else if (t == 6) count = 200;
+                else if (t == 7) count = 500;
+                else if (t == 8) count = 500;
+                else if (t == 9) count = 500;
+                else if (t == 10) count = 500;
+                else if (t == 11) count = 500;
+                else if (t == 12) count = 500;
+                else if (t == 13) count = 1000;
+                else if (t == 14) count = 2000;
+                else if (t == 15) count = 3000;
+                else if (t == 16) count = 4000;
+                else if (t == 17) count = 5000;
+                else if (t == 18) count = 5000;
+                else if (t == 19) count = 5000;
+                else if (t == 20) count = 5000;
+
+                for (let l = 1; l <= count; l++) {
+                    let diff = l <= 50 ? 'easy' : (l <= 100 ? 'medium' : 'hard');
+                    masterData[modeKey].push({
+                        level: l,
+                        difficulty: diff,
+                        tubes: generateDynamicLevel(t, full, diff)
+                    });
+                }
+            }
+            console.log(masterData);
+            document.getElementById("genStatus").textContent = masterData;
+
+            // JSON को फाइल में बदलें
+            const dataStr = JSON.stringify(masterData, null, 2);
+            console.log(dataStr);
+            const blob = new Blob([dataStr], { type: "application/json" });
+            console.log(blob);
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'multi_mode_levels.json';
+            link.click();
+
+
+                // JSON को फाइल में बदलें
+
+                // एक अदृश्य लिंक बनाकर क्लिक करें
+                // link.href = url;
+                // link.download = 'levels.json';
+                // document.body.appendChild(link);
+                // link.click();
+                // document.body.removeChild(link);
+
+                status.innerText = "✅ levels.json successfully downloaded!";
+        }
+
+
+
+
+
+        // LocalStorage & Game Loader Logic
+        let currentMode = 4; // Default 4 tubes
+        let allModesData = {};
+
+        // 1. डेटा लोड करें
+        async function initGame() {
+            const res = await fetch('multi_mode_levels.json');
+            allModesData = await res.json();
+            loadModeProgress(4); // शुरुआत 4 ट्यूब्स से करें
+        }
+
+        // 2. मोड के हिसाब से प्रोग्रेस लोड करें
+        function loadModeProgress(numTubes) {
+            currentMode = numTubes;
+            // LocalStorage से उस स्पेसिफिक मोड का लेवल निकालें
+            let savedLevel = localStorage.getItem(`progress_mode_${numTubes}`) || 1;
+            let levelIndex = parseInt(savedLevel) - 1;
+
+            let levelData = allModesData[`mode_${numTubes}_tubes`][levelIndex];
+
+            console.log(`Loading Mode: ${numTubes} Tubes, Level: ${savedLevel}`);
+            renderGameUI(levelData.tubes); // UI रेंडर करें
+        }
+
+        // 3. लेवल जीतने पर प्रोग्रेस अपडेट करें
+        function onLevelComplete() {
+            let savedLevel = parseInt(localStorage.getItem(`progress_mode_${currentMode}`) || 1);
+            let nextLevel = savedLevel + 1;
+
+            // सिर्फ उसी मोड की प्रोग्रेस सेव करें जो अभी चल रहा है
+            localStorage.setItem(`progress_mode_${currentMode}`, nextLevel);
+
+            alert(`Mode ${currentMode} Tubes: Level ${savedLevel} Completed!`);
+            loadModeProgress(currentMode); // अगला लेवल लोड करें
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tube Jump Animation</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        body {
+            margin: 0;
+            background: #111;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game {
+            display: flex;
+            gap: 40px;
+        }
+
+        .tube {
+            width: 80px;
+            height: 250px;
+            border: 3px solid white;
+            border-radius: 0 0 40px 40px;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            padding: 10px 0;
+            position: relative;
+        }
+
+        .block {
+            width: 60px;
+            height: 40px;
+            margin: 4px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .red {
+            background: red;
+        }
+
+        .blue {
+            background: blue;
+        }
+
+        .green {
+            background: green;
+        }
+
+        .selected {
+            transform: translateY(-20px) scale(1.1);
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="game">
+
+        <div class="tube">
+            <div class="block red"></div>
+            <div class="block blue"></div>
+        </div>
+
+        <div class="tube">
+            <div class="block green"></div>
+        </div>
+
+        <div class="tube"></div>
+
+    </div>
+
+    <!-- <script src="script.js"></script> -->
+    <script>
+        let selectedBlock = null;
+        let fromTube = null;
+
+        // ----------------------
+        // Block Select
+        // ----------------------
+        document.addEventListener("pointerdown", function (e) {
+
+            if (e.target.classList.contains("block")) {
+
+                const tube = e.target.parentElement;
+
+                // सिर्फ ऊपर वाला block उठे
+                if (tube.lastElementChild !== e.target) return;
+
+                // पहले से select है तो unselect
+                if (selectedBlock === e.target) {
+                    e.target.classList.remove("selected");
+                    selectedBlock = null;
+                    return;
+                }
+
+                // नया select
+                if (selectedBlock) {
+                    selectedBlock.classList.remove("selected");
+                }
+
+                selectedBlock = e.target;
+                fromTube = tube;
+                selectedBlock.classList.add("selected");
+            }
+
+            // ----------------------
+            // Tube Click (Drop)
+            // ----------------------
+            else if (e.target.classList.contains("tube") && selectedBlock) {
+
+                const toTube = e.target;
+                animateJump(selectedBlock, fromTube, toTube);
+                selectedBlock.classList.remove("selected");
+                selectedBlock = null;
+            }
+
+        });
+
+        // ----------------------
+        // Arc Animation Function
+        // ----------------------
+        function animateJump(block, fromTube, toTube) {
+
+            const startRect = block.getBoundingClientRect();
+            const endRect = toTube.getBoundingClientRect();
+
+            const clone = block.cloneNode(true);
+            document.body.appendChild(clone);
+
+            clone.style.position = "fixed";
+            clone.style.left = startRect.left + "px";
+            clone.style.top = startRect.top + "px";
+            clone.style.width = startRect.width + "px";
+            clone.style.height = startRect.height + "px";
+            clone.style.margin = 0;
+            clone.style.zIndex = 1000;
+
+            block.style.visibility = "hidden";
+
+            const endX = endRect.left + (endRect.width / 2 - startRect.width / 2);
+            const endY = endRect.top + 30;
+
+            const midX = (startRect.left + endX) / 2;
+            const midY = Math.min(startRect.top, endY) - 120; // arc height
+
+            let startTime = null;
+            const duration = 500;
+
+            function animate(time) {
+                if (!startTime) startTime = time;
+                const progress = (time - startTime) / duration;
+
+                if (progress < 1) {
+
+                    const x = quadraticBezier(progress, startRect.left, midX, endX);
+                    const y = quadraticBezier(progress, startRect.top, midY, endY);
+
+                    clone.style.left = x + "px";
+                    clone.style.top = y + "px";
+
+                    requestAnimationFrame(animate);
+
+                } else {
+
+                    clone.remove();
+                    block.style.visibility = "visible";
+                    toTube.appendChild(block);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Bezier Curve Formula
+        function quadraticBezier(t, p0, p1, p2) {
+            return (1 - t) * (1 - t) * p0 + 2 * (1 - t) * t * p1 + t * t * p2;
+        }
+    </script>
+</body>
+
+</html>
