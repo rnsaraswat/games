@@ -1,169 +1,169 @@
-import { supabase } from "../supabaseClient.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  TwitterAuthProvider,
+  signInWithPopup,
+  sendSignInLinkToEmail,
+  isSignInWithEmailLink,
+  signInWithEmailLink,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-// Elements
-const googleBtn = document.getElementById("google-login");
-const facebookBtn = document.getElementById("facebook-login");
-const guestForm = document.getElementById("guest-login");
-const guestF = document.getElementById("guest");
-const emailForm = document.getElementById("email-login");
-const statusDiv = document.getElementById("auth-status");
-const loginContinueButton = document.getElementById("login-continue-button");
-const loginChangeButton = document.getElementById("login-change-button");
+const firebaseConfig = {
+    apiKey: "AIzaSyCEEOj5ZaEs8LZ9HCEVPhapDFy0bw-N3D4",
+    authDomain: "ravindra-games-hub-68e5f.firebaseapp.com",
+    projectId: "ravindra-games-hub-68e5f",
+    appId: "1:233066688435:web:307f0bc7508df35579e5c6"
+};
 
-const pad = (num) => num.toString().padStart(2, '0');
-const date = new Date();
-const guestName = `Guest${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-loginContinueButton.addEventListener("click", () => {
-  window.location.href = "../index.html";
-});
-
-loginChangeButton.addEventListener("click", () => {
-  // window.location.href = "login.html";
-  document.getElementById("alreadyLoginPopup").style.display = "none";
-  changeAccount();
-  window.location.href = "./login.html";
-});
-
-// Change Login → Logout + Login Page
-async function changeAccount() {
-  await supabase.auth.signOut();
-  localStorage.clear();
+// 🔹 Save user to localStorage
+function saveUser(name, email) {
+  localStorage.setItem("user", JSON.stringify({ name, email }));
 }
 
-// 🔹 Utility: Update Status Message
-function showStatus(msg, success = true) {
-  statusDiv.textContent = msg;
-  statusDiv.style.color = success ? "green" : "red";
+// 🔹 Redirect main
+export function redirectMain() {
+  setTimeout(() => {
+    window.location.href = "../index.html";
+  }, 2000);
 }
 
-// 🔹 Redirect after login (to your main page)
-function redirectAfterLogin() {
-  // window.location.href = "../index.html";
-  window.location.href = "../index.html";
+// 🔹 Show message
+function showMsg(msg, ok = true) {
+  const el = document.getElementById("msg");
+  if (el) {
+    el.innerHTML = msg;
+    el.style.color = ok ? "green" : "red";
+  }
 }
 
-// 🔹 Save user info to localStorage
-function saveUserLocally(user) {
-  console.log(user);
-  localStorage.setItem("player_name", user.name);
-  localStorage.setItem("email", user.email);
-  localStorage.setItem("id", user.id);
+// 🔹 Google
+export async function loginGoogle() {
+  const provider = new GoogleAuthProvider();
+  const result = await signInWithPopup(auth, provider);
+  success(result.user.displayName, result.user.email);
 }
 
-// 🔹 Google Login
-googleBtn.addEventListener("click", async () => {
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      // redirectTo: window.location.origin + "/auth/redirect.html", 
-      redirectTo: "https://rnsaraswat.github.io/games/auth/redirect.html"
+// 🔹 Facebook
+export async function loginFacebook() {
+  const provider = new FacebookAuthProvider();
+  const result = await signInWithPopup(auth, provider);
+  success(result.user.displayName, result.user.email);
+}
 
-    },
-  });
-  if (error) showStatus("Google login failed: " + error.message, false);
-});
+// 🔹 Twitter
+export async function loginTwitter() {
+  const provider = new TwitterAuthProvider();
+  const result = await signInWithPopup(auth, provider);
+  success(result.user.displayName, result.user.email);
+}
 
-// 🔹 Facebook Login
-facebookBtn.addEventListener("click", async () => {
-  console.log("Facebook Login")
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "facebook",
-    options: {
-      // redirectTo: window.location.origin + "redirect.html"
-      redirectTo: "https://rnsaraswat.github.io/games/auth/redirect.html"
-    },
-  });
-  console.log("Facebook Login 1")
-
-  if (error) showStatus("Facebook login failed: " + error.message, false);
-});
-
-// 🔹 Email Login (no password — just lightweight login)
-emailForm.addEventListener("submit", async e => {
-  e.preventDefault();
-  const email = document.getElementById("email").value.trim();
-  const name = document.getElementById("name").value.trim();
-
-  if (!email) {
-    showStatus("Please enter a valid email.", false);
+// 🔹 Email Magic Link
+export async function sendMagicLink(email) {
+  if (!validateEmail(email)) {
+    showMsg("Invalid email", false);
     return;
   }
 
+  await sendSignInLinkToEmail(auth, email, {
+    url: window.location.origin + "https://rnsaraswat.github.io/games/login.html",
+    handleCodeInApp: true
+  });
+
+  localStorage.setItem("emailForSignIn", email);
+  showMsg("Magic link sent to email");
+}
+
+// 🔹 Handle email return
+export async function checkEmailLink() {
+  if (isSignInWithEmailLink(auth, window.location.href)) {
+    const email = localStorage.getItem("emailForSignIn");
+    await signInWithEmailLink(auth, email, window.location.href);
+    success(email.split("@")[0], email);
+  }
+}
+
+// 🔹 Name + Email
+export function loginNameEmail(name, email) {
+  if (!name || !validateEmail(email)) {
+    showMsg("Invalid name or email", false);
+    return;
+  }
+  success(name, email);
+}
+
+// 🔹 Guest
+export function loginGuest(name) {
   if (!name) {
-    showStatus("Please enter your name.", false);
-    return;
+    const now = new Date();
+    const auto =
+      "guest" +
+      String(now.getDate()).padStart(2,"0") +
+      String(now.getMonth()+1).padStart(2,"0") +
+      String(now.getFullYear()).slice(-2) +
+      "_" +
+      String(now.getHours()).padStart(2,"0") +
+      String(now.getMinutes()).padStart(2,"0");
+    name = auto;
   }
+  success(name, "");
+}
 
-  try {
-    // Supabase Magic Link Login (optional)
-    const { data, error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: "https://rnsaraswat.github.io/games/auth/redirect.html"
-      },
+// 🔹 Success handler
+function success(name, email) {
+  saveUser(name, email);
+  showMsg(`Login success!<br>Logged in as: ${name} (${email || "No Email"})`);
+  redirectMain();
+}
+
+// 🔹 Auto detect
+// export function detectLogin(callback) {
+//   onAuthStateChanged(auth, (user) => {
+//     if (user) {
+//       saveUser(user.displayName, user.email);
+//       callback(true);
+//     } else {
+//       const localUser = localStorage.getItem("user");
+//       callback(!!localUser);
+//     }
+//   });
+// }
+
+export function detectLogin(callback) {
+    const auth = getAuth();
+  
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+  
+      unsubscribe(); // important: prevent multiple triggers
+  
+      if (user) {
+        localStorage.setItem("user", JSON.stringify({
+          name: user.displayName || "Guest",
+          email: user.email || ""
+        }));
+        callback(true);
+      } else {
+        const localUser = localStorage.getItem("user");
+        callback(!!localUser);
+      }
+  
     });
-
-    if (error) throw error;
-
-    saveUserLocally({ name: name || guestName, email: email, id: `${name}${Math.floor(Math.random() * 10000)}` });
-    showStatus("Login link sent to your email. Check inbox!", true);
-  } catch (err) {
-    showStatus("Email login failed: " + err.message, false);
-  }
-});
-
-// 🔹 Guest Login with email
-guestForm.addEventListener("submit", async e => {
-  e.preventDefault();
-  const gemail = document.getElementById("gemail").value.trim();
-  const gname = document.getElementById("gname").value.trim();
-
-  console.log(gemail, gname);
-  if (!gemail) {
-    showStatus("Please enter a valid email.", false);
-    return;
   }
 
-  if (!gname) {
-    showStatus("Please enter your name.", false);
-    return;
-  }
+// 🔹 Logout
+export async function logoutUser() {
+  await signOut(auth);
+  localStorage.clear();
+  window.location.href = "firebase-login.html";
+}
 
-  saveUserLocally({ name: gname || guestName, email: gemail, id: `${gname}${Math.floor(Math.random() * 10000)}` });
-
-  showStatus(`Welcome, ${gname}! Logging in as Guest...`);
-  setTimeout(redirectAfterLogin, 1000);
-});
-
-// --- 4️⃣ Guest Login without email ---
-guestF.addEventListener("submit", async e => {
-  e.preventDefault();
-  const guname = document.getElementById("guname").value.trim();
-
-
-  // const rand = Math.floor(Math.random() * 10000);
-  guestName = `${guname}${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
-  const guemail = "-";
-  saveUserLocally({ name: guestName, email: guemail, id: `${guname}${Math.floor(Math.random() * 10000)}` });
-  statusDiv.textContent = `Welcome, ${guestName}!`;
-  setTimeout(redirectAfterLogin, 1000);
-});
-
-// 🔹 Check current session (if already logged in)
-(async () => {
-  const { data: { session } } = await supabase.auth.getSession();
-  if (session?.user) {
-    saveUserLocally({
-      name: session.user.user_metadata.full_name,
-      email: session.user.email,
-      id: session.user.id,
-    });
-    // showStatus("You are already logged in! Redirecting...");
-    // setTimeout(redirectAfterLogin, 1000);
-
-    // 🔸 Auto redirect हटाया
-    document.getElementById("alreadyLoginPopup").style.display = "flex";
-  }
-})();
-
+// 🔹 Email validation
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}

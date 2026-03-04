@@ -11,8 +11,9 @@
     <link rel="icon" type="image/png" sizes="512x512" href="./assets/icons/rgh-512x512.png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="commoncss.css">
-    <link rel="stylesheet" href="./leaderboard/gbfeedback.css" />
-    <link rel="stylesheet" href="./leaderboard/gbleaderboard.css" />
+    <!-- <link rel="stylesheet" href="./leaderboard/gbfeedback.css" /> -->
+    <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
+    <!-- <link rel="stylesheet" href="./leaderboard/gbleaderboard.css" /> -->
     <link rel="stylesheet" href="./leaderboard/lcleaderboard.css" />
     <link rel="manifest" href="./manifest.json" />
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -33,14 +34,15 @@
             </div>
             <div class="hdrbtns">
                 <div class="hdr-child-div">
-                    <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
-                        Global Leaderboard</button>
+                    <!-- <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
+                        Global Leaderboard</button> -->
+                    <button class="button-primary" id="toggle-firebase-leaderboard" onclick="openFirebaseGlobalLeaderboard()">🌍 Global Leaderboard</button>
                     <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
                         Leaderboard</button>
                 </div>
                 <div class="hdr-child-div">
                     <button class="button-primary" id="shareBtn">📤Sharing</button>
-                    <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+                    <!-- <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button> -->
                     <button class="button-primary" onclick="window.location.href='auth/login.html'">🚪Sign in</button>
                     <button class="button-primary" id="toggle-theme">☀️ Light</button>
                 </div>
@@ -91,7 +93,7 @@
         document.getElementById("gbLeaderboardModal").style.display = 'none';
         // document.getElementById("winText").style.display = 'none';
         // document.getElementById("rulesPopup").style.display = 'none';
-        
+
         const games = [
             { id: 'memory', name: 'memory', title: 'Memory', desc: 'Flip, match, win', href: 'games/memory/index.html' },
             { id: 'watersort', name: 'watersort', title: 'Water Sort', desc: 'Train your critical thinking', href: 'games/watersort2/index.html' },
@@ -112,10 +114,10 @@
             { id: 'tictactoe3', name: 'tictactoe', title: 'Tic Tac Toe Share', desc: "Three in a row to win X vs O", href: 'games/tictactoe3/index.html' },
             { id: 'project', name: 'Project', title: 'Project Share', desc: "Three in a row to win X vs O", href: 'games/project/index.html' }
         ];
-        
+
         const pad = (num) => num.toString().padStart(2, '0');
-        const date = new Date();
-        const player_name = localStorage.getItem('player_name') || `Guest${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
+        const player_name = getUserName();
+        console.log("Welcome", player_name);
 
         document.getElementById("welcom").textContent = `Welcome ${player_name}`;
         document.getElementById("welcom").style.alignContent = "center";
@@ -127,6 +129,15 @@
             card.innerHTML = `<h3>${g.title}</h3><p>${g.desc}</p><div class='actions'><a href='${g.href}' class='play-btn'>Play</a></div>`;
             grid.appendChild(card);
         });
+
+        function getUserName() {
+            const userData = localStorage.getItem("user");
+            const date = new Date();
+            if (!userData) return `Guest${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
+
+            const user = JSON.parse(userData);
+            return user.name || `Guest${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
+        }
 
         const themeToggle = document.getElementById('toggle-theme');
         function setTheme(t) {

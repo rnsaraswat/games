@@ -1,71 +1,201 @@
-<!doctype html>
-<html lang="hi">
-
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Sign in — Ravindra Games Hub</title>
-  <link rel="stylesheet" href="./style.css">
-  <link rel="stylesheet" href="../commoncss.css">
+<title>Login - Ravindra Games Hub</title>
+
+<style>
+body { font-family: Arial; text-align:center; }
+
+#loginModal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-box{
+  background:white;
+  padding:20px;
+  width:320px;
+  border-radius:10px;
+}
+
+input{ width:100%; margin:5px 0; padding:5px; }
+button{ margin:4px; padding:6px 10px; }
+
+#msg{ margin:8px 0; font-weight:bold; }
+</style>
 </head>
-
 <body>
-  <div class="login-container ">
-    <div class="login-header-section">
-      <h2>Sign in — Ravindra Games Hub</h2>
-      <h3>Login to save your score</h3>
-    </div>
-    <div id="auth-section" class="login-btn-container">
 
-      <button id="google-login" class="login-btn">Login with Google</button>
-      <button id="facebook-login" class="login-btn">Login with Facebook</button>
+<h2>Ravindra Games Hub</h2>
+<div id="authArea">Checking login...</div>
 
-      <form id="email-login" class="login-form-box">
-        <input type="email" id="email" placeholder="Email (required)" required>
-        <input type="text" id="name" placeholder="Name (required)" required>
-        <button type="submit" class="login-btn">Login with Email</button>
-      </form>
-      <form id="guest-login" class="login-form-box">
-        <input type="email" id="gemail" placeholder="Email (required)" required>
-        <input type="text" id="gname" placeholder="Name (required)" required>
-        <button type="submit" class="login-btn">Login as Guest with email</button>
-      </form>
-      <form id="guest" class="login-form-box">
-        <input type="text" id="guname" placeholder="Name (Optional) Default Guest####">
-        <button type="submit" class="login-btn">Login as Guest</button>
-      </form>
-      <div id="auth-status"></div>
-    </div>
-    <div class="login-footer-section">
-      <p style="margin-top:12px;color:var(--muted)">After login you will be redirected back</p>
-    </div>
+<!-- LOGIN MODAL -->
+<div id="loginModal">
+  <div class="modal-box">
+    <h2>Sign in — Ravindra Games Hub</h2>
+    <h3>Login to save your score in leaderboard</h3>
+    <div id="msg"></div>
+
+    <button id="googleBtn">Google</button>
+    <button id="fbBtn">Facebook</button>
+    <button id="twBtn">Twitter</button>
+
+    <hr>
+
+    <input id="emailInput" placeholder="Email for Magic Link">
+    <button id="magicBtn">Send Magic Link</button>
+
+    <hr>
+
+    <input id="nameInput" placeholder="Name">
+    <input id="email2Input" placeholder="Email">
+    <button id="nameEmailBtn">Login Name+Email</button>
+
+    <hr>
+
+    <input id="guestInput" placeholder="Guest Name (optional)">
+    <button id="guestBtn">Login as Guest</button>
+
   </div>
-  <div id="alreadyLoginPopup" class="login-popup">
-    <div class="login-popup-box">
-      <h3>You are already logged in!</h3>
+</div>
 
-      <button id="login-continue-button" class="button-primary">Continue</button>
-      <button  id="login-change-button" class="login-danger">Change Login</button>
-      <!-- <button class="button-primary" onclick="continueSession()">Continue</button>
-      <button class="login-danger" onclick="changeAccount()">Change Login</button> -->
-    </div>
-  </div>
-  <script type="module" src="./auth.js"></script>
-  <!-- <script type="module">
-        import { supabase } from "../supabaseClient.js";
-    // Continue → Main Page
-    function continueSession() {
-      // redirectAfterLogin(); 
-      window.location.href = "../index.html";
-    }
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  TwitterAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    // Change Login → Logout + Login Page
-    async function changeAccount() {
-      await supabase.auth.signOut();
-      localStorage.clear();
-      window.location.href = "login.html";
+const firebaseConfig = {
+    apiKey: "AIzaSyCEEOj5ZaEs8LZ9HCEVPhapDFy0bw-N3D4",
+    authDomain: "ravindra-games-hub-68e5f.firebaseapp.com",
+    projectId: "ravindra-games-hub-68e5f",
+    appId: "1:233066688435:web:307f0bc7508df35579e5c6"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const modal = document.getElementById("loginModal");
+const authArea = document.getElementById("authArea");
+const msg = document.getElementById("msg");
+
+// 🔹 Helpers
+function showModal(){ modal.style.display="flex"; }
+function hideModal(){ modal.style.display="none"; }
+
+function saveUser(name,email){
+  localStorage.setItem("user", JSON.stringify({name,email}));
+}
+
+function success(name,email){
+  saveUser(name,email);
+  msg.innerHTML=`Login success!<br>${name} (${email||"No Email"})`;
+  msg.style.color="green";
+  setTimeout(()=>{
+    hideModal();
+    showLoggedUI();
+    window.location.href = "../index.html";
+  },1500);
+}
+
+function validateEmail(e){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+}
+
+// 🔹 Firebase Login Buttons
+googleBtn.onclick = async ()=>{
+  const r = await signInWithPopup(auth,new GoogleAuthProvider());
+  success(r.user.displayName,r.user.email);
+};
+
+fbBtn.onclick = async ()=>{
+  const r = await signInWithPopup(auth,new FacebookAuthProvider());
+  success(r.user.displayName,r.user.email);
+};
+
+twBtn.onclick = async ()=>{
+  const r = await signInWithPopup(auth,new TwitterAuthProvider());
+  success(r.user.displayName,r.user.email);
+};
+
+// 🔹 Magic link (simple demo validation only)
+magicBtn.onclick = ()=>{
+  if(!validateEmail(emailInput.value)){
+    msg.innerText="Invalid Email";
+    msg.style.color="red";
+    return;
+  }
+  success(emailInput.value.split("@")[0],emailInput.value);
+};
+
+// 🔹 Name + Email
+nameEmailBtn.onclick = ()=>{
+  if(!nameInput.value || !validateEmail(email2Input.value)){
+    msg.innerText="Invalid Name or Email";
+    msg.style.color="red";
+    return;
+  }
+  success(nameInput.value,email2Input.value);
+};
+
+// 🔹 Guest
+guestBtn.onclick = ()=>{
+  let name = guestInput.value;
+  if(!name){
+    const d=new Date();
+    name="guest"+
+      String(d.getDate()).padStart(2,"0")+
+      String(d.getMonth()+1).padStart(2,"0")+
+      String(d.getFullYear()).slice(-2)+"_"+
+      String(d.getHours()).padStart(2,"0")+
+      String(d.getMinutes()).padStart(2,"0");
+  }
+  success(name,"");
+};
+
+// 🔹 Auto Detect
+onAuthStateChanged(auth,(user)=>{
+  if(user){
+    saveUser(user.displayName,user.email);
+    showLoggedUI();
+  }else{
+    const localUser=localStorage.getItem("user");
+    if(localUser){
+      showLoggedUI();
+    }else{
+      authArea.innerText="";
+      showModal();
     }
-  </script> -->
+  }
+});
+
+// 🔹 Logged UI
+function showLoggedUI(){
+  const u=JSON.parse(localStorage.getItem("user"));
+  authArea.innerHTML=`
+    <h3>You are already logged in</h3>
+    <p>Welcome: ${u.name} (${u.email||"No Email"})</p>
+    <button id="continueBtn">Continue</button>
+    <button id="changeBtn">Change Login</button>
+  `;
+  continueBtn.onclick=()=>window.location.href = "../index.html";
+  changeBtn.onclick=async ()=>{
+    await signOut(auth);
+    localStorage.clear();
+    showModal();
+  };
+}
+</script>
+
 </body>
-
 </html>

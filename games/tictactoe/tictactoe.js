@@ -1,15 +1,43 @@
 import { shareScore } from './share.js';
-import { saveScore } from '../../leaderboard/gbleaderboard.js';
 import { lcsaveToLeaderboard } from '../../leaderboard/lcleaderboard.js';
+// to add firebase leaderboard
+import { db } from "../../leaderboard/firebase-config.js";
+// import {
+//     collection,
+//     query,
+//     where,
+//     orderBy,
+//     limit,
+//     getDocs,
+//     addDoc
+//   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { addDoc, collection } from 
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-export let score = 0;
+// define variables also used to add firebase leaderboard
+let player = localStorage.getItem('player') || 'Human1';
+let opponent = localStorage.getItem('opponent') || 'Human2';
+let email = localStorage.getItem('email') || '-';
+let game = "Tic tac TOE";
+let game_id = "tictactoe";
+let difficulty, elapsed, moves, level, date;
+export let score;
+let size = '3x3';
+let hours = 0;
+let seconds = 0;
+let minutes = 0;
+let text = "";
+let playMode = "pvc";
+
+
+// export let score = 0;
 export let gameName = 'tictactoe';
 
 window.addEventListener('load', function () {
     const loading = document.getElementById('loading');
     loading.style.display = 'none';
 
-    const modeEl = document.getElementById('mode');
+    const modeEl = document.getElementById('playerMode');
     const boardEl = document.getElementById("board");
     const difficultyEl = document.getElementById("difficulty");
     const toggleThemeBtn = document.getElementById("toggle-theme");
@@ -17,6 +45,7 @@ window.addEventListener('load', function () {
     const canvas = document.getElementById('fireworksCanvas');
     const timerDisplay = document.getElementById('timer-display');
 
+    playMode = modeEl.value;
     let board = Array(9).fill("");
     let history = [];
     let human = "X";
@@ -29,17 +58,14 @@ window.addEventListener('load', function () {
     let moves = 0;
 
     let timer = false;
-    let seconds = 0;
-    let minutes = 0;
-    let hours = 0;
+
     let timerInterval;
     let startTime;
     let elapsedTime = 0;
 
-    let theme = localStorage.getItem('rg_theme') || 'dark';
-    let player1 = localStorage.getItem('player_name') || 'Human1';
-    let mode = modeEl.value;
-    let player2 = localStorage.getItem('player_opponent') || 'Human2';
+    // let theme = localStorage.getItem('rg_theme') || 'dark';
+    let player = localStorage.getItem('player_name') || 'Human1';
+    let opponent = localStorage.getItem('player_opponent') || 'Human2';
     let winnerName;
     let difficulty = difficultyEl.value;
 
@@ -50,21 +76,21 @@ window.addEventListener('load', function () {
 
     namebar.classList.remove('show');
     modeEl.addEventListener('change', function (e) {
-        mode = e.target.value;
-        document.getElementById("player1").textContent = player1;
-        document.getElementById("nameInput").placeholder = player2 || 'Human2';
-        player2 = document.getElementById("nameInput").value;
-        if (mode == 'pvp') {
+        playMode = e.target.value;
+        document.getElementById("player1").textContent = player;
+        document.getElementById("nameInput").placeholder = opponent || 'Human2';
+        opponent = document.getElementById("nameInput").value;
+        if (playMode == 'pvp') {
             namebar.classList.add('show');
         } else {
             namebar.classList.remove('show');
-            player2 = "Computer";
+            opponent = "Computer";
         }
     });
 
     document.getElementById("name").addEventListener("click", () => {
         namebar.classList.remove('show');
-        player2 = document.getElementById("nameInput").value;
+        opponent = document.getElementById("nameInput").value;
         messageEl.innerText = "Click New game to play";
     });
 
@@ -83,7 +109,7 @@ window.addEventListener('load', function () {
             timer = true;
             startTimer();
         }
-        messageEl.innerText = `Click in cell to play (${player1} turn (X)`;
+        messageEl.innerText = `Click in cell to play (${player} turn (X)`;
         board.forEach((val, i) => {
             const cell = document.createElement("div");
             cell.classList.add("cell");
@@ -169,19 +195,22 @@ window.addEventListener('load', function () {
             timer = false;
             clearInterval(timerInterval);
             score = 9 * 10 - moves * 2 + 50;
+            
+
             if (modeEl.value === 'pvp') {
                 if (winner === human) {
                     winnerName = winner;
                     playSound('win');
-                    launchFireworks(player1);
-                    messageEl.innerText = `${player1} Win! 😊`;
+                    launchFireworks(player);
+                    messageEl.innerText = `${player} Win! 😊`;
                     updateleaderboard();
+                    window.saveScore();
                     shareScore(gameName, score);
                 } else if (winner === ai) {
                     winnerName = winner;
                     playSound('win');
-                    launchFireworks(player2);
-                    messageEl.innerText = `${player2} Wins! 🤖`;
+                    launchFireworks(opponent);
+                    messageEl.innerText = `${opponent} Wins! 🤖`;
                     shareScore(gameName, score);
                 } else {
                     playSound('draw');
@@ -193,7 +222,8 @@ window.addEventListener('load', function () {
                     playSound('win');
                     launchFireworks(player1);
                     messageEl.innerText = `${player1} Win! 😊`;
-                    updateleaderboard();            shareScore(gameName, score);
+                    updateleaderboard();            
+                    shareScore(gameName, score);
                 } else if (winner === ai) {
                     winnerName = winner;
                     playSound('win');
@@ -206,9 +236,9 @@ window.addEventListener('load', function () {
             }
         } else {
             if (currentPlayer === 'O') {
-                messageEl.innerText = `${player2} Turn (O)`;
+                messageEl.innerText = `${opponent} Turn (O)`;
             } else {
-                messageEl.innerText = `${player1} Turn (X)`;
+                messageEl.innerText = `${player} Turn (X)`;
             }
         }
     }
@@ -285,24 +315,24 @@ window.addEventListener('load', function () {
         gameCount++;
         turn = gameCount % 2 === 0 ? "X" : "O";
 
-        if (mode == 'pvc' && turn === ai) {
+        if (playMode == 'pvc' && turn === ai) {
             board[getBestMove(difficultyEl.value)] = ai;
         }
 
 
         history.push([...board]);
         createBoard();
-        if (mode == 'pvc') {
+        if (playMode == 'pvc') {
             if (turn === ai) {
-                messageEl.innerText = `Computer Played! ${player1} Turn (X)`;
+                messageEl.innerText = `Computer Played! ${player} Turn (X)`;
             } else if (turn === human) {
-                messageEl.innerText = `${player1} Turn (X)`;
+                messageEl.innerText = `${player} Turn (X)`;
             }
-        } else if (mode == 'pvp') {
+        } else if (playMode == 'pvp') {
             if (turn === human) {
-                messageEl.innerText = `${player1} Turn (X)`;
+                messageEl.innerText = `${player} Turn (X)`;
             } else if (turn === human1) {
-                messageEl.innerText = `${player2} Turn (X)`;
+                messageEl.innerText = `${opponent} Turn (X)`;
             }
         }
     }
@@ -364,11 +394,41 @@ window.addEventListener('load', function () {
         }
     }
 
+    // to add firebase leaderboard (save record)
+    window.saveScore = async function() {
+
+        try {
+          await addDoc(collection(db, "leaderboard"), {
+            game_id: game_id,
+            game: game,
+            name: player,
+            opponent: opponent,
+            difficulty: difficulty,
+            size: size,
+            elapsed: elapsedTime,
+            score: score,
+            moves: moves,
+            email: email,
+            level: "-",
+            mode: playMode,
+            text: text,
+            date: new Date()
+          });
+      
+          console.log("Score Saved!");
+      
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      
+      };
+
+    // to add local leaderboard (save record)
     function updateleaderboard() {
         console.log("update leader board")
-        let player_name = player1;
+        let player_name = player;
         let finalScore = 0;
-        let player_opponent = player2;
+        let player_opponent = opponent;
         let game_id = 'tictactoe';
         let size = '3x3';
         let elapsed = hours * 3600 + minutes * 60 + seconds;
@@ -379,39 +439,39 @@ window.addEventListener('load', function () {
         let filed4 = "-";
         let email = localStorage.getItem('email') || '-';
         const created_at = new Date();
-        if (mode === 'pvc' && winnerName === human) {
+        if (playMode === 'pvc' && winnerName === human) {
             filed3 = 'Player vs Computer';
             filed4 = currentPlayer.toUpperCase();
-            player_name = player1;
+            player_name = player;
             player_opponent = 'Computer';
             finalScore = 9 * 10 - history.length * 2 + 100;
-        } else if (mode === 'pvc' && winnerName === ai) {
+        } else if (playMode === 'pvc' && winnerName === ai) {
             filed3 = 'Player vs Computer';
             filed4 = currentPlayer.toUpperCase();
             player_name = 'Computer';
-            player_opponent = player2;
+            player_opponent = opponent;
             finalScore = 9 * 10 - history.length * 2 + 100;
         } else if (winnerName === human) {
-            player_name = player1;
-            player_opponent = player2;
+            player_name = player;
+            player_opponent = opponent;
             filed3 = 'Player vs Player';
             filed4 = currentPlayer.toUpperCase();
             finalScore = 9 * 10 - history.length * 2 + 50;
         } else {
-            player_name = player2;
-            player_opponent = player1;
+            player_name = opponent;
+            player_opponent = player;
             filed3 = 'Player vs Player';
             filed4 = currentPlayer.toUpperCase();
             finalScore = 9 * 10 - history.length * 2 + 50;
         }
 
-        lcsaveToLeaderboard(player_name, player_opponent, email, size, difficulty, game_id, finalScore, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
-        saveScore(player_name, player_opponent, email, size, difficulty, game_id, finalScore, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+        lcsaveToLeaderboard(player_name, player_opponent, email, size, difficulty, game_id, finalScore, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
     }
     document.addEventListener('DOMContentLoaded', () => {
         lcrenderLeaderboard();
     });
 
+    //fire on win
     // import { winnerName } from './script.js';
     class FireParticle {
         constructor(x, y, color, dx, dy, shape) {

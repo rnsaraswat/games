@@ -7,8 +7,8 @@
     <title>Tic Tac Toe</title>
     <meta name="description"
         content="Ravindra Games Hub — collection of lightweight web games (Tic tac Toe) Classic & Action-Oriented X vs O game">
-    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
-    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+    <!-- <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" /> -->
+    <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
     <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
     <link rel="stylesheet" href="../../commoncss.css">
     <link rel="manifest" href="../../manifest.json" />
@@ -301,10 +301,37 @@
         #namebar.show {
             display: flex;
         }
+
+        /* Modal CSS (common CSS file में) */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .modal-content {
+            background: #111;
+            color: white;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .close {
+            float: right;
+            cursor: pointer;
+        }
     </style>
 </head>
 
-<body>
+<body data-game="tictactoe">
     <div id="container">
         <!-- Left Panel -->
         <div id="left" class="section">
@@ -312,7 +339,7 @@
             <div class="button-group">
                 <button id="startGame">🔄 New Game</button>
                 <button id="undo-last">↩️ Undo</button>
-                <select id="mode">
+                <select id="playerMode">
                     <option value="pvp">😊Player vs 😊Player</option>
                     <option value="pvc" selected>😊Player vs 🤖Computer</option>
                 </select>
@@ -323,12 +350,14 @@
                 </select>
                 <button id="toggle-theme">☀️ Light</button>
                 <button id="toggle-sound">🔇 Music:Off"</button>
-                <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global
+                <!-- <button onclick="openLeaderboard()">🏆 Leaderboard</button> -->
+                <button class="button-primary" id="toggle-firebase-leaderboard" onclick="openFirebaseGlobalLeaderboard()">🌍 FB Global
                     Leaderboard</button>
                 <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
                     Leaderboard</button>
                 <button class="button-primary" id="shareBtn">📤Sharing</button>
-                <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+                <button class="button-primary" onclick="window.location.href='http://127.0.0.1:5501/startup/games/auth/firebase-login.html'">sign in</button>
+                <!-- <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button> -->
                 <button class="button-primary"
                     onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
             </div>
@@ -341,9 +370,9 @@
             <div id="board"></div>
         </div>
     </div>
-    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+    <!-- <div id="gb-feedbackModal" class="gb-feedback-main-container"></div> -->
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
-    <div id="gbLeaderboardModal" class="gb-main-container"></div>
+    <div id="firebaseLeaderboardModal" class="firebase-main-container"></div>
     <div id="winText">🎉 You Won! 🎉</div>
     <!-- <div class="namebar" id="namebar" aria-live="polite">
         <div class="row">
@@ -366,15 +395,55 @@
             <button id="name" class="name-primary-button">Ok</button>
         </div>
     </div>
-    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
-    <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+    <!-- <div id="leaderboardModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeLeaderboard()">✖</span>
+          <h2 id="leaderboardTitle"></h2>
+          
+          <select id="gameFilter">
+            <option value="all">All Games</option>
+            <option value="water-sort">Water Sort</option>
+            <option value="mastermind">Mastermind</option>
+            <option value="memory">Memory</option>
+            <option value="tictactoe">Tic Tac Toe</option>
+        </select>
+          <div id="leaderboardList"></div>
+        </div>
+      </div> -->
+      
+      <!-- <script type="module" src="../../leaderboard/leaderboard-popup.js"></script> -->
+
+    <!-- <div id="leaderboardModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLeaderboard()">✖</span>
+            <h2 id="leaderboardTitle"></h2>
+
+            <select id="gameFilter">
+                <option value="all">All Games</option>
+                <option value="water-sort">Water Sort</option>
+                <option value="mastermind">Mastermind</option>
+                <option value="memory">Memory</option>
+            </select>
+
+            <div id="leaderboardList"></div>
+        </div>
+    </div>
+
+    <script type="module" src="leaderboard/firebasegbleaderboard.js"></script> -->
+    <!-- <script type="module" src="../../leaderboard/gbfeedback.js"></script> -->
+    <!-- <script type="module" src="../../leaderboard/firebaseleaderboard.js"></script> -->
+    <!-- <script type="module" src="../../leaderboard/firebase-config.js"></script> -->
+    <script type="module" src="../../leaderboard/firebasegbleaderboard.js"></script>
     <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <script type="module" src="tictactoe.js"></script>
     <script>
-
-        document.getElementById("gb-feedbackModal").style.display = 'none';
+        // function openLeaderboard() {
+        //     document.getElementById("leaderboardModal").style.display = 'flex';
+        // };
+        // document.getElementById("gb-feedbackModal").style.display = 'none';
         document.getElementById("lcLeaderboardModal").style.display = 'none';
-        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById("firebaseLeaderboardModal").style.display = 'none';
+        // document.getElementById("leaderboardModal").style.display = 'none';
         document.getElementById("winText").style.display = 'none';
         // document.getElementById("rulesPopup").style.display = 'none';
 
@@ -394,22 +463,23 @@
         if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
-        function openGlobalLeaderboard() {
-            document.getElementById("gbLeaderboardModal").style.display = 'flex';
+        // to add firebase leaderboard (display & hide)
+        function openFirebaseGlobalLeaderboard() {
+            document.getElementById("firebaseLeaderboardModal").style.display = 'flex';
         };
 
-        function closeGlobalLeaderboard() {
-            document.getElementById("gbLeaderboardModal").style.display = 'none';
+        function closeFirebaseGlobalLeaderboard() {
+            document.getElementById("firebaseLeaderboardModal").style.display = 'none';
         };
 
-
-        fetch('../../leaderboard/gbleaderboard.html')
+        fetch('../../leaderboard/firebasegbleaderboard.html')
             .then(response => response.text())
             .then(htmlText => {
-                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
-                document.getElementById("gbLeaderboardModal").style.display = 'none';
+                document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("firebaseLeaderboardModal").style.display = 'none';
             });
 
+        // to add local leaderboard (display & hide)
         function openLocalLeaderboard() {
             document.getElementById("lcLeaderboardModal").style.display = 'flex';
         };
@@ -433,20 +503,20 @@
                 document.getElementById("lcLeaderboardModal").style.display = 'none';
             });
 
-        function openGlobalFeedback() {
-            document.getElementById("gb-feedbackModal").style.display = 'flex';
-        };
+        // function openGlobalFeedback() {
+        //     document.getElementById("gb-feedbackModal").style.display = 'flex';
+        // };
 
-        function closeGlobalFeedback() {
-            document.getElementById("gb-feedbackModal").style.display = 'none';
-        };
+        // function closeGlobalFeedback() {
+        //     document.getElementById("gb-feedbackModal").style.display = 'none';
+        // };
 
-        fetch('../../leaderboard/gbfeedback.html')
-            .then(response => response.text())
-            .then(htmlText => {
-                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
-                document.getElementById("gb-feedbackModal").style.display = 'none';
-            });
+        // fetch('../../leaderboard/gbfeedback.html')
+        //     .then(response => response.text())
+        //     .then(htmlText => {
+        //         document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+        //         document.getElementById("gb-feedbackModal").style.display = 'none';
+        //     });
 
         (async () => {
             const GAME_NAME = "TIC TAC TOE";

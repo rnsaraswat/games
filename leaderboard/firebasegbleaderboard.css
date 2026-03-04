@@ -1,0 +1,283 @@
+:root {
+    --firebase-bg: #ffcea9;
+    --firebase-bg-hover: #ff9748;
+    --firebase-text: #000000;
+    --firebase-border: #333;
+    --firebase-gradient1: #fe6201;
+    --firebase-gradient2: #ff904a;
+    --firebase-text-gradient: #ffff00;
+    --firebase-box-shadow: rfirebasea(0, 0, 0, 0.2);
+    --firebase-btn-shadow: rfirebasea(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] {
+    --firebase-bg: #686cff;
+    --firebase-bg-hover: #474dfb;
+    --firebase-text: #ffffff;
+    --firebase-border: #d9d8d8;
+    --firebase-gradient1: #0015ff;
+    --firebase-gradient2: #4a4aff;
+    --firebase-text-gradient: #ff904a;
+    --firebase-box-shadow: rfirebasea(255, 255, 255, 0.5);
+    --firebase-btn-shadow: rfirebasea(0, 0, 0, 0.2);
+}
+
+.firebase-main-container {
+    inset: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 10;
+    width: 95%;
+    height: 95%;
+    overflow-y: auto;
+    text-align: center;
+    border: 2px solid var(--firebase-border);
+    background: var(--firebase-bg);
+    color: var(--firebase-text);
+    flex-direction: column;
+    box-shadow: 0 10px 30px rfirebasea(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.firebase-header-section {
+    padding: 2px;
+    background: var(--firebase-bg);
+    color: var(--firebase-text);
+    text-align: center;
+}
+
+.firebase-h2 {
+    background: var(--firebase-bg);
+}
+
+.firebase-btn-container {
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: Arial, sans-serif;
+    background: var(--firebase-bg);
+    color: var(--firebase-text);
+    border-bottom: 1px solid var(--firebase-border);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.firebase-table-area {
+    flex: 1;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.firebase-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+.firebase-leaderboardTable td,  .firebase-leaderboardTable th{
+    border: 1px solid var(--firebase-border);
+}
+
+.firebase-thead th {
+    position: sticky;
+    top: 0;
+    padding: 2px;
+    z-index: 10;
+
+    background: var(--firebase-bg);
+    color: var(--firebase-text);
+    z-index: 1;
+    padding: 4px;
+    text-align: left;
+    border-bottom: 2px solid var(--firebase-border);
+}
+
+.firebase-thead th {
+    background: var(--firebase-bg-hover);
+}
+
+.firebase-td {
+    padding: 2px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.firebase-textarea {
+    border: 1px solid var(--firebase-border);
+    width: 100%;
+    margin: 5px 0;
+    padding: 8px;
+}
+
+.firebasePopupClose {
+    float: right;
+    cursor: pointer;
+    color: var(--firebase-text);
+    background: var(--firebase-bg);
+    border: 1px solid var(--firebase-border);
+    transition: 0.5s ease-in-out;
+    box-shadow: 0 4px 15px rfirebasea(0, 0, 0, 0.2);
+    padding: 5px 10px;
+    border-radius: 4px;
+
+    background: linear-gradient(90deg, var(--accent), #7c3aed);
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(90deg, #b91010, #960505);
+    border: 2px solid #b91010;
+    box-shadow: 0 10px 40px var(--box-shadow);
+}
+
+.firebasePopupClose:hover {
+    background: linear-gradient(90deg, #960505, #b91010);
+    color: var(--firebase-text);
+    transform: translateY(-2px);
+}
+
+.firebase-leaderboardSignIn {
+    float: right;
+    cursor: pointer;
+}
+
+.firebase-leaderboardignIn:hover {
+    background: var(--gf-bg-hover);
+    color: var(--gf-text);
+    transform: translateY(-2px);
+}
+
+.firebase-footer-section {
+    padding: 2px;
+    background: var(--firebase-bg);
+    color: var(--firebase-text);
+    border-top: 2px solid #333;
+    display: flex;
+    justify-content: space-around;
+}
+
+.firebase-leaderboard {
+    padding: 4px 3px;
+    margin-top: 1px;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 5px 5px 0 var(--firebase-box-shadow);
+    cursor: pointer;
+    background: var(--firebase-bg);
+    color: var(--firebase-text);
+    border: 2px solid var(--firebase-border);
+    border-radius: 5px;
+}
+
+.firebase-leaderboard:hover {
+    background: var(--firebase-bg-hover);
+}
+
+.firebase-leaderboardSelect {
+    padding: 1px 2px;
+}
+
+.firebase-pageInfo {
+    padding: 4px 3px;
+    margin-top: 1px;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+    background: var(--firebase-bg);
+    color: var(--firebase-text);
+}
+
+.firebaselogin {
+    background: var(--firebase-bg);
+    border-radius: 5px;
+    padding: 2px 5px;
+    margin-top: 5px;
+    margin: 2px;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 5px 2px 0 var(--firebase-box-shadow);
+    cursor: pointer;
+    color: var(--firebase-text);
+    border: 2px solid var(--firebase-border);
+    text-decoration: none;
+}
+
+.firebaselogin:hover {
+    background: var(--firebase-bg-hover);
+}
+
+
+.firebaseClearPry {
+    gap: 5px;
+    align-items: center;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 5px;
+    margin: 10px 2px 5px 2px;
+    font-size: 1.6vw;
+    display: inline-block;
+    margin-top: 0.1vh;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 5px 5px 0 var(--firebase-box-shadow);
+    border-radius: 5px;
+    color: var(--firebase-text);;
+    border-color: transparent;
+    border: none;
+    box-shadow: 0 1px 4px var(--firebase-box-shadow);
+} 
+
+
+.table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #444;
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    background: #222;
+    color: white;
+    cursor: pointer;
+}
+
+.table-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.pagination {
+    margin-top: 10px;
+    text-align: center;
+}
+
+  /* Portrait */
+ @media (orientation: portrait)  {
+    .firebase-btn-container {
+        padding: 1px;
+        gap: 2px;
+    }
+    .firebase-textarea {
+        margin: 2px 0;
+        padding: 3px;
+    }
+    .firebaselogin {
+        border-radius: 2px;
+        padding: 1px 2px;
+        margin-top: 2px;
+        margin: 1px;
+    }
+    .firebase-pageInfo {
+        padding: 2px 1px;
+    }
+    .firebase-leaderboard {
+        padding: 2px 1px;
+    }
+    .firebasePopupClose {
+        padding: 2px 2px;
+        border-radius: 2px;
+    }
+  }

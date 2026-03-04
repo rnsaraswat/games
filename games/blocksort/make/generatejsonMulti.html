@@ -183,7 +183,7 @@
             }
 
             // 2. Shuffling logic based on difficulty
-            let shuffles = difficulty === 'easy' ? 100 : (difficulty === 'medium' ? 300 : 800);
+            let shuffles = difficulty === 'easy' ? 300 : (difficulty === 'medium' ? 500 : 800);
 
             for (let i = 0; i < shuffles; i++) {
                 let src = Math.floor(Math.random() * total);

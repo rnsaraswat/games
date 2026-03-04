@@ -1,0 +1,171 @@
+<div class="leaderboard-wrapper">
+    <div class="firebase-header-section">
+        <span id="firebaseCloseBtn" class="firebasePopupClose" onclick="closeFirebaseGlobalLeaderboard()">Close X</span>
+        <h2 class="firebase-h2">🌍 Global Leaderboard</h2>
+    </div>
+    <!-- Top Controls -->
+
+        <div class="firebase-btn-container">
+            <label class="firebase-leaderboard">Filter game:</label>
+                <select class="firebase-leaderboard" id="firebasegameFilter">
+                    <option value="all">All Games</option>
+                    <option value="rockpaperscissor">Rock Paper Scissor</option>
+                    <option value="5inARow">5 in A Row</option>
+                    <option value="connect4">Connect 4</option>
+                    <option value="sudoku">Sudoku</option>
+                    <option value="4inARow">4 in A Row</option>
+                    <option value="connect3">Connect 3</option>
+                    <option value="tictactoe">Tic Tac Toe</option>
+                    <option value="threeinarow">3 in Row</option>
+                    <option value="mastermind">Mastermind</option>
+                    <option value="watersort">Water Sort</option>
+                    <option value="memory">Memory</option>
+                </select>
+            <label class="firebase-leaderboard">Show per page:</label>
+                <select class="firebase-leaderboardSelect" id="pageSize">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+            
+            <input type="text" class="firebase-leaderboard" id="searchInput" placeholder="🔍 Search player..." />
+            <button class="button-primary"
+                onclick="window.location.href='https://rnsaraswat.github.io/games/auth/login.html'">🚪Sign in</button>
+        </div>
+  
+    <!-- Table -->
+    <div class="table-container">
+        <table id="leaderboardTable">
+            <thead>
+                <tr>
+                    <th data-field="rank">Rank ▲▼</th>
+                    <th data-field="game">Game ▲▼</th>
+                    <th data-field="game_id">Game ID ▲▼</th>
+                    <th data-field="name">Player Name ▲▼</th>
+                    <th data-field="opponent">Opponent Name ▲▼</th>
+                    <th data-field="size">Size ▲▼</th>
+                    <th data-field="score">Score ▲▼</th>
+                    <th data-field="moves">Moves ▲▼</th>
+                    <th data-field="level">Level ▲▼</th>
+                    <th data-field="mode">Mode ▲▼</th>
+                    <th data-field="text">Text ▲▼</th>
+                    <th data-field="elapsed">Elapsed Time ▲▼</th>
+                    <th data-field="elapsed">Date Time ▲▼</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+        </table>
+    </div>
+  
+    <!-- Pagination -->
+    <div class="pagination">
+        <button id="prevBtn">Previous</button>
+        <span id="pageInfo"></span>
+        <button id="nextBtn">Next</button>
+    </div>
+  
+  </div>
+
+<!-- 
+<div class="firebase-header-section">
+    <span id="firebaseCloseBtn" class="firebasePopupClose" onclick="closeGlobalLeaderboard()">Close X</span>
+    <h2 class="firebase-h2">🌍 Global Leaderboard</h2>
+</div>
+
+
+
+<div class="firebase-table-area">
+    <table id="firebaseLeaderboardTable" class="firebase-leaderboardTable">
+        <thead class="firebase-thead">
+            <tr>
+                <th>#
+                </th>
+                <th class="sortable">Game
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Winner
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Looser
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Size
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Difficulty
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Score
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Elapsed time
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Date
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Moves
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Email
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Field1
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Field2
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Field3
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+                <th class="sortable">Field4
+                    <span class="arrow asc">🔼</span>
+                    <span class="arrow desc">🔽</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="firebase-table-body">
+        </tbody>
+    </table>
+</div>
+
+<div class="firebase-footer-section">
+    <button class="firebase-leaderboard" id="firebaseprevPage">⬅ Prev</button>
+    <span id="firebasepageInfo" class="firebase-pageInfo"></span>
+    <button class="firebase-leaderboard" id="firebasenextPage">Next ➡</button>
+</div>
+
+
+<div id="leaderboardModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeLeaderboard()">✖</span>
+        <h2 id="leaderboardTitle"></h2>
+
+        <select id="gameFilter">
+            <option value="all">All Games</option>
+            <option value="water-sort">Water Sort</option>
+            <option value="mastermind">Mastermind</option>
+            <option value="memory">Memory</option>
+        </select>
+
+        <div id="leaderboardList"></div>
+    </div>
+</div>
+<script type="module" src="leaderboard/firebasegbleaderboard.js"></script> -->
