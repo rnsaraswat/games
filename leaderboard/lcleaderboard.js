@@ -99,7 +99,12 @@ function lcrenderTable() {
   const end = start + lcitemsPerPage;
   const currentItems = lcfilteredData.slice(start, end);
 
-//   if (!tbody) return;
+  console.log(currentItems);
+  // console.log(d.date);
+  // const date = new Date(d.date).toLocaleString();
+  // console.log(date);
+
+  //   if (!tbody) return;
 
   tbody.innerHTML = "";
   if (currentItems.length === 0) {

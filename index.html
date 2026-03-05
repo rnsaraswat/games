@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="commoncss.css">
     <!-- <link rel="stylesheet" href="./leaderboard/gbfeedback.css" /> -->
-    <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
+    <link rel="stylesheet" href="./leaderboard/firebasegbleaderboard.css" />
     <!-- <link rel="stylesheet" href="./leaderboard/gbleaderboard.css" /> -->
     <link rel="stylesheet" href="./leaderboard/lcleaderboard.css" />
     <link rel="manifest" href="./manifest.json" />
@@ -71,12 +71,14 @@
 
         <footer style="margin-top:20px;color:var(--muted)">© 2025 Ravindra</footer>
     </div>
-    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+    <!-- <div id="gb-feedbackModal" class="gb-feedback-main-container"></div> -->
+    <div id="firebaseLeaderboardModal" class="firebase-main-container"></div>
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
-    <div id="gbLeaderboardModal" class="gb-main-container"></div>
-    <script src="./leaderboard/submit-helper.js"></script>
-    <script type="module" src="./leaderboard/gbfeedback.js"></script>
-    <script type="module" src="./leaderboard/gbleaderboard.js"></script>
+    <!-- <div id="gbLeaderboardModal" class="gb-main-container"></div> -->
+    <!-- <script src="./leaderboard/submit-helper.js"></script> -->
+    <!-- <script type="module" src="./leaderboard/gbfeedback.js"></script>
+    <script type="module" src="./leaderboard/gbleaderboard.js"></script> -->
+    <script type="module" src="./leaderboard/firebasegbleaderboard.js"></script>
     <script type="module" src="./leaderboard/lcleaderboard.js"></script>
     <script type="module" src="./script.js"></script>
 
@@ -88,9 +90,10 @@
     </script> -->
 
     <script>
-        document.getElementById("gb-feedbackModal").style.display = 'none';
+        // document.getElementById("gb-feedbackModal").style.display = 'none';
         document.getElementById("lcLeaderboardModal").style.display = 'none';
-        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById("firebaseLeaderboardModal").style.display = 'none';
+        // document.getElementById("gbLeaderboardModal").style.display = 'none';
         // document.getElementById("winText").style.display = 'none';
         // document.getElementById("rulesPopup").style.display = 'none';
 
@@ -155,20 +158,35 @@
         if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
-        function openGlobalLeaderboard() {
-            document.getElementById("gbLeaderboardModal").style.display = 'flex';
+        // function openGlobalLeaderboard() {
+        //     document.getElementById("gbLeaderboardModal").style.display = 'flex';
+        // };
+
+        // function closeGlobalLeaderboard() {
+        //     document.getElementById("gbLeaderboardModal").style.display = 'none';
+        // };
+
+
+        // fetch('./leaderboard/gbleaderboard.html')
+        //     .then(response => response.text())
+        //     .then(htmlText => {
+        //         document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
+        //         document.getElementById("gbLeaderboardModal").style.display = 'none';
+        //     });
+
+        function openFirebaseGlobalLeaderboard() {
+            document.getElementById("firebaseLeaderboardModal").style.display = 'flex';
         };
 
-        function closeGlobalLeaderboard() {
-            document.getElementById("gbLeaderboardModal").style.display = 'none';
+        function closeFirebaseGlobalLeaderboard() {
+            document.getElementById("firebaseLeaderboardModal").style.display = 'none';
         };
 
-
-        fetch('./leaderboard/gbleaderboard.html')
+        fetch('./leaderboard/firebasegbleaderboard.html')
             .then(response => response.text())
             .then(htmlText => {
-                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
-                document.getElementById("gbLeaderboardModal").style.display = 'none';
+                document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("firebaseLeaderboardModal").style.display = 'none';
             });
 
         function openLocalLeaderboard() {
@@ -194,20 +212,20 @@
                 document.getElementById("lcLeaderboardModal").style.display = 'none';
             });
 
-        function openGlobalFeedback() {
-            document.getElementById("gb-feedbackModal").style.display = 'flex';
-        };
+        // function openGlobalFeedback() {
+        //     document.getElementById("gb-feedbackModal").style.display = 'flex';
+        // };
 
-        function closeGlobalFeedback() {
-            document.getElementById("gb-feedbackModal").style.display = 'none';
-        };
+        // function closeGlobalFeedback() {
+        //     document.getElementById("gb-feedbackModal").style.display = 'none';
+        // };
 
-        fetch('./leaderboard/gbfeedback.html')
-            .then(response => response.text())
-            .then(htmlText => {
-                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
-                document.getElementById("gb-feedbackModal").style.display = 'none';
-            });
+        // fetch('./leaderboard/gbfeedback.html')
+        //     .then(response => response.text())
+        //     .then(htmlText => {
+        //         document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+        //         document.getElementById("gb-feedbackModal").style.display = 'none';
+        //     });
     </script>
 
     <script>

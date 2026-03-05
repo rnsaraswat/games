@@ -319,22 +319,92 @@ let rowsPerPage = 20;
 let currentSortField = "score";
 let currentSortDirection = "desc";
 
+// async function loadLeaderboard() {
+
+//     const q = query(
+//         collection(db, "leaderboard"),
+//         orderBy("score", "desc")
+//     );
+
+//     const snapshot = await getDocs(q);
+
+//     fullData = [];
+//     snapshot.forEach(doc => {
+//         fullData.push(doc.data());
+//     });
+//     console.log(fullData);
+
+//     renderTable();
+// }
+
+// async function loadLeaderboard() {
+
+//   const q = query(
+//       collection(db, "leaderboard"),
+//       orderBy("score", "desc")
+//   );
+
+//   const snapshot = await getDocs(q);
+
+//   fullData = [];
+
+//   snapshot.forEach(doc => {
+
+//       const data = doc.data();
+
+//       let formattedDate = "-";
+
+//       if (data.createdAt) {
+//           const dateObj = data.createdAt.toDate();   // Firestore timestamp → JS Date
+//           formattedDate = formatDateTime(dateObj);   // format convert
+//       }
+
+//       fullData.push({
+//           ...data,
+//           formattedDate: formattedDate   // table ke liye ready date
+//       });
+
+//   });
+
+//   console.log(fullData);
+
+//   renderTable();
+// }
+
 async function loadLeaderboard() {
 
-    const q = query(
-        collection(db, "leaderboard"),
-        orderBy("score", "desc")
-    );
+  const q = query(
+      collection(db, "leaderboard"),
+      orderBy("score", "desc")
+  );
 
-    const snapshot = await getDocs(q);
+  const snapshot = await getDocs(q);
 
-    fullData = [];
-    snapshot.forEach(doc => {
-        fullData.push(doc.data());
-    });
-    console.log(fullData);
+  fullData = [];
 
-    renderTable();
+  snapshot.forEach(doc => {
+
+      const data = doc.data();
+
+      // 🔹 Date Formatting
+      let formattedDate = "-";
+      if (data.createdAt) {
+          const dateObj = data.createdAt.toDate();
+          formattedDate = formatDateTime(dateObj);
+      }
+
+      // 🔹 Elapsed Formatting
+      let formattedElapsed = formatElapsed(data.elapsed);
+
+      fullData.push({
+          ...data,
+          formattedDate: formattedDate,
+          formattedElapsed: formattedElapsed
+      });
+      console.log(fullData);
+  });
+
+  renderTable();
 }
 
 function renderTable() {
@@ -352,21 +422,41 @@ function renderTable() {
             <td>${rank}</td>
                 <td>${d.game}</td>
                 <td>${d.game_id}</td>
-                <td>${d.level}</td>
                 <td>${d.name}</td>
-                <td>${d.mode}</td>
                 <td>${d.opponent}</td>
-                <td>${d.score}</td>
                 <td>${d.size}</td>
+                <td>${d.score}</td>
                 <td>${d.moves}</td>
+                <td>${d.level}</td>
+                <td>${d.mode}</td>
                 <td>${d.text}</td>
-                <td>${formatTime(d.elapsed)}</td>
-                <td>${new Date(d.date).toLocaleString()}</td>
+                <td>${d.formattedElapsed}</td>
+                <td>${d.formattedDate}</td>
             </tr>
         `;
+        rank++;
     });
 
     updatePaginationInfo(filtered.length);
+}
+
+function formatDateTime(date) {
+
+  let day = String(date.getDate()).padStart(2, '0');
+  let month = String(date.getMonth() + 1).padStart(2, '0');
+  let year = date.getFullYear();
+
+  let hours = date.getHours();
+  let minutes = String(date.getMinutes()).padStart(2, '0');
+  let seconds = String(date.getSeconds()).padStart(2, '0');
+
+  let ampm = hours >= 12 ? 'PM' : 'AM';
+
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  hours = String(hours).padStart(2, '0');
+
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} ${ampm}`;
 }
 
 function filterData() {
@@ -469,6 +559,21 @@ export function formatTime(totalSeconds) {
   return `${h.toString().padStart(2, '0')}:` +
       `${m.toString().padStart(2, '0')}:` +
       `${s.toString().padStart(2, '0')}`;
+}
+
+function formatElapsed(totalSeconds) {
+
+  totalSeconds = Number(totalSeconds) || 0;
+
+  let hours = Math.floor(totalSeconds / 3600);
+  let minutes = Math.floor((totalSeconds % 3600) / 60);
+  let seconds = totalSeconds % 60;
+
+  hours = String(hours).padStart(2, '0');
+  minutes = String(minutes).padStart(2, '0');
+  seconds = String(seconds).padStart(2, '0');
+
+  return `${hours}:${minutes}:${seconds}`;
 }
 
 loadLeaderboard();

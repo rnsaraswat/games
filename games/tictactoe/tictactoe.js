@@ -11,7 +11,7 @@ import { db } from "../../leaderboard/firebase-config.js";
 //     getDocs,
 //     addDoc
 //   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { addDoc, collection } from 
+import { addDoc, collection, serverTimestamp } from 
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // define variables also used to add firebase leaderboard
@@ -396,7 +396,11 @@ window.addEventListener('load', function () {
 
     // to add firebase leaderboard (save record)
     window.saveScore = async function() {
+        // let date = new Date();
+        // let date = serverTimestamp();
 
+        // console.log(game_id, game, player, opponent, difficulty, size,
+        //     hours * 3600 + minutes * 60 + seconds, score, moves, email,playMode, text, serverTimestamp());
         try {
           await addDoc(collection(db, "leaderboard"), {
             game_id: game_id,
@@ -405,14 +409,14 @@ window.addEventListener('load', function () {
             opponent: opponent,
             difficulty: difficulty,
             size: size,
-            elapsed: elapsedTime,
+            elapsed: hours * 3600 + minutes * 60 + seconds,
             score: score,
             moves: moves,
             email: email,
             level: "-",
             mode: playMode,
             text: text,
-            date: new Date()
+            createdAt: new Date()
           });
       
           console.log("Score Saved!");
