@@ -2,15 +2,6 @@ import { shareScore } from './share.js';
 import { lcsaveToLeaderboard } from '../../leaderboard/lcleaderboard.js';
 // to add firebase leaderboard
 import { db } from "../../leaderboard/firebase-config.js";
-// import {
-//     collection,
-//     query,
-//     where,
-//     orderBy,
-//     limit,
-//     getDocs,
-//     addDoc
-//   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { addDoc, collection, serverTimestamp } from 
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -396,11 +387,6 @@ window.addEventListener('load', function () {
 
     // to add firebase leaderboard (save record)
     window.saveScore = async function() {
-        // let date = new Date();
-        // let date = serverTimestamp();
-
-        // console.log(game_id, game, player, opponent, difficulty, size,
-        //     hours * 3600 + minutes * 60 + seconds, score, moves, email,playMode, text, serverTimestamp());
         try {
           await addDoc(collection(db, "leaderboard"), {
             game_id: game_id,

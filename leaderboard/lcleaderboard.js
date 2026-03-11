@@ -99,7 +99,7 @@ function lcrenderTable() {
   const end = start + lcitemsPerPage;
   const currentItems = lcfilteredData.slice(start, end);
 
-  console.log(currentItems);
+  // console.log(currentItems);
   // console.log(d.date);
   // const date = new Date(d.date).toLocaleString();
   // console.log(date);

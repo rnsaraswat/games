@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Login</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/rgh-16x16.png">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
+
+<body>
+
+  <h2>Login with firebase</h2>
+
+  <button onclick="loginGoogle()">Login with Google</button>
+  <button onclick="loginGuest()">Continue as Guest</button>
+  <button onclick="logout()">Logout</button>
+
+  <p id="status">Not logged in</p>
+  <div id="alreadyLoginPopup" class="login-popup">
+    <div class="login-popup-box">
+      <h3>You are already logged in!</h3>
+
+      <button id="login-continue-button" class="button-primary">Continue</button>
+      <button id="login-change-button" class="login-danger">Change Login</button>
+      <!-- <button class="button-primary" onclick="continueSession()">Continue</button>
+    <button class="login-danger" onclick="changeAccount()">Change Login</button> -->
+    </div>
+  </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth, GoogleAuthProvider,
+      signInWithPopup, signInAnonymously,
+      signOut, onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    document.getElementById("alreadyLoginPopup").style.display = "none";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCEEOj5ZaEs8LZ9HCEVPhapDFy0bw-N3D4",
+      authDomain: "ravindra-games-hub-68e5f.firebaseapp.com",
+      projectId: "ravindra-games-hub-68e5f",
+      storageBucket: "ravindra-games-hub-68e5f.firebasestorage.app",
+      messagingSenderId: "233066688435",
+      appId: "1:233066688435:web:307f0bc7508df35579e5c6",
+      measurementId: "G-B24P20E3K8"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.loginGoogle = async () => {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+    };
+
+    window.loginGuest = async () => {
+      await signInAnonymously(auth);
+      document.getElementById("alreadyLoginPopup").style.display = "flex";
+    };
+
+    window.logout = async () => {
+      await signOut(auth);
+      document.getElementById("alreadyLoginPopup").style.display = "none";
+    };
+
+    // 🔹 Redirect to main
+    function goMain() {
+      window.location.href = "https://rnsaraswat.github.io/games/index.html";
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      const status = document.getElementById("status");
+      if (user) {
+        const now = new Date();
+        const guestName =
+          "Guest" +
+          now.getFullYear() +
+          (now.getMonth() + 1) +
+          now.getDate() +
+          "_" +
+          now.getHours() +
+          now.getMinutes();
+        status.innerText = "Logged in as: " + (user.displayName || guestName);
+        // goMain();
+        document.getElementById("alreadyLoginPopup").style.display = "flex";
+      } else {
+        status.innerText = "Not logged in";
+      }
+    });
+
+    const loginContinueButton = document.getElementById("login-continue-button");
+    const loginChangeButton = document.getElementById("login-change-button");
+
+    loginContinueButton.addEventListener("click", () => {
+      window.location.href = "../index.html";
+    });
+
+    loginChangeButton.addEventListener("click", () => {
+      // window.location.href = "login.html";
+      document.getElementById("alreadyLoginPopup").style.display = "none";
+      changeAccount();
+      window.location.href = "./firebase-login-test.html";
+    });
+
+    // Change Login → Logout + Login Page
+    async function changeAccount() {
+      await signOut(auth);
+      localStorage.clear();
+    }
+
+  </script>
+
+</body>
+
+</html>

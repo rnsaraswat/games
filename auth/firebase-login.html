@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Login</h2>
+<div id="msg"></div>
+
+<button id="g">Google</button>
+<button id="f">Facebook</button>
+<button id="t">Twitter</button>
+
+<hr>
+
+<h3>Email Magic Link</h3>
+<input id="emailInput" placeholder="Email">
+<button id="emailBtn">Send Link</button>
+
+<hr>
+
+<h3>Name + Email</h3>
+<input id="nameInput" placeholder="Name">
+<input id="email2Input" placeholder="Email">
+<button id="nameEmailBtn">Login</button>
+
+<hr>
+
+<h3>Login as Guest</h3>
+<input id="guestName" placeholder="Enter name (optional)">
+<button id="guestBtn">Continue</button>
+
+<div id="authBox">
+    <h3>Checking login...</h3>
+  </div>
+
+<script type="module">
+import {
+  loginGoogle,
+  loginFacebook,
+  loginTwitter,
+  sendMagicLink,
+  loginNameEmail,
+  loginGuest,
+  checkEmailLink
+} from "./firebase-auth.js";
+
+g.onclick = loginGoogle;
+f.onclick = loginFacebook;
+t.onclick = loginTwitter;
+
+emailBtn.onclick = () =>
+  sendMagicLink(emailInput.value);
+
+nameEmailBtn.onclick = () =>
+  loginNameEmail(nameInput.value, email2Input.value);
+
+guestBtn.onclick = () =>
+  loginGuest(guestName.value);
+
+checkEmailLink();
+</script>
+
+<script type="module">
+    import { detectLogin, logoutUser } from "./auth.js";
+    
+    const box = document.getElementById("authBox");
+    
+    detectLogin((logged) => {
+    
+      if (logged) {
+    
+        const user = JSON.parse(localStorage.getItem("user"));
+    
+        box.innerHTML = `
+          <h3>You are already logged in</h3>
+          <p>Welcome: ${user.name} (${user.email || "No Email"})</p>
+          <button id="continueBtn">Continue</button>
+          <button id="changeBtn">Change Login</button>
+        `;
+    
+        document.getElementById("continueBtn").onclick = () => {
+            redirectMain();
+        };
+    
+        document.getElementById("changeBtn").onclick = logoutUser;
+    
+      } else {
+        window.location.href = "firebase-login.html";
+      }
+    
+    });
+    
+    // function startMainProgram(){
+    //   alert("Main program started");
+    //   redirectMain();
+    // }
+    </script>
+</body>
+</html>

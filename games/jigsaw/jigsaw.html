@@ -5,7 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Magic Jigsaw</title>
+    <meta name="description"
+    content="Ravindra Games Hub — collection of lightweight web games (Jigsaw) assembly of small, square shaped pieces to form a complete, cohesive image">
     <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+  <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+  <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
+  <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+  <link rel="stylesheet" href="../../commoncss.css">
+  <link rel="manifest" href="../../manifest.json" />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta name="theme-color" content="#6200ee" />
 </head>
 
 <body>
@@ -160,6 +170,21 @@
             }
         });
 
+        function openGlobalFeedback() {
+      document.getElementById("gb-feedbackModal").style.display = 'flex';
+    };
+
+    function closeGlobalFeedback() {
+      document.getElementById("gb-feedbackModal").style.display = 'none';
+    };
+
+    fetch('../../leaderboard/gbfeedback.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+        document.getElementById("gb-feedbackModal").style.display = 'none';
+      });
+      
         function loadCSS() {
             var head = document.head;
             var link = document.createElement('link');
@@ -168,7 +193,51 @@
             link.href = '../../leaderboard/leaderboard.css';
             head.appendChild(link);
         }
+
+        (async () => {
+      const GAME_NAME = "Jigsaw Puzzle";
+      const GAME_SHORT = "jigsaw";
+
+      const res = await fetch("../../manifest.json");
+      const manifest = await res.json();
+
+      manifest.short_name = GAME_SHORT;
+      manifest.name = GAME_NAME;
+
+      manifest.start_url = 'https://rnsaraswat.github.io/games/games/jigsaw/index.html';
+      manifest.scope = 'https://rnsaraswat.github.io/games/games/jigsaw/index.html';
+
+      // 🔥 icons ko absolute banane ka safety fix
+      manifest.icons = manifest.icons.map(icon => ({
+        ...icon,
+        src: new URL(icon.src, location.origin).href
+      }));
+
+      const blob = new Blob(
+        [JSON.stringify(manifest)],
+        { type: "application/json" }
+      );
+
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("link");
+      link.rel = "manifest";
+      link.href = url;
+      document.head.appendChild(link);
+    })();
+        
     </script>
+
+<script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("../../sw.js")
+          .then(() => console.log("SW registered"))
+          .catch((err) => console.log("SW error", err));
+      });
+    }
+  </script>
 </body>
 
 </html>

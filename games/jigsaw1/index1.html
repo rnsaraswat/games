@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Magic Jigsaw Puzzle</title>
+    <meta name="description"
+        content="Ravindra Games Hub — collection of lightweight web games (Jigsaw) assembly of small, interlocking, and square shaped pieces to form a complete, cohesive image">
+    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+    <link rel="stylesheet" href="../../commoncss.css">
+    <link rel="manifest" href="../../manifest.json" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <meta name="theme-color" content="#6200ee" />
+</head>
+
+<body>
+    <div id="app">
+        <div id="controls">
+            <h1>Magic Jigsaw</h1>
+            <label for="difficulty">⊞ Size:</label>
+            <select id="difficulty">
+                <option value="3x4" selected>😊Easy 3×4</option>
+                <option value="4x6">🤔Medium 4×6</option>
+                <option value="6x8">🤯Hard 6×8</option>
+                <option value="10x14">🧑‍🔬Extreme 10×14</option>
+            </select>
+            <button class="button-primary" id="startBtn">🔄 New Game</button>
+            <button id="shuffleBtn">🔄Reshuffle</button>
+            <!-- <button id="startBtn">Start / Shuffle</button>
+            <button id="resetBtn">Reset</button> -->
+
+
+            <label for="hint">Hint:</label>
+            <select id="hint">
+                <option value="0">Off</option>
+                <option value="0.25">💡Low</option>
+                <option value="0.5" selected>🤔Medium</option>
+                <option value="0.75">👀High</option>
+            </select>
+
+            <div><button id="pauseBtn">⏸Pause</button>Timer: <span id="timer-display">⏱️00:00:00</span></div>
+
+            <div id="status">
+                Placed: <span id="placed">0</span> /
+                <span id="total">0</span>
+            </div>
+
+            <label for="gallery">gallery:</label>
+            <div class="gallery" id="gallery">
+                <img src="https://picsum.photos/400/400?1">
+                <img src="https://picsum.photos/400/400?2">
+                <img src="https://picsum.photos/400/400?3">
+            </div>
+
+            <label for="snapMode">Snap Mode:</label>
+            <select id="snapMode">
+                <option value="smart" selected>Smart Threshold</option>
+                <option value="grid">Exact Grid</option>
+                <option value="off">OFF</option>
+            </select>
+
+            <label for="rotation">Rotation Piece:</label>
+            <select id="rotation">
+                <option value="on">🔓ON</option>
+                <option value="off" selected>🔒OFF</option>
+            </select>
+
+            <!-- <label for="imgURL">Load Image URL:</label> -->
+            <!-- <input id="imgURL" type="text"  placeholder="Paste image link">
+
+            <button id="loadURLBtn">Load</button> -->
+
+            <!-- <label for="localImg">Load From Computer:</label> -->
+            <!-- <input type="file" id="localImg" accept="image/*"> -->
+            <!-- <button id="loadLocalBtn">Load</button> -->
+            <button id="toggle-theme">☀️ Light</button>
+            <button id="toggle-sound">🔇 Music:Off</button>
+            <button id="toggle-rules">📜View Rules</button>
+            <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global
+                Leaderboard</button>
+            <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+                Leaderboard</button>
+            <button class="button-primary" id="shareBtn">📤Sharing</button>
+            <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+            <button class="button-primary"
+                onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+            <label for="shapeStyle">Piece Shape:</label>
+            <select id="shapeStyle">
+
+                <option value="square">Perfect Square</option>
+                <option value="classic">Classic Curvy</option>
+                <option value="random">More Randomized</option>
+                <option value="bezier">Super-Real</option>
+
+            </select>
+            <p id="loading" class="loading">Loading...</p>
+        </div>
+
+        <div id="gameArea">
+            <div id="board">
+                <canvas id="puzzleBoard"></canvas>
+
+                <div id="pauseOverlay">
+                    <h1>Game Paused</h1>
+                    <button id="resumeBtn">Resume</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+    <div id="lcLeaderboardModal" class="lc-main-container"></div>
+    <div id="gbLeaderboardModal" class="gb-main-container"></div>
+    <div id="firebasegbLeaderboardModal" class="gb-main-container"></div>
+    <div id="rulesPopup" class="rules-popup-window">
+        <div class="rules-header-section">
+            <span id="rulesCloseBtn" class="rules-popup-close">Close X</span>
+            <h1 class="rules-h2">Game Rules</h1>
+        </div>
+        <div class="rules-content">
+            <p id="RulesBox"></p>
+        </div>
+    </div>
+    <script type="module" src="js/rules.js"></script>
+    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
+    <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+    <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
+    <script type="module" src="js/script.js"></script>
+    <script type="module">
+        import { shareScore } from './js/share.js';
+        document.getElementById("shareBtn").addEventListener("click", async () => {
+            console.log("shareBtn clicked")
+            shareScore("4inARow", 0);
+        });
+    </script>
+
+    <script>
+        document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById("lcLeaderboardModal").style.display = 'none';
+        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+        // document.getElementById("winText").style.display = 'none';
+        document.getElementById("rulesPopup").style.display = 'none';
+
+        const themeToggle = document.getElementById('toggle-theme');
+        function setTheme(t) {
+            if (t === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '☀️ Light'
+            }
+            if (t === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '🌙 Dark'
+            }
+        }
+        if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+        setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+
+        function openGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'none';
+        };
+
+        function openFirebaseGlobalLeaderboard() {
+            document.getElementById("firebasegbLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeFirebaseGlobalLeaderboard() {
+            document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+        };
+
+        fetch('../../leaderboard/firebasegbleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('firebasegbLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+            });
+
+        fetch('../../leaderboard/gbleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("gbLeaderboardModal").style.display = 'none';
+            });
+
+        function openLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'none';
+        };
+
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
+            }
+        };
+
+        fetch('../../leaderboard/lcleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("lcLeaderboardModal").style.display = 'none';
+            });
+
+        function openGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'flex';
+        };
+
+        function closeGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'none';
+        };
+
+        fetch('../../leaderboard/gbfeedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+                document.getElementById("gb-feedbackModal").style.display = 'none';
+            });
+
+        (async () => {
+            const GAME_NAME = "Jigsaw Puzzle";
+            const GAME_SHORT = "jigsaw";
+
+            const res = await fetch("../../manifest.json");
+            const manifest = await res.json();
+
+            manifest.short_name = GAME_SHORT;
+            manifest.name = GAME_NAME;
+
+            manifest.start_url = 'https://rnsaraswat.github.io/games/games/jigsaw1/index.html';
+            manifest.scope = 'https://rnsaraswat.github.io/games/games/jigsaw1/index.html';
+
+            manifest.icons = manifest.icons.map(icon => ({
+                ...icon,
+                src: new URL(icon.src, location.origin).href
+            }));
+
+            const blob = new Blob(
+                [JSON.stringify(manifest)],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("link");
+            link.rel = "manifest";
+            link.href = url;
+            document.head.appendChild(link);
+        })();
+
+    </script>
+    <script>
+
+        const board = document.getElementById("board")
+        let image = new Image()
+
+        let rows = 4
+        let cols = 6
+
+        let pieces = []
+        let pieceW, pieceH
+
+        let placed = 0
+
+        let timer = 0
+        let timerInterval = null
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timer++
+                updateTimer()
+            }, 1000)
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval)
+        }
+
+        function updateTimer() {
+            let h = Math.floor(timer / 3600)
+            let m = Math.floor(timer % 3600 / 60)
+            let s = timer % 60
+
+            document.getElementById("timer-display").innerText =
+                String(h).padStart(2, "0") + ":" +
+                String(m).padStart(2, "0") + ":" +
+                String(s).padStart(2, "0")
+        }
+
+        /* start puzzle */
+        function startPuzzle() {
+            let diff = document.getElementById("difficulty").value.split("x")
+            rows = parseInt(diff[0])
+            cols = parseInt(diff[1])
+
+            createPieces()
+
+            shufflePieces()
+
+            timer = 0
+            startTimer()
+        }
+
+        /* create pieces */
+        function createPieces() {
+            board.innerHTML = ""
+
+            pieces = []
+
+            let w = board.clientWidth
+            let h = board.clientHeight
+
+            pieceW = w / cols
+            pieceH = h / rows
+
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+
+                    let canvas = document.createElement("canvas")
+
+                    canvas.width = pieceW
+                    canvas.height = pieceH
+
+                    canvas.className = "piece"
+
+                    let ctx = canvas.getContext("2d")
+
+                    let sx = c * (image.width / cols)
+                    let sy = r * (image.height / rows)
+
+                    ctx.drawImage(
+                        image,
+                        sx, sy,
+                        image.width / cols,
+                        image.height / rows,
+                        0, 0,
+                        pieceW, pieceH
+                    )
+
+                    canvas.style.width = pieceW + "px"
+                    canvas.style.height = pieceH + "px"
+
+                    board.appendChild(canvas)
+
+                    let piece = {
+                        r, c,
+                        x: 0, y: 0,
+                        correctX: c * pieceW,
+                        correctY: r * pieceH,
+                        el: canvas,
+                        placed: false
+                    }
+
+                    enableDrag(piece)
+
+                    pieces.push(piece)
+                }
+            }
+        }
+
+        /* shuffle */
+        function shufflePieces() {
+            pieces.forEach(p => {
+                if (p.placed) return
+
+                p.x = Math.random() * (board.clientWidth - pieceW)
+                p.y = Math.random() * (board.clientHeight - pieceH)
+
+                p.el.style.transform = `translate(${p.x}px,${p.y}px)`
+            })
+        }
+
+        /* drag */
+        function enableDrag(piece) {
+            let dragging = false
+            let ox, oy
+
+            piece.el.onpointerdown = e => {
+                dragging = true
+                ox = e.clientX - piece.x
+                oy = e.clientY - piece.y
+            }
+
+            window.onpointermove = e => {
+                if (!dragging) return
+
+                piece.x = e.clientX - ox
+                piece.y = e.clientY - oy
+
+                piece.el.style.transform =
+                    `translate(${piece.x}px,${piece.y}px)`
+            }
+
+            window.onpointerup = () => {
+                dragging = false
+
+                let dx = Math.abs(piece.x - piece.correctX)
+                let dy = Math.abs(piece.y - piece.correctY)
+
+                if (dx < 20 && dy < 20) {
+
+                    piece.x = piece.correctX
+                    piece.y = piece.correctY
+
+                    piece.el.style.transform =
+                        `translate(${piece.x}px,${piece.y}px)`
+
+                    piece.placed = true
+
+                    placed++
+
+                    updateStatus()
+
+                    if (placed === pieces.length) {
+                        stopTimer()
+                        confetti()
+                    }
+                }
+            }
+        }
+
+        /* status */
+        function updateStatus() {
+            document.getElementById("status").innerText =
+                "Placed " + placed + " / " + pieces.length
+        }
+
+        /* pause */
+        document.getElementById("pauseBtn").onclick = () => {
+            stopTimer()
+            document.getElementById("pauseOverlay").style.display = "flex"
+        }
+        /* resume */
+        document.getElementById("resumeBtn").onclick = () => {
+            startTimer()
+            document.getElementById("pauseOverlay").style.display = "none"
+        }
+
+        /* start */
+        document.getElementById("startBtn").onclick = startPuzzle
+
+        // document.getElementById("resetBtn").onclick = () => {
+        //     placed = 0
+        //     startPuzzle()
+        // }
+
+        /* gallery */
+        document.querySelectorAll(".gallery img").forEach(img => {
+            img.onclick = () => {
+                image.src = img.src
+            }
+        })
+
+        /* load url */
+        document.getElementById("loadURLBtn").onclick = () => {
+            image.src = document.getElementById("imgURL").value
+        }
+
+        /* local image */
+        document.getElementById("localImg").onchange = e => {
+            let file = e.target.files[0]
+            image.src = URL.createObjectURL(file)
+        }
+
+        /* hint */
+        document.getElementById("hint").onchange = e => {
+            let v = e.target.value
+
+            board.style.backgroundImage = "url(" + image.src + ")"
+            board.style.backgroundSize = "cover"
+            board.style.opacity = 1
+
+            board.style.backgroundBlendMode = "normal"
+
+            board.style.backgroundColor = "rgba(0,0,0," + (1 - v) + ")"
+        }
+
+        /* confetti */
+        function confetti() {
+            for (let i = 0; i < 150; i++) {
+                let div = document.createElement("div")
+
+                div.style.position = "fixed"
+                div.style.width = "6px"
+                div.style.height = "6px"
+                div.style.background = "hsl(" + Math.random() * 360 + ",100%,50%)"
+
+                div.style.left = Math.random() * 100 + "vw"
+                div.style.top = "-10px"
+
+                div.style.animation = "fall 2s linear"
+
+                document.body.appendChild(div)
+
+                setTimeout(() => div.remove(), 2000)
+            }
+        }
+
+    </script>
+    <script type="module" src="js/script.js"></script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("../../sw.js")
+                    .then(() => console.log("SW registered"))
+                    .catch((err) => console.log("SW error", err));
+            });
+        }
+    </script>
+</body>
+
+</html>
