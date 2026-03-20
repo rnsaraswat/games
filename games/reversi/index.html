@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Reversi</title>
+    <meta name="description"
+        content="Ravindra Games Hub — collection of lightweight web games (Reversi) One move can change it all">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+    <link rel="stylesheet" href="../../commoncss.css">
+    <link rel="manifest" href="../../manifest.json" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <meta name="theme-color" content="#6200ee" />
+</head>
+
+<body>
+    <div id="container">
+        <div id="left" class="left-section">
+
+            <h1>Reversi</h1>
+            <!-- <div id="controls"> -->
+            <div class="button-group">
+                <label for="difficulty">Level :
+                    <select id="difficulty">
+                        <option value="2" selected>😊Easy</option>
+                        <option value="4">🤔Medium</option>
+                        <option value="6">🤯Hard</option>
+                    </select></label>
+                <button class="button-primary" id="startBtn">🔄New Game</button>
+                <button id="undoBtn">↩️Undo</button>
+                <button id="toggle-theme">☀️ Light</button>
+                <button id="toggle-sound">🔇 Music:Off</button>
+                <button id="toggle-rules">📜View Rules</button>
+                <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global
+                    Leaderboard</button>
+                <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+                    Leaderboard</button>
+                <button class="button-primary" id="shareBtn">📤Sharing</button>
+                <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+                <button class="button-primary"
+                    onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+                <div id="status">
+                    <div class="scoredisk">
+                        <button class="bblack">
+                            <div class="bdisk"></div>
+                            Black: <span id="bScore">2</span>
+                        </button>
+                        <button class="bwhite">
+                            <div class="wdisk"></div>
+                            White: <span id="wScore">2</span>
+                        </button>
+                    </div>
+                    <div>
+                        <button id="pauseBtn">⏸Pause</button>
+                        <p>
+                            Timer: <span id="timer-display">⏱️00:00:00</span>
+                        </p>
+                    </div>
+                </div>
+                <div id="message">Select Level then press New Game to start game</div>
+                <p id="loading" class="loading">Loading...</p>
+            </div>
+        </div>
+        <div id="gameArea">
+            <div id="board">
+                <!-- <canvas id="fireworksCanvas"></canvas> -->
+            </div>
+            <div id="pauseOverlay">
+                <h1>Game Paused</h1>
+                <button id="resumeBtn">Resume</button>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+    <div id="lcLeaderboardModal" class="lc-main-container"></div>
+    <div id="gbLeaderboardModal" class="gb-main-container"></div>
+    <div id="firebasegbLeaderboardModal" class="gb-main-container"></div>
+    <div id="winText">🎉 You Won! 🎉</div>
+    <div id="rulesPopup" class="rules-popup-window">
+        <div class="rules-header-section">
+            <span id="rulesCloseBtn" class="rules-popup-close">Close X</span>
+            <h1 class="rules-h2">Game Rules</h1>
+        </div>
+        <div class="rules-content">
+            <p id="RulesBox"></p>
+        </div>
+    </div>
+    <canvas id="fireworksCanvas"></canvas>
+
+    <script type="module" src="js/rules.js"></script>
+    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
+    <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+    <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
+    <script type="module" src="js/script.js"></script>
+    <!-- <script type="module" src="js/timer_date.js"></script> -->
+    <script type="module">
+        import { shareScore } from './js/share.js';
+        document.getElementById("shareBtn").addEventListener("click", async () => {
+            console.log("shareBtn clicked")
+            shareScore("4inARow", 0);
+        });
+    </script>
+
+    <script>
+        document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById("lcLeaderboardModal").style.display = 'none';
+        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+        document.getElementById("winText").style.display = 'none';
+        document.getElementById("pauseOverlay").style.display = 'none';
+        document.getElementById("rulesPopup").style.display = 'none';
+
+        const themeToggle = document.getElementById('toggle-theme');
+        function setTheme(t) {
+            if (t === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '☀️ Light'
+            }
+            if (t === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '🌙 Dark'
+            }
+        }
+        if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+        setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+
+        function openGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'none';
+        };
+
+        function openFirebaseGlobalLeaderboard() {
+            document.getElementById("firebasegbLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeFirebaseGlobalLeaderboard() {
+            document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+        };
+
+        fetch('../../leaderboard/firebasegbleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('firebasegbLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+            });
+
+        fetch('../../leaderboard/gbleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("gbLeaderboardModal").style.display = 'none';
+            });
+
+        function openLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'none';
+        };
+
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
+            }
+        };
+
+        fetch('../../leaderboard/lcleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("lcLeaderboardModal").style.display = 'none';
+            });
+
+        function openGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'flex';
+        };
+
+        function closeGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'none';
+        };
+
+        fetch('../../leaderboard/gbfeedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+                document.getElementById("gb-feedbackModal").style.display = 'none';
+            });
+
+        (async () => {
+            const GAME_NAME = "Reversi Game";
+            const GAME_SHORT = "reversi";
+
+            const res = await fetch("../../manifest.json");
+            const manifest = await res.json();
+
+            manifest.short_name = GAME_SHORT;
+            manifest.name = GAME_NAME;
+
+            manifest.start_url = 'https://rnsaraswat.github.io/games/games/reversi/index.html';
+            manifest.scope = 'https://rnsaraswat.github.io/games/games/reversi/index.html';
+
+            manifest.icons = manifest.icons.map(icon => ({
+                ...icon,
+                src: new URL(icon.src, location.origin).href
+            }));
+
+            const blob = new Blob(
+                [JSON.stringify(manifest)],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("link");
+            link.rel = "manifest";
+            link.href = url;
+            document.head.appendChild(link);
+        })();
+
+    </script>
+    <script type="module" src="js/script.js"></script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("../../sw.js")
+                    .then(() => console.log("SW registered"))
+                    .catch((err) => console.log("SW error", err));
+            });
+        }
+    </script>
+</body>
+
+</html>

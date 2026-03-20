@@ -4,8 +4,8 @@ import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/l
 import { playSound } from './sound.js';
 // to add firebase leaderboard
 import { db } from "../../../leaderboard/firebase-config.js";
-import { addDoc, collection, serverTimestamp } from 
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { addDoc, collection, serverTimestamp } from
+    "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 export let winnerName = localStorage.getItem('player_name') || getUserName();
 export let gameName = 'jigsaw';
@@ -360,7 +360,7 @@ document.addEventListener("DOMContentLoaded", function () {
             window.saveScore();
             setTimeout(() => {
                 shareScore(gameName, score);
-              }, 3000);
+            }, 3000);
         }
     }
 
@@ -580,7 +580,7 @@ document.addEventListener("DOMContentLoaded", function () {
         pieces.forEach(p => {
             // let shape = shapeStyle.value;
             // if (shape === "square") {
-                drawSquarePiece(p);
+            drawSquarePiece(p);
             // }
             // else if (shape === "classic") {
             //     drawClassicPiece(p);
@@ -610,7 +610,7 @@ document.addEventListener("DOMContentLoaded", function () {
             ctx.shadowBlur = 20;
         }
 
-         /* image */
+        /* image */
         ctx.drawImage(
             img,
             p.col * (img.width / cols),
@@ -824,11 +824,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 y: Math.random() * -boardSize,
                 vx: (Math.random() - 0.5) * 5,
                 vy: Math.random() * 5 + 2,
-                size: Math.random() * 6 + 4
+                size: Math.random() * 6 + 4,
+                color: generateRandomNeonColor()
+
             });
         }
         animateConfetti();
     }
+
+    function generateRandomNeonColor() {
+        const hue = Math.floor(Math.random() * 361); // Random hue (0-360)
+        const saturation = 100; // Full saturation (100%)
+        const lightness = 50; // Moderate lightness (50%) for full color intensity
+        return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+      }
 
     function animateConfetti() {
         let anim = setInterval(() => {
@@ -838,13 +847,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 c.x += c.vx;
                 c.y += c.vy;
                 c.vy += 0.1;
+                ctx.save();
+                ctx.fillStyle = c.color;
+                ctx.shadowColor = c.color; 
+                ctx.shadowBlur = 15; 
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
                 ctx.fillRect(c.x, c.y, c.size, c.size);
+                ctx.restore();
             });
 
             if (confetti.length === 0) {
                 clearInterval(anim);
             }
-        }, 16);
+        }, 50);
     }
 
     /* =========================
@@ -939,10 +955,10 @@ document.addEventListener("DOMContentLoaded", function () {
        Leaderboard update
     ========================= */
 
-        // to add firebase leaderboard (save record)
-        window.saveScore = async function() {
-            try {
-              await addDoc(collection(db, "leaderboard"), {
+    // to add firebase leaderboard (save record)
+    window.saveScore = async function () {
+        try {
+            await addDoc(collection(db, "leaderboard"), {
                 game_id: game_id || 'jigsaw',
                 game: game || 'Jigsaw',
                 name: winnerName || 'Guast',
@@ -957,15 +973,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 mode: playMode || 'pvc',
                 text: text || "-",
                 createdAt: new Date()
-              });
-          
-              console.log("Score Saved!");
-          
-            } catch (error) {
-              console.error("Error:", error);
-            }
-          
-          };
+            });
+
+            console.log("Score Saved!");
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+
+    };
 
     function updateleaderboard() {
         let opponent = "-";
@@ -999,7 +1015,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     document.querySelectorAll("body > input[type='file']:not(#localImg)")
-    .forEach(el => el.remove());
+        .forEach(el => el.remove());
 
     /* =========================
        INIT

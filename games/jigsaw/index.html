@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="hi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Magic Jigsaw (Square)</title>
+    <meta name="description"
+        content="Ravindra Games Hub — collection of lightweight web games (Jigsaw) assembly of small, square shaped pieces to form a complete, cohesive image">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+    <link rel="stylesheet" href="../../commoncss.css">
+    <link rel="manifest" href="../../manifest.json" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <meta name="theme-color" content="#6200ee" />
+</head>
+
+<body>
+    <div id="container">
+        <div class="main">
+
+            <div id="left" class="section">
+                <!-- <div id="controls"> -->
+                <h1>Magic Jigsaw</h1>
+                <div class="button-group">
+
+                    <label>Choose image (built-in / upload / URL)</label>
+                    <!-- <div class="gallery" id="gallery">Choose image (built-in / upload / URL)</div> -->
+
+                    <!-- <div style="display:flex;gap:8px;margin-top:8px"> -->
+                    <input id="fileInput" type="file" accept="image/*" />
+                    <input id="urlInput" type="text" placeholder="Paste image URL and press Load" />
+                    <button id="loadUrlBtn" class="smallbtn">Load</button>
+                    <!-- </div> -->
+
+                    <label>Difficulty</label>
+                    <select id="difficulty">
+                        <option value="easy">😊 Easy — 3 × 4</option>
+                        <option value="medium" selected>🤔 Medium — 4 × 6</option>
+                        <option value="hard">🤯 Hard — 6 × 8</option>
+                        <option value="extreme">Extreme — 10 × 14</option>
+                    </select>
+
+                    <label>Options</label>
+                    <!-- <div style="display:flex;gap:8px"> -->
+                    <select id="snapMode">
+                        <option value="smart">Snap: Smart (threshold)</option>
+                        <option value="grid">Snap: Grid (exact)</option>
+                        <option value="none">Snap: Off</option>
+                    </select>
+                    <select id="rotationMode">
+                        <option value="none" selected>Rotate: Off</option>
+                        <option value="double">Rotate: Double-click</option>
+                    </select>
+                    <!-- </div> -->
+
+                    <button id="startBtn">Start</button>
+                    <button id="resetBtn" class="smallbtn">Reset</button>
+                    <button id="hintBtn" class="smallbtn">Show Hint</button>
+
+                    <button id="toggle-rules">📜View Rules</button>
+                    <button id="downloadBtn" class="smallbtn">Download Result</button>
+                    <!-- <div class="status" id="status">Pieces: 0 | Placed: 0 | Time: 00:00:00</div> -->
+                    <div class="infoLabel">Pieces:
+                        <span id="pieces" class="infoName">0</span>
+                    </div>
+                    <div class="infoLabel">Placed:
+                        <span id="placeed" class="infoName">0</span>
+                    </div>
+                    <div id="timer-display" class="info">⏱️ 00:00:00</div>
+
+                    <button id="toggle-theme">☀️ Light</button>
+                    <button id="toggle-sound">🔇 Music:Off</button>
+                    <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
+                        Global
+                        Leaderboard</button>
+                    <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+                        Leaderboard</button>
+                    <button class="button-primary" id="shareBtn">📤Sharing</button>
+                    <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+                    <button class="button-primary"
+                        onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+                    <button class="smallbtn" onclick="setting()">⚙️ Setting</button>
+                    <p id="loading" class="loading">Loading...</p>
+                </div>
+
+            </div>
+            <div id="right">
+                <div id="board" class="board">
+                    <div id="hintOverlay" class="hint-overlay" style="display:none"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="settingPopup" class="popupWindow">
+        <button class="smallbtn" onclick="setting()">❌ Close</button>
+
+        <label>Choose image (built-in / upload / URL)</label>
+        <div class="gallery" id="gallery"></div>
+
+        <div style="display:flex;gap:8px;margin-top:8px">
+            <input id="fileInput" type="file" accept="image/*" />
+            <input id="urlInput" type="text" placeholder="Paste image URL and press Load" />
+            <button id="loadUrlBtn" class="smallbtn">Load</button>
+        </div>
+
+        <label>Difficulty</label>
+        <select id="difficulty">
+            <option value="easy">😊 Easy — 3 × 4</option>
+            <option value="medium" selected>🤔 Medium — 4 × 6</option>
+            <option value="hard">🤯 Hard — 6 × 8</option>
+            <option value="extreme">Extreme — 10 × 14</option>
+        </select>
+
+        <label>Options</label>
+        <div style="display:flex;gap:8px">
+            <select id="snapMode">
+                <option value="smart">Snap: Smart (threshold)</option>
+                <option value="grid">Snap: Grid (exact)</option>
+                <option value="none">Snap: Off</option>
+            </select>
+            <select id="rotationMode">
+                <option value="none" selected>Rotate: Off</option>
+                <option value="double">Rotate: Double-click</option>
+            </select>
+        </div>
+
+        <div class="controls">
+            <button id="startBtn">Start / Shuffle</button>
+            <button id="resetBtn" class="smallbtn">Reset</button>
+        </div>
+
+        <div class="controls" style="margin-top:8px">
+            <button id="hintBtn" class="smallbtn">Show Hint</button>
+            <button id="toggle-rules">📜View Rules</button>
+            <button id="downloadBtn" class="smallbtn">Download Result</button>
+        </div>
+
+        <button id="toggle-theme">☀️ Light</button>
+        <button id="toggle-sound">🔇 Music:Off</button>
+        <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
+        <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
+        <button class="button-primary" id="shareBtn">📤Sharing</button>
+    </div>
+    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+    <div id="lcLeaderboardModal" class="lc-main-container"></div>
+    <div id="gbLeaderboardModal" class="gb-main-container"></div>
+    <div id="firebasegbLeaderboardModal" class="gb-main-container"></div>
+    <div id="rulesPopup" class="rules-popup-window">
+        <div class="rules-header-section">
+            <span id="rulesCloseBtn" class="rules-popup-close">Close X</span>
+            <h1 class="rules-h2">Game Rules</h1>
+        </div>
+        <div class="rules-content">
+            <p id="RulesBox"></p>
+        </div>
+    </div>
+    <div id="winText">🎉 You Won! 🎉</div>
+    <script type="module" src="js/rules.js"></script>
+    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
+    <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+    <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
+    <script type="module" src="js/script.js"></script>
+    <script type="module">
+        import { shareScore } from './js/share.js';
+        document.getElementById("shareBtn").addEventListener("click", async () => {
+            console.log("shareBtn clicked")
+            shareScore("4inARow", 0);
+        });
+    </script>
+    <!-- <script type="module">
+        import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
+        window.sortTable = sortTable;
+        window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
+            try {
+                await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+            } catch (e) {
+                document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
+            }
+        };
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLeaderboard();
+        });
+    </script> -->
+
+    <!-- <script type="module">
+        import { localrenderLeaderboard } from '../../leaderboard/localleaderboard.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            localrenderLeaderboard();
+        });
+    </script> -->
+
+    <script>
+        document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById("lcLeaderboardModal").style.display = 'none';
+        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+        document.getElementById("winText").style.display = 'none';
+        document.getElementById("rulesPopup").style.display = 'none';
+
+        const themeToggle = document.getElementById('toggle-theme');
+        function setTheme(t) {
+            if (t === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '☀️ Light'
+            }
+            if (t === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('rg_theme', t);
+                themeToggle.textContent = '🌙 Dark'
+            }
+        }
+        if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+        setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+
+        function setting() {
+            if (document.getElementById("settingPopup").style.display === 'block') {
+                document.getElementById("settingPopup").style.display = 'none';
+            } else {
+                document.getElementById("settingPopup").style.display = 'block';
+            }
+        }
+
+        function openGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeGlobalLeaderboard() {
+            document.getElementById("gbLeaderboardModal").style.display = 'none';
+        };
+
+        function openFirebaseGlobalLeaderboard() {
+            document.getElementById("firebasegbLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeFirebaseGlobalLeaderboard() {
+            document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+        };
+
+        fetch('../../leaderboard/firebasegbleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('firebasegbLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+            });
+
+        fetch('../../leaderboard/gbleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("gbLeaderboardModal").style.display = 'none';
+            });
+
+        function openLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeLocalLeaderboard() {
+            document.getElementById("lcLeaderboardModal").style.display = 'none';
+        };
+
+        function clearLLB() {
+            if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+                localStorage.removeItem('leaderboard');
+                alert("All games Local Leaderboard Data is Cleared");
+                textToSpeechEng('Local Leaderboard data cleared');
+            }
+        };
+
+        fetch('../../leaderboard/lcleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("lcLeaderboardModal").style.display = 'none';
+            });
+
+        function openGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'flex';
+        };
+
+        function closeGlobalFeedback() {
+            document.getElementById("gb-feedbackModal").style.display = 'none';
+        };
+
+        fetch('../../leaderboard/gbfeedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
+                document.getElementById("gb-feedbackModal").style.display = 'none';
+            });
+
+        (async () => {
+            const GAME_NAME = "Jigsaw Puzzle";
+            const GAME_SHORT = "jigsaw";
+
+            const res = await fetch("../../manifest.json");
+            const manifest = await res.json();
+
+            manifest.short_name = GAME_SHORT;
+            manifest.name = GAME_NAME;
+
+            manifest.start_url = 'https://rnsaraswat.github.io/games/games/jigsaw/index.html';
+            manifest.scope = 'https://rnsaraswat.github.io/games/games/jigsaw/index.html';
+
+            // 🔥 icons ko absolute banane ka safety fix
+            manifest.icons = manifest.icons.map(icon => ({
+                ...icon,
+                src: new URL(icon.src, location.origin).href
+            }));
+
+            const blob = new Blob(
+                [JSON.stringify(manifest)],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("link");
+            link.rel = "manifest";
+            link.href = url;
+            document.head.appendChild(link);
+        })();
+
+    </script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("../../sw.js")
+                    .then(() => console.log("SW registered"))
+                    .catch((err) => console.log("SW error", err));
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -21,7 +21,7 @@ window.addEventListener('load', function () {
   const messageEl = document.getElementById('message');
   const toggleThemeBtn = document.getElementById("toggle-theme");
   const gridWrap = document.getElementById('right');
-  const canvas = document.getElementById('fireworksCanvas');
+  // const canvas = document.getElementById('fireworksCanvas');
 
   let board = [];
   let size = 15;

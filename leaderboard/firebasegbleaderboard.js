@@ -316,7 +316,7 @@ if (searchInput) {
 let fullData = [];
 let currentPage = 1;
 let rowsPerPage = 20;
-let currentSortField = "score";
+let currentSortField = "createdAt";
 let currentSortDirection = "desc";
 
 // async function loadLeaderboard() {
@@ -375,7 +375,7 @@ async function loadLeaderboard() {
 
   const q = query(
       collection(db, "leaderboard"),
-      orderBy("score", "desc")
+      orderBy("createdAt", "desc")
   );
 
   const snapshot = await getDocs(q);

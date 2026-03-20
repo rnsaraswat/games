@@ -4,10 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Magic Jigsaw Puzzle</title>
+    <title>Magic Jigsaw (rectangle)</title>
     <meta name="description"
-        content="Ravindra Games Hub — collection of lightweight web games (Jigsaw) assembly of small, interlocking, and square shaped pieces to form a complete, cohesive image">
-    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
+        content="Ravindra Games Hub — collection of lightweight web games (Jigsaw) assembly of small, interlocking, and reckangle shaped pieces to form a complete, cohesive image">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
     <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
@@ -502,12 +501,15 @@
                 div.style.position = "fixed"
                 div.style.width = "6px"
                 div.style.height = "6px"
+                console.log(Math.random() * 360)
                 div.style.background = "hsl(" + Math.random() * 360 + ",100%,50%)"
+                // div.style.backgroundColor = '#0ff'
+                div.style.boxShadow = "0 0 5px #0ff, 0 0 10px #0ff";
 
                 div.style.left = Math.random() * 100 + "vw"
                 div.style.top = "-10px"
 
-                div.style.animation = "fall 2s linear"
+                div.style.animation = "fall 3s linear"
 
                 document.body.appendChild(div)
 
