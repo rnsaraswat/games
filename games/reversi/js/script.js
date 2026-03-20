@@ -317,7 +317,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function playerMove() {
         if (gameOver) return
 
-        // 👉 पहले dot हटाओ
+        // remove yellow dots
         clearPreview()
 
         let r = parseInt(this.dataset.r)
@@ -658,7 +658,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 opponent: opponent || "Computer",
                 difficulty: difficulty || "-",
                 size: `9x9`,
-                elapsed: Number(elapsedTime) / 1000 || 0,
+                elapsed: Math.floor(Number(elapsedTime) / 1000) || 0,
                 score: score || 0,
                 moves: moves || 0,
                 email: email || "-",

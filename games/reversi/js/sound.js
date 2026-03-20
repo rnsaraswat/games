@@ -1,6 +1,7 @@
 // Sound objects
 const sounds = {
     click: new Audio('../../assets/sound/tap-sound.mp3'),
+    flip: new Audio('../../assets/sound/card-flip.wav'),
     error: new Audio('../../assets/sound/error-sound.mp3'),
     win: new Audio('../../assets/sound/winner-trumpets.mp3'),
     draw: new Audio('../../assets/sound/game-over-classic.mp3'),
