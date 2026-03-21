@@ -28,8 +28,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const loading = document.getElementById('loading');
     loading.style.display = 'none';
 
-    // const canvas = document.getElementById("fireworksCanvas");
-    // const ctx = canvas.getContext("2d");
     const startBtn = document.getElementById('startBtn');
     const undoBtn = document.getElementById('undoBtn');
     const boardDiv = document.getElementById('board');
@@ -213,6 +211,9 @@ document.addEventListener("DOMContentLoaded", function () {
         let aiMoves = getMoves(board, 2)
         let empty = 0
 
+        // console.log("elapsedTime",elapsedTime, "Num", Number(elapsedTime), "floor", Math.floor(Number(elapsedTime)),"/1000", Math.floor(Number(elapsedTime) / 1000))
+        // alert ("elapsedTime",elapsedTime, "Num", Number(elapsedTime), "floor", Math.floor(Number(elapsedTime)),"/1000", Math.floor(Number(elapsedTime)) / 1000 )
+
         for (let r = 0; r < 8; r++) {
             for (let c = 0; c < 8; c++) {
                 if (board[r][c] == 0) empty++
@@ -240,6 +241,7 @@ document.addEventListener("DOMContentLoaded", function () {
             } else if (white > black) {
                 statusEl.textContent = `Computer (White) Wins`
                 playSound('draw');
+
             } else {
                 statusEl.textContent = "Draw Game"
                 textToSpeechEng("its a Draw")
@@ -401,6 +403,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //     })
     // }
 
+    //check 
     function checkPassTurn() {
         let humanMoves = getMoves(board, 1)
         let aiMoves = getMoves(board, 2)
@@ -578,15 +581,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }, delay + 400)
     }
 
-    function animateFlip(cell, color) {
-        let disk = cell.querySelector(".disk")
-        if (!disk) return
-        disk.classList.add("flip")
-        setTimeout(() => {
-            disk.className = "disk " + color
-        }, 400)
+    // function animateFlip(cell, color) {
+    //     let disk = cell.querySelector(".disk")
+    //     if (!disk) return
+    //     disk.classList.add("flip")
+    //     setTimeout(() => {
+    //         disk.className = "disk " + color
+    //     }, 400)
 
-    }
+    // }
 
     // show yellow points where player can play
     function showPreview() {
@@ -642,6 +645,7 @@ document.addEventListener("DOMContentLoaded", function () {
         init();
     });
 
+    //resize game screen
     window.addEventListener('resize', () => {
         drawBoard();
         showPreview()
@@ -650,6 +654,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // to add firebase leaderboard (save record)
     window.saveScore = async function () {
         text = `Black=${b}, White=${w}`
+
         try {
             await addDoc(collection(db, "leaderboard"), {
                 game_id: game_id || 'reversi',
@@ -676,11 +681,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     };
 
+    // to add firebase leaderboard (save record)
     function updateleaderboard() {
         let opponent = "Computer";
         let game_id = 'reversi';
         let gsize = `9x9`;
-        let elapsed = Number(elapsedTime) / 1000;
+        let elapsed = Math.floor(Number(elapsedTime) / 1000);
         let gameCount = history.length;
         let filed1 = 0;
         let filed2 = 0
@@ -688,22 +694,27 @@ document.addEventListener("DOMContentLoaded", function () {
         let filed4 = playMode || 'pvc';
         let email = localStorage.getItem('email') || '-';
         const created_at = new Date();
-        score = (9 * 9 * 100 + (b - w > 0 ? b - w : w - b) - Number(elapsedTime) / 1000) * 1;
         if (depth == 2) {
+            score = (9 * 9 * 100 + (b - w > 0 ? b - w : w - b) - Math.floor(Number(elapsedTime) / 1000)) * 1;
             difficulty = "easy";
         } else if (depth == 4) {
+            score = (9 * 9 * 100 + (b - w > 0 ? b - w : w - b) - Math.floor(Number(elapsedTime) / 1000)) * 2;
             difficulty = "medium";
         } else if (depth == 6) {
+            score = (9 * 9 * 100 + (b - w > 0 ? b - w : w - b) - Math.floor(Number(elapsedTime) / 1000)) * 3;
             difficulty = "hard";
         }
 
+        // to add local leaderboard (save record)
         lcsaveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
 
+        //save record to spabase global leaderboard
         saveScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
     }
 
 });
 
+//get user name from local storage
 function getUserName() {
     const userData = localStorage.getItem("user");
     if (!userData) return `Guest`;
