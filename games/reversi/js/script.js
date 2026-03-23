@@ -1,5 +1,4 @@
 import { shareScore } from './share.js';
-import { launchFireworks, showWinText } from './fireworks.js';
 import { textToSpeechEng } from './speak.js';
 import { saveScore } from '../../../leaderboard/gbleaderboard.js';
 import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
@@ -10,7 +9,7 @@ import { addDoc, collection, serverTimestamp } from
     "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 export let winnerName = localStorage.getItem('player_name') || getUserName();
-export let gameName = 'Reversi';
+export let gameName = 'reversi';
 let game = "reversi";
 let game_id = "reversi";
 let opponent, difficulty, elapsed, moves, level, date;
@@ -38,6 +37,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const resumeBtn = document.getElementById('resumeBtn');
     const pauseBtn = document.getElementById('pauseBtn');
     const pauseOverlay = document.getElementById("pauseOverlay");
+
+    const canvas = document.getElementById('fireworksCanvas');
+    const ctx = canvas.getContext('2d');
+    resizeCanvas();
 
     let board = []
     let history = []
@@ -70,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let timerInterval;
     let isPaused = false;
 
-    //Start Function
+    //Timer Start Function
     function startTimer() {
         clearInterval(timerInterval);
         isPaused = false;
@@ -82,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 1000);
     }
 
-    /* Pause */
+    //Timer Pause
     pauseBtn.onclick = () => {
         if (!isPaused) {
             // Pause logic
@@ -92,13 +95,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    /* Stop function */
+    //Timer Stop function
     function stopTimer() {
         clearInterval(timerInterval);
         elapsedTime = 0;
     }
 
-    /* resume */
+    //Timer resume
     resumeBtn.onclick = () => {
         // Resume logic
         isPaused = false;
@@ -111,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
         pauseOverlay.style.display = "none"
     }
 
-    // prepare time to display in hh:mm:sss
+    // prepare time to display in hh:mm:ss
     function timeToString(time) {
         let h = Math.floor(time / 3600000);
         let m = Math.floor((time % 3600000) / 60000);
@@ -125,6 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("timer-display").innerHTML = txt;
     }
 
+    //change difficulty
     difficultySelect.onchange = () => {
         depth = difficultySelect.value;
         if (depth == 2) {
@@ -136,6 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // initial game setting / start game
     function init() {
         board = []
         for (let r = 0; r < 8; r++) {
@@ -158,6 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateScore()
     }
 
+    //create game board
     function createBoard() {
         boardDiv.innerHTML = ""
         statusEl.innerHTML = `${winnerName} (Black) Tuen <br> Click on yellow dots cell to play`
@@ -173,6 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // draw game board
     function drawBoard() {
         document.querySelectorAll(".cell").forEach(cell => {
             cell.innerHTML = ""
@@ -206,13 +213,11 @@ document.addEventListener("DOMContentLoaded", function () {
         return flips
     }
 
+    //check for game over
     function checkGameOver() {
         let humanMoves = getMoves(board, 1)
         let aiMoves = getMoves(board, 2)
         let empty = 0
-
-        // console.log("elapsedTime",elapsedTime, "Num", Number(elapsedTime), "floor", Math.floor(Number(elapsedTime)),"/1000", Math.floor(Number(elapsedTime) / 1000))
-        // alert ("elapsedTime",elapsedTime, "Num", Number(elapsedTime), "floor", Math.floor(Number(elapsedTime)),"/1000", Math.floor(Number(elapsedTime)) / 1000 )
 
         for (let r = 0; r < 8; r++) {
             for (let c = 0; c < 8; c++) {
@@ -231,7 +236,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             if (black > white) {
                 statusEl.textContent = `${winnerName} (Black) Wins`
-                launchFireworks();
+                // launchFireworks();
+                launchConfetti();
                 playSound('win');
                 updateleaderboard();
                 window.saveScore();
@@ -267,55 +273,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return moves
     }
 
-    // function isBoardFull() {
-    //     for (let r = 0; r < 8; r++) {
-    //         for (let c = 0; c < 8; c++) {
-    //             if (board[r][c] == 0)
-    //                 return false
-    //         }
-    //     }
-    //     return true
-    // }
-
-    // function playerMove() {
-    //     if (gameOver) return
-    //     let r = parseInt(this.dataset.r)
-    //     let c = parseInt(this.dataset.c)
-    //     if (board[r][c] !== 0) return
-    //     let flips = getFlips(board, r, c, 1)
-    //     if (flips.length == 0) return
-    //     history.push(JSON.parse(JSON.stringify(board)))
-    //     applyMove(board, { r, c, flips }, 1)
-    //     drawBoard()
-    //     updateScore()
-    //     if (checkGameOver()) return
-    //     currentPlayer = 2
-    //     if (checkPassTurn()) return
-    //     statusEl.innerHTML = `Computer (White) Turn <br> Thinking`
-    //     setTimeout(aiMove, 300)
-    // }
-
-    // function playerMove() {
-    //     if (gameOver) return
-    //     let r = parseInt(this.dataset.r)
-    //     let c = parseInt(this.dataset.c)
-    //     if (board[r][c] != 0) return
-    //     let flips = getFlips(board, r, c, 1)
-    //     if (flips.length == 0) return
-    //     history.push(copyBoard(board))
-    //     let move = { r, c, flips }
-    //     applyMove(board, move, 1)
-    //     animateMove(move, 1, () => {
-    //         drawBoard()
-    //         updateScore()
-    //         if (checkGameOver()) return
-    //         currentPlayer = 2
-    //         if (checkPassTurn()) return
-    //         statusEl.innerHTML = `Computer (White) Turn <br> Thinking`
-    //         setTimeout(aiMove, 300)
-    //     })
-    // }
-
+    //player move function
     function playerMove() {
         if (gameOver) return
 
@@ -343,6 +301,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     }
 
+    //computer move function
     function aiMove() {
         let depth = parseInt(document.getElementById("difficulty").value)
         let move = findBestMove(board, depth)
@@ -350,11 +309,11 @@ document.addEventListener("DOMContentLoaded", function () {
             gameOver = true
             return
         }
-        // STEP 1: state update
+        //state update
         applyMove(board, move, 2)
-        // STEP 2: animation only (NO drawBoard here)
+        //animation only (NO drawBoard here)
         animateMove(move, 2, () => {
-            // STEP 3: clean redraw AFTER animation
+            // clean redraw board AFTER animation
             drawBoard()
             updateScore()
             if (checkGameOver()) return
@@ -365,45 +324,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     }
 
-    // function aiMove() {
-    //     depth = parseInt(document.getElementById("difficulty").value)
-    //     let move = findBestMove(board, depth)
-    //     if (!move) {
-    //         gameOver = true
-    //         return
-    //     }
-    //     applyMove(board, move, 2)
-    //     drawBoard()
-    //     updateScore()
-
-    //     currentPlayer = 1
-    //     if (checkGameOver()) return
-    //     statusEl.innerHTML = `${winnerName} (Black) Tuen <br> Click on yellow dots cell to play`
-
-    //     if (checkPassTurn()) return
-    //     showPreview()
-    // }
-
-    // function aiMove() {
-    //     let depth = parseInt(document.getElementById("difficulty").value)
-    //     let move = findBestMove(board, depth)
-    //     if (!move) {
-    //         gameOver = true
-    //         return
-    //     }
-    //     applyMove(board, move, 2)
-    //     animateMove(move, 2, () => {
-    //         drawBoard()
-    //         updateScore()
-    //         currentPlayer = 1
-    //         if (checkGameOver()) return
-    //         statusEl.innerHTML = `${winnerName} (Black) Tuen <br> Click on yellow dots cell to play`
-    //         if (checkPassTurn()) return
-    //         showPreview()
-    //     })
-    // }
-
-    //check 
+    //check pass (no move for player or computer)
     function checkPassTurn() {
         let humanMoves = getMoves(board, 1)
         let aiMoves = getMoves(board, 2)
@@ -426,28 +347,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return false
     }
 
-    // function applyMove(b, m, player) {
-    //     b[m.r][m.c] = player
-    //     let cell = document.querySelector(
-    //         `.cell[data-r="${m.r}"][data-c="${m.c}"]`
-    //     )
-    //     if (cell) {
-    //         let disk = document.createElement("div")
-    //         disk.className = "disk " + (player == 1 ? "black" : "white")
-    //         cell.appendChild(disk)
-    //     }
-    //     m.flips.forEach(p => {
-    //         b[p[0]][p[1]] = player
-    //         let flipCell = document.querySelector(
-    //             `.cell[data-r="${p[0]}"][data-c="${p[1]}"]`
-    //         )
-    //         animateFlip(
-    //             flipCell,
-    //             player == 1 ? "black" : "white"
-    //         )
-    //     })
-    // }
-
     function applyMove(b, move, player) {
 
         b[move.r][move.c] = player
@@ -458,6 +357,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+    //computer game logic 
     function findBestMove(b, depth) {
         let moves = getMoves(b, 2)
         let best = -Infinity
@@ -520,36 +420,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return JSON.parse(JSON.stringify(b))
     }
 
-    // function animateMove(move, player, callback) {
-    //     let color = player == 1 ? "black" : "white"
-    //     // नया disk add
-    //     let cell = document.querySelector(
-    //         `.cell[data-r="${move.r}"][data-c="${move.c}"]`
-    //     )
-    //     let disk = document.createElement("div")
-    //     disk.className = "disk " + color
-    //     cell.appendChild(disk)
-    //     // flip animation delay chain
-    //     let delay = 0
-    //     move.flips.forEach(p => {
-    //         let flipCell = document.querySelector(
-    //             `.cell[data-r="${p[0]}"][data-c="${p[1]}"]`
-    //         )
-    //         let flipDisk = flipCell.querySelector(".disk")
-    //         setTimeout(() => {
-    //             flipDisk.classList.add("flip")
-    //             setTimeout(() => {
-    //                 flipDisk.className = "disk " + color
-    //             }, 300)
-    //         }, delay)
-    //         delay += 120
-    //     })
-    //     // final callback
-    //     setTimeout(() => {
-    //         callback()
-    //     }, delay + 400)
-    // }
-
+    //flip animation function
     function animateMove(move, player, callback) {
         let color = player == 1 ? "black" : "white"
         // NEW DISK
@@ -581,16 +452,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }, delay + 400)
     }
 
-    // function animateFlip(cell, color) {
-    //     let disk = cell.querySelector(".disk")
-    //     if (!disk) return
-    //     disk.classList.add("flip")
-    //     setTimeout(() => {
-    //         disk.className = "disk " + color
-    //     }, 400)
-
-    // }
-
     // show yellow points where player can play
     function showPreview() {
         document.querySelectorAll(".cell").forEach(cell => {
@@ -614,7 +475,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     }
 
-    //update score after each play
+    //update score after each turn (player and computer)
     function updateScore() {
         b = 0
         w = 0
@@ -650,6 +511,63 @@ document.addEventListener("DOMContentLoaded", function () {
         drawBoard();
         showPreview()
     });
+
+    /* =========================
+   CONFETTI CELEBRATION
+========================= */
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    let confetti = [];
+    function launchConfetti() {
+        for (let i = 0; i < 150; i++) {
+            confetti.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 5,
+                vy: Math.random() * 5 + 2,
+                size: Math.random() * 6 + 4,
+                color: generateRandomNeonColor()
+
+            });
+        }
+        animateConfetti();
+    }
+
+    function generateRandomNeonColor() {
+        const hue = Math.floor(Math.random() * 361); // Random hue (0-360)
+        const saturation = 100; // Full saturation (100%)
+        const lightness = 50; // Moderate lightness (50%) for full color intensity
+        return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    }
+
+    function animateConfetti() {
+        let anim = setInterval(() => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // draw();
+            confetti.forEach(c => {
+                c.x += c.vx;
+                c.y += c.vy;
+                c.vy += 0.1;
+                ctx.save();
+                ctx.fillStyle = c.color;
+                ctx.shadowColor = c.color;
+                ctx.shadowBlur = 15;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+                ctx.fillRect(c.x, c.y, c.size, c.size);
+                ctx.restore();
+            });
+
+            if (confetti.length === 0) {
+                clearInterval(anim);
+            }
+        }, 50);
+    }
+
 
     // to add firebase leaderboard (save record)
     window.saveScore = async function () {

@@ -885,7 +885,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ========================= */
     loadURLBtn.onclick = () => {
         let url = imgURL.value.trim();
-        if (!url) return alert('कृपया image URL डालें');
+        if (!url) return alert('PLEASE load image URL');
         //     loadImage(url);
         let renderUrl = loadImage(url);
         renderUrl.onload = e => {

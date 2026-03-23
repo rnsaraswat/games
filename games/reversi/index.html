@@ -103,7 +103,7 @@
         import { shareScore } from './js/share.js';
         document.getElementById("shareBtn").addEventListener("click", async () => {
             console.log("shareBtn clicked")
-            shareScore("4inARow", 0);
+            shareScore("reversi", 0);
         });
     </script>
 
@@ -232,7 +232,7 @@
         })();
 
     </script>
-    <script type="module" src="js/script.js"></script>
+    <!-- <script type="module" src="js/script.js"></script> -->
     <script>
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {
