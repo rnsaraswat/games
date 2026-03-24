@@ -12,9 +12,9 @@ export let winnerName = localStorage.getItem('player_name') || getUserName();
 export let gameName = 'reversi';
 let game = "reversi";
 let game_id = "reversi";
-let opponent, difficulty, elapsed, moves, level, date;
+let opponent, difficulty, moves, level, date;
 export let score;
-let size = '3x4';
+let size = '8x8';
 let h = 0;
 let m = 0;
 let s = 0;
@@ -40,12 +40,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const canvas = document.getElementById('fireworksCanvas');
     const ctx = canvas.getContext('2d');
-    resizeCanvas();
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     let board = []
     let history = []
     let depth = difficultySelect.value;
-    let difficulty;
     let gameOver = false
     let currentPlayer = 1
 
@@ -116,9 +116,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // prepare time to display in hh:mm:ss
     function timeToString(time) {
-        let h = Math.floor(time / 3600000);
-        let m = Math.floor((time % 3600000) / 60000);
-        let s = Math.floor((time % 60000) / 1000);
+        h = Math.floor(time / 3600000);
+        m = Math.floor((time % 3600000) / 60000);
+        s = Math.floor((time % 60000) / 1000);
 
         return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
     }
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("timer-display").innerHTML = txt;
     }
 
-    //change difficulty
+    //change difficulty level
     difficultySelect.onchange = () => {
         depth = difficultySelect.value;
         if (depth == 2) {
@@ -219,6 +219,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let aiMoves = getMoves(board, 2)
         let empty = 0
 
+        //count empty space
         for (let r = 0; r < 8; r++) {
             for (let c = 0; c < 8; c++) {
                 if (board[r][c] == 0) empty++
@@ -228,6 +229,7 @@ document.addEventListener("DOMContentLoaded", function () {
             gameOver = true
             let black = 0
             let white = 0
+            //count black and white disc
             for (let r = 0; r < 8; r++) {
                 for (let c = 0; c < 8; c++) {
                     if (board[r][c] == 1) black++
@@ -258,6 +260,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return false
     }
 
+    // avaliable moves for both player nad computer
     function getMoves(b, player) {
         let moves = []
         for (let r = 0; r < 8; r++) {
@@ -276,6 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //player move function
     function playerMove() {
         if (gameOver) return
+        playSound("click");
 
         // remove yellow dots
         clearPreview()
@@ -324,7 +328,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     }
 
-    //check pass (no move for player or computer)
+    //check pass (no valid move for player or computer)
     function checkPassTurn() {
         let humanMoves = getMoves(board, 1)
         let aiMoves = getMoves(board, 2)
@@ -347,6 +351,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return false
     }
 
+    //apply move for boath player nad computer
     function applyMove(b, move, player) {
 
         b[move.r][move.c] = player
@@ -357,7 +362,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    //computer game logic 
+    //computer turn find best move
     function findBestMove(b, depth) {
         let moves = getMoves(b, 2)
         let best = -Infinity
@@ -374,6 +379,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return bestMove
     }
 
+    //computer turn find best move as per level selected
     function minimax(b, depth, alpha, beta, isMax) {
         if (depth == 0) return evaluate(b)
         let player = isMax ? 2 : 1
@@ -405,6 +411,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    //evaluate score for bast move of computer turn
     function evaluate(b) {
         let score = 0
         for (let r = 0; r < 8; r++) {
@@ -416,11 +423,12 @@ document.addEventListener("DOMContentLoaded", function () {
         return score
     }
 
+    // copy board for evaluation of bast move for computer turn
     function copyBoard(b) {
         return JSON.parse(JSON.stringify(b))
     }
 
-    //flip animation function
+    //disc flip animation function
     function animateMove(move, player, callback) {
         let color = player == 1 ? "black" : "white"
         // NEW DISK
@@ -440,6 +448,7 @@ document.addEventListener("DOMContentLoaded", function () {
             setTimeout(() => {
                 if (!flipDisk) return
                 flipDisk.classList.add("flip")
+                playSound("flip")
                 setTimeout(() => {
                     flipDisk.className = "disk " + color
                 }, 300)
@@ -452,7 +461,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }, delay + 400)
     }
 
-    // show yellow points where player can play
+    // show yellow dots where player can play
     function showPreview() {
         document.querySelectorAll(".cell").forEach(cell => {
             let r = parseInt(cell.dataset.r)
@@ -468,7 +477,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     }
 
-    // remove yellow points where player can play
+    // remove yellow dots where player can play
     function clearPreview() {
         document.querySelectorAll(".preview").forEach(dot => {
             dot.remove()
@@ -479,6 +488,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateScore() {
         b = 0
         w = 0
+        //count black and hwite disc for score
         for (let r = 0; r < 8; r++) {
             for (let c = 0; c < 8; c++) {
                 if (board[r][c] == 1) b++
@@ -508,19 +518,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //resize game screen
     window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
         drawBoard();
-        showPreview()
+        showPreview();
     });
 
     /* =========================
    CONFETTI CELEBRATION
 ========================= */
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-
     let confetti = [];
     function launchConfetti() {
         for (let i = 0; i < 150; i++) {
@@ -580,7 +586,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 name: winnerName || 'Guast',
                 opponent: opponent || "Computer",
                 difficulty: difficulty || "-",
-                size: `9x9`,
+                size: size || `8x8`,
                 elapsed: Math.floor(Number(elapsedTime) / 1000) || 0,
                 score: score || 0,
                 moves: moves || 0,
@@ -590,13 +596,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 text: text || "-",
                 createdAt: new Date()
             });
-
             console.log("Score Saved!");
-
         } catch (error) {
             console.error("Error:", error);
         }
-
     };
 
     // to add firebase leaderboard (save record)

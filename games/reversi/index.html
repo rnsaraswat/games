@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Reversi</title>
     <meta name="description"
-        content="Ravindra Games Hub — collection of lightweight web games (Reversi) One move can change it all">
+        content="Ravindra Games Hub — collection of lightweight web games (Reversi or Othello) One move can change it all">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
     <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
@@ -68,7 +68,6 @@
         </div>
         <div id="gameArea">
             <div id="board">
-                <!-- <canvas id="fireworksCanvas"></canvas> -->
             </div>
             <div id="pauseOverlay">
                 <h1>Game Paused</h1>
@@ -98,7 +97,6 @@
     <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
     <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <script type="module" src="js/script.js"></script>
-    <!-- <script type="module" src="js/timer_date.js"></script> -->
     <script type="module">
         import { shareScore } from './js/share.js';
         document.getElementById("shareBtn").addEventListener("click", async () => {
