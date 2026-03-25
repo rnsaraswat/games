@@ -59,14 +59,12 @@ input {
     width: 190px;
 }
 
-/* Board */
-
 #gameArea {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #000;
+    background: linear-gradient(to right, var(--bg1), var(--bg2));
 }
 
 #board {
@@ -85,23 +83,56 @@ input {
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Pause overlay */
-
-#pauseOverlay {
-    position: absolute;
+#fireworksCanvas {
+    position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    display: none;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+  }
+  
+  #winText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: gold;
+    text-shadow: 2px 2px 10px #fff;
+    font-weight: bold;
+    opacity: 0;
+    z-index: 2;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+  }
+  
+#pauseOverlay {
+    inset: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px;
+    border-radius: 5px;
+    border-radius: 10px;
+    z-index: 10;
+    width: 95%;
+    height: 95%;
+    overflow-y: auto;
+    text-align: center;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
     flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Gallery */
-
 .gallery {
     display: flex;
     gap: 6px;
@@ -140,8 +171,20 @@ input {
 
     #gameArea {
         width: 70%;
+        align-content: center;
     }
 
+    .gamePaused{
+        font-size: 4vw;
+        margin: 1vw;
+        padding: 1vw;
+    }
+    #resumeBtn{
+        font-size: 4vw;
+        padding: 1vw;
+        margin: 1vw;
+        padding: 1vw;
+    }
 }
 
 @media (orientation:portrait) {
@@ -156,6 +199,7 @@ input {
 
     #gameArea {
         height: 70%;
+        align-content: center;
     }
 
     #timer-display {
@@ -169,6 +213,19 @@ input {
     p {
         padding: 1px 2px;
         margin: 2px 1px 2px 1px;
+        text-shadow: 2px 2px var(--text-shadow);
+    }
+
+    .gamePaused{
+        font-size: 20px;
+        margin: 10px;
+        padding: 10px;
+    }
+
+    #resumeBtn{
+        font-size: 15px;
+        margin: 10px;
+        padding: 10px;
     }
 }
 

@@ -30,13 +30,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const startBtn = document.getElementById('startBtn');
     const undoBtn = document.getElementById('undoBtn');
     const boardDiv = document.getElementById('board');
-    const difficultySelect = document.getElementById('difficulty');
+    const difficultySelectBtn = document.getElementById('difficultySelect');
     const statusEl = document.getElementById('message');
     const bScore = document.getElementById("bScore");
     const wScore = document.getElementById("wScore");
     const resumeBtn = document.getElementById('resumeBtn');
     const pauseBtn = document.getElementById('pauseBtn');
     const pauseOverlay = document.getElementById("pauseOverlay");
+
+    toggleElement(pauseBtn, true);
+    toggleElement(undoBtn, true);
 
     const canvas = document.getElementById('fireworksCanvas');
     const ctx = canvas.getContext('2d');
@@ -45,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let board = []
     let history = []
-    let depth = difficultySelect.value;
+    let depth = difficultySelectBtn.value;
     let gameOver = false
     let currentPlayer = 1
 
@@ -129,8 +132,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     //change difficulty level
-    difficultySelect.onchange = () => {
-        depth = difficultySelect.value;
+    difficultySelectBtn.onchange = () => {
+        depth = difficultySelectBtn.value;
         if (depth == 2) {
             difficulty = "easy";
         } else if (depth == 4) {
@@ -154,6 +157,10 @@ document.addEventListener("DOMContentLoaded", function () {
         board[4][3] = 1
         board[4][4] = 2
 
+        toggleElement(pauseBtn, false);
+        toggleElement(undoBtn, false);
+        toggleElement(startBtn, true);
+        toggleElement(difficultySelect, true);
         gameOver = false
         elapsedTime = 0
         startTimer()
@@ -255,6 +262,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 textToSpeechEng("its a Draw")
             }
             stopTimer()
+            toggleElement(pauseBtn, true);
+            toggleElement(undoBtn, true);
+            toggleElement(startBtn, false);
+            toggleElement(difficultySelect, false);
             return true
         }
         return false
@@ -307,7 +318,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //computer move function
     function aiMove() {
-        let depth = parseInt(document.getElementById("difficulty").value)
+        let depth = parseInt(document.getElementById("difficultySelect").value)
         let move = findBestMove(board, depth)
         if (!move) {
             gameOver = true
@@ -524,9 +535,29 @@ document.addEventListener("DOMContentLoaded", function () {
         showPreview();
     });
 
+    //toggle disable buttons/select byid
+    function toggleElement(elementId, isDisable) {
+
+        if (elementId) {
+            elementId.disabled = isDisable;
+            if (isDisable) {
+                elementId.style.opacity = "0.5";
+                elementId.style.cursor = "not-allowed";
+                elementId.style.pointerEvents = "visiable";
+            } else {
+                elementId.style.opacity = "1";
+                elementId.style.cursor = "pointer";
+                elementId.style.pointerEvents = "auto";
+            }
+        } else {
+            console.error(`Element with ID=${elementId} not found.`);
+        }
+    }
+
+
     /* =========================
-   CONFETTI CELEBRATION
-========================= */
+    CONFETTI CELEBRATION
+    ========================= */
     let confetti = [];
     function launchConfetti() {
         for (let i = 0; i < 150; i++) {
@@ -574,7 +605,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 50);
     }
 
-
     // to add firebase leaderboard (save record)
     window.saveScore = async function () {
         text = `Black=${b}, White=${w}`
@@ -589,7 +619,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 size: size || `8x8`,
                 elapsed: Math.floor(Number(elapsedTime) / 1000) || 0,
                 score: score || 0,
-                moves: moves || 0,
+                moves: history.length || 0,
                 email: email || "-",
                 level: "-",
                 mode: playMode || 'pvc',

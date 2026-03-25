@@ -25,8 +25,8 @@
             <h1>Reversi</h1>
             <!-- <div id="controls"> -->
             <div class="button-group">
-                <label for="difficulty">Level :
-                    <select id="difficulty">
+                <label for="difficultySelect">Level :
+                    <select id="difficultySelect">
                         <option value="2" selected>😊Easy</option>
                         <option value="4">🤔Medium</option>
                         <option value="6">🤯Hard</option>
@@ -70,8 +70,8 @@
             <div id="board">
             </div>
             <div id="pauseOverlay">
-                <h1>Game Paused</h1>
-                <button id="resumeBtn">Resume</button>
+                <h1 class="gamePaused">Game Paused</h1>
+                <button id="resumeBtn">▶ Resume</button>
             </div>
         </div>
     </div>
@@ -106,6 +106,7 @@
     </script>
 
     <script>
+        //hide display
         document.getElementById("gb-feedbackModal").style.display = 'none';
         document.getElementById("lcLeaderboardModal").style.display = 'none';
         document.getElementById("gbLeaderboardModal").style.display = 'none';
@@ -114,6 +115,7 @@
         document.getElementById("pauseOverlay").style.display = 'none';
         document.getElementById("rulesPopup").style.display = 'none';
 
+        //change theme
         const themeToggle = document.getElementById('toggle-theme');
         function setTheme(t) {
             if (t === 'dark') {
@@ -127,9 +129,11 @@
                 themeToggle.textContent = '🌙 Dark'
             }
         }
+        //get last set theme
         if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
+        //global leaderboard functions
         function openGlobalLeaderboard() {
             document.getElementById("gbLeaderboardModal").style.display = 'flex';
         };
@@ -137,7 +141,16 @@
         function closeGlobalLeaderboard() {
             document.getElementById("gbLeaderboardModal").style.display = 'none';
         };
+        
+        fetch('../../leaderboard/gbleaderboard.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("gbLeaderboardModal").style.display = 'none';
+            });
 
+
+        //global firebase leaderboard functions
         function openFirebaseGlobalLeaderboard() {
             document.getElementById("firebasegbLeaderboardModal").style.display = 'flex';
         };
@@ -153,13 +166,7 @@
                 document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
             });
 
-        fetch('../../leaderboard/gbleaderboard.html')
-            .then(response => response.text())
-            .then(htmlText => {
-                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
-                document.getElementById("gbLeaderboardModal").style.display = 'none';
-            });
-
+        //local leaderboard functions
         function openLocalLeaderboard() {
             document.getElementById("lcLeaderboardModal").style.display = 'flex';
         };
@@ -183,6 +190,7 @@
                 document.getElementById("lcLeaderboardModal").style.display = 'none';
             });
 
+        //global feedback functions
         function openGlobalFeedback() {
             document.getElementById("gb-feedbackModal").style.display = 'flex';
         };
@@ -230,7 +238,7 @@
         })();
 
     </script>
-    <!-- <script type="module" src="js/script.js"></script> -->
+    
     <script>
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {

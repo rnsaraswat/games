@@ -425,6 +425,7 @@ function renderTable() {
                 <td>${d.name}</td>
                 <td>${d.opponent}</td>
                 <td>${d.size}</td>
+                <td>${d.difficulty}</td>
                 <td>${d.score}</td>
                 <td>${d.moves}</td>
                 <td>${d.level}</td>

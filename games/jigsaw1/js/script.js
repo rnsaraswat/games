@@ -17,7 +17,7 @@ let size = '3x4';
 let h = 0;
 let m = 0;
 let s = 0;
-let text = "Shape Square";
+let text = "Rectangle";
 let playMode = "pvc";
 
 
@@ -27,6 +27,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const canvas = document.getElementById("puzzleBoard");
     const ctx = canvas.getContext("2d");
+    const fireworkscanvas = document.getElementById('fireworksCanvas');
+    const ctxfireworks = fireworkscanvas.getContext('2d');
+    fireworkscanvas.width = window.innerWidth;
+    fireworkscanvas.height = window.innerHeight;
 
     const gallery = document.getElementById("gallery");
     const difficultySel = document.getElementById("difficulty");
@@ -131,7 +135,6 @@ document.addEventListener("DOMContentLoaded", function () {
        BOARD RESIZE
     ========================= */
     function resizeBoard() {
-
         let container = document.getElementById("board");
 
         if (!container) {
@@ -141,62 +144,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let w = container.clientWidth;
         let h = container.clientHeight;
-
         boardSize = Math.min(w, h);
-
         canvas.style.width = boardSize + "px";
         canvas.style.height = boardSize + "px";
-
         let dpr = window.devicePixelRatio || 1;
-
         canvas.width = boardSize * dpr;
         canvas.height = boardSize * dpr;
-
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
         pieceW = boardSize / cols;
         pieceH = boardSize / rows;
-
         draw();
-
     }
 
-    window.addEventListener("resize", resizeBoard);
+    window.addEventListener("resize", () => {
+        fireworkscanvas.width = window.innerWidth;
+        fireworkscanvas.height = window.innerHeight;
+        console.log(fireworkscanvas.width, fireworkscanvas.height)
+        resizeBoard();
+        console.log(canvas.width, canvas.height)
+    });
 
     /* =========================
        PIECE OBJECT
     ========================= */
     function createPieces() {
-
         pieces = [];
-
         placedCount = 0;
-
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
-
                 let p = {
-
                     row: r,
                     col: c,
-
                     x: Math.random() * boardSize,
                     y: Math.random() * boardSize,
-
                     correctX: c * pieceW,
                     correctY: r * pieceH,
-
                     rotation: 0,
-
                     placed: false
-
                 };
-
                 pieces.push(p);
-
             }
         }
-
         totalEl.textContent = pieces.length;
         placedEl.textContent = placedCount;
     }
@@ -236,7 +224,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             ctx.restore();
         });
-
     }
 
     /* =========================
@@ -818,15 +805,14 @@ document.addEventListener("DOMContentLoaded", function () {
     ========================= */
     let confetti = [];
     function launchConfetti() {
-        for (let i = 0; i < 150; i++) {
+        for (let i = 0; i < 250; i++) {
             confetti.push({
-                x: Math.random() * boardSize,
-                y: Math.random() * -boardSize,
+                x: Math.random() * fireworkscanvas.width,
+                y: Math.random() * -fireworkscanvas.height,
                 vx: (Math.random() - 0.5) * 5,
                 vy: Math.random() * 5 + 2,
                 size: Math.random() * 6 + 4,
                 color: generateRandomNeonColor()
-
             });
         }
         animateConfetti();
@@ -841,20 +827,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function animateConfetti() {
         let anim = setInterval(() => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctxfireworks.clearRect(0, 0, fireworkscanvas.width, fireworkscanvas.height);
             draw();
             confetti.forEach(c => {
                 c.x += c.vx;
                 c.y += c.vy;
                 c.vy += 0.1;
-                ctx.save();
-                ctx.fillStyle = c.color;
-                ctx.shadowColor = c.color; 
-                ctx.shadowBlur = 15; 
-                ctx.shadowOffsetX = 0;
-                ctx.shadowOffsetY = 0;
-                ctx.fillRect(c.x, c.y, c.size, c.size);
-                ctx.restore();
+                ctxfireworks.save();
+                ctxfireworks.fillStyle = c.color;
+                ctxfireworks.shadowColor = c.color; 
+                ctxfireworks.shadowBlur = 15; 
+                ctxfireworks.shadowOffsetX = 0;
+                ctxfireworks.shadowOffsetY = 0;
+                ctxfireworks.fillRect(c.x, c.y, c.size, c.size);
+                ctxfireworks.restore();
             });
 
             if (confetti.length === 0) {
@@ -876,9 +862,9 @@ document.addEventListener("DOMContentLoaded", function () {
         draw();
     }
 
-    startBtn.onclick = () => {
-        shuffleUnplaced();
-    };
+    // startBtn.onclick = () => {
+    //     shuffleUnplaced();
+    // };
 
     /* =========================
        LOAD IMAGE FROM URL
@@ -957,6 +943,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // to add firebase leaderboard (save record)
     window.saveScore = async function () {
+        if (hintOpacity == 0) {
+            text = "Hint: Off, Shape: Rectangle";
+        } else if (hintOpacity == 0.25) {
+            text = "Hint: Low, Shape: Rectangle";
+        } else if (hintOpacity == 0.5) {
+            text = "Hint: Medium, Shape: Rectangle";
+        } else if (hintOpacity == 0.75) {
+            text = "Hint: High, Shape: Rectangle";
+        }
+
         try {
             await addDoc(collection(db, "leaderboard"), {
                 game_id: game_id || 'jigsaw',
@@ -992,7 +988,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let filed1 = 0;
         let filed2 = 0
         let filed3 = "-";
-        let filed4 = "-";
+        let filed4 = "Shape: Rectangle" || "-";
         let email = localStorage.getItem('email') || '-';
         const created_at = new Date();
         if (rows == 3) {
@@ -1007,6 +1003,15 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (rows == 10) {
             difficulty = "extreme";
             score = (rows * cols * 100 - Number(elapsed)) * 2.5;
+        }
+        if (hintOpacity == 0) {
+            filed3 = "Hint: Off";
+        } else if (hintOpacity == 0.25) {
+                filed3 = "Hint: Low";
+        } else if (hintOpacity == 0.5) {
+                filed3 = "Hint: Medium";
+        } else if (hintOpacity == 0.75) {
+                filed3 = "Hint: High";
         }
 
         lcsaveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
