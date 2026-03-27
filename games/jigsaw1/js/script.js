@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const snapSel = document.getElementById("snapMode");
     const hintSel = document.getElementById("hint");
 
-    const startBtn = document.getElementById("startBtn");
+    // const startBtn = document.getElementById("startBtn");
     const shuffleBtn = document.getElementById("shuffleBtn");
     // const resetBtn = document.getElementById("resetBtn");
     const pauseBtn = document.getElementById("pauseBtn");
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const pauseOverlay = document.getElementById("pauseOverlay");
 
     const timerEl = document.getElementById("timer-display");
-
+    const statusEl = document.getElementById('message');
     const placedEl = document.getElementById("placed");
     const totalEl = document.getElementById("total");
 
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
         img.crossOrigin = "anonymous";
 
         img.onload = () => {
-            setupPuzzle();
+            setupPuzzle(img);
         };
         img.src = src;
     }
@@ -154,14 +154,14 @@ document.addEventListener("DOMContentLoaded", function () {
         pieceW = boardSize / cols;
         pieceH = boardSize / rows;
         draw();
+        
     }
 
     window.addEventListener("resize", () => {
         fireworkscanvas.width = window.innerWidth;
         fireworkscanvas.height = window.innerHeight;
-        console.log(fireworkscanvas.width, fireworkscanvas.height)
+        statusEl.innerHTML = `Board Resized`;
         resizeBoard();
-        console.log(canvas.width, canvas.height)
     });
 
     /* =========================
@@ -187,6 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         totalEl.textContent = pieces.length;
         placedEl.textContent = placedCount;
+        statusEl.innerHTML = `Click/tap in pieces to move piece change piece position`;
     }
     /* =========================
        DRAW
@@ -230,7 +231,6 @@ document.addEventListener("DOMContentLoaded", function () {
        DRAG
     ========================= */
     canvas.addEventListener("pointerdown", e => {
-
         e.preventDefault();
         canvas.setPointerCapture(e.pointerId);
 
@@ -239,10 +239,10 @@ document.addEventListener("DOMContentLoaded", function () {
         let mx = e.clientX - rect.left;
         let my = e.clientY - rect.top;
 
+        // statusEl.innerHTML = `Pointer Down pieces selected`;
+
         for (let i = pieces.length - 1; i >= 0; i--) {
-
             let p = pieces[i];
-
             if (
                 mx > p.x &&
                 mx < p.x + pieceW &&
@@ -250,34 +250,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 my < p.y + pieceH &&
                 !p.placed
             ) {
-
                 selected = p;
-
                 offsetX = mx - p.x;
                 offsetY = my - p.y;
-
                 pieces.splice(i, 1);
                 pieces.push(p);
-
                 break;
             }
         }
     });
 
     // canvas.addEventListener("pointermove", e => {
-
     //     if (!selected) return;
-
     //     let rect = canvas.getBoundingClientRect();
-
     //     let mx = e.clientX - rect.left;
     //     let my = e.clientY - rect.top;
-
     //     selected.x = mx - offsetX;
     //     selected.y = my - offsetY;
-
     //     draw();
-
     // });
 
     canvas.addEventListener("pointerup", () => {
@@ -329,6 +319,7 @@ document.addEventListener("DOMContentLoaded", function () {
             placedCount++;
             placedEl.textContent = placedCount;
             playSound('click');
+            // statusEl.innerHTML = `Selected piece on correct Position`;
 
             checkWin();
         }
@@ -341,6 +332,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function checkWin() {
         if (placedCount === pieces.length) {
             clearInterval(timerInterval);
+            statusEl.innerHTML = `You win!`;
             launchConfetti();
             playSound('win');
             updateleaderboard();
@@ -351,13 +343,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    startBtn.onclick = () => {
-        readDifficulty();
-        setupPuzzle();
-    };
+    // startBtn.onclick = () => {
+    //     readDifficulty();
+    //     setupPuzzle();
+    // };
 
     shuffleBtn.onclick = () => {
         if (pieces.length === 0) return;
+        statusEl.innerHTML = `Pieces Reshuffled`;
+
         // no piece placed
         if (placedCount === 0) {
             shuffleAllPieces();
@@ -405,6 +399,8 @@ document.addEventListener("DOMContentLoaded", function () {
     ========================= */
     hintSel.onchange = () => {
         hintOpacity = parseFloat(hintSel.value);
+        statusEl.innerHTML = `Hint Changed`;
+
         draw();
     };
 
@@ -438,7 +434,8 @@ document.addEventListener("DOMContentLoaded", function () {
     /* =========================
        SETUP
     ========================= */
-    function setupPuzzle() {
+    function setupPuzzle(image) {
+        img = image;
         readDifficulty();
         resizeBoard();
         createPieces();
@@ -448,15 +445,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* =========================
-   INERTIA DRAGGING
-========================= */
+    INERTIA DRAGGING
+    ========================= */
     let vx = 0;
     let vy = 0;
     let lastMoveTime = 0;
 
     canvas.addEventListener("pointermove", e => {
         if (!selected) return;
-
         e.preventDefault();
         let rect = canvas.getBoundingClientRect();
 
@@ -479,17 +475,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     canvas.addEventListener("pointerup", () => {
         if (!selected) return;
-
         let p = selected;
         selected = null;
         let inertia = setInterval(() => {
-
             p.x += vx * 20;
             p.y += vy * 20;
-
             vx *= 0.95;
             vy *= 0.95;
-
             draw();
             if (Math.abs(vx) < 0.01 && Math.abs(vy) < 0.01) {
                 clearInterval(inertia);
@@ -498,44 +490,27 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 16);
     });
 
-
     /* =========================
        SHADOW + HIGHLIGHT
     ========================= */
-
     // function draw() {
-
     //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     //     /* hint */
-
     //     if (hintOpacity > 0) {
-
     //         ctx.globalAlpha = hintOpacity;
     //         ctx.drawImage(img, 0, 0, boardSize, boardSize);
     //         ctx.globalAlpha = 1;
-
     //     }
-
     //     pieces.forEach(p => {
-
     //         ctx.save();
-
     //         ctx.translate(p.x + pieceW / 2, p.y + pieceH / 2);
-
     //         ctx.rotate(p.rotation * Math.PI / 180);
-
     //         /* shadow */
-
     //         if (p === selected) {
-
     //             ctx.shadowColor = "rgba(0,0,0,0.6)";
     //             ctx.shadowBlur = 20;
-
     //         }
-
     //         /* image */
-
     //         ctx.drawImage(
     //             img,
     //             p.col * (img.width / cols),
@@ -547,11 +522,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //             pieceW,
     //             pieceH
     //         );
-
-
-
     //     });
-
     // }
 
     function draw() {
@@ -620,20 +591,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // function drawClassicPiece(p) {
-
     //     ctx.save();
-
     //     ctx.translate(p.x, p.y);
-
     //     let sx = p.col * (img.width / cols);
     //     let sy = p.row * (img.height / rows);
-
     //     ctx.beginPath();
-
     //     drawClassicPath(p);
-
     //     ctx.clip();
-
     //     ctx.drawImage(
     //         img,
     //         sx,
@@ -645,29 +609,18 @@ document.addEventListener("DOMContentLoaded", function () {
     //         pieceW,
     //         pieceH
     //     );
-
     //     ctx.stroke();
-
     //     ctx.restore();
-
-
     // }
 
     // function drawRandomPiece(p) {
-
     //     ctx.save();
-
     //     ctx.translate(p.x, p.y);
-
     //     let sx = p.col * (img.width / cols);
     //     let sy = p.row * (img.height / rows);
-
     //     ctx.beginPath();
-
     //     drawRandomPath(p);
-
     //     ctx.clip();
-
     //     ctx.drawImage(
     //         img,
     //         sx,
@@ -679,28 +632,18 @@ document.addEventListener("DOMContentLoaded", function () {
     //         pieceW,
     //         pieceH
     //     );
-
     //     ctx.stroke();
-
     //     ctx.restore();
-
     // }
 
     // function drawBezierPiece(p) {
-
     //     ctx.save();
-
     //     ctx.translate(p.x, p.y);
-
     //     let sx = p.col * (img.width / cols);
     //     let sy = p.row * (img.height / rows);
-
     //     ctx.beginPath();
-
     //     drawBezierPath(p);
-
     //     ctx.clip();
-
     //     ctx.drawImage(
     //         img,
     //         sx,
@@ -712,77 +655,52 @@ document.addEventListener("DOMContentLoaded", function () {
     //         pieceW,
     //         pieceH
     //     );
-
     //     ctx.lineWidth = 1.2;
     //     ctx.stroke();
-
     //     ctx.restore();
-
     // }
 
     // function drawClassicPath(p) {
-
     //     let size = pieceW * 0.3;
-
     //     ctx.moveTo(0, 0);
-
     //     ctx.lineTo(pieceW * 0.35, 0);
-
     //     ctx.bezierCurveTo(
     //         pieceW * 0.35, -size,
     //         pieceW * 0.65, -size,
     //         pieceW * 0.65, 0
     //     );
-
     //     ctx.lineTo(pieceW, 0);
     //     ctx.lineTo(pieceW, pieceH);
-
     //     ctx.lineTo(0, pieceH);
-
     //     ctx.closePath();
-
     // }
 
     // function drawRandomPath(p) {
-
     //     let size = pieceW * (0.2 + Math.random() * 0.2);
-
     //     ctx.moveTo(0, 0);
-
     //     ctx.lineTo(pieceW * 0.3, 0);
-
     //     ctx.bezierCurveTo(
     //         pieceW * 0.3, -size,
     //         pieceW * 0.7, size,
     //         pieceW * 0.7, 0
     //     );
-
     //     ctx.lineTo(pieceW, 0);
     //     ctx.lineTo(pieceW, pieceH);
     //     ctx.lineTo(0, pieceH);
-
     //     ctx.closePath();
-
     // }
 
     // function drawBezierPath(p) {
-
     //     let size = pieceW * 0.35;
-
     //     ctx.moveTo(0, 0);
-
     //     ctx.lineTo(pieceW * 0.4, 0);
-
     //     ctx.bezierCurveTo(
     //         pieceW * 0.4, -size,
     //         pieceW * 0.6, -size,
     //         pieceW * 0.6, 0
     //     );
-
     //     ctx.lineTo(pieceW, 0);
-
     //     ctx.lineTo(pieceW, pieceH * 0.4);
-
     //     ctx.bezierCurveTo(
     //         pieceW + size,
     //         pieceH * 0.4,
@@ -791,63 +709,10 @@ document.addEventListener("DOMContentLoaded", function () {
     //         pieceW,
     //         pieceH * 0.6
     //     );
-
     //     ctx.lineTo(pieceW, pieceH);
-
     //     ctx.lineTo(0, pieceH);
-
     //     ctx.closePath();
-
     // }
-
-    /* =========================
-       CONFETTI CELEBRATION
-    ========================= */
-    let confetti = [];
-    function launchConfetti() {
-        for (let i = 0; i < 250; i++) {
-            confetti.push({
-                x: Math.random() * fireworkscanvas.width,
-                y: Math.random() * -fireworkscanvas.height,
-                vx: (Math.random() - 0.5) * 5,
-                vy: Math.random() * 5 + 2,
-                size: Math.random() * 6 + 4,
-                color: generateRandomNeonColor()
-            });
-        }
-        animateConfetti();
-    }
-
-    function generateRandomNeonColor() {
-        const hue = Math.floor(Math.random() * 361); // Random hue (0-360)
-        const saturation = 100; // Full saturation (100%)
-        const lightness = 50; // Moderate lightness (50%) for full color intensity
-        return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-      }
-
-    function animateConfetti() {
-        let anim = setInterval(() => {
-            ctxfireworks.clearRect(0, 0, fireworkscanvas.width, fireworkscanvas.height);
-            draw();
-            confetti.forEach(c => {
-                c.x += c.vx;
-                c.y += c.vy;
-                c.vy += 0.1;
-                ctxfireworks.save();
-                ctxfireworks.fillStyle = c.color;
-                ctxfireworks.shadowColor = c.color; 
-                ctxfireworks.shadowBlur = 15; 
-                ctxfireworks.shadowOffsetX = 0;
-                ctxfireworks.shadowOffsetY = 0;
-                ctxfireworks.fillRect(c.x, c.y, c.size, c.size);
-                ctxfireworks.restore();
-            });
-
-            if (confetti.length === 0) {
-                clearInterval(anim);
-            }
-        }, 50);
-    }
 
     /* =========================
        SHUFFLE UNPLACED PIECES
@@ -862,10 +727,6 @@ document.addEventListener("DOMContentLoaded", function () {
         draw();
     }
 
-    // startBtn.onclick = () => {
-    //     shuffleUnplaced();
-    // };
-
     /* =========================
        LOAD IMAGE FROM URL
     ========================= */
@@ -877,7 +738,7 @@ document.addEventListener("DOMContentLoaded", function () {
         renderUrl.onload = e => {
             loadImage(e.target.result);
         };
-        // renderUrl.readAsDataURL(url);
+        renderUrl.readAsDataURL(url);
     };
 
     /* =========================
@@ -885,7 +746,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ========================= */
     loadLocalBtn.onclick = () => {
         let file = localImg.files[0];
-        if (!file) return alert('कृपया image URL डालें');
+        if (!file) return alert('Please Enter image URL');
         let reader = new FileReader();
         reader.onload = e => {
             loadImage(e.target.result);
@@ -937,10 +798,59 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         lastTap = now;
     });
+
+    /* =========================
+       CONFETTI CELEBRATION
+    ========================= */
+    let confetti = [];
+    function launchConfetti() {
+        for (let i = 0; i < 250; i++) {
+            confetti.push({
+                x: Math.random() * fireworkscanvas.width,
+                y: Math.random() * -fireworkscanvas.height,
+                vx: (Math.random() - 0.5) * 5,
+                vy: Math.random() * 5 + 2,
+                size: Math.random() * 6 + 4,
+                color: generateRandomNeonColor()
+            });
+        }
+        animateConfetti();
+    }
+
+    function generateRandomNeonColor() {
+        const hue = Math.floor(Math.random() * 361); // Random hue (0-360)
+        const saturation = 100; // Full saturation (100%)
+        const lightness = 50; // Moderate lightness (50%) for full color intensity
+        return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    }
+
+    function animateConfetti() {
+        let anim = setInterval(() => {
+            ctxfireworks.clearRect(0, 0, fireworkscanvas.width, fireworkscanvas.height);
+            draw();
+            confetti.forEach(c => {
+                c.x += c.vx;
+                c.y += c.vy;
+                c.vy += 0.1;
+                ctxfireworks.save();
+                ctxfireworks.fillStyle = c.color;
+                ctxfireworks.shadowColor = c.color;
+                ctxfireworks.shadowBlur = 15;
+                ctxfireworks.shadowOffsetX = 0;
+                ctxfireworks.shadowOffsetY = 0;
+                ctxfireworks.fillRect(c.x, c.y, c.size, c.size);
+                ctxfireworks.restore();
+            });
+
+            if (confetti.length === 0) {
+                clearInterval(anim);
+            }
+        }, 50);
+    }
+
     /* =========================
        Leaderboard update
     ========================= */
-
     // to add firebase leaderboard (save record)
     window.saveScore = async function () {
         if (hintOpacity == 0) {
@@ -1007,11 +917,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (hintOpacity == 0) {
             filed3 = "Hint: Off";
         } else if (hintOpacity == 0.25) {
-                filed3 = "Hint: Low";
+            filed3 = "Hint: Low";
         } else if (hintOpacity == 0.5) {
-                filed3 = "Hint: Medium";
+            filed3 = "Hint: Medium";
         } else if (hintOpacity == 0.75) {
-                filed3 = "Hint: High";
+            filed3 = "Hint: High";
         }
 
         lcsaveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)

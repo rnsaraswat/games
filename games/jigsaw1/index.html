@@ -22,6 +22,8 @@
     <div id="app">
         <div id="controls">
             <h1>Magic Jigsaw</h1>
+            <p id="loading" class="loading">Loading...</p>
+            <div id="message">Select Size(Level) to change size <br> then click/tap on image from galley to start new puzzle</div>
             <label for="difficulty">⊞ Size:</label>
             <select id="difficulty">
                 <option value="3x4" selected>😊Easy 3×4</option>
@@ -29,7 +31,7 @@
                 <option value="6x8">🤯Hard 6×8</option>
                 <option value="10x14">🧑‍🔬Extreme 10×14</option>
             </select>
-            <button class="button-primary" id="startBtn">🔄 New Game</button>
+            <!-- <button class="button-primary" id="startBtn">🔄 New Game</button> -->
             <button id="shuffleBtn">🔄Reshuffle</button>
             <!-- <button id="startBtn">Start / Shuffle</button>
             <button id="resetBtn">Reset</button> -->
@@ -43,20 +45,33 @@
                 <option value="0.75">👀High</option>
             </select>
 
+            <div class="placedTime">
             <div id="status">
                 Placed: <span id="placed">0</span> /
                 <span id="total">0</span>
             </div>
             <div><button id="pauseBtn">⏸Pause</button>Timer: <span id="timer-display">⏱️00:00:00</span></div>
-
+            </div>
             <div>
                 <label for="gallery">gallery:</label>
                 <div class="gallery" id="gallery">
+    
                     <img src="https://picsum.photos/400/400?1">
-                    <img src="https://picsum.photos/400/400?2">
+                    <!-- <img src="https://picsum.photos/400/400?2">
                     <img src="https://picsum.photos/400/400?3">
                     <img src="https://picsum.photos/400/400?4">
-                    <img src="https://picsum.photos/400/400?5">
+                    <img src="https://picsum.photos/400/400?5"> -->
+                    <img src="https://picsum.photos/id/1015/400/400">
+                    <img src="https://picsum.photos/id/1025/400/400">
+                    <img src="https://picsum.photos/id/1035/400/400">
+                    <img src="https://picsum.photos/id/1045/400/400">
+                    <img src="https://picsum.photos/id/1055/400/400">
+                    <!-- <div> -->
+                    <div class="image-container">
+
+                        <img src="https://picsum.photos/400/400?2" alt="Thumbnail">
+                        <div class="centered-text">Random Image</div>
+                      </div>
                 </div>
             </div>
             <div>
@@ -65,7 +80,7 @@
                         <option value="smart" selected>Smart Threshold</option>
                         <option value="grid">Exact Grid</option>
                         <option value="off">OFF</option>
-                    </select></label>
+                    </select>
             </div>
             <div>
                 <label for="rotation">Rotation Piece:
@@ -104,7 +119,7 @@
             <option value="bezier">Super-Real</option> -->
                 </select>
             </div>
-            <p id="loading" class="loading">Loading...</p>
+
         </div>
 
         <div id="gameArea">
@@ -457,7 +472,7 @@
         }
 
         /* start */
-        document.getElementById("startBtn").onclick = startPuzzle
+        // document.getElementById("startBtn").onclick = startPuzzle
 
         // document.getElementById("resetBtn").onclick = () => {
         //     placed = 0

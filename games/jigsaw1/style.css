@@ -23,16 +23,7 @@ body {
     justify-content: center;
 }
 
-/* body {
-    margin: 0;
-    color: white;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-} */
-
 /* Layout */
-
 #app {
     flex: 1;
     display: flex;
@@ -41,20 +32,14 @@ body {
 }
 
 /* Controls */
-
 #controls {
     /* background: #1a1a1a; */
     padding: 2px;
     overflow: auto;
+    text-align: center;
 }
 
-/* #controls button,
-#controls select,
-#controls input {
-    width: 100%;
-    margin: 4px 0;
-    padding: 6px;
-} */
+/* #controls button */
 input {
     width: 190px;
 }
@@ -76,13 +61,28 @@ input {
 }
 
 /* Pieces */
-
 .piece {
     position: absolute;
     cursor: grab;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
 }
 
+#message {
+    background: white;
+    width: 100%;
+    text-align: center;
+    margin-top: 1px;
+    padding: 5px 5px;
+    margin: 5px 2px 5px 2px;
+    border: 3px dashed var(--box-shadow);
+    font-weight: bold;
+    font-size: 15px;
+    background: var(--bg);
+    color: var(--text);
+    box-shadow: 0 5px 25px 0 var(--box-shadow);
+  }
+  
+/* confetti canvas */
 #fireworksCanvas {
     position: fixed;
     top: 0;
@@ -91,9 +91,9 @@ input {
     height: 100%;
     pointer-events: none;
     z-index: 10;
-  }
-  
-  #winText {
+}
+
+#winText {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -105,8 +105,9 @@ input {
     z-index: 2;
     transition: opacity 0.5s ease, transform 0.5s ease;
     pointer-events: none;
-  }
-  
+}
+
+/* pause popup */
 #pauseOverlay {
     inset: 0;
     position: fixed;
@@ -135,9 +136,11 @@ input {
 /* Gallery */
 .gallery {
     display: flex;
+    justify-content: center;
     gap: 6px;
     flex-wrap: wrap;
     padding: 1px;
+
 }
 
 .gallery img {
@@ -148,21 +151,18 @@ input {
     border-radius: 6px;
 }
 
+/* timer */
 #timer-display {
     font-family: 'Digital', Arial, Helvetica, sans-serif;
     text-align: center;
     width: auto;
     height: auto;
-    /* font-size: 15px;
-    padding: 5px 5px;
-    margin: 5px 2px 5px 2px; */
     background: var(--bg);
     color: var(--text);
     border: none;
 }
 
-/* Responsive layout */
-
+/* Responsive layout (landscape) */
 @media (orientation:landscape) {
 
     #controls {
@@ -174,19 +174,29 @@ input {
         align-content: center;
     }
 
-    .gamePaused{
+    .gamePaused {
         font-size: 4vw;
         margin: 1vw;
         padding: 1vw;
     }
-    #resumeBtn{
+
+    #resumeBtn {
         font-size: 4vw;
         padding: 1vw;
         margin: 1vw;
         padding: 1vw;
+    }
+
+    .placedTime {
+        display: block;
+    }
+
+    #timer-display {
+        font-size: 20px;
     }
 }
 
+/* Responsive layout (portrait) */
 @media (orientation:portrait) {
 
     #app {
@@ -194,11 +204,11 @@ input {
     }
 
     #controls {
-        height: 30%;
+        height: 40%;
     }
 
     #gameArea {
-        height: 70%;
+        height: 60%;
         align-content: center;
     }
 
@@ -216,16 +226,25 @@ input {
         text-shadow: 2px 2px var(--text-shadow);
     }
 
-    .gamePaused{
+    .gamePaused {
         font-size: 20px;
         margin: 10px;
         padding: 10px;
     }
 
-    #resumeBtn{
+    #resumeBtn {
         font-size: 15px;
         margin: 10px;
         padding: 10px;
+    }
+
+    .placedTime {
+        display: inline-flex;
+    }
+
+    #status {
+        margin-top: 7px;
+        margin-right: 5px;
     }
 }
 
@@ -234,6 +253,32 @@ canvas {
     touch-action: none;
 }
 
+/* css for random image thumbnail */
+/* thumbnail container */
+.image-container {
+    position: relative;
+}
+
+/* image style as thumbnail */
+.image-container img {
+    width: 60px;
+    height: 40px;
+    display: inline-block;
+}
+
+/* Text stylye on image */
+.centered-text {
+    cursor: pointer;
+    position: absolute;
+    top: 15%;
+    left: 10%;
+    transform: translate(0%, -50%);
+    color: white;
+    font-size: 7px;
+    font-weight: bold;
+}
+
+/* rules popup */
 .rules-popup-window {
     inset: 0;
     position: fixed;
@@ -280,9 +325,7 @@ canvas {
     border: 1px solid var(--border);
     transition: 0.5s ease-in-out;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    /* padding: 5px 10px; */
     border-radius: 4px;
-
     background: linear-gradient(90deg, var(--accent), #7c3aed);
     color: #fff;
     border-color: transparent;
