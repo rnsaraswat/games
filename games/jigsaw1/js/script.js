@@ -52,7 +52,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const pauseOverlay = document.getElementById("pauseOverlay");
 
-    const timerEl = document.getElementById("timer-display");
     const statusEl = document.getElementById('message');
     const placedEl = document.getElementById("placed");
     const totalEl = document.getElementById("total");
@@ -74,33 +73,69 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let hintOpacity = 0;
 
-    let startTime = 0;
-    let timerInterval = null;
-    let paused = false;
-
     let placedCount = 0;
-
-    let timeSec = 0;
     let difficulty = "easy";
 
-    /* =========================
-       TIMER
-    ========================= */
+    // timer function with system time and pasue resume
+    // timer function variables
+    let startTime;
+    let elapsedTime = 0;
+    let timerInterval;
+    let isPaused = false;
+
+    //Timer Start Function
     function startTimer() {
         clearInterval(timerInterval);
-        startTime = Date.now();
-        timerInterval = setInterval(updateTimer, 1000);
+        isPaused = false;
+
+        startTime = Date.now() - elapsedTime;
+        timerInterval = setInterval(function () {
+            elapsedTime = Date.now() - startTime;
+            print(timeToString(elapsedTime));
+        }, 1000);
     }
 
-    function updateTimer() {
-        if (paused) return;
-        timeSec = Math.floor((Date.now() - startTime) / 1000);
+    //Timer Pause
+    pauseBtn.onclick = () => {
+        if (!isPaused) {
+            // Pause logic
+            clearInterval(timerInterval);
+            isPaused = true;
+            pauseOverlay.style.display = "flex"
+        }
+    }
 
-        h = String(Math.floor(timeSec / 3600)).padStart(2, "0");
-        m = String(Math.floor(timeSec % 3600 / 60)).padStart(2, "0");
-        s = String(timeSec % 60).padStart(2, "0");
+    //Timer Stop function
+    function stopTimer() {
+        clearInterval(timerInterval);
+        elapsedTime = 0;
+    }
 
-        timerEl.textContent = `${h}:${m}:${s}`;
+    //Timer resume
+    resumeBtn.onclick = () => {
+        // Resume logic
+        isPaused = false;
+
+        startTime = Date.now() - elapsedTime;
+        timerInterval = setInterval(() => {
+            elapsedTime = Date.now() - startTime;
+            print(timeToString(elapsedTime));
+        }, 1000);
+        pauseOverlay.style.display = "none"
+    }
+
+    // prepare time to display in hh:mm:ss
+    function timeToString(time) {
+        h = Math.floor(time / 3600000);
+        m = Math.floor((time % 3600000) / 60000);
+        s = Math.floor((time % 60000) / 1000);
+
+        return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+    }
+
+    //display time
+    function print(txt) {
+        document.getElementById("timer-display").innerHTML = txt;
     }
 
     /* =========================
@@ -160,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("resize", () => {
         fireworkscanvas.width = window.innerWidth;
         fireworkscanvas.height = window.innerHeight;
-        statusEl.innerHTML = `Board Resized`;
+        statusEl.innerHTML = `Board Resized<br>Click/tap on pieces to select and move piece`;
         resizeBoard();
     });
 
@@ -187,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         totalEl.textContent = pieces.length;
         placedEl.textContent = placedCount;
-        statusEl.innerHTML = `Click/tap in pieces to move piece change piece position`;
+        statusEl.innerHTML = `Click/tap on pieces to select and move piece`;
     }
     /* =========================
        DRAW
@@ -239,7 +274,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let mx = e.clientX - rect.left;
         let my = e.clientY - rect.top;
 
-        // statusEl.innerHTML = `Pointer Down pieces selected`;
+        statusEl.innerHTML = `Click/tap on pieces to select and move piece`;
 
         for (let i = pieces.length - 1; i >= 0; i--) {
             let p = pieces[i];
@@ -273,6 +308,7 @@ document.addEventListener("DOMContentLoaded", function () {
     canvas.addEventListener("pointerup", () => {
         if (!selected) return;
         snapPiece(selected);
+        // statusEl.innerHTML = `piece Released <br>Click/tap on pieces to select and move piece`;
         selected = null;
     });
 
@@ -319,7 +355,7 @@ document.addEventListener("DOMContentLoaded", function () {
             placedCount++;
             placedEl.textContent = placedCount;
             playSound('click');
-            // statusEl.innerHTML = `Selected piece on correct Position`;
+            statusEl.innerHTML = `Selected piece on correct Position <br> Click/tap on pieces to select and move piece`;
 
             checkWin();
         }
@@ -331,11 +367,12 @@ document.addEventListener("DOMContentLoaded", function () {
     ========================= */
     function checkWin() {
         if (placedCount === pieces.length) {
-            clearInterval(timerInterval);
-            statusEl.innerHTML = `You win!`;
+            // clearInterval(timerInterval);
+            statusEl.innerHTML = `You win! <br> click/tap on image from galley to start new puzzle`;
             launchConfetti();
             playSound('win');
             updateleaderboard();
+            stopTimer();
             window.saveScore();
             setTimeout(() => {
                 shareScore(gameName, score);
@@ -350,7 +387,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     shuffleBtn.onclick = () => {
         if (pieces.length === 0) return;
-        statusEl.innerHTML = `Pieces Reshuffled`;
+        statusEl.innerHTML = `Pieces Reshuffled<br>Click/tap on pieces to select and move piece`;
 
         // no piece placed
         if (placedCount === 0) {
@@ -380,27 +417,28 @@ document.addEventListener("DOMContentLoaded", function () {
                 p.y = Math.random() * (boardSize - pieceH);
             }
         });
+        statusEl.innerHTML = `Unplaced pieces Reshiffled <br>Click/tap on pieces to select and move piece`;
+
         draw();
     }
 
-    pauseBtn.onclick = () => {
-        paused = true;
-        pauseOverlay.style.display = "flex";
-    };
+    // pauseBtn.onclick = () => {
+    //     paused = true;
+    //     pauseOverlay.style.display = "flex";
+    // };
 
-    if (resumeBtn && pauseOverlay) {
-        resumeBtn.onclick = () => {
-            paused = false;
-            pauseOverlay.style.display = "none";
-        };
-    }
+    // if (resumeBtn && pauseOverlay) {
+    //     resumeBtn.onclick = () => {
+    //         paused = false;
+    //         pauseOverlay.style.display = "none";
+    //     };
+    // }
     /* =========================
        HINT
     ========================= */
     hintSel.onchange = () => {
         hintOpacity = parseFloat(hintSel.value);
-        statusEl.innerHTML = `Hint Changed`;
-
+        statusEl.innerHTML = `Hint Changed<br>Click/tap on pieces to select and move piece`;
         draw();
     };
 
@@ -440,6 +478,7 @@ document.addEventListener("DOMContentLoaded", function () {
         resizeBoard();
         createPieces();
         hintOpacity = parseFloat(hintSel.value);
+        elapsedTime = 0
         startTimer();
         draw();
     }
@@ -739,6 +778,7 @@ document.addEventListener("DOMContentLoaded", function () {
             loadImage(e.target.result);
         };
         renderUrl.readAsDataURL(url);
+        statusEl.innerHTML = `URL image loaded <br>Click/tap on pieces to select and move piece`;
     };
 
     /* =========================
@@ -752,6 +792,7 @@ document.addEventListener("DOMContentLoaded", function () {
             loadImage(e.target.result);
         };
         reader.readAsDataURL(file);
+        statusEl.innerHTML = `Your image loaded <br>Click/tap on pieces to select and move piece`;
     };
 
     /* =========================
@@ -871,7 +912,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 opponent: opponent || "-",
                 difficulty: difficulty || "-",
                 size: `${rows}x${cols}`,
-                elapsed: timeSec || 0,
+                elapsed: Math.floor(Number(elapsedTime) / 1000) || 0,
                 score: score || 0,
                 moves: moves || 0,
                 email: email || "-",
@@ -893,7 +934,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let opponent = "-";
         let game_id = 'jigsaw';
         let gsize = `${rows}x${cols}`;
-        let elapsed = timeSec;
+        let elapsed = Math.floor(Number(elapsedTime) / 1000);
         let gameCount = 0;
         let filed1 = 0;
         let filed2 = 0
@@ -903,16 +944,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const created_at = new Date();
         if (rows == 3) {
             difficulty = "easy";
-            score = (rows * cols * 100 - Number(elapsed)) * 1;
+            score = (rows * cols * 100 - Math.floor(Number(elapsedTime) / 1000)) * 1;
         } else if (rows == 4) {
             difficulty = "medium";
-            score = (rows * cols * 100 - Number(elapsed)) * 1.5;
+            score = (rows * cols * 100 - Math.floor(Number(elapsedTime) / 1000)) * 1.5;
         } else if (rows == 6) {
             difficulty = "hard";
-            score = (rows * cols * 100 - Number(elapsed)) * 2;
+            score = (rows * cols * 100 - Math.floor(Number(elapsedTime) / 1000)) * 2;
         } else if (rows == 10) {
             difficulty = "extreme";
-            score = (rows * cols * 100 - Number(elapsed)) * 2.5;
+            score = (rows * cols * 100 - Math.floor(Number(elapsedTime) / 1000)) * 2.5;
         }
         if (hintOpacity == 0) {
             filed3 = "Hint: Off";

@@ -124,6 +124,7 @@ label {
     color: var(--text);
     border-radius: 5px;
     cursor: none;
+    align-content: center;
 }
 
 input {
@@ -343,6 +344,13 @@ button:hover {
         padding: 2px;
         min-height: 40px;
     }
+
+    #resumeBtn {
+        font-size: 4vw;
+        padding: 1vw;
+        margin: 1vw;
+        padding: 1vw;
+    }
 }
 
 @media (orientation: portrait) {
@@ -405,6 +413,12 @@ button:hover {
         margin-top: 2px;
         padding: 2px;
         min-height: 40px;
+    }
+
+    #resumeBtn {
+        font-size: 15px;
+        margin: 10px;
+        padding: 10px;
     }
 }
 
@@ -519,7 +533,7 @@ button:hover {
     transition: height 12s ease-in-out;
 }
 
-.pause-container {
+#pauseOverlay {
     inset: 0;
     position: fixed;
     top: 50%;
@@ -527,20 +541,22 @@ button:hover {
     transform: translate(-50%, -50%);
     padding: 5px;
     border-radius: 5px;
-    display: flex;
-    justify-content: center;
+    border-radius: 10px;
     z-index: 10;
-    width: 90%;
-    height: 90%;
+    width: 95%;
+    height: 95%;
     overflow-y: auto;
     text-align: center;
-    border: 2px solid var(--gf-border);
-    background: var(--gf-bg);
-    color: var(--gf-text);
+    border: 2px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
     flex-direction: column;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
 #resumeBtn{
     padding: 10px 20px;
     margin: 5px;

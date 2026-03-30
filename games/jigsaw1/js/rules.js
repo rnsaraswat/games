@@ -28,8 +28,8 @@ function showRules() {
             start by Sort pieces by group interior pieces by colour, pattern, or texture to build the inner sections systematically. Frequently refer to the hint picture for guidance
         
         <h2>The Core Rules</h2>
-        <b><u>Tap/click to hold piece:</b></u> Tap a piece to hold and move to place where you want.<br><br>
-        <b><u>Drop piece:</b></u> release tap/click to drop piece.<br><br>
+        <b><u>Tap/click to hold piece:</b></u> Tap a piece to hold and move to place where you want.<br>
+        <b><u>Drop piece:</b></u> release tap/click to drop piece.<br>
         <b><u>Snap mode:</b></u><br>
             <b><u>Smart Threshold:</b></u>When a piece is moved close to its correct location or an adjacent piece, it "snaps" or jumps into the precise, locked position.<br>
             <b><u>Exact Grid:</b></u>When a piece is moved close to its correct location or an adjacent piece, it "snaps" or jumps into the precise, locked position.<br>

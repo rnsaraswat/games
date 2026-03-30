@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
         toggleElement(pauseBtn, false);
         toggleElement(undoBtn, false);
         toggleElement(startBtn, true);
-        toggleElement(difficultySelect, true);
+        toggleElement(difficultySelectBtn, true);
         gameOver = false
         elapsedTime = 0
         startTimer()

@@ -43,6 +43,12 @@
                         <option value="13">13 Tubes</option>
                         <option value="14">14 Tubes</option>
                     </select>
+                    <label for="difficulty">Difficulty:</label>
+                    <select id="difficultySel">
+                        <option value="easy" selected>😊Easy</option>
+                        <option value="medium">🤔Medium</option>
+                        <option value="hard">🤯Hard</option>
+                    </select>
                     <div class="divtext">Level: <span id="leveldisplay">1 (EASY)</span></div>
 
                     <button class="button-primary" id="startBtn">New Game</button>
@@ -64,7 +70,7 @@
                     <div class="divtext">Moves: <span id="moves">0</span></div>
                     <div id="timer-display">⏱️ 00:00:00</div>
                     <div class="output-box" id="output">
-                        Please Select no of tubes to change level or press New Game for Easy Level (4 tubes)
+                        Please Select no of tubes and Difficulty to change level or press New Game for Level 1 Easy (4 tubes)
                     </div>
                     <p id="loading" class="loading">Loading...</p>
                 </div>
@@ -75,9 +81,9 @@
     <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
     <div id="gbLeaderboardModal" class="gb-main-container"></div>
-    <div id="pauseModal" class="pause-container">
-        <h2>Game Paused</h2>
-        <button id="resumeBtn">Resume</button>
+    <div id="pauseOverlay">
+        <h1 class="gamePaused">Game Paused</h1>
+        <button id="resumeBtn">▶ Resume</button>
     </div>
     <div id="winText">🎉 Completed 🎉</div>
     <canvas id="confettiCanvas"></canvas>
@@ -108,7 +114,7 @@
         document.getElementById("gbLeaderboardModal").style.display = 'none';
         document.getElementById("winText").style.display = 'none';
         document.getElementById("rulesPopup").style.display = 'none';
-        document.getElementById("pauseModal").style.display = 'none';
+        document.getElementById("pauseOverlay").style.display = 'none';
 
         const themeToggle = document.getElementById('toggle-theme');
         function setTheme(t) {

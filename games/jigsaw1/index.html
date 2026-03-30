@@ -154,7 +154,6 @@
     <script type="module">
         import { shareScore } from './js/share.js';
         document.getElementById("shareBtn").addEventListener("click", async () => {
-            console.log("shareBtn clicked")
             shareScore("4inARow", 0);
         });
     </script>
@@ -518,7 +517,6 @@
                 div.style.position = "fixed"
                 div.style.width = "6px"
                 div.style.height = "6px"
-                console.log(Math.random() * 360)
                 div.style.background = "hsl(" + Math.random() * 360 + ",100%,50%)"
                 // div.style.backgroundColor = '#0ff'
                 div.style.boxShadow = "0 0 5px #0ff, 0 0 10px #0ff";

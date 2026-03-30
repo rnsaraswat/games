@@ -231,26 +231,27 @@
                 let full = t - 2; // आपकी शर्त: 2 खाली ट्यूब्स
                 let modeKey = `mode_${t}_tubes`;
                 masterData[modeKey] = [];
-                if (t == 4) count = 200;
-                else if (t == 5) count = 200;
-                else if (t == 6) count = 200;
-                else if (t == 7) count = 500;
-                else if (t == 8) count = 500;
-                else if (t == 9) count = 500;
-                else if (t == 10) count = 500;
-                else if (t == 11) count = 500;
-                else if (t == 12) count = 500;
-                else if (t == 13) count = 1000;
-                else if (t == 14) count = 2000;
-                else if (t == 15) count = 3000;
-                else if (t == 16) count = 4000;
-                else if (t == 17) count = 5000;
-                else if (t == 18) count = 5000;
-                else if (t == 19) count = 5000;
-                else if (t == 20) count = 5000;
+                // if (t == 4) count = 200;
+                // else if (t == 5) count = 200;
+                // else if (t == 6) count = 200;
+                // else if (t == 7) count = 500;
+                // else if (t == 8) count = 500;
+                // else if (t == 9) count = 500;
+                // else if (t == 10) count = 500;
+                // else if (t == 11) count = 500;
+                // else if (t == 12) count = 500;
+                // else if (t == 13) count = 1000;
+                // else if (t == 14) count = 2000;
+                // else if (t == 15) count = 3000;
+                // else if (t == 16) count = 4000;
+                // else if (t == 17) count = 5000;
+                // else if (t == 18) count = 5000;
+                // else if (t == 19) count = 5000;
+                // else if (t == 20) count = 5000;
+                count = 10;
 
                 for (let l = 1; l <= count; l++) {
-                    let diff = l <= 50 ? 'easy' : (l <= 100 ? 'medium' : 'hard');
+                    let diff = l <= 3 ? 'easy' : (l <= 6 ? 'medium' : 'hard');
                     masterData[modeKey].push({
                         level: l,
                         difficulty: diff,
