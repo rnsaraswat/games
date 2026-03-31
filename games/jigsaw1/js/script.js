@@ -880,7 +880,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 ctxfireworks.shadowBlur = 15;
                 ctxfireworks.shadowOffsetX = 0;
                 ctxfireworks.shadowOffsetY = 0;
-                ctxfireworks.fillRect(c.x, c.y, c.size, c.size);
+                if(Math.floor(Math.random() * 10) < 5) {
+                    ctxfireworks.fillRect(c.x, c.y, c.size, c.size);
+                } else {
+                    ctxfireworks.beginPath();
+                    ctxfireworks.arc(c.x, c.y, 5, 0, Math.PI * 2);
+                    ctxfireworks.fill();
+                }
                 ctxfireworks.restore();
             });
 

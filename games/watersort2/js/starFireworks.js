@@ -15,7 +15,7 @@ function tubeCracker(tubeEl) {
 
     rocket.addEventListener("animationend", () => {
         rocket.remove();
-        blast(rect.left + rect.width / 2, rect.top, 24);
+        blast(rect.left + rect.width / 2, rect.top, 240);
     });
 }
 
@@ -28,19 +28,38 @@ function blast(x, y, count = 40) {
 
         const colorClass = Math.floor(Math.random() * colors.length);
         spark.className = "spark " + colors[colorClass];
+        // spark.className = "spark " + "aqua";
 
         spark.style.left = x + "px";
         spark.style.top = y + "px";
 
         /* 🔥 WIDE SPREAD */
         const angle = Math.random() * Math.PI * 2;
-        const distance = 120 + Math.random() * 120; 
+        const distance = 20 + Math.random() * 20; 
         spark.style.setProperty("--dx", Math.cos(angle) * distance + "px");
         spark.style.setProperty("--dy", Math.sin(angle) * distance + "px");
 
         fw.appendChild(spark);
 
-        setTimeout(() => spark.remove(), 1200);
+        // const spark1 = document.createElement("div");
+
+        // // const colorClass = Math.floor(Math.random() * colors.length);
+        // spark.className = "spark " + colors[colorClass];
+        // // spark1.className = "star " + "aqua";
+        // spark1.textContent = "*";
+        // spark1.style.fontSize = "25px";
+        // spark1.style.left = x + "px";
+        // spark1.style.top = y + "px";
+
+        // /* 🔥 WIDE SPREAD */
+        // // const angle = Math.random() * Math.PI * 2;
+        // // const distance = 220 + Math.random() * 220; 
+        // spark1.style.setProperty("--dx", Math.cos(angle) * distance + "px");
+        // spark1.style.setProperty("--dy", Math.sin(angle) * distance + "px");
+
+        // fw.appendChild(spark1);
+
+        setTimeout(() => spark.remove(), 400);
     }
 }
 

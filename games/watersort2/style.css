@@ -309,7 +309,6 @@ button:hover {
     h1 {
         padding: 1px 1px;
         margin: 2px 1px 2px 1px;
-        font-size: 15px;
         margin-bottom: 1px;
     }
 
@@ -533,6 +532,17 @@ button:hover {
     transition: height 12s ease-in-out;
 }
 
+/* confetti canvas */
+#fireworksCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
 #pauseOverlay {
     inset: 0;
     position: fixed;
@@ -609,9 +619,7 @@ button:hover {
     border: 1px solid var(--border);
     transition: 0.5s ease-in-out;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    /* padding: 5px 10px; */
     border-radius: 4px;
-
     background: linear-gradient(90deg, var(--accent), #7c3aed);
     color: #fff;
     border-color: transparent;
@@ -629,44 +637,3 @@ button:hover {
 #RulesBox {
     text-align: left;
 }
-
-/* .cracker {
-    position: fixed;
-    bottom: 0;
-    width: 6px;
-    height: 20px;
-    background: white;
-    border-radius: 3px;
-    z-index: 5000;
-}
-
-.blast {
-    position: fixed;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    z-index: 5000;
-    pointer-events: none;
-}
-
-@keyframes rise {
-    from {
-        transform: translateY(0);
-    }
-
-    to {
-        transform: translateY(var(--riseHeight));
-    }
-}
-
-@keyframes spread {
-    from {
-        transform: translate(0, 0) scale(1);
-        opacity: 1;
-    }
-
-    to {
-        transform: translate(var(--dx), var(--dy)) scale(0.5);
-        opacity: 0;
-    }
-} */

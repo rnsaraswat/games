@@ -6,7 +6,7 @@ import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/l
 // to add firebase leaderboard
 import { db } from "../../../leaderboard/firebase-config.js";
 import { addDoc, collection, serverTimestamp } from
-    "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 let game = "Water Sort";
 let game_id = "watersort";
@@ -38,6 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const undoBtn = document.getElementById('undoBtn');
   const difficultySel = document.getElementById("difficultySel");
   const pauseOverlay = document.getElementById("pauseOverlay");
+  const fireworkscanvas = document.getElementById('fireworksCanvas');
+  const ctxfireworks = fireworkscanvas.getContext('2d');
+  fireworkscanvas.width = window.innerWidth;
+  fireworkscanvas.height = window.innerHeight;
 
   let selected = null;
   // let savedLevel = 1;
@@ -56,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const statusText = document.getElementById("output");
   const select = document.getElementById("tubeSelect");
   TOTAL_TUBES = select.value;
-  currentMode = TOTAL_TUBES; 
+  currentMode = TOTAL_TUBES;
   let colors = select.value - 2;
   statusText.innerHTML = `Level:${currentLevel} (${TOTAL_TUBES} ${difficulty.toUpperCase()}), New game started, Click on the tube liquid transfer from`;
   document.getElementById("leveldisplay").textContent = `${currentLevel} ${difficulty.toUpperCase()}`;
@@ -67,80 +71,78 @@ document.addEventListener('DOMContentLoaded', () => {
   toggleElement(startBtn, false);
   toggleElement(select, false);
   toggleElement(difficultySel, false);
-  
-      // timer function with system time and pasue resume
-    // timer function variables
-    let startTime;
-    let elapsedTime = 0;
-    let timerInterval;
-    let isPaused = false;
 
-    //Timer Start Function
-    function startTimer() {
-        clearInterval(timerInterval);
-        isPaused = false;
+  // timer function with system time and pasue resume
+  // timer function variables
+  let startTime;
+  let elapsedTime = 0;
+  let timerInterval;
+  let isPaused = false;
 
-        startTime = Date.now() - elapsedTime;
-        timerInterval = setInterval(function () {
-            elapsedTime = Date.now() - startTime;
-            print(timeToString(elapsedTime));
-        }, 1000);
+  //Timer Start Function
+  function startTimer() {
+    clearInterval(timerInterval);
+    isPaused = false;
+
+    startTime = Date.now() - elapsedTime;
+    timerInterval = setInterval(function () {
+      elapsedTime = Date.now() - startTime;
+      print(timeToString(elapsedTime));
+    }, 1000);
+  }
+
+  //Timer Pause
+  pauseBtn.onclick = () => {
+    if (!isPaused) {
+      // Pause logic
+      clearInterval(timerInterval);
+      isPaused = true;
+      pauseOverlay.style.display = "flex"
     }
+  }
 
-    //Timer Pause
-    pauseBtn.onclick = () => {
-        if (!isPaused) {
-            // Pause logic
-            clearInterval(timerInterval);
-            isPaused = true;
-            pauseOverlay.style.display = "flex"
-        }
-    }
+  //Timer Stop function
+  function stopTimer() {
+    clearInterval(timerInterval);
+    elapsedTime = 0;
+  }
 
-    //Timer Stop function
-    function stopTimer() {
-        clearInterval(timerInterval);
-        elapsedTime = 0;
-    }
+  //Timer resume
+  resumeBtn.onclick = () => {
+    // Resume logic
+    isPaused = false;
 
-    //Timer resume
-    resumeBtn.onclick = () => {
-        // Resume logic
-        isPaused = false;
+    startTime = Date.now() - elapsedTime;
+    timerInterval = setInterval(() => {
+      elapsedTime = Date.now() - startTime;
+      print(timeToString(elapsedTime));
+    }, 1000);
+    pauseOverlay.style.display = "none"
+  }
 
-        startTime = Date.now() - elapsedTime;
-        timerInterval = setInterval(() => {
-            elapsedTime = Date.now() - startTime;
-            print(timeToString(elapsedTime));
-        }, 1000);
-        pauseOverlay.style.display = "none"
-    }
+  // prepare time to display in hh:mm:ss
+  function timeToString(time) {
+    h = Math.floor(time / 3600000);
+    m = Math.floor((time % 3600000) / 60000);
+    s = Math.floor((time % 60000) / 1000);
 
-    // prepare time to display in hh:mm:ss
-    function timeToString(time) {
-        h = Math.floor(time / 3600000);
-        m = Math.floor((time % 3600000) / 60000);
-        s = Math.floor((time % 60000) / 1000);
+    return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+  }
 
-        return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-    }
+  //display time
+  function print(txt) {
+    document.getElementById("timer-display").innerHTML = txt;
+  }
 
-    //display time
-    function print(txt) {
-        document.getElementById("timer-display").innerHTML = txt;
-    }
-
-
+  // change no of tube
   select.onchange = () => {
     const count = parseInt(select.value);
     TOTAL_TUBES = select.value;
     difficulty = difficultySel.value;
     currentMode = TOTAL_TUBES;
     colors = select.value - 2;
-    // stopTimer();
-    // newGame();
     if (TOTAL_TUBES == 4) {
-      if (difficulty == "medium" || difficulty == "hard" ) {
+      if (difficulty == "medium" || difficulty == "hard") {
         difficulty = "easy";
         statusText.innerHTML = `No of tubes Changed to ${TOTAL_TUBES} tubes only easy difficulty availabe<br> Level:${currentLevel} (${TOTAL_TUBES} tubes Easy), Press new game button to start game`;
         document.getElementById("leveldisplay").textContent = `${currentLevel} ${difficulty.toUpperCase()}`;
@@ -149,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("leveldisplay").textContent = `${currentLevel} ${difficulty.toUpperCase()}`;
       }
     } else if (TOTAL_TUBES == 5) {
-      if (difficulty == "hard" ) {
+      if (difficulty == "hard") {
         difficulty = "medium";
         statusText.innerHTML = `No of tubes Changed to ${TOTAL_TUBES} tubes hard difficulty not availabe<br> Level:${currentLevel} (no of tubes = ${TOTAL_TUBES} medium), Press new game button to start game`;
         document.getElementById("leveldisplay").textContent = `${currentLevel} ${difficulty.toUpperCase()}`;
@@ -163,28 +165,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // change difficulty
   difficultySel.onchange = () => {
     difficulty = difficultySel.value;
-    // stopTimer();
-    // newGame();
     if (TOTAL_TUBES == 4) {
-      if (difficulty == "medium" || difficulty == "hard" ) {
+      if (difficulty == "medium" || difficulty == "hard") {
         statusText.innerHTML = `Difficulty level medium/hard not availabe in no of tubes = ${TOTAL_TUBES}<br> Level:${currentLevel} (${TOTAL_TUBES} tubes Easy), Press new game button to start game`;
         document.getElementById("leveldisplay").textContent = `Level ${currentLevel}`;
         difficulty = "easy";
       }
     } else if (TOTAL_TUBES == 5) {
-      if (difficulty == "hard" ) {
+      if (difficulty == "hard") {
         difficulty = "medium";
         statusText.innerHTML = `Difficulty level hard not availabe in no of tubes = ${TOTAL_TUBES} medium)<br> Level:${currentLevel} (no of tubes = ${TOTAL_TUBES}), Press new game button to start game`;
         document.getElementById("leveldisplay").textContent = `${currentLevel} ${difficulty.toUpperCase()}`;
       }
     } else {
       statusText.innerHTML = `Difficulty level change to ${difficulty.toUpperCase()} <br> Level:${currentLevel} (${TOTAL_TUBES} tubes ${difficulty.toUpperCase()}), Press new game button to start game`;
-    document.getElementById("leveldisplay").textContent = `${currentLevel} ${difficulty.toUpperCase()}`;
+      document.getElementById("leveldisplay").textContent = `${currentLevel} ${difficulty.toUpperCase()}`;
     }
   };
 
+  //start game
   startBtn.addEventListener('click', () => {
     moves = 0;
     movesDisplay.textContent = moves;
@@ -192,14 +194,14 @@ document.addEventListener('DOMContentLoaded', () => {
     newGame();
   });
 
+  //restart game
   restartBtn.addEventListener('click', () => {
     window.Restart();
   });
 
-  window.Restart = function () {
+    window.Restart = function () {
     playSound('loose');
 
-    // const newLevel = loadModeProgress(TOTAL_TUBES);
     const newLevel = startGame(gameLevels, currentMode, difficulty)
 
     moves = 0;
@@ -212,6 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderGame();
   }
 
+  //new game setup
   function newGame() {
     moves = 0;
     elapsedTime = 0;
@@ -223,8 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     for (let i = 0; i < TOTAL_TUBES; i++) gameState.push([]);
 
-    // const newLevel = loadModeProgress(TOTAL_TUBES);
-    // const newLevel = getLevelData(gameLevels, mode, difficulty, currentLevel); 
     const newLevel = startGame(gameLevels, currentMode, difficulty)
     document.getElementById("leveldisplay").textContent = `${currentLevel} (${difficulty.toUpperCase()})`;
 
@@ -264,7 +265,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return shuffled.slice(0, colorCount);
   }
 
-
   function buildBoard() {
     const board = document.getElementById("board");
     board.innerHTML = "";
@@ -278,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  //when click on tube
   function handleClick(i) {
     const tubes = document.querySelectorAll(".tube");
 
@@ -293,6 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // if clicked on previous selected
     if (selected === i) {
       playSound('error');
       tubes[selected].classList.remove("selected");
@@ -300,6 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    //if top color of boath tube not same
     if (!canPour(selected, i)) {
       playSound('error');
       statusText.innerHTML = `Click on the tube liquid transfer from`;
@@ -308,6 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    //if top color of both tube ise same
     playSound('click');
     animateTubePour(selected, i);
     selected = null;
@@ -320,20 +324,12 @@ document.addEventListener('DOMContentLoaded', () => {
       gameState[i].forEach((c, index) => {
         const d = document.createElement("div");
         if (index == 0) { d.classList.add("layerBottom"); };
-        // d.className = "layer";
         d.classList.add("layer");
         d.style.background = c;
         tube.appendChild(d);
       });
     });
   }
-
-  // function shuffle(arr) {
-  //   for (let i = arr.length - 1; i > 0; i--) {
-  //     const j = Math.floor(Math.random() * (i + 1));
-  //     [arr[i], arr[j]] = [arr[j], arr[i]];
-  //   }
-  // }
 
   function getTopColor(i) {
     const t = gameState[i];
@@ -477,7 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (win) {
       playSound('win');
-      launchStarFireworks();
+      launchConfetti();
       setTimeout(() => {
         shareScore(gameName, score);
       }, 2500);
@@ -491,22 +487,12 @@ document.addEventListener('DOMContentLoaded', () => {
       toggleElement(startBtn, false);
       toggleElement(select, false);
       toggleElement(difficultySel, false);
- 
+
       let nextLevel = levelCompleted(currentMode, difficulty);
       let newLevelData = getLevelData(gameLevels, currentMode, difficulty, nextLevel);
-      console.log("Next Level:", nextLevel);
-      console.log(newLevelData);
-
-
-      // savedLevel = parseInt(localStorage.getItem(`progress_mode_${currentMode}`) || 1);
-      // let nextLevel = savedLevel + 1;
-      // Save progress of that mode
-      // localStorage.setItem(`progress_mode_${currentMode}`, nextLevel);
 
       statusText.innerHTML = `Mode ${TOTAL_TUBES} Tubes: Level ${currentLevel} ${difficulty.toUpperCase()} Completed! <br> Click New Game to play next Level ${nextLevel} ${difficulty.toUpperCase()}`;
-      // document.getElementById("leveldisplay").textContent = `${nextLevel} (${difficulty.toUpperCase()})`;
-      // loadModeProgress(currentMode);
-   }
+    }
   }
 
   function checkNoMovesLeft() {
@@ -549,6 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 300);
   }
 
+  // button disable/enable
   function toggleElement(elementId, isDisable) {
 
     if (elementId) {
@@ -567,6 +554,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  //che any one tube is full with all same colors
   function checkTubeCompleted(index) {
     const tube = gameState[index];
     if (
@@ -578,71 +566,108 @@ document.addEventListener('DOMContentLoaded', () => {
       );
       if (tubeEl) {
         tubeCracker(tubeEl);
-        playSound("fire3");
+        // playSound("fire3");
         textToSpeechEng("tube completed");
       }
     }
   }
 
-  // this code is for timer display and upadte including pause
-  // function startTimer() {
-  //   stopTimer();
-  //   timerId = setInterval(() => {
-  //     if (!paused) { timeSec++; renderTimer(); }
-  //   }, 1000);
-  // }
+  //resize window
+  window.addEventListener("resize", () => {
+    fireworkscanvas.width = window.innerWidth;
+    fireworkscanvas.height = window.innerHeight;
+  });
 
-  // function stopTimer() {
-  //   if (timerId) { clearInterval(timerId); timerId = null; }
-  // }
+  /* =========================
+   CONFETTI CELEBRATION
+========================= */
+  let confetti = [];
+  function launchConfetti() {
+    for (let i = 0; i < 250; i++) {
+      confetti.push({
+        x: Math.random() * fireworkscanvas.width,
+        y: Math.random() * -fireworkscanvas.height,
+        vx: (Math.random() - 0.5) * 5,
+        vy: Math.random() * 5 + 2,
+        size: Math.random() * 6 + 4,
+        color: generateRandomNeonColor()
+      });
+    }
+    animateConfetti();
+  }
 
-  // function renderTimer() {
-  //   const h = String(Math.floor(timeSec / 3600)).padStart(2, '0');
-  //   const m = String(Math.floor((timeSec % 3600) / 60)).padStart(2, '0');
-  //   const s = String(timeSec % 60).padStart(2, '0');
-  //   timeDisplay.textContent = `${h}:${m}:${s}`;
-  // }
+  function generateRandomNeonColor() {
+    const hue = Math.floor(Math.random() * 361); // Random hue (0-360)
+    const saturation = 100; // Full saturation (100%)
+    const lightness = 50; // Moderate lightness (50%) for full color intensity
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+  }
 
-  // pauseBtn.onclick = () => {
-  //   paused = !paused;
-  //   document.getElementById("pauseModal").style.display = 'flex';
-  // };
+  function animateConfetti() {
+    let anim = setInterval(() => {
+      ctxfireworks.clearRect(0, 0, fireworkscanvas.width, fireworkscanvas.height);
+      confetti.forEach(c => {
+        c.x += c.vx;
+        c.y += c.vy;
+        c.vy += 0.1;
+        ctxfireworks.save();
+        ctxfireworks.fillStyle = c.color;
+        ctxfireworks.shadowColor = c.color;
+        ctxfireworks.shadowBlur = 15;
+        ctxfireworks.shadowOffsetX = 0;
+        ctxfireworks.shadowOffsetY = 0;
+        if (Math.floor(Math.random() * 10) < 5) {
+          //darw rectangle
+          ctxfireworks.fillRect(c.x, c.y, c.size, c.size);
+        } else {
+          //darw circle
+          ctxfireworks.beginPath();
+          ctxfireworks.arc(c.x, c.y, 5, 0, Math.PI * 2);
+          ctxfireworks.fill();
+        }
+        //draw riangle
+        // drawPolygon(ctx, this.x, this.y, 3, 4);
+        //draw square
+        //drawPolygon(ctx, this.x, this.y, 4, 4); 
+        ctxfireworks.restore();
+      });
 
-  // resumeBtn.onclick = () => {
-  //   paused = !paused;
-  //   document.getElementById("pauseModal").style.display = 'none';
-  // };
-
-     /* =========================
-       Leaderboard update
-    ========================= */
-    // to add firebase leaderboard (save record)
-    window.saveScore = async function () {
-          text = `tubes:${TOTAL_TUBES}, Colors:${TOTAL_TUBES - 2}`;
-
-      try {
-          await addDoc(collection(db, "leaderboard"), {
-              game_id: game_id || 'watersort',
-              game: game || 'Water Sort',
-              name: player1 || 'Guast',
-              opponent: opponent || "-",
-              difficulty: difficulty || "-",
-              size: `${TOTAL_TUBES}x${TOTAL_TUBES - 2}`,
-              elapsed: Math.floor(Number(elapsedTime) / 1000) || 0,
-              score: score || 0,
-              moves: moves || 0,
-              email: email || "-",
-              level: currentLevel || "-",
-              mode: playMode || '-',
-              text: text || "-",
-              createdAt: new Date()
-          });
-
-          console.log("Score Saved!");
-
-      } catch (error) {
-          console.error("Error:", error);
+      if (confetti.length === 0) {
+        clearInterval(anim);
       }
+    }, 50);
+  }
+
+  /* =========================
+    Leaderboard update
+ ========================= */
+  // to add firebase leaderboard (save record)
+  window.saveScore = async function () {
+    text = `tubes:${TOTAL_TUBES}, Colors:${TOTAL_TUBES - 2}`;
+
+    try {
+      await addDoc(collection(db, "leaderboard"), {
+        game_id: game_id || 'watersort',
+        game: game || 'Water Sort',
+        name: player1 || 'Guast',
+        opponent: opponent || "-",
+        difficulty: difficulty || "-",
+        size: `${TOTAL_TUBES}x${TOTAL_TUBES - 2}`,
+        elapsed: Math.floor(Number(elapsedTime) / 1000) || 0,
+        score: score || 0,
+        moves: moves || 0,
+        email: email || "-",
+        level: currentLevel || "-",
+        mode: playMode || '-',
+        text: text || "-",
+        createdAt: new Date()
+      });
+
+      console.log("Score Saved!");
+
+    } catch (error) {
+      console.error("Error:", error);
+    }
 
   };
 
@@ -673,78 +698,78 @@ document.addEventListener('DOMContentLoaded', () => {
     saveScore(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
   }
 
-// this code for load/get/save levels dat from json file
-// variable to strore all level data
-let gameLevels = {};
-//get current level data (as per tubes & difficulty) 
-function getLevelData(data, currentMode, difficulty, levelNumber = 1) {
-console.log(data, currentMode, difficulty, levelNumber)
+  // this code for load/get/save levels dat from json file
+  // variable to strore all level data
+  let gameLevels = {};
+  //get current level data (as per tubes & difficulty) 
+  function getLevelData(data, currentMode, difficulty, levelNumber = 1) {
+    console.log(data, currentMode, difficulty, levelNumber)
 
-  const modeKey = `mode_${currentMode}_tubes`;
+    const modeKey = `mode_${currentMode}_tubes`;
 
-  const levels = data[modeKey];
+    const levels = data[modeKey];
 
-  // difficulty filter
-  const filtered = levels.filter(l => l.difficulty === difficulty);
+    // difficulty filter
+    const filtered = levels.filter(l => l.difficulty === difficulty);
 
-  // specific level
-  const levelData = filtered.find(l => l.level === levelNumber);
-  console.log(levelData)
+    // specific level
+    const levelData = filtered.find(l => l.level === levelNumber);
+    console.log(levelData)
 
-  return levelData;
-}
-//save level played progress on level completd
-function saveProgress(currentMode, difficulty, level) {
-  const key = `progress_${currentMode}_${difficulty}`;
-  localStorage.setItem(key, level);
-}
-//load level progress on current device or start initial level
-function loadProgress(currentMode, difficulty) {
-  const key = `progress_${currentMode}_${difficulty}`;
-  if (difficulty == "easy") {
-    return parseInt(localStorage.getItem(key)) || 1;
-  } else if (difficulty == "medium") {
-    return parseInt(localStorage.getItem(key)) || 51;
-  } else if (difficulty == "hard") {
-    return parseInt(localStorage.getItem(key)) || 101;
+    return levelData;
   }
-}
-//load current level data before start game 
-function startGame(data, currentMode, difficulty) {
-  currentLevel = loadProgress(currentMode, difficulty);
+  //save level played progress on level completd
+  function saveProgress(currentMode, difficulty, level) {
+    const key = `progress_${currentMode}_${difficulty}`;
+    localStorage.setItem(key, level);
+  }
+  //load level progress on current device or start initial level
+  function loadProgress(currentMode, difficulty) {
+    const key = `progress_${currentMode}_${difficulty}`;
+    if (difficulty == "easy") {
+      return parseInt(localStorage.getItem(key)) || 1;
+    } else if (difficulty == "medium") {
+      return parseInt(localStorage.getItem(key)) || 51;
+    } else if (difficulty == "hard") {
+      return parseInt(localStorage.getItem(key)) || 101;
+    }
+  }
+  //load current level data before start game 
+  function startGame(data, currentMode, difficulty) {
+    currentLevel = loadProgress(currentMode, difficulty);
 
-  let levelData = getLevelData(data, currentMode, difficulty, currentLevel);
+    let levelData = getLevelData(data, currentMode, difficulty, currentLevel);
 
-  return levelData;
-}
-//level completed function - load next level and save progress
-function levelCompleted(currentMode, difficulty) {
-  let currentLevel = loadProgress(currentMode, difficulty);
+    return levelData;
+  }
+  //level completed function - load next level and save progress
+  function levelCompleted(currentMode, difficulty) {
+    let currentLevel = loadProgress(currentMode, difficulty);
 
-  currentLevel++;
+    currentLevel++;
 
-  console.log("Completed Level:", currentLevel);
+    console.log("Completed Level:", currentLevel);
 
-  saveProgress(currentMode, difficulty, currentLevel);
+    saveProgress(currentMode, difficulty, currentLevel);
 
-  return currentLevel;
-}
+    return currentLevel;
+  }
 
-// load json file data
-async function loadLevelsData() {
+  // load json file data
+  async function loadLevelsData() {
     try {
-        const response = await fetch('js/multi_mode_levels.json');
-        if (!response.ok) throw new Error("Jason file not found");
-        
-        gameLevels = await response.json();
-        console.log("Levels Loaded Successfully!");
+      const response = await fetch('js/multi_mode_levels.json');
+      if (!response.ok) throw new Error("Jason file not found");
+
+      gameLevels = await response.json();
+      console.log("Levels Loaded Successfully!");
 
     } catch (error) {
-        console.error("Error loading JSON:", error);
+      console.error("Error loading JSON:", error);
     }
-}
+  }
 
-window.onload = loadLevelsData();
+  window.onload = loadLevelsData();
 
 });
 
