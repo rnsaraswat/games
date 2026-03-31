@@ -186,6 +186,8 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   startBtn.addEventListener('click', () => {
+    moves = 0;
+    movesDisplay.textContent = moves;
     stopTimer();
     newGame();
   });
@@ -502,7 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // localStorage.setItem(`progress_mode_${currentMode}`, nextLevel);
 
       statusText.innerHTML = `Mode ${TOTAL_TUBES} Tubes: Level ${currentLevel} ${difficulty.toUpperCase()} Completed! <br> Click New Game to play next Level ${nextLevel} ${difficulty.toUpperCase()}`;
-      document.getElementById("leveldisplay").textContent = `${nextLevel} (${difficulty.toUpperCase()})`;
+      // document.getElementById("leveldisplay").textContent = `${nextLevel} (${difficulty.toUpperCase()})`;
       // loadModeProgress(currentMode);
    }
   }

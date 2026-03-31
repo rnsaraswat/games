@@ -24,6 +24,7 @@ let playMode = "pvc";
 document.addEventListener("DOMContentLoaded", function () {
     const loading = document.getElementById('loading');
     loading.style.display = 'none';
+    lcrenderLeaderboard();
 
     const canvas = document.getElementById("puzzleBoard");
     const ctx = canvas.getContext("2d");
