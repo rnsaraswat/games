@@ -881,12 +881,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 ctxfireworks.shadowOffsetX = 0;
                 ctxfireworks.shadowOffsetY = 0;
                 if(Math.floor(Math.random() * 10) < 5) {
+                    //darw rectangle
                     ctxfireworks.fillRect(c.x, c.y, c.size, c.size);
                 } else {
+                    //darw circle
                     ctxfireworks.beginPath();
                     ctxfireworks.arc(c.x, c.y, 5, 0, Math.PI * 2);
                     ctxfireworks.fill();
                 }
+                //draw riangle
+                // drawPolygon(ctx, this.x, this.y, 3, 4);
+                //draw square
+                //drawPolygon(ctx, this.x, this.y, 4, 4); 
                 ctxfireworks.restore();
             });
 

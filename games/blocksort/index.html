@@ -26,7 +26,7 @@
         <div id="left" class="control-panel">
             <h1>Block Sort</h1>
             <div class="button-group">
-                <select id="colorCount">
+                <!-- <select id="colorCount">
                     <option value="2" selected>2 Colors</option>
                     <option value="3">3 Colors</option>
                     <option value="4">4 Colors</option>
@@ -45,9 +45,15 @@
                     <option value="17">17 Colors</option>
                     <option value="18">18 Colors</option>
                 </select>
+                <label for="difficulty">Difficulty:
+                    <select id="difficultySel">
+                        <option value="easy" selected>😊Easy</option>
+                        <option value="medium">🤔Medium</option>
+                        <option value="hard">🤯Hard</option>
+                    </select></label> -->
                 <div class="divtext">Level: <span id="leveldisplay">1 (EASY)</span></div>
 
-                <button class="button-primary" id="startBtn">New Game</button>
+                <!-- <button class="button-primary" id="startBtn">New Game</button> -->
                 <button id="restartBtn">Restart</button>
                 <button id="undoBtn">↩️ Undo</button>
                 <button id="pauseBtn">⏸ Pause</button>
@@ -68,7 +74,7 @@
                 <div class="output-box" id="output">
                     Please Select no of colors or press New Game for Easy (2 Colors)
                 </div>
-                <p id="loading" class="loading">Loading...</p>
+                <!-- <p id="loading" class="loading">Loading...</p> -->
             </div>
         </div>
         <div class="game-area">
@@ -78,9 +84,9 @@
     <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
     <div id="gbLeaderboardModal" class="gb-main-container"></div>
-    <div id="pauseModal" class="pause-container">
-        <h2 class="h2-gamePaused">Game Paused</h2>
-        <button id="resumeBtn">Resume</button>
+    <div id="pauseOverlay">
+        <h1 class="gamePaused">Game Paused</h1>
+        <button id="resumeBtn">▶ Resume</button>
     </div>
     <div id="winText">🎉 Completed 🎉</div>
     <canvas id="confettiCanvas"></canvas>
@@ -95,7 +101,42 @@
             <p id="RulesBox"></p>
         </div>
     </div>
+    <div id="levelPopup" class="popup">
+        <div class="popup-content">
+            <h1>Block Sort (Select Level)</h1>
+            <div>
+                <label>No. Colors:
+                    <select id="modeSelect">
+                        <option value="2" selected>2 Colors</option>
+                        <option value="3">3 Colors</option>
+                        <option value="4">4 Colors</option>
+                        <option value="5">5 Colors</option>
+                        <option value="6">6 Colors</option>
+                        <option value="7">7 Colors</option>
+                        <option value="8">8 Colors</option>
+                        <option value="9">9 Colors</option>
+                        <option value="10">10 Colors</option>
+                        <option value="11">11 Colors</option>
+                        <option value="12">12 Colors</option>
+                        <option value="13">13 Colors</option>
+                        <option value="14">14 Colors</option>
+                        <option value="15">15 Colors</option>
+                        <option value="16">16 Colors</option>
+                        <option value="17">17 Colors</option>
+                        <option value="18">18 Colors</option>
+                    </select></label>
+                <label for="difficulty">Difficulty:
+                    <select id="difficultySel">
+                        <option value="easy" selected>😊Easy</option>
+                        <option value="medium">🤔Medium</option>
+                        <option value="hard">🤯Hard</option>
+                    </select></label>
+            </div>
+            <div id="levelsContainer" class="scroll-area"></div>
+                <p id="loading" class="loading">Loading...</p>
 
+        </div>
+    </div>
     <!-- <script src="js/config.js"></script> -->
     <!-- <script src="js/layout.js"></script> -->
     <script type="module" src="js/script.js"></script>
@@ -111,7 +152,7 @@
         document.getElementById("gbLeaderboardModal").style.display = 'none';
         document.getElementById("winText").style.display = 'none';
         document.getElementById("rulesPopup").style.display = 'none';
-        document.getElementById("pauseModal").style.display = 'none';
+        document.getElementById("pauseOverlay").style.display = 'none';
 
         const themeToggle = document.getElementById('toggle-theme');
         function setTheme(t) {

@@ -53,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let TOTAL_TUBES;
   let currentMode = TOTAL_TUBES;
 
-  console.log(currentMode, difficulty, currentLevel)
   let levelData;
 
   const AVAILABLE_COLORS = ["#FF0000", "#8b0000", "#00FF00", "#006400", "#00bfff", "#0000FF", "#000080", "#ffd700", "#bdb76b", "#00FFFF", "#FF00FF", "#9932cc"];
@@ -676,7 +675,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let opponent = "-"
     let game_id = gameName;
     let gsize = `${TOTAL_TUBES}x${TOTAL_TUBES - 2}`;
-    let elapsed = Math.floor(Number(elapsedTime) / 1000);;
+    let elapsed = Math.floor(Number(elapsedTime) / 1000);
     // let difficulty = level;
     // moves = 0;
     let filed1 = 0;

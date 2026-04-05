@@ -300,11 +300,6 @@ button:hover {
     }
 }
 
-/* #app {
-    display: flex;
-    height: 100%;
-} */
-
 @media (orientation: landscape) {
     #app {
         flex-direction: column;
@@ -381,11 +376,6 @@ button:hover {
 }
 
 @media (orientation: portrait) {
-    /* #app {
-        flex-direction: column;
-        align-items: center;
-    } */
-
     .main {
         grid-template-rows: 30% 70%;
     }
@@ -544,6 +534,7 @@ button:hover {
     height: 95%;
     padding: 2vmin;
     transition: all 0.4s ease;
+    justify-items: center;
 }
 
 .layer {
@@ -553,37 +544,39 @@ button:hover {
     border-radius: 5px;
     z-index: 10;
 }
-
-.pause-container {
+/* pause screen css */
+#pauseOverlay {
     inset: 0;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 5vw;
+    padding: 5px;
     border-radius: 5px;
-    display: flex;
-    justify-content: center;
+    border-radius: 10px;
     z-index: 10;
-    width: 90%;
-    height: 90%;
+    width: 95%;
+    height: 95%;
     overflow-y: auto;
     text-align: center;
-    border: 2px solid var(--gf-border);
-    background: var(--gf-bg);
-    color: var(--gf-text);
+    border: 2px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
     flex-direction: column;
-    /* box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3); */
-    /* box-shadow: inset 0 0 0.5em 0 var(--card-border), 0 0 0.5em 0 var(--card-border); */
-    box-shadow: 0 0 20px var(--card-border), 0 0 40px var(--card-border), 0 0 60px var(--card-border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#resumeBtn {
+#resumeBtn{
     padding: 10px 20px;
     margin: 5px;
     font-size: 16px;
 }
 
+/* rules screen css */
 .rules-popup-window {
     inset: 0;
     position: fixed;
@@ -630,9 +623,7 @@ button:hover {
     border: 1px solid var(--border);
     transition: 0.5s ease-in-out;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-    /* padding: 5px 10px; */
     border-radius: 4px;
-
     background: linear-gradient(90deg, var(--accent), #7c3aed);
     color: #fff;
     border-color: transparent;
@@ -659,7 +650,6 @@ button:hover {
     gap: 2vmin;
     justify-content: center;
     align-items: center;
-    /* background: #1a1a1a; */
     font-size: clamp(14px, 2vmin, 24px);
 }
 .selected {
@@ -671,19 +661,6 @@ button:hover {
     height: 100vh;
     display: grid;
 }
-/* 
-@media (orientation:landscape) {
-    .main {
-        grid-template-columns: 30% 70%;
-    }
-}
-
-@media (orientation:portrait) {
-    .main {
-        grid-template-rows: 30% 70%;
-    }
-} */
-
 
 /* Advanced Glass Tube CSS */
 /* ===== TUBE ===== */
@@ -768,4 +745,149 @@ button:hover {
   @keyframes completePulse{
     from{ transform:scale(1); }
     to{ transform:scale(1.05); }
+  }
+
+  /* level popup css */
+  .popup {
+    inset: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 10;
+    width: 95%;
+    height: 95%;
+    overflow-y: auto;
+    text-align: center;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    flex-direction: column;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+  }
+  
+  .level-section {
+    margin-top: 15px;
+  }
+  
+  .level-title {
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  
+  .level-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+  
+  .level-box {
+    padding: 10px;
+    background: #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .level-box.unlocked {
+    background: #4CAF50;
+    color: white;
+  }
+  
+  .level-box.locked {
+    background: #aaa;
+    cursor: not-allowed;
+  }
+
+  .popup-content {
+    padding: 15px;
+    border-radius: 10px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  /* SCROLL AREA */
+  .scroll-area {
+    overflow-y: auto;
+    margin-top: 10px;
+    padding-right: 5px;
+    scroll-behavior: smooth; 
+  }
+  
+  /* Sections */
+  .level-section {
+    margin-bottom: 15px;
+  }
+  
+  .level-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  /* Responsive Grid */
+  .level-grid {
+    display: grid;
+    gap: 8px;
+  }
+  
+  /* Mobile */
+  @media (max-width: 480px) {
+    .level-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  /* Tablet */
+  @media (min-width: 481px) and (max-width: 900px) {
+    .level-grid {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+  
+  /* Desktop */
+  @media (min-width: 901px) {
+    .level-grid {
+      grid-template-columns: repeat(8, 1fr);
+    }
+  }
+  
+  /* Level box */
+  .level-box {
+    padding: 10px;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  /* States */
+  .unlocked {
+    background: #4CAF50;
+    color: white;
+    box-shadow: 0 10px 10px 0 var(--box-shadow);
+  }
+  
+  .locked {
+    background: #aaa;
+    cursor: not-allowed;
+  }
+  
+  /* CURRENT LEVEL (last played) */
+  .current {
+    background: orange !important;
+    color: black;
+    border: 2px solid #000;
+    box-shadow: 0 10px 10px 0 var(--box-shadow);
+
+  }
+  
+  /* Hover */
+  .unlocked:hover {
+    transform: scale(1.1);
   }
