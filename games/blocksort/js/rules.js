@@ -34,7 +34,9 @@ function showRules() {
     You can only Transfer block if the top color of blocks in both container is the same. <br>
     You can only transfer block into a container that has enough space to accommodate the coloured block. <br>
     <b>Winning:</b> The game is won when all the container contain blocks  of only one color and the container is full. <br>
-    <b>Restarting:</b> You can restart a level at any time. if you get stuck (no move left means top colors of all container different and no container is empty).<br><br></p>
+    <b>Game Stuck:</b> 1. This game is stuck when no container is empty and top colours of all container blocks are different.<br>
+    2. When block can be moved from one container to another, and possible to return back to previous container only, the game will also considered as stuck. However, since move is possible, the game will not report it as stuck. 
+    <b>Restarting:</b> You can restart a level at any time or if player game stuck.<br><br></p>
 
 
 <h2>The Core Rules</h2><br>

@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let history = [];
   let moves = 0;
   let isAnimating = false;
+  let colourStuck = false;
 
 
   let levelData;
@@ -178,6 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // const newLevel = loadModeProgress(TOTAL_TUBES);
 
     moves = 0;
+    colourStuck = false;
     movesDisplay.textContent = moves;
     elapsedTime = 0;
     updateUndoCount();
@@ -197,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
   //start game
   function newGame() {
     moves = 0;
+    colourStuck = false;
     updateUndoCount();
     startTimer();
 
@@ -217,6 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentLevel = levelData.level;
     currentDifficulty = levelData.difficulty;
     currentMode = levelData.tubes.length;
+    currentDifficulty == 'easy' ? difficultySel.selectedIndex = 0 : currentDifficulty == 'medium' ? difficultySel.selectedIndex = 1 : difficultySel.selectedIndex = 2; 
 
     for (let i = 0; i < pickedColors.tubes.length - 2; i++) {
       for (let j = 0; j < MAX_HEIGHT; j++) {
@@ -266,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
   game.addEventListener("click", function (e) {
 
     if (isAnimating) return;
-
+    if (colourStuck) return;
     const tubeDiv = e.target.closest(".tube");
     if (!tubeDiv) return;
 
@@ -287,13 +291,13 @@ document.addEventListener('DOMContentLoaded', () => {
     else {
       if (isValidMove(fromIndex, index)) {
         animateMove(fromIndex, index);
+      } else {
+        playSound("error");
       }
       clearHighlight();
       selected = null;
       fromIndex = null;
-      playSound("error")
       statusText.innerHTML = `Click on the tube top block transfer`;
-
     }
   });
 
@@ -322,11 +326,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!hasEmpty && !moveLeft) {
       stopTimer();
+      // playSound('loose');
+      textToSpeechEng("No Moves Possible");
 
+      colourStuck = true;
       // setTimeout(() => {
         // alert("❌ No Moves Left! Game Over");
-        statusText.innerHTML = `No Moves Left! Game Over, Press restart to play again`;
+        statusText.innerHTML = `No Moves Possible! Game Over, Press restart to play again`;
       // }, 300);
+
     }
   }
 
@@ -413,13 +421,13 @@ document.addEventListener('DOMContentLoaded', () => {
           liftHeight + p * (targetY - liftHeight) + "px";
       }
       else {
-        clone.remove();
-        blockEl.style.visibility = "visible";
-
+        
         history.push(JSON.stringify(tubes));
         const color = tubes[from].pop();
         tubes[to].push(color);
-
+        
+        clone.remove();
+        blockEl.style.visibility = "visible";
         moves++;
         updateInfo();
         render();
@@ -490,14 +498,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (win) {
+
       playSound('win');
       launchStarFireworks();
       setTimeout(() => {
         shareScore(gameName, score);
       }, 2500);
       updateleaderboard();
-      stopTimer();
       window.saveScore();
+      stopTimer();
       toggleElement(pauseBtn, true);
       toggleElement(restartBtn, true);
       toggleElement(undoBtn, true);
