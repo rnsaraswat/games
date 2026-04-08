@@ -446,7 +446,7 @@ button:hover {
     }
 
     .block {
-        font-size: 2vw;
+        font-size: 3vw;
     }
 }
 
@@ -729,7 +729,7 @@ button:hover {
 
     transition: 0.3s ease;
     display: flex;
-    font-size: 2vw;
+    /* font-size: 2vw; */
     align-items: center;
     justify-content: center;
     font-weight: bold;
