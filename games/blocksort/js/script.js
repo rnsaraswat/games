@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let isAnimating = false;
   let colourStuck = false;
 
-
+  let originalLevelData = null;
   let levelData;
   let currentLevel = 1;
   let undoCount = 2;
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(timerInterval);
     elapsedTime = 0;
   }
-  
+
   //Timer Pause
   pauseBtn.onclick = () => {
     if (!isPaused) {
@@ -169,10 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //restart game
   restartBtn.addEventListener('click', () => {
-    window.Restart();
-  });
-
-  window.Restart = function () {
     playSound('loose');
     stopTimer();
 
@@ -185,17 +181,29 @@ document.addEventListener('DOMContentLoaded', () => {
     updateUndoCount();
     startTimer();
     selected = null;
-    const pickedColors = startGame(currentMode, currentDifficulty, currentLevel);
-    for (let i = 0; i < pickedColors.tubes.length - 2; i++) {
-      for (let j = 0; j < MAX_HEIGHT; j++) {
-        tubes[i][j] = AVAILABLE_COLORS[pickedColors.tubes[i][j]];
-      }
-    }
+    tubes = [];
+    // tubes.push([]);
+    // tubes.push([]);
+
+    if (!originalLevelData) return;
+
+    console.log("Restarting Level:", currentLevel);
+
+    // 🔥 fresh copy फिर से load करो
+    tubes = JSON.parse(JSON.stringify(originalLevelData));
+
+    // const pickedColors = originalLevelData;
+
+    // pickedColors = startGame(currentMode, currentDifficulty, currentLevel);
+    // for (let i = 0; i < pickedColors.tubes.length - 2; i++) {
+    //   for (let j = 0; j < MAX_HEIGHT; j++) {
+    //     tubes[i][j] = AVAILABLE_COLORS[pickedColors.tubes[i][j]];
+    //   }
+    // }
     history = [];
     render();
     calculateGrid();
-  }
-
+  });
   //start game
   function newGame() {
     moves = 0;
@@ -220,13 +228,17 @@ document.addEventListener('DOMContentLoaded', () => {
     currentLevel = levelData.level;
     currentDifficulty = levelData.difficulty;
     currentMode = levelData.tubes.length;
-    currentDifficulty == 'easy' ? difficultySel.selectedIndex = 0 : currentDifficulty == 'medium' ? difficultySel.selectedIndex = 1 : difficultySel.selectedIndex = 2; 
+    currentDifficulty == 'easy' ? difficultySel.selectedIndex = 0 : currentDifficulty == 'medium' ? difficultySel.selectedIndex = 1 : difficultySel.selectedIndex = 2;
 
     for (let i = 0; i < pickedColors.tubes.length - 2; i++) {
       for (let j = 0; j < MAX_HEIGHT; j++) {
         tubes[i][j] = AVAILABLE_COLORS[pickedColors.tubes[i][j]];
       }
     }
+
+    //ORIGINAL GAME SAVE (deep copy)
+    originalLevelData = JSON.parse(JSON.stringify(tubes));
+
     document.getElementById("leveldisplay").textContent = `${currentLevel} (${currentDifficulty.toUpperCase()}) ${currentMode - 2} colors`;
 
     statusText.innerHTML = `Click/tap on the tube/top color block to transfer`;
@@ -331,8 +343,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       colourStuck = true;
       // setTimeout(() => {
-        // alert("❌ No Moves Left! Game Over");
-        statusText.innerHTML = `No Moves Possible! Game Over, Press restart to play again`;
+      // alert("❌ No Moves Left! Game Over");
+      statusText.innerHTML = `No Moves Possible! Game Over, Press restart to play again`;
       // }, 300);
 
     }
@@ -421,11 +433,11 @@ document.addEventListener('DOMContentLoaded', () => {
           liftHeight + p * (targetY - liftHeight) + "px";
       }
       else {
-        
+
         history.push(JSON.stringify(tubes));
         const color = tubes[from].pop();
         tubes[to].push(color);
-        
+
         clone.remove();
         blockEl.style.visibility = "visible";
         moves++;
@@ -475,6 +487,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const block = document.createElement("div");
         block.className = "block";
         block.style.background = color;
+        // block.style.display = "flex";
+        // block.style.alignItems = "center";
+        // block.style.justifyContent = "center";
+        block.textContent = AVAILABLE_COLORS.indexOf(color);
         div.appendChild(block);
       });
 
@@ -626,10 +642,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let opponent = "-"
     let game_id = gameName;
     let gsize = `${currentMode}x${colorCount}`;
-    let elapsed = Math.floor(Number(elapsedTime) / 1000);;
+    let elapsed = Math.floor(Number(elapsedTime) / 1000);
     difficulty = currentDifficulty;
     // moves = 0;
-    let filed1 = 0;
+    let filed1 = currentLevel || 0;
     let filed2 = 0
     let filed3 = `tube=${currentMode}`;
     let filed4 = `color=${currentMode - 2}`;
@@ -638,9 +654,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentDifficulty.toUpperCase() === "EASY") {
       score = (Number(currentMode) * (Number(currentMode) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 1;
     } else if (currentDifficulty.toUpperCase() === "MEDIUM") {
-      score = (Number(currentMode) * (Number(currentMode) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 1.5;
-    } else if (currentDifficulty.toUpperCase() === "HARD") {
       score = (Number(currentMode) * (Number(currentMode) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 2;
+    } else if (currentDifficulty.toUpperCase() === "HARD") {
+      score = (Number(currentMode) * (Number(currentMode) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 3;
     }
 
     lcsaveToLeaderboard(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
@@ -694,25 +710,25 @@ document.addEventListener('DOMContentLoaded', () => {
       const section = document.createElement("div");
       section.className = "level-section";
 
-      // 🔥 id add (scroll के लिए)
+      // id add for scroll to difficulty
       section.id = `section_${diff}`;
 
-      if (diff == "easy"){
+      if (diff == "easy") {
         section.innerHTML = `<div class="level-title">${diff.toUpperCase()} (1 to 50)</div>`;
-      } else if (diff == "medium"){
+      } else if (diff == "medium") {
         section.innerHTML = `<div class="level-title">${diff.toUpperCase()} (51 to 100)</div>`;
-      } else if (diff == "hard"){
-        if (mode < 5){
+      } else if (diff == "hard") {
+        if (mode < 5) {
           section.innerHTML = `<div class="level-title">${diff.toUpperCase()} (101 to 200)</div>`;
-        } else if (mode < 11){
+        } else if (mode < 11) {
           section.innerHTML = `<div class="level-title">${diff.toUpperCase()} (101 to 500)</div>`;
-        } else if (mode == 11){
+        } else if (mode == 11) {
           section.innerHTML = `<div class="level-title">${diff.toUpperCase()} (101 to 1000)</div>`;
-        } else if (mode == 12){
+        } else if (mode == 12) {
           section.innerHTML = `<div class="level-title">${diff.toUpperCase()} (101 to 2000)</div>`;
-        } else if (mode == 13){
+        } else if (mode == 13) {
           section.innerHTML = `<div class="level-title">${diff.toUpperCase()} (101 to 3000)</div>`;
-        } else if (mode == 14){
+        } else if (mode == 14) {
           section.innerHTML = `<div class="level-title">${diff.toUpperCase()} (101 to 4000)</div>`;
         } else {
           section.innerHTML = `<div class="level-title">${diff.toUpperCase()} (101 to 5000)</div>`;
@@ -772,11 +788,15 @@ document.addEventListener('DOMContentLoaded', () => {
           block: "center"
         });
       }
-    }, 100); // DOM render wait
+    }, 100);
   }
 
   //load current level data from jason file
   function startGame(mode, difficulty, levelNumber) {
+
+    // currentMode = mode;
+    // currentDifficulty = difficulty;
+    // currentLevel = levelNumber;
 
     const modeKey = `mode_${mode}_tubes`;
     // check lavels loaded
@@ -792,6 +812,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error("Level not found:", mode, difficulty, levelNumber);
       return;
     }
+
     //set current level
     setCurrentLevel(mode, difficulty, levelNumber);
     //hide level screen
@@ -819,7 +840,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderLevels();
     document.getElementById("levelPopup").style.display = "flex";
     //auto scroll again
-    renderLevels(); 
+    renderLevels();
   }
 
   // load json file data

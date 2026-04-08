@@ -74,12 +74,14 @@ gbgameFilter.addEventListener("change", async (event) => {
 
 export async function renderLeaderboard() {
   try {
-    const url = `${SUPABASE_URL}/rest/v1/scores?select=*`;
+    // const url = `${SUPABASE_URL}/rest/v1/scores?select=*`;
+    const url = `${SUPABASE_URL}/rest/v1/scores?select=*&order=score.desc&limit=50`;
 
     const res = await fetch(url, {
       headers: {
         apikey: SUPABASE_ANON_KEY,
         Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        // Range: "0-1999", 
       }
     });
 
