@@ -324,11 +324,37 @@ document.addEventListener('DOMContentLoaded', () => {
         const d = document.createElement("div");
         if (index == 0) { d.classList.add("layerBottom"); };
         d.classList.add("layer");
-        d.style.background = c;
+        // d.style.background = c;
+        const color1 = changeHexColor(c, 10);
+        const color2 = changeHexColor(c, 40);
+        const color3 = "#2980b9";
+        // const color4 = "#2c3e50";
+        let angle = Math.floor(Math.random() * (145 - 125 + 1)) + 125;
+        d.style.backgroundImage = `linear-gradient(${angle}deg, ${color1}, ${color2}, ${color3})`
+        d.textContent = AVAILABLE_COLORS.indexOf(c);
         tube.appendChild(d);
       });
     });
   }
+
+  function changeHexColor(hex, amount) {
+    // '#' ko hatayein agar hai to
+    hex = hex.replace('#', '');
+
+    // Red, Green, Blue ko integer mein badlein
+    let r = parseInt(hex.substring(0, 2), 16);
+    let g = parseInt(hex.substring(2, 4), 16);
+    let b = parseInt(hex.substring(4, 6), 16);
+
+    // Sankhya jodein ya ghatayein (0-255 ki limit mein)
+    r = Math.min(255, Math.max(0, r + amount));
+    g = Math.min(255, Math.max(0, g + amount));
+    b = Math.min(255, Math.max(0, b + amount));
+
+    // Wapas Hex string banayein
+    const newHex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    return newHex;
+}
 
   function getTopColor(i) {
     const t = gameState[i];

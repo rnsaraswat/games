@@ -524,6 +524,26 @@ button:hover {
     height: calc(100% / 4.5);
     transition: 2s linear;
     z-index: 10;
+    background-size: 8% 8%;
+    animation: waveEffect 1s ease infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 1px 1px var(--text-shadow);
+}
+
+@keyframes waveEffect {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    50% {
+        background-position: 25% 25%;
+    }
+
+    100% {
+        background-position: 0% 0%;
+    }
 }
 
 .layerBottom {

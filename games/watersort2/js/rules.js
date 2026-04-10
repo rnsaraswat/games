@@ -44,8 +44,8 @@ function showRules() {
         <b><u>Filled Tubes:</b></u> Puzzles begin with some tubes already filled with 4 different colours liquid randomly. regardless of the difficulty level, begins with allocated tubes. The player should use these colours position as clues to find which colours liquid moves to empty tube.<br>
         <b><u>Empty Tubes:</b></u> Two tubes are empty in starting of game which is use to transfer liquid.<br>
         <b><u>Top colours:</b></u> Look for top colours of filled tubes which can be transfer to empty tube<br>
-        <b><u>Second / other colours:</b></u> remaining tubes top colours can be transferred into top empty tube only is the both colours are same.
-    
+        <b><u>Second / other colours:</b></u> remaining tubes top colours can be transferred into top empty tube only is the both colours are same.<br>
+        <b><u>Number in water:</b></u> Number in side water are color number and it only helping to  playing for semi or fully color blind players.
     <h2>Buttons used in the game</h2>
         <u>No of tubes(mode):</u> This dropdown menu to select no of tubes (mode) in puzzle. 4 to 14 tubes option are available in which 2 tubes are empty. lesser the tubes easy the difficulty level and more tubes harder the difficulty level.<br>
         the levels are Easy/Medium/Hard<br>
