@@ -310,6 +310,10 @@ button:hover {
         grid-template-columns: 40% 60%;
     }
 
+    #game {
+        gap: 6vmin;
+    }
+
     #board {
         width: 75%;
         margin-top: 15px;
@@ -377,7 +381,12 @@ button:hover {
 
 @media (orientation: portrait) {
     .main {
+        width: 95%;
         grid-template-rows: 30% 70%;
+    }
+
+    #game {
+        gap: 2vmin;
     }
 
     .control-panel {
@@ -525,7 +534,7 @@ button:hover {
 
 #game {
     display: grid;
-    gap: 2vmin;
+    /* gap: 2vmin; */
     width: 95%;
     height: 95%;
     padding: 2vmin;
@@ -742,13 +751,13 @@ button:hover {
       0 0 20px lime,
       0 0 40px lime;
     border-color:lime;
-    animation:completePulse 1s infinite alternate;
+    /* animation:completePulse 1s infinite alternate; */
   }
   
-  @keyframes completePulse{
+  /* @keyframes completePulse{
     from{ transform:scale(1); }
     to{ transform:scale(1.05); }
-  }
+  } */
 
   /* level popup css */
   .popup {

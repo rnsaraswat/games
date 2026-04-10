@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let TUBE_SIZE = 4;
   let TOTAL_TUBES;
   let currentMode = TOTAL_TUBES;
-
+  let originalLevelData = null;
   let levelData;
 
   const AVAILABLE_COLORS = ["#FF0000", "#8b0000", "#00FF00", "#006400", "#00bfff", "#0000FF", "#000080", "#ffd700", "#bdb76b", "#00FFFF", "#FF00FF", "#9932cc"];
@@ -195,10 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //restart game
   restartBtn.addEventListener('click', () => {
-    window.Restart();
-  });
-
-    window.Restart = function () {
     playSound('loose');
 
     const newLevel = startGame(gameLevels, currentMode, difficulty)
@@ -208,10 +204,19 @@ document.addEventListener('DOMContentLoaded', () => {
     elapsedTime = 0;
     updateUndoCount();
     startTimer();
+    gameState = [];
+
+    if (!originalLevelData) return;
+
+    console.log("Restarting Level:", currentLevel);
+
+    // 🔥 fresh copy फिर से load करो
+    gameState = JSON.parse(JSON.stringify(originalLevelData));
+    history = [];
     selected = null;
     buildBoard();
     renderGame();
-  }
+  });
 
   //new game setup
   function newGame() {
@@ -235,6 +240,9 @@ document.addEventListener('DOMContentLoaded', () => {
         gameState[i][j] = pickedColors[newLevel.tubes[i][j]];
       }
     }
+
+    //ORIGINAL GAME SAVE (deep copy)
+    originalLevelData = JSON.parse(JSON.stringify(gameState));
 
     statusText.innerHTML = `Click on the tube liquid transfer from`;
 
@@ -354,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Wapas Hex string banayein
     const newHex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
     return newHex;
-}
+  }
 
   function getTopColor(i) {
     const t = gameState[i];

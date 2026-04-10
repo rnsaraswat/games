@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const statusText = document.getElementById("output");
   colorCount = parseInt(modeSelectBtn.value);
   currentMode = currentMode = colorCount + 2;
-  statusText.innerHTML = `Level:${currentLevel} (${currentMode} ${currentDifficulty.toUpperCase()}), New game started, Click on the tube liquid transfer from`;
+  statusText.innerHTML = `Level:${currentLevel} (${currentMode} ${currentDifficulty.toUpperCase()}), <br>New game started, Click on the tube liquid transfer from`;
   document.getElementById("leveldisplay").textContent = `${currentLevel} ${currentDifficulty.toUpperCase()}`;
   updateUndoCount();
   toggleElement(pauseBtn, true);
@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById("leveldisplay").textContent = `${currentLevel} (${currentDifficulty.toUpperCase()}) ${currentMode - 2} colors`;
 
-    statusText.innerHTML = `Click/tap on the tube/top color block to transfer`;
+    statusText.innerHTML = `Click/tap on the tube/top color block <br> to transfer`;
 
     toggleElement(pauseBtn, false);
     toggleElement(restartBtn, false);
@@ -296,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fromIndex = index;
       highlight(index);
       playSound("click");
-      statusText.innerHTML = `Click on the tube where transfer block`;
+      statusText.innerHTML = `Block Selected <br>Click on the tube where transfer block`;
     }
 
     // DROP block
@@ -309,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
       clearHighlight();
       selected = null;
       fromIndex = null;
-      statusText.innerHTML = `Click on the tube top block transfer`;
+      statusText.innerHTML = `Block not Possibel to transfer<br> Click on the tube / top block to transfer`;
     }
   });
 
@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
       colourStuck = true;
       // setTimeout(() => {
       // alert("❌ No Moves Left! Game Over");
-      statusText.innerHTML = `No Moves Possible! Game Over, Press restart to play again`;
+      statusText.innerHTML = `No Moves Possible! Game Over, <br>Press restart to play again`;
       // }, 300);
 
     }
@@ -460,10 +460,10 @@ document.addEventListener('DOMContentLoaded', () => {
   //resize window
   window.addEventListener("resize", () => {
     const game = document.getElementById("game");
-    game.style.transform = "scale(0.95)";
-    setTimeout(() => {
-      game.style.transform = "scale(1)";
-    }, 200);
+    game.style.transform = "scale(1)";
+    // setTimeout(() => {
+    //   game.style.transform = "scale(1)";
+    // }, 200);
   });
 
   // render game
@@ -527,7 +527,9 @@ document.addEventListener('DOMContentLoaded', () => {
       toggleElement(restartBtn, true);
       toggleElement(undoBtn, true);
 
-      levelCompleted(currentMode, currentDifficulty, currentLevel);
+      setTimeout(() => {
+        levelCompleted(currentMode, currentDifficulty, currentLevel);
+      }, 2500);
 
       statusText.innerHTML = `🎉 ${player1} Win! 🎉<br>Mode ${colorCount} Colors: Level ${currentLevel} Completed! <br> Click New Game to play next Level ${currentLevel + 1} ${currentDifficulty.toUpperCase()}`;
     }
