@@ -172,8 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
     playSound('loose');
     stopTimer();
 
-    // const newLevel = loadModeProgress(TOTAL_TUBES);
-
     moves = 0;
     colourStuck = false;
     movesDisplay.textContent = moves;
@@ -182,28 +180,19 @@ document.addEventListener('DOMContentLoaded', () => {
     startTimer();
     selected = null;
     tubes = [];
-    // tubes.push([]);
-    // tubes.push([]);
 
     if (!originalLevelData) return;
 
     console.log("Restarting Level:", currentLevel);
 
-    // 🔥 fresh copy फिर से load करो
+    // load fresh copy again
     tubes = JSON.parse(JSON.stringify(originalLevelData));
 
-    // const pickedColors = originalLevelData;
-
-    // pickedColors = startGame(currentMode, currentDifficulty, currentLevel);
-    // for (let i = 0; i < pickedColors.tubes.length - 2; i++) {
-    //   for (let j = 0; j < MAX_HEIGHT; j++) {
-    //     tubes[i][j] = AVAILABLE_COLORS[pickedColors.tubes[i][j]];
-    //   }
-    // }
     history = [];
     render();
     calculateGrid();
   });
+
   //start game
   function newGame() {
     moves = 0;
@@ -461,9 +450,6 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener("resize", () => {
     const game = document.getElementById("game");
     game.style.transform = "scale(1)";
-    // setTimeout(() => {
-    //   game.style.transform = "scale(1)";
-    // }, 200);
   });
 
   // render game
@@ -795,10 +781,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //load current level data from jason file
   function startGame(mode, difficulty, levelNumber) {
-
-    // currentMode = mode;
-    // currentDifficulty = difficulty;
-    // currentLevel = levelNumber;
 
     const modeKey = `mode_${mode}_tubes`;
     // check lavels loaded

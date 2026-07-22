@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" sizes="512x512" href="./assets/icons/rgh-512x512.png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="commoncss.css">
-    <!-- <link rel="stylesheet" href="./leaderboard/gbfeedback.css" /> -->
+    <link rel="stylesheet" href="./leaderboard/firebasefeedback.css" />
     <link rel="stylesheet" href="./leaderboard/firebasegbleaderboard.css" />
     <!-- <link rel="stylesheet" href="./leaderboard/gbleaderboard.css" /> -->
     <link rel="stylesheet" href="./leaderboard/lcleaderboard.css" />
@@ -37,13 +37,13 @@
                     <!-- <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
                         Global Leaderboard</button> -->
                     <button class="button-primary" id="toggle-firebase-leaderboard"
-                        onclick="openFirebaseGlobalLeaderboard()">🌍 Global Leaderboard</button>
+                        onclick="openFirebaseLeaderboard()">🌍 Global Leaderboard</button>
                     <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
                         Leaderboard</button>
                 </div>
                 <div class="hdr-child-div">
                     <button class="button-primary" id="shareBtn">📤Sharing</button>
-                    <!-- <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button> -->
+                    <button class="button-primary" onclick="openFBFeedback()">💬 Feedback</button>
                     <button class="button-primary" onclick="window.location.href='auth/login.html'">🚪Sign in</button>
                     <button class="button-primary" id="toggle-theme">☀️ Light</button>
                 </div>
@@ -53,26 +53,91 @@
 
 
         <main>
-            <section class="grid" id="gamesGrid">
-                <!-- <article class="game-card"><img class="thumb" src="/assets/icons/icon-512.png">
-                    <div class="content">
-                        <h3>Tic Tac Toe</h3>
-                        <p>Classic X vs O</p><a class="play-btn" href="games/tictactoe/index.html">Play ▶</a>
-                    </div>
-                </article>
-                <article class="game-card"><img class="thumb" src="/assets/icons/icon-512.png">
-                    <div class="content">
-                        <h3>Mastermind</h3>
-                        <p>Guess the color code</p><a class="play-btn" href="games/mastermind/index.html">Play ▶</a>
-                    </div>
-                </article> -->
-            </section>
+                <!-- ===========================
+                    Hero Section
+                =========================== -->
+                <!-- <section class="hero">
+                    <img src="./assets/icons/rgh-512x512.png"
+                        alt="RGH Logo">
+                    <h1>Ravindra Games Hub</h1>
+                    <p>
+                        Multiple Brain Training Games in One App
+                    </p>
+                    <p>
+                        Play • Learn • Improve • Enjoy
+                    </p>
+                    <a href="#games" class="play-btn">
+                        🎮 Explore Games
+                    </a>
+                </section> -->
+
+
+            <h2 class="section-title">
+                Why Choose RGH?
+            </h2>
+            
+            <div class="features">
+                <div class="feature">
+                    <h3>🎮 Multiple Games</h3>
+                    <p>Enjoy many brain games in one application.</p>
+                </div>
+                <div class="feature">
+                    <h3>🧠 Brain Training</h3>
+                    <p>Improve memory, strategy and logic skills.</p>
+                </div>
+                <div class="feature">
+                    <h3>📱 Offline Play</h3>
+                    <p>Play anytime without an internet connection.</p>
+                </div>
+                <div class="feature">
+                    <h3>⚡ Lightweight</h3>
+                    <p>Fast performance with beautiful themes.</p>
+                </div>
+            
+            </div>
+            <h2 class="section-title">
+                Screenshots
+            </h2>
+            <div class="screenshots">
+                <img src="assets/images/Screenshot_main3.png"
+                     alt="Home">
+                <img src="assets/images/Screenshot_watersort.png"
+                     alt="Water Sort">
+                <img src="assets/images/Screenshot_reversi.png"
+                     alt="Reversi">
+                <img src="./assets/images/Screenshot_about.png"
+                     alt="About">
+            </div>
+            <section class="grid" id="gamesGrid"></section>
         </main>
 
 
-        <footer style="margin-top:20px;color:var(--muted)">© 2026 Ravindra</footer>
+        <!-- <footer style="margin-top:20px;color:var(--muted)"> -->
+            <footer class="footer">
+                <h3>Ravindra Games Hub</h3>
+                <p>Version 1.0.0</p>
+                <br>
+                <p>© 2026 Ravindra Games Hub</p>
+                <br>
+                <br>
+                <p>
+                    <a class="chip"
+                       href="privacy.html">
+                        Privacy Policy
+                    </a>
+                    <a class="chip"
+                       href="terms.html">
+                        Terms & Conditions
+                    </a>
+                    <a class="chip"
+                       href="contact.html">
+                        Contact Us
+                    </a>
+                </p>
+            </footer>
+        <!-- </footer> -->
     </div>
-    <!-- <div id="gb-feedbackModal" class="gb-feedback-main-container"></div> -->
+    <div id="FB-feedbackModal" class="firebase-main-container"></div>
     <div id="firebaseLeaderboardModal" class="firebase-main-container"></div>
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
     <!-- <div id="gbLeaderboardModal" class="gb-main-container"></div> -->
@@ -91,7 +156,7 @@
     </script> -->
 
     <script>
-        // document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById("FB-feedbackModal").style.display = 'none';
         document.getElementById("lcLeaderboardModal").style.display = 'none';
         document.getElementById("firebaseLeaderboardModal").style.display = 'none';
         // document.getElementById("gbLeaderboardModal").style.display = 'none';
@@ -161,22 +226,6 @@
         if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
-        // function openGlobalLeaderboard() {
-        //     document.getElementById("gbLeaderboardModal").style.display = 'flex';
-        // };
-
-        // function closeGlobalLeaderboard() {
-        //     document.getElementById("gbLeaderboardModal").style.display = 'none';
-        // };
-
-
-        // fetch('./leaderboard/gbleaderboard.html')
-        //     .then(response => response.text())
-        //     .then(htmlText => {
-        //         document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
-        //         document.getElementById("gbLeaderboardModal").style.display = 'none';
-        //     });
-
         function openFirebaseGlobalLeaderboard() {
             document.getElementById("firebaseLeaderboardModal").style.display = 'flex';
         };
@@ -215,20 +264,20 @@
                 document.getElementById("lcLeaderboardModal").style.display = 'none';
             });
 
-        // function openGlobalFeedback() {
-        //     document.getElementById("gb-feedbackModal").style.display = 'flex';
-        // };
+        function openFBFeedback() {
+            document.getElementById("FB-feedbackModal").style.display = 'flex';
+        };
 
-        // function closeGlobalFeedback() {
-        //     document.getElementById("gb-feedbackModal").style.display = 'none';
-        // };
+        function closeFBFeedback() {
+            document.getElementById("FB-feedbackModal").style.display = 'none';
+        };
 
-        // fetch('./leaderboard/gbfeedback.html')
-        //     .then(response => response.text())
-        //     .then(htmlText => {
-        //         document.getElementById('gb-feedbackModal').innerHTML = htmlText;
-        //         document.getElementById("gb-feedbackModal").style.display = 'none';
-        //     });
+        fetch('./leaderboard/firebasefeedback.html')
+            .then(response => response.text())
+            .then(htmlText => {
+                document.getElementById('FB-feedbackModal').innerHTML = htmlText;
+                document.getElementById("FB-feedbackModal").style.display = 'none';
+            });
     </script>
 
     <script>

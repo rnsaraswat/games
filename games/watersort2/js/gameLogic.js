@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log("Restarting Level:", currentLevel);
 
-    // 🔥 fresh copy फिर से load करो
+    // load fresh copy again
     gameState = JSON.parse(JSON.stringify(originalLevelData));
     history = [];
     selected = null;

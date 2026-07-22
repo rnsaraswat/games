@@ -145,13 +145,14 @@
     text-align: left;
 }
 
-.pageInput{
+.pageInput {
     width: 5vw;
     padding: 0.6vw;
     border-radius: 0.8vw;
-    border:0.1vw solid var(--fd-cell-border);
-    background:transparent;
-    color:inherit"
+    border: 0.1vw solid var(--fd-cell-border);
+    background: transparent;
+    color: inherit"
+
 }
 
 input[type="text"].fb-input,
@@ -195,7 +196,7 @@ textarea {
     margin-left: auto
 }
 
-.fb-btn-Primary{
+.fb-btn-Primary {
     gap: 0.8vw;
     align-items: center;
     flex-wrap: wrap;
@@ -210,7 +211,8 @@ textarea {
     transition: background-color 0.3s, transform 0.2s;
     box-shadow: 0 0.5vw 2.5vw 0 var(--ld-box-shadow);
     border-radius: 0.5vw;
-    color: var(--ld-text);;
+    color: var(--ld-text);
+    ;
     border-color: transparent;
     border: none;
     box-shadow: 0 1vw 4vw var(--ld-box-shadow);
@@ -341,4 +343,42 @@ textarea {
         flex-direction: column;
         align-items: flex-start
     }
+}
+
+/* body {
+    font-family: Arial;
+    background: #111;
+    color: #fff;
+    padding: 20px;
+} */
+
+.container {
+    max-width: 600px;
+    margin: auto;
+}
+
+textarea {
+    width: 100%;
+    height: 80px;
+    margin-bottom: 10px;
+}
+
+button {
+    margin: 5px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.feedback {
+    background: #222;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.reply {
+    margin-left: 20px;
+    background: #333;
+    padding: 5px;
+    margin-top: 5px;
 }

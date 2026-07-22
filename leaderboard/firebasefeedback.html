@@ -1,57 +1,76 @@
 <div class="fb-header-btn-close">
     <div class="fbpopupHeadeer">
         <div class="fbHeadLeft">
-            <h2 class="fbh2">Feedback</h2>
+            <h2 class="fbh2">Firebase Feedback</h2>
             <a href="./auth/login.html" class="fblogin">Sign in</a>
         </div>
         <div class="fdClose">
-            <button class="fbclose-btn" onclick="hideFeedback()">Close ❌</button>
+            <button class="fbclose-btn" onclick="closeFBFeedback()">Close ❌</button>
         </div>
     </div>
 </div>
-<div class="feed-card" id="form-card">
-    <form id="feedback-form" autocomplete="off">
-        <div>
-            <label class="fb-label" for="name">Name (optional)</label>
-            <input class="fb-input" id="name" type="text" placeholder="Enter your name" maxlength="60" />
-        </div>
-        <div style="margin-top:1vw">
-            <label class="fb-label" for="message">Comment / Feedback / Suggestion</label>
-            <textarea class="fb-input" id="message" placeholder="write Comment / Feedback / Suggestio..."
-                required></textarea>
-        </div>
-        <div class="fb-controls">
-            <button class="fb-btn-Primary" type="submit">Submit</button>
-            <button class="fb-btn-ghost" type="button" id="btn-undo">Undo</button>
-            <button class="fb-btn-ghost" type="button" id="btn-clear">Clear Local</button>
-            <div class="fb-server-status" id="server-status">Server: checking...</div>
-        </div>
-    </form>
+<div class="feed-card" id="form-card"></div>
+<!-- <div class="container"> -->
+<!-- <h2>Feedback System</h2> -->
+<form id="feedback-form" autocomplete="off">
+    <div>
+        <label class="fb-label" for="name">Name (optional)</label>
+        <input class="fb-input" id="name" type="text" placeholder="Enter your name" maxlength="60" />
+    </div>
+    <!-- <textarea id="input"></textarea> -->
+    <div style="margin-top:1vw">
+        <label class="fb-label" for="message">Comment / Feedback / Suggestion</label>
+        <textarea class="fb-input" id="message" placeholder="write Comment / Feedback / Suggestio..."
+            required></textarea>
+    </div>
+    <div class="fb-controls">
+        <button ${liked?"disabled":""}>👍</button>
+        <select id="rating">
+            <option value="1">⭐</option>
+            <option value="2">⭐⭐</option>
+            <option value="3">⭐⭐⭐</option>
+            <option value="4">⭐⭐⭐⭐</option>
+            <option value="5">⭐⭐⭐⭐⭐</option>
+        </select>
+        <button class="fb-btn-Primary" type="submit">Submit</button>
+        <!-- <button onclick="submitFeedback()">Submit</button> -->
+        <button class="fb-btn-ghost" type="button" id="btn-undo">Undo</button>
+        <!-- <button onclick="undo()">Undo</button> -->
+        <button class="fb-btn-ghost" type="button" id="btn-clear">Clear Local</button>
+        <!-- <button onclick="clearBox()">Clear</button> -->
+        <div class="fb-server-status" id="server-status">Server: checking...</div>
+    </div>
+</form>
+<!-- <button ${liked?"disabled":""}>👍</button>
+    <select id="rating">
+        <option value="1">⭐</option>
+        <option value="2">⭐⭐</option>
+        <option value="3">⭐⭐⭐</option>
+        <option value="4">⭐⭐⭐⭐</option>
+        <option value="5">⭐⭐⭐⭐⭐</option>
+    </select> -->
 </div>
-
-<!-- List + controls -->
 <div class="card">
     <div style="display:flex;align-items:center;gap:1.2vw">
         <h2 style="font-size:3.6vw;margin:0">Feedback List</h2>
         <div class="small">— All Comments</div>
         <div style="margin-left:auto;display:flex;gap:0.8vw;align-items:center">
             <label class="small" style="margin:0">Page size:</label>
-            <select id="page-size">
+            <select id="perPage">
                 <option>5</option>
                 <option>10</option>
                 <option>20</option>
             </select>
         </div>
     </div>
-
-    <div id="feedback-list" class="list"></div>
-
+    <div id="list" class="list"></div>
+    <!-- <div id="list"></div> -->
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1vw">
         <div class="small" id="list-info">—</div>
         <div class="pagination" aria-label="Pagination controls">
             <button class="fb-btn-ghost" id="first-page">First</button>
             <button class="fb-btn-ghost" id="prev-page">Prev</button>
-            <input class="pageInput" id="page-input" type="number" min="1" value="1" />
+            <input class="pageInput" id="pageNo" type="number" min="1" value="1" />
             <button class="fb-btn-ghost" id="go-page">Go</button>
             <button class="fb-btn-ghost" id="next-page">Next</button>
             <button class="fb-btn-ghost" id="last-page">Last</button>
