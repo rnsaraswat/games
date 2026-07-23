@@ -18,10 +18,10 @@
     --fd-btn-shadow: rgba(0, 0, 0, 0.2);
 }
 
-* {
+/* * {
     box-sizing: border-box;
     font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Arial;
-}
+} */
 
 .fb-header-btn-close {
     display: flex;
