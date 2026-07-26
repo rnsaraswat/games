@@ -5,19 +5,78 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Ravindra Games Hub</title>
+
     <meta name="description"
-        content="Ravindra Games Hub — collection of lightweight web games (TicTacToe, Mastermind, Memory...)">
+        content="Ravindra Games Hub — collection of lightweight web games (Memory, Block Sort Puzzle, Sudoku, Water Sort Puzzle, Reversi Puzzle, Connect 4, Tic Tac Toe, Mastermind, Mastermind solver, Sudoku solver, three in a row, Connect 3, four in a roe, Connect 4, Jigsaw Puzzle, slintherlink, Rock Paper Scissor and more) Play free Multple brain games in one app or site, Brain Training, Improve memory, strategy and logic skill. Play Offline withou internet connection, Fast perfromance and beautifull thems like blue and orange. Download the Ravindra Games Hub Android app.">
+
+    <meta name="keywords"
+        content="Ravindra Games Hub, Brain Games, Sudoku, Water Sort, Connect 4, Reversi, Tic Tac Toe, Memory, Block Sort, Mastermind, Mastermind solver, Sudoku solver, three in a row, Connect 3, four in a roe, Connect 4, Jigsaw Puzzle, slintherlink, Rock Paper Scissor, Android Games, Puzzle Games">
+
+    <meta name="author" content="Ravindra Nath Saraswat">
+
+    <meta name="robots" content="index,follow,max-image-preview:large">
+
+    <meta property="og:type" content="website">
+
+    <meta property="og:title" content="Ravindra Games Hub">
+
+    <meta property="og:description"
+        content="Play exciting brain games including Sudoku, Water Sort, Connect 4, Reversi and more.">
+
+    <meta property="og:url" content="https://rnsaraswat.github.io/games/">
+
+    <meta property="og:image" content="https://rnsaraswat.github.io/games/assets/images/preview.png">
+
+    <link rel="canonical" href="https://rnsaraswat.github.io/games/">
+
+    <meta name="twitter:card" content="summary_large_image">
+
+    <meta name="twitter:title" content="Ravindra Games Hub">
+
+    <meta name="twitter:description" content="Free Brain Games for Android">
+
+    <meta name="twitter:image" content="https://rnsaraswat.github.io/games/assets/images/preview.png">
+
+    <meta name="theme-color" content="#6200ee" />
     <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/rgh-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="./assets/icons/rgh-512x512.png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="commoncss.css">
     <link rel="stylesheet" href="./leaderboard/firebasefeedback.css" />
     <link rel="stylesheet" href="./leaderboard/firebasegbleaderboard.css" />
-    <link rel="stylesheet" href="./leaderboard/gbleaderboard.css" />
     <link rel="stylesheet" href="./leaderboard/lcleaderboard.css" />
     <link rel="manifest" href="./manifest.json" />
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-    <meta name="theme-color" content="#6200ee" />
+
+    <script type="application/ld+json">
+        {
+         "@context":"https://schema.org",
+         "@type":"WebSite",
+         "name":"Ravindra Games Hub",
+         "url":"https://rnsaraswat.github.io/games/",
+         "description":"Free Brain Games including Sudoku, Water Sort, Connect 4, Reversi and more.",
+         "inLanguage":"en",
+         "publisher":{
+           "@type":"Person",
+           "name":"Ravindra Nath Saraswat"
+         }
+        }
+        </script>
+
+    <script type="application/ld+json">
+            {
+             "@context":"https://schema.org",
+             "@type":"SoftwareApplication",
+             "name":"Ravindra Games Hub",
+             "applicationCategory":"GameApplication",
+             "operatingSystem":"Android",
+             "offers":{
+               "@type":"Offer",
+               "price":"0",
+               "priceCurrency":"USD"
+             }
+            }
+            </script>
 </head>
 
 <body>
@@ -25,56 +84,29 @@
         <header>
             <div class="brand">
                 <div class="logo">
-                    <img src="./assets/icons/rgh-192x192.png" alt="Game Logo" style="width: 7vw; height: 7vw;">
+                    <img src="./assets/icons/rgh-192x192.png" alt="Ravindra Games Hub Logo"
+                        style="width: 7vw; height: 7vw;">
                 </div>
                 <div class="title">
                     <h1>Ravindra Games Hub</h1>
                     <p class="lead">Enhance your brain with fun browser games(PWA-ready)</p>
                 </div>
             </div>
-            <div class="hdrbtns">
-                <div class="hdr-child-div">
-                    <!-- <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
-                        Global Leaderboard</button> -->
-                    <button class="button-primary" id="toggle-firebase-leaderboard"
-                        onclick="openFirebaseLeaderboard()">🌍 Global Leaderboard</button>
-                    <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
-                        Leaderboard</button>
-                </div>
-                <div class="hdr-child-div">
-                    <button class="button-primary" id="shareBtn">📤Sharing</button>
-                    <button class="button-primary" onclick="openFBFeedback()">💬 Feedback</button>
-                    <button class="button-primary" onclick="window.location.href='auth/login.html'">🚪Sign in</button>
-                    <button class="button-primary" id="toggle-theme">☀️ Light</button>
-                </div>
+        </header>
+        <main>
+            <div class="hdr-child-div">
+                <button class="button-primary" id="toggle-firebase-leaderboard" onclick="openFirebaseGlobalLeaderboard()">🌍
+                    Global Leaderboard</button>
+                <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+                    Leaderboard</button>
+                <button class="button-primary" id="shareBtn">📤Sharing</button>
+                <button class="button-primary" onclick="openFBFeedback()">💬 Feedback</button>
+                <button class="button-primary" onclick="window.location.href='auth/login.html'">🚪Sign in</button>
+                <button class="button-primary" id="toggle-theme">☀️ Light</button>
+            </div>
+            <div class="hdr-child-div">
                 <p id="welcom" class="lead">Welcome</p>
             </div>
-        </header>
-
-
-        <main>
-                <!-- ===========================
-                    Hero Section
-                =========================== -->
-                <!-- <section class="hero">
-                    <img src="./assets/icons/rgh-512x512.png"
-                        alt="RGH Logo">
-                    <h1>Ravindra Games Hub</h1>
-                    <p>
-                        Multiple Brain Training Games in One App
-                    </p>
-                    <p>
-                        Play • Learn • Improve • Enjoy
-                    </p>
-                    <a href="#games" class="play-btn">
-                        🎮 Explore Games
-                    </a>
-                </section> -->
-
-
-
-
-
             <h2 class="section-title">
                 Why Choose RGH?
             </h2>
@@ -95,22 +127,31 @@
                     <h3>⚡ Lightweight</h3>
                     <p>Fast performance with beautiful themes.</p>
                 </div>
-            
+
             </div>
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="features">
+                <h3>Is Ravindra Games Hub free?</h3>
+
+                <p>Yes, every game is free.</p>
+
+                <h3>Can I play offline?</h3>
+
+                <p>All games work offline after installation. Also save in local leaderboard. But need internet to
+                    include in global leaderboard</p>
+            </div>
+
+
             <h2 class="section-title">
                 Screenshots
             </h2>
             <div class="screenshots">
-                <img src="assets/images/Screenshot_main3.png"
-                     alt="Home">
-                <img src="assets/images/Screenshot_watersort.png"
-                     alt="Water Sort">
-                <img src="assets/images/Screenshot_reversi.png"
-                     alt="Reversi">
-                <img src="./assets/images/Screenshot_about.png"
-                     alt="About">
+                <img src="assets/images/Screenshot_main3.png" alt="Ravindra Games Hub Home Screen" loading="lazy">
+                <img src="assets/images/Screenshot_watersort.png" alt="Ravindra Games Hub Home Screen" loading="lazy">
+                <img src="assets/images/Screenshot_reversi.png" alt="Reversi Game Screenshot" loading="lazy">
+                <img src="./assets/images/Screenshot_about.png" alt="About Ravindra Games Hub" loading="lazy">
             </div>
-            
+
             <h2 class="section-title">
                 GAMES
             </h2>
@@ -119,55 +160,42 @@
 
 
         <!-- <footer style="margin-top:20px;color:var(--muted)"> -->
-            <footer class="footer">
-                <h3>Ravindra Games Hub</h3>
-                <p>Version 1.0.0</p>
-                <br>
-                <p>© 2026 Ravindra Games Hub</p>
-                <br>
-                <br>
-                <p>
-                    <a class="chip"
-                       href="privacy.html">
-                        Privacy Policy
-                    </a>
-                    <a class="chip"
-                       href="terms.html">
-                        Terms & Conditions
-                    </a>
-                    <a class="chip"
-                       href="contact.html">
-                        Contact Us
-                    </a>
-                </p>
-            </footer>
+        <footer class="footer">
+            <h3>Ravindra Games Hub</h3>
+            <p>Version 1.0.0</p>
+            <br>
+            <p>© 2026 Ravindra Games Hub</p>
+            <br>
+            <br>
+            <p>
+                <a class="chip" href="about.html">
+                    Abou Us
+                </a>
+                <a class="chip" href="privacy.html">
+                    Privacy Policy
+                </a>
+                <a class="chip" href="terms.html">
+                    Terms & Conditions
+                </a>
+                <a class="chip" href="contact.html">
+                    Contact Us
+                </a>
+            </p>
+        </footer>
         <!-- </footer> -->
     </div>
-    <div id="FB-feedbackModal" class="firebase-main-container"></div>
+    <div id="FB-feedbackModal" class="fb-container"></div>
     <div id="firebaseLeaderboardModal" class="firebase-main-container"></div>
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
-    <!-- <div id="gbLeaderboardModal" class="gb-main-container"></div> -->
-    <!-- <script src="./leaderboard/submit-helper.js"></script> -->
-    <!-- <script type="module" src="./leaderboard/gbfeedback.js"></script>
-    <script type="module" src="./leaderboard/gbleaderboard.js"></script> -->
+    <script type="module" src="./leaderboard/firebasefeedback.js"></script>
     <script type="module" src="./leaderboard/firebasegbleaderboard.js"></script>
     <script type="module" src="./leaderboard/lcleaderboard.js"></script>
     <script type="module" src="./script.js"></script>
-
-    <!-- <script type="module">
-        import { shareScore } from './leaderboard/share.js';
-        document.getElementById("shareBtn").addEventListener("click", async () => {
-            shareScore("-", 0);
-        });
-    </script> -->
 
     <script>
         document.getElementById("FB-feedbackModal").style.display = 'none';
         document.getElementById("lcLeaderboardModal").style.display = 'none';
         document.getElementById("firebaseLeaderboardModal").style.display = 'none';
-        // document.getElementById("gbLeaderboardModal").style.display = 'none';
-        // document.getElementById("winText").style.display = 'none';
-        // document.getElementById("rulesPopup").style.display = 'none';
 
         const games = [
             { id: 'memory', name: 'memory', title: 'Memory', desc: 'Flip, match, win', href: 'games/memory/index.html' },
@@ -193,7 +221,18 @@
         ];
 
         const pad = (num) => num.toString().padStart(2, '0');
-        const player_name = getUserName();
+        const user = JSON.parse(localStorage.getItem("user"));
+        let playerName;
+        if(user){
+            playerName = user.name;
+        } else {
+            const date = new Date();
+            playerName = localStorage.getItem('player_name') || `Guest${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
+        }
+        
+        // let playerName = user ? user.name : localStorage.getItem('player_name');
+
+        const player_name = playerName;
         console.log("Welcome", player_name);
 
         document.getElementById("welcom").textContent = `Welcome ${player_name}`;

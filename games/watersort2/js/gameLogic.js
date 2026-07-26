@@ -1,7 +1,7 @@
 import { shareScore } from './share.js';
 import { textToSpeechEng } from './speak.js';
 import { playSound } from './sound.js';
-import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+// import { saveScore } from '../../../leaderboard/gbleaderboard.js';
 import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
 // to add firebase leaderboard
 import { db } from "../../../leaderboard/firebase-config.js";
@@ -677,7 +677,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // to add firebase leaderboard (save record)
   window.saveScore = async function () {
     text = `tubes:${TOTAL_TUBES}, Colors:${TOTAL_TUBES - 2}`;
-
+    console.log("window.saveScore", text);
+    // console.log(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, created_at);
     try {
       await addDoc(collection(db, "leaderboard"), {
         game_id: game_id || 'watersort',

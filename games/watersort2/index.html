@@ -9,8 +9,8 @@
     <meta name="description"
         content="Ravindra Games Hub — collection of lightweight web games (water sort) Train your critical thinking same colors wate in one tube game">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
-    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/firebasefeedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
     <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
     <link rel="stylesheet" href="starFireworks.css">
     <!-- <link rel="stylesheet" href="../../commoncss.css"> -->
@@ -58,7 +58,7 @@
                     <button id="toggle-theme">☀️ Light</button>
                     <button id="toggle-sound">🔇 Music:Off</button>
                     <button id="toggle-rules">📜View Rules</button>
-                    <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
+                    <button class="button-primary" id="toggle-gb-leaderboard" onclick="openFirebaseGlobalLeaderboard()">🌍
                         Global
                         Leaderboard</button>
                     <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
@@ -78,9 +78,9 @@
         </div>
         <div id="board"></div>
     </div>
-    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+    <div id="FB-feedbackModal" class="fb-container"></div>
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
-    <div id="gbLeaderboardModal" class="gb-main-container"></div>
+    <div id="firebaseLeaderboardModal" class="firebase-main-container"></div>
     <div id="pauseOverlay">
         <h1 class="gamePaused">Game Paused</h1>
         <button id="resumeBtn">▶ Resume</button>
@@ -105,14 +105,14 @@
     <script type="module" src="js/gameLogic.js"></script>
     <!-- <script src="js/win.js"></script> -->
     <script src="js/starFireworks.js"></script>
-    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
-    <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+    <script type="module" src="../../leaderboard/firebasefeedback.js"></script>
+    <script type="module" src="../../leaderboard/firebasegbleaderboard.js"></script>
     <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <script type="module" src="js/rules.js"></script>
     <script>
-        document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById("FB-feedbackModal").style.display = 'none';
         document.getElementById("lcLeaderboardModal").style.display = 'none';
-        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById("firebaseLeaderboardModal").style.display = 'none';
         document.getElementById("winText").style.display = 'none';
         document.getElementById("rulesPopup").style.display = 'none';
         document.getElementById("pauseOverlay").style.display = 'none';
@@ -132,20 +132,20 @@
         }
         if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
-        function openGlobalLeaderboard() {
-            document.getElementById("gbLeaderboardModal").style.display = 'flex';
+        function openFirebaseGlobalLeaderboard() {
+            document.getElementById("firebaseLeaderboardModal").style.display = 'flex';
         };
 
-        function closeGlobalLeaderboard() {
-            document.getElementById("gbLeaderboardModal").style.display = 'none';
+        function closeFirebaseGlobalLeaderboard() {
+            document.getElementById("firebaseLeaderboardModal").style.display = 'none';
         };
 
 
-        fetch('../../leaderboard/gbleaderboard.html')
+        fetch('../../leaderboard/firebasegbleaderboard.html')
             .then(response => response.text())
             .then(htmlText => {
-                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
-                document.getElementById("gbLeaderboardModal").style.display = 'none';
+                document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("firebaseLeaderboardModal").style.display = 'none';
             });
 
         function openLocalLeaderboard() {
@@ -172,18 +172,18 @@
             });
 
         function openGlobalFeedback() {
-            document.getElementById("gb-feedbackModal").style.display = 'flex';
+            document.getElementById("FB-feedbackModal").style.display = 'flex';
         };
 
-        function closeGlobalFeedback() {
-            document.getElementById("gb-feedbackModal").style.display = 'none';
+        function closeFBFeedback() {
+            document.getElementById("FB-feedbackModal").style.display = 'none';
         };
 
-        fetch('../../leaderboard/gbfeedback.html')
+        fetch('../../leaderboard/firebasefeedback.html')
             .then(response => response.text())
             .then(htmlText => {
-                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
-                document.getElementById("gb-feedbackModal").style.display = 'none';
+                document.getElementById('FB-feedbackModal').innerHTML = htmlText;
+                document.getElementById("FB-feedbackModal").style.display = 'none';
             });
 
         (async () => {

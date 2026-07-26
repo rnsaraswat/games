@@ -95,6 +95,7 @@ function hideModal(){ modal.style.display="none"; }
 
 function saveUser(name,email){
   localStorage.setItem("user", JSON.stringify({name,email}));
+  localStorage.setItem("player_name", name);
 }
 
 function success(name,email){

@@ -33,7 +33,6 @@ header {
 .brand {
     display: flex;
     gap: 1.2vw;
-    width: 60%;
     align-items: center;
     margin: 0vw;
 }
@@ -48,6 +47,9 @@ header {
 
 .hdr-child-div {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .logo {
@@ -166,7 +168,10 @@ header {
         flex-direction: column;
     }
     h1 {
-        font-size: 5vw;
+        font-size: 10px;
+        padding: 1px 2px;
+        margin: 2px 1px 2px 1px;
+        letter-spacing: 5px;
     }
     .game-card {
         padding: 1vw;
@@ -181,7 +186,7 @@ header {
         margin: 0.5vw;
     }
     .title .lead {
-        font-size: 3.5vw;
+        font-size: 2.5vw;
     }
     .lead {
         font-size: 4.5vw;

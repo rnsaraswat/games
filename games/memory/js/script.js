@@ -21,16 +21,16 @@ export let score = 0;
 export let totalTiles = 0;
 
 // define variables also used to add firebase leaderboard
-let player = getUserName()
+let player = localStorage.getItem('player_name') || getUserName();
 let email = getUserEail()
 let opponent = localStorage.getItem('opponent') || 'Human2';
 let game = "Memory";
 let game_id = gameName;
 let difficulty, elapsed, level, date;
 let size = '3x3';
-let hours = 0;
-let seconds = 0;
-let minutes = 0;
+// let hours = 0;
+// let seconds = 0;
+// let minutes = 0;
 let text = "";
 let playMode = "-";
 

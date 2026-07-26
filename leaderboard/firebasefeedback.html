@@ -9,7 +9,7 @@
         </div>
     </div>
 </div>
-<div class="feed-card" id="form-card"></div>
+<!-- <div class="feed-card" id="form-card"></div> -->
 <!-- <div class="container"> -->
 <!-- <h2>Feedback System</h2> -->
 <form id="feedback-form" autocomplete="off">
@@ -50,12 +50,12 @@
         <option value="5">⭐⭐⭐⭐⭐</option>
     </select> -->
 </div>
-<div class="card">
+<div class="fb-card">
     <div style="display:flex;align-items:center;gap:1.2vw">
         <h2 style="font-size:3.6vw;margin:0">Feedback List</h2>
-        <div class="small">— All Comments</div>
+        <div class="fb-small">— All Comments</div>
         <div style="margin-left:auto;display:flex;gap:0.8vw;align-items:center">
-            <label class="small" style="margin:0">Page size:</label>
+            <label class="fb-small" style="margin:0">Page size:</label>
             <select id="perPage">
                 <option>5</option>
                 <option>10</option>
@@ -63,14 +63,14 @@
             </select>
         </div>
     </div>
-    <div id="list" class="list"></div>
+    <div id="list" class="fb-list"></div>
     <!-- <div id="list"></div> -->
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1vw">
-        <div class="small" id="list-info">—</div>
-        <div class="pagination" aria-label="Pagination controls">
+        <div class="fb-small" id="list-info">—</div>
+        <div class="fb-pagination" aria-label="Pagination controls">
             <button class="fb-btn-ghost" id="first-page">First</button>
             <button class="fb-btn-ghost" id="prev-page">Prev</button>
-            <input class="pageInput" id="pageNo" type="number" min="1" value="1" />
+            <input class="fb-pageInput" id="pageNo" type="number" min="1" value="1" />
             <button class="fb-btn-ghost" id="go-page">Go</button>
             <button class="fb-btn-ghost" id="next-page">Next</button>
             <button class="fb-btn-ghost" id="last-page">Last</button>

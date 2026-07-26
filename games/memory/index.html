@@ -9,8 +9,8 @@
     content="Ravindra Games Hub — collection of lightweight web games (memory) flip, match and win">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="rules.css">
-  <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
-  <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+  <link rel="stylesheet" href="../../leaderboard/firebasefeedback.css" />
+  <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
   <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
   <link rel="stylesheet" href="../../commoncss.css">
   <link rel="manifest" href="../../manifest.json" />
@@ -107,15 +107,15 @@
     </div> -->
 
   <p id="loading" class="loading">Loading...</p>
-  <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+  <div id="gb-feedbackModal" class="fb-container"></div>
   <div id="lcLeaderboardModal" class="lc-main-container"></div>
   <div id="gbLeaderboardModal" class="gb-main-container"></div>
   <!-- Display winning text -->
   <div id="winText">🎉 You Won! 🎉</div>
   <!-- fire crackers canvas -->
   <canvas id="confettiCanvas"></canvas>
-  <script type="module" src="../../leaderboard/gbfeedback.js"></script>
-  <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+  <script type="module" src="../../leaderboard/firebasefeedback.js"></script>
+  <script type="module" src="../../leaderboard/firebasegbleaderboard.js"></script>
   <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
   <script type="module" src="js/script.js"></script>
   <!-- <script type="module" src="js/rules.js"></script> -->
@@ -151,12 +151,12 @@
       document.getElementById("gbLeaderboardModal").style.display = 'flex';
     };
 
-    function closeGlobalLeaderboard() {
+    function closeFirebaseGlobalLeaderboard() {
       document.getElementById("gbLeaderboardModal").style.display = 'none';
     };
 
 
-    fetch('../../leaderboard/gbleaderboard.html')
+    fetch('../../leaderboard/firebasegbleaderboard.html')
       .then(response => response.text())
       .then(htmlText => {
         document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
@@ -190,11 +190,11 @@
       document.getElementById("gb-feedbackModal").style.display = 'flex';
     };
 
-    function closeGlobalFeedback() {
+    function closeFBFeedback() {
       document.getElementById("gb-feedbackModal").style.display = 'none';
     };
 
-    fetch('../../leaderboard/gbfeedback.html')
+    fetch('../../leaderboard/firebasefeedback.html')
       .then(response => response.text())
       .then(htmlText => {
         document.getElementById('gb-feedbackModal').innerHTML = htmlText;

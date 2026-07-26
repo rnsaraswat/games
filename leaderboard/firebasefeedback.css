@@ -1,7 +1,7 @@
 :root {
-    --fd-bg: #f0f0f0;
-    --fd-bg-hover: #9d9d9d;
-    --fd-text: #111;
+    --fd-bg: #ffcea9;
+    --fd-bg-hover: #ff9748;
+    --fd-text: #000000;
     --muted: #30343c;
     --fd-cell-border: #333;
     --fd-box-shadow: rgba(0, 0, 0, 0.2);
@@ -9,19 +9,35 @@
 }
 
 [data-theme='dark'] {
-    --fd-bg: #121212;
-    --fd-bg-hover: #5a5a5a;
-    --fd-text: #eee;
+    --fd-bg: #686cff;
+    --fd-bg-hover: #474dfb;
+    --fd-text: #ffffff;
     --muted: #baccee;
     --fd-cell-border: #d9d8d8;
     --fd-box-shadow: rgba(255, 255, 255, 0.5);
     --fd-btn-shadow: rgba(0, 0, 0, 0.2);
 }
 
-/* * {
-    box-sizing: border-box;
-    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Arial;
-} */
+.fb-container {
+    inset: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 10;
+    width: 95%;
+    height: 95%;
+    overflow-y: auto;
+    text-align: center;
+    border: 2px solid var(--firebase-border);
+    background: var(--firebase-bg);
+    color: var(--firebase-text);
+    flex-direction: column;
+    box-shadow: 0 10px 30px rfirebasea(0, 0, 0, 0.3);
+    /* overflow: hidden; */
+}
 
 .fb-header-btn-close {
     display: flex;
@@ -145,7 +161,7 @@
     text-align: left;
 }
 
-.pageInput {
+.fb-pageInput {
     width: 5vw;
     padding: 0.6vw;
     border-radius: 0.8vw;
@@ -227,7 +243,7 @@ textarea {
 }
 
 /* list */
-.list {
+.fb-list {
     margin-top: 1.2vw;
     display: flex;
     flex-direction: column;
@@ -310,14 +326,14 @@ textarea {
 }
 
 /* pagination */
-.pagination {
+.fb-pagination {
     display: flex;
     gap: 0.6vw;
     align-items: center;
     margin-top: 0.8vw
 }
 
-.small {
+.fb-small {
     font-size: 1.3vw;
     color: var(--muted)
 }
@@ -334,7 +350,7 @@ textarea {
 
 /* responsive */
 @media (max-width:600px) {
-    .controls {
+    .fb-controls {
         flex-direction: column;
         align-items: stretch
     }
@@ -345,17 +361,10 @@ textarea {
     }
 }
 
-/* body {
-    font-family: Arial;
-    background: #111;
-    color: #fff;
-    padding: 20px;
-} */
-
-.container {
+/* .fb-container {
     max-width: 600px;
     margin: auto;
-}
+} */
 
 textarea {
     width: 100%;
@@ -370,7 +379,7 @@ button {
 }
 
 .feedback {
-    background: #222;
+    background: var(--fd-bg-hover);
     padding: 10px;
     margin-top: 10px;
     border-radius: 5px;
@@ -378,7 +387,7 @@ button {
 
 .reply {
     margin-left: 20px;
-    background: #333;
+    background: var(--fd-bg);
     padding: 5px;
     margin-top: 5px;
 }

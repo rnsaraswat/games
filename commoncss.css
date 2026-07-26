@@ -293,6 +293,8 @@ button:hover {
         padding: 1px 2px;
         margin: 2px 1px 2px 1px;
         margin-top: 1px;
+        font-size: 10px;
+        letter-spacing: 5px;
     }
 
     .button-primary {
