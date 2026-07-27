@@ -13,12 +13,17 @@
                     <option value="5inARow">5 in A Row</option>
                     <option value="connect4">Connect 4</option>
                     <option value="sudoku">Sudoku</option>
+                    <option value="sudokusolver">Sudoku Solver</option>
                     <option value="4inARow">4 in A Row</option>
                     <option value="connect3">Connect 3</option>
                     <option value="tictactoe">Tic Tac Toe</option>
                     <option value="threeinarow">3 in Row</option>
                     <option value="mastermind">Mastermind</option>
+                    <option value="slitherlink">Slinther Link</option>
+                    <option value="jigsaw">Jigsaw</option>
+                    <option value="reversi">Reversi</option>
                     <option value="watersort">Water Sort</option>
+                    <option value="blocksort">Block Sort</option>
                     <option value="memory">Memory</option>
                 </select>
             <label class="firebase-leaderboard">Show per page:</label>
@@ -36,9 +41,9 @@
         </div>
   
     <!-- Table -->
-    <div class="table-container">
-        <table id="leaderboardTable">
-            <thead>
+    <div class="firebase-table-area">
+        <table id="leaderboardTable" class="firebase-leaderboardTable">
+            <thead class="firebase-thead">
                 <tr>
                     <th data-field="rank">Rank ▲▼</th>
                     <th data-field="game">Game ▲▼</th>
@@ -62,10 +67,12 @@
     </div>
   
     <!-- Pagination -->
-    <div class="pagination">
-        <button id="prevBtn">Previous</button>
-        <span id="pageInfo"></span>
-        <button id="nextBtn">Next</button>
+    <div class="firebase-footer-section">
+        <div class="firebase-pagination">
+            <button class="firebase-leaderboard" id="prevBtn">Previous</button>
+            <span id="pageInfo" class="firebase-pageInfo"></span>
+            <button class="firebase-leaderboard" id="nextBtn">Next</button>
+        </div>
     </div>
   
   </div>

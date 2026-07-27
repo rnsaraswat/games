@@ -16,7 +16,9 @@ export let gameName = 'watersort';
 export let score = 0;
 export let gameState = [];
 export let noofFireWorks = 10;
-export let player1 = localStorage.getItem('player_name') || getUserName();
+const user = JSON.parse(localStorage.getItem("user"));
+export let player1 = user ? user.name : localStorage.getItem('player_name');
+export let email = user ? user.email : "";
 export let winnerName = player1;
 let h = 0;
 let m = 0;
@@ -511,8 +513,8 @@ document.addEventListener('DOMContentLoaded', () => {
         shareScore(gameName, score);
       }, 2500);
       updateleaderboard();
-      stopTimer();
       window.saveScore();
+      stopTimer();
       statusText.textContent = `🎉 ${player1}Win! 🎉`;
       toggleElement(pauseBtn, true);
       toggleElement(restartBtn, true);
@@ -678,6 +680,16 @@ document.addEventListener('DOMContentLoaded', () => {
   window.saveScore = async function () {
     text = `tubes:${TOTAL_TUBES}, Colors:${TOTAL_TUBES - 2}`;
     console.log("window.saveScore", text);
+    // const created_at = new Date();
+    let gsize = `${TOTAL_TUBES}x${TOTAL_TUBES - 2}`;
+    // let elapsed = Math.floor(Number(elapsedTime) / 1000);
+    if (difficulty.toUpperCase() === "EASY") {
+      score = (Number(TOTAL_TUBES) * (Number(TOTAL_TUBES) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 1;
+    } else if (difficulty.toUpperCase() === "MEDIUM") {
+      score = (Number(TOTAL_TUBES) * (Number(TOTAL_TUBES) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 1.5;
+    } else if (difficulty.toUpperCase() === "HARD") {
+      score = (Number(TOTAL_TUBES) * (Number(TOTAL_TUBES) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 2;
+    }
     // console.log(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, created_at);
     try {
       await addDoc(collection(db, "leaderboard"), {
@@ -729,7 +741,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     lcsaveToLeaderboard(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
 
-    saveScore(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+    // saveScore(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
   }
 
   // this code for load/get/save levels dat from json file

@@ -21,8 +21,9 @@ export let score = 0;
 export let totalTiles = 0;
 
 // define variables also used to add firebase leaderboard
-let player = localStorage.getItem('player_name') || getUserName();
-let email = getUserEail()
+const user = JSON.parse(localStorage.getItem("user"));
+let player = user ? user.name : localStorage.getItem('player_name');
+let email = user ? user.email : "";
 let opponent = localStorage.getItem('opponent') || 'Human2';
 let game = "Memory";
 let game_id = gameName;
@@ -353,6 +354,7 @@ window.addEventListener('load', function () {
         document.getElementById("startBtn").textContent = "Start";
         // updateleaderboard()
         updateleaderboard();
+        window.saveScore();
         timer = false;
         // saveBest();
         // loadBest();
@@ -376,14 +378,14 @@ window.addEventListener('load', function () {
                 name: player || "-",
                 opponent: opponent || "-",
                 difficulty: difficulty || "-",
-                size: size || "-",
-                elapsed: Number(hours) * 3600 + Number(minutes) * 60 + Numbe(seconds),
+                size: totalTiles || "-",
+                elapsed: Number(hours) * 3600 + Number(minutes) * 60 + Number(seconds),
                 score: Number(score) || 0,
                 moves: Number(moves) || 0,
-                email: getUserEmail(),
+                email: email || "-",
                 level: "-",
-                mode: playMode,
-                text: text,
+                mode: playMode || "-",
+                text: themeSel.value || "-",
                 createdAt: new Date()
             });
 
@@ -426,7 +428,7 @@ window.addEventListener('load', function () {
         // boardData.push(entry);
         // localStorage.setItem("leaderboard", JSON.stringify(boardData));
 
-        saveScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+        // saveScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
     }
     document.addEventListener('DOMContentLoaded', () => {
         lcrenderLeaderboard();
