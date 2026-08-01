@@ -111,16 +111,16 @@ window.addEventListener('load', function () {
 
     // set default Player Name or ask player name
     // let theme = localStorage.getItem('rg_theme') || 'dark';
-    let player1 = getUserName();
+    // let player1 = getUserName();
 
-    function getUserName() {
-        const userData = localStorage.getItem("user");
-        const date = new Date();
-        if (!userData) return `Guest${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
+    // function getUserName() {
+    //     const userData = localStorage.getItem("user");
+    //     const date = new Date();
+    //     if (!userData) return `Guest${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
 
-        const user = JSON.parse(userData);
-        return user.name || `Guest${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
-    }
+    //     const user = JSON.parse(userData);
+    //     return user.name || `Guest${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
+    // }
 
     function getUserEmail() {
         const userData = localStorage.getItem("user");
@@ -359,7 +359,7 @@ window.addEventListener('load', function () {
         // saveBest();
         // loadBest();
         wintxt.style.display = 'block';
-        wintxt.innerHTML = `🎉${player1} Won!🎉(⏱️${hours}:${minutes}:${seconds}, Moves:${moves})`;
+        wintxt.innerHTML = `🎉${player} Won!🎉(⏱️${hours}:${minutes}:${seconds}, Moves:${moves})`;
         shareScore(gameName, score);
 
         // wintxt.textContent = `(⏱️${hrs}:${min}:${sec}`;
@@ -399,7 +399,7 @@ window.addEventListener('load', function () {
 
     // to add local leaderboard (save record)
     function updateleaderboard() {
-        let player_name = player1;
+        let player_name = player;
         // let score = 0;
         let player_opponent = "-";
         let game_id = 'memory';
