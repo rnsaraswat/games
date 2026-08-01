@@ -19,12 +19,12 @@
     </div>
     <!-- <textarea id="input"></textarea> -->
     <div style="margin-top:1vw">
-        <label class="fb-label" for="message">Comment / Feedback / Suggestion</label>
-        <textarea class="fb-input" id="message" placeholder="write Comment / Feedback / Suggestio..."
+        <label class="fb-label" for="fb-message">Comment / Feedback / Suggestion</label>
+        <textarea class="fb-input" id="fb-message" placeholder="write Comment / Feedback / Suggestio..."
             required></textarea>
     </div>
     <div class="fb-controls">
-        <button ${liked?"disabled":""}>👍</button>
+        <button type="button" id="likePreview">👍</button>
         <select id="rating">
             <option value="1">⭐</option>
             <option value="2">⭐⭐</option>
@@ -41,14 +41,6 @@
         <div class="fb-server-status" id="server-status">Server: checking...</div>
     </div>
 </form>
-<!-- <button ${liked?"disabled":""}>👍</button>
-    <select id="rating">
-        <option value="1">⭐</option>
-        <option value="2">⭐⭐</option>
-        <option value="3">⭐⭐⭐</option>
-        <option value="4">⭐⭐⭐⭐</option>
-        <option value="5">⭐⭐⭐⭐⭐</option>
-    </select> -->
 </div>
 <div class="fb-card">
     <div style="display:flex;align-items:center;gap:1.2vw">

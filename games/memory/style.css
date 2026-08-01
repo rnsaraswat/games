@@ -58,6 +58,8 @@ header {
     margin: 2px;
     font-size: 1.6vw;
     display: inline-block;
+    overflow-y: auto;
+    overflow-x: auto;
     margin-top: 1px;
     transition: background-color 0.3s, transform 0.2s;
     box-shadow: 0 5px 25px 0 var(--box-shadow);

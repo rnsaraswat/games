@@ -10,8 +10,8 @@
         content="Ravindra Games Hub — collection of lightweight web games (water sort) Train your critical thinking same colors wate in one tube game">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
-    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/firebasefeedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
     <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
     <link rel="stylesheet" href="../../commoncss.css">
     <link rel="manifest" href="../../manifest.json" />
@@ -87,9 +87,9 @@
     </div> -->
     </div>
 
-    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+    <div id="fb-feedbackModal" class="fb-container"></div>
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
-    <div id="gbLeaderboardModal" class="gb-main-container"></div>
+    <div id="firebasegbLeaderboardModal" class="firebase-main-container"></div>
     <div id="pauseModal" class="pause-container">
         <button id="closePaused">Game Paused</button>
     </div>
@@ -106,15 +106,15 @@
         </div>
     </div>
 
-    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
-    <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+    <script type="module" src="../../leaderboard/firebasefeedback.js"></script>
+    <script type="module" src="../../leaderboard/firebasegbleaderboard.js"></script>
     <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <script type="module" src="js/script.js"></script>
     <script type="module" src="js/rules.js"></script>
     <script>
-        document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById("fb-feedbackModal").style.display = 'none';
         document.getElementById("lcLeaderboardModal").style.display = 'none';
-        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
         document.getElementById("winText").style.display = 'none';
         document.getElementById("rulesPopup").style.display = 'none';
         document.getElementById("pauseModal").style.display = 'none';
@@ -143,11 +143,11 @@
         };
 
 
-        fetch('../../leaderboard/gbleaderboard.html')
+        fetch('../../leaderboard/firebasegbleaderboard.html')
             .then(response => response.text())
             .then(htmlText => {
-                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
-                document.getElementById("gbLeaderboardModal").style.display = 'none';
+                document.getElementById('firebasegbLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
             });
 
         function openLocalLeaderboard() {
@@ -174,18 +174,18 @@
             });
 
         function openGlobalFeedback() {
-            document.getElementById("gb-feedbackModal").style.display = 'flex';
+            document.getElementById("firebase-feedbackModal").style.display = 'flex';
         };
 
         function closeGlobalFeedback() {
-            document.getElementById("gb-feedbackModal").style.display = 'none';
+            document.getElementById("firebase-feedbackModal").style.display = 'none';
         };
 
-        fetch('../../leaderboard/gbfeedback.html')
+        fetch('../../leaderboard/firebasefeedback.html')
             .then(response => response.text())
             .then(htmlText => {
-                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
-                document.getElementById("gb-feedbackModal").style.display = 'none';
+                document.getElementById('firebase-feedbackModal').innerHTML = htmlText;
+                document.getElementById("firebase-feedbackModal").style.display = 'none';
             });
 
         (async () => {

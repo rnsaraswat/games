@@ -1,8 +1,13 @@
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
 import { shareScore } from './share.js';
-import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+// import { saveScore } from '../../../leaderboard/gbleaderboard.js';
 import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
+// to add firebase leaderboard
+import { db } from "../../../leaderboard/firebase-config.js";
+import { addDoc, collection, serverTimestamp } from
+    "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 export let gameName = 'rockpaperscissor';
 export let score = 0;
 
@@ -204,6 +209,33 @@ window.addEventListener('load', function () {
     }
   }
 
+      // to add firebase leaderboard (save record)
+      window.saveScore = async function () {
+        text = `Black=${b}, White=${w}`
+
+        try {
+            await addDoc(collection(db, "leaderboard"), {
+                game_id: game_id || 'rockpaperscissors',
+                game: game || 'rockpaperscissors',
+                name: winnerName || 'Guast',
+                opponent: opponent || "Computer",
+                difficulty: difficulty || "-",
+                size: size || `8x8`,
+                elapsed: Math.floor(Number(elapsedTime) / 1000) || 0,
+                score: score || 0,
+                moves: history.length || 0,
+                email: email || "-",
+                level: "-",
+                mode: playMode || 'pvc',
+                text: text || "-",
+                createdAt: new Date()
+            });
+            console.log("Score Saved!");
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
   function updateleaderboard() {
     score = matchLengthSelect.value * 100 + (history.length - computerScore - playerScore) * 5 - computerScore * 10;
     if (computerScore == 0) { score = score + maxWins * 50 };
@@ -221,7 +253,7 @@ window.addEventListener('load', function () {
     const created_at = new Date();
 
     lcsaveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
-    saveScore(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+    // saveScore(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
   }
 
   document.addEventListener('DOMContentLoaded', () => {

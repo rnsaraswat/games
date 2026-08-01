@@ -1,7 +1,16 @@
 import { textToSpeechEng } from './speak.js';
 import { shareScore } from './share.js';
-import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+// import { saveScore } from '../../../leaderboard/gbleaderboard.js';
 import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
+import { db } from "./firebase-config.js";
+import {
+    collection,
+    query,
+    where,
+    orderBy,
+    limit,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 export let gameName = 'watersort';
 export let score = 0;
@@ -363,6 +372,48 @@ function WaterInc(p, q, b, count) {
     }, 50);
 }
 
+/* =========================
+    Leaderboard update
+ ========================= */
+  // to add firebase leaderboard (save record)
+  window.saveScore = async function () {
+    text = `tubes:${TOTAL_TUBES}, Colors:${TOTAL_TUBES - 2}`;
+    console.log("window.saveScore", text);
+    let gsize = `${TOTAL_TUBES}x${TOTAL_TUBES - 2}`;
+    if (difficulty.toUpperCase() === "EASY") {
+      score = (Number(TOTAL_TUBES) * (Number(TOTAL_TUBES) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 1;
+    } else if (difficulty.toUpperCase() === "MEDIUM") {
+      score = (Number(TOTAL_TUBES) * (Number(TOTAL_TUBES) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 1.5;
+    } else if (difficulty.toUpperCase() === "HARD") {
+      score = (Number(TOTAL_TUBES) * (Number(TOTAL_TUBES) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 2;
+    }
+    try {
+      await addDoc(collection(db, "leaderboard"), {
+        game_id: game_id || 'watersort',
+        game: game || 'Water Sort',
+        name: player1 || 'Guast',
+        opponent: opponent || "-",
+        difficulty: difficulty || "-",
+        size: `${TOTAL_TUBES}x${TOTAL_TUBES - 2}`,
+        elapsed: Math.floor(Number(elapsedTime) / 1000) || 0,
+        score: score || 0,
+        moves: moves || 0,
+        email: email || "-",
+        level: currentLevel || "-",
+        mode: playMode || '-',
+        text: text || "-",
+        createdAt: new Date()
+      });
+
+      console.log("Score Saved!");
+
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
+  };
+
+  // this function is updated leader board
 function updateleaderboard() {
     // let opponent = player2;
     let game_id = gameName;
@@ -380,7 +431,7 @@ function updateleaderboard() {
     let player_opponent = "-";
     lcsaveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
 
-    saveScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+    // saveScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
 }
 
 //these para to play sound

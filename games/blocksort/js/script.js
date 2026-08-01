@@ -1,7 +1,7 @@
 import { shareScore } from './share.js';
 import { textToSpeechEng } from './speak.js';
 import { playSound } from './sound.js';
-import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+// import { saveScore } from '../../../leaderboard/gbleaderboard.js';
 import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
 // to add firebase leaderboard
 import { db } from "../../../leaderboard/firebase-config.js";
@@ -9,8 +9,6 @@ import { addDoc, collection, serverTimestamp } from
   "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 let gameFullName = "Block Sort";
-let game_id = "blocksort";
-let opponent, difficulty, elapsed, moves, level, date;
 export let gameName = 'blocksort';
 export let score = 0;
 export let noofFireWorks = 10;
@@ -21,6 +19,18 @@ let m = 0;
 let s = 0;
 let text = `tubes:4, Colors:2`;
 let playMode = "-";
+
+  // define variables also used to add firebase leaderboard
+  const user = JSON.parse(localStorage.getItem("user"));
+  let player = user ? user.name : localStorage.getItem('player_name');
+  let email = user ? user.email : "";
+  let opponent = localStorage.getItem('opponent') || 'Human2';
+  // let game = gameName;
+  let game_id = gameName;
+  let difficulty;
+  let elapsed, level, date;
+  let size = 3;
+  let gsize = '-';
 
 document.addEventListener('DOMContentLoaded', () => {
   const loading = document.getElementById('loading');
@@ -599,13 +609,22 @@ document.addEventListener('DOMContentLoaded', () => {
   window.saveScore = async function () {
     text = `tubes:${currentMode}, Colors:${currentMode - 2}`;
 
+    if (currentDifficulty.toUpperCase() === "EASY") {
+      score = (Number(currentMode) * (Number(currentMode) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 1;
+    } else if (currentDifficulty.toUpperCase() === "MEDIUM") {
+      score = (Number(currentMode) * (Number(currentMode) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 2;
+    } else if (currentDifficulty.toUpperCase() === "HARD") {
+      score = (Number(currentMode) * (Number(currentMode) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 3;
+    }
+    console.log("Globle Score Save method!");
+    console.log("data", gameName, gameName, winnerName, opponent, difficulty, size, elapsedTime, score, history.length, email, playMode);
     try {
       await addDoc(collection(db, "leaderboard"), {
         game_id: game_id || 'blocksort',
         game: gameFullName || 'Block Sort',
         name: player1 || 'Guast',
         opponent: opponent || "-",
-        difficulty: currentDifficulty || "-",
+        difficulty: difficulty || "-",
         size: `${currentMode}x${currentMode - 2}`,
         elapsed: Math.floor(Number(elapsedTime) / 1000) || 0,
         score: score || 0,
@@ -649,7 +668,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     lcsaveToLeaderboard(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
 
-    saveScore(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+    // saveScore(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
   }
 
   //levels display code

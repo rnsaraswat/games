@@ -680,9 +680,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.saveScore = async function () {
     text = `tubes:${TOTAL_TUBES}, Colors:${TOTAL_TUBES - 2}`;
     console.log("window.saveScore", text);
-    // const created_at = new Date();
     let gsize = `${TOTAL_TUBES}x${TOTAL_TUBES - 2}`;
-    // let elapsed = Math.floor(Number(elapsedTime) / 1000);
     if (difficulty.toUpperCase() === "EASY") {
       score = (Number(TOTAL_TUBES) * (Number(TOTAL_TUBES) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 1;
     } else if (difficulty.toUpperCase() === "MEDIUM") {
@@ -690,7 +688,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (difficulty.toUpperCase() === "HARD") {
       score = (Number(TOTAL_TUBES) * (Number(TOTAL_TUBES) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 2;
     }
-    // console.log(player1, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, created_at);
     try {
       await addDoc(collection(db, "leaderboard"), {
         game_id: game_id || 'watersort',

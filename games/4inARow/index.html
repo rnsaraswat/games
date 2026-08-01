@@ -8,8 +8,8 @@
   <meta name="description"
     content="Ravindra Games Hub — collection of lightweight web games (4 in a Row) Classic & Action-Oriented X vs O game">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
-  <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+  <link rel="stylesheet" href="../../leaderboard/firebasefeedback.css" />
+  <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
   <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
   <link rel="stylesheet" href="../../commoncss.css">
   <link rel="manifest" href="../../manifest.json" />
@@ -60,7 +60,7 @@
           <button id="toggle-theme">☀️ Light</button>
           <button id="toggle-sound">🔇 Music:Off"</button>
           <button id="toggle-rules">📜View Rules</button>
-          <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global
+          <button class="button-primary" id="toggle-gb-leaderboard" onclick="openFirebaseGlobalLeaderboard()">🌍 Global
             Leaderboard</button>
           <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
             Leaderboard</button>
@@ -80,9 +80,9 @@
       </section>
     </div>
   </div>
-  <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+  <div id="fb-feedbackModal" class="fb-container"></div>
   <div id="lcLeaderboardModal" class="lc-main-container"></div>
-  <div id="gbLeaderboardModal" class="gb-main-container"></div>
+  <div id="firebasegbLeaderboardModal" class="firebase-main-container"></div>
   <div id="rulesPopup" class="rules-popup-window">
     <div class="rules-header-section">
       <span id="rulesCloseBtn" class="rules-popup-close">Close X</span>
@@ -107,8 +107,8 @@
   </div>
   <canvas id="fireworksCanvas"></canvas>
   <script type="module" src="js/rules.js"></script>
-  <script type="module" src="../../leaderboard/gbfeedback.js"></script>
-  <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+  <script type="module" src="../../leaderboard/firebasefeedback.js"></script>
+  <script type="module" src="../../leaderboard/firebasegbleaderboard.js"></script>
   <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
   <script type="module" src="js/script.js"></script>
   <script type="module">
@@ -120,9 +120,9 @@
   </script>
 
   <script>
-    document.getElementById("gb-feedbackModal").style.display = 'none';
+    document.getElementById("fb-feedbackModal").style.display = 'none';
     document.getElementById("lcLeaderboardModal").style.display = 'none';
-    document.getElementById("gbLeaderboardModal").style.display = 'none';
+    document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
     document.getElementById("winText").style.display = 'none';
     document.getElementById("rulesPopup").style.display = 'none';
 
@@ -142,20 +142,20 @@
     if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
     setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
-    function openGlobalLeaderboard() {
-      document.getElementById("gbLeaderboardModal").style.display = 'flex';
+    function openFirebaseGlobalLeaderboard() {
+      document.getElementById("firebasegbLeaderboardModal").style.display = 'flex';
     };
 
-    function closeGlobalLeaderboard() {
-      document.getElementById("gbLeaderboardModal").style.display = 'none';
+    function closeFirebaseGlobalLeaderboard() {
+      document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
     };
 
 
-    fetch('../../leaderboard/gbleaderboard.html')
+    fetch('../../leaderboard/firebasegbleaderboard.html')
       .then(response => response.text())
       .then(htmlText => {
-        document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
-        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById('firebasegbLeaderboardModal').innerHTML = htmlText;
+        document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
       });
 
     function openLocalLeaderboard() {
@@ -182,18 +182,30 @@
       });
 
     function openGlobalFeedback() {
-      document.getElementById("gb-feedbackModal").style.display = 'flex';
+      document.getElementById("fb-feedbackModal").style.display = 'flex';
     };
 
-    function closeGlobalFeedback() {
-      document.getElementById("gb-feedbackModal").style.display = 'none';
+    function closeFBFeedback() {
+      document.getElementById("fb-feedbackModal").style.display = 'none';
     };
 
-    fetch('../../leaderboard/gbfeedback.html')
+    fetch('../../leaderboard/firebasefeedback.html')
       .then(response => response.text())
       .then(htmlText => {
-        document.getElementById('gb-feedbackModal').innerHTML = htmlText;
-        document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById('fb-feedbackModal').innerHTML = htmlText;
+        document.getElementById("fb-feedbackModal").style.display = 'none';
+
+        setTimeout(() => {
+          console.log("window.initFeedback =", window.initFeedback);
+
+          if (typeof window.initFeedback === "function") {
+            window.initFeedback();
+          } else {
+            console.error("initFeedback not available");
+          }
+
+        }, 100);
+        
       });
 
     (async () => {

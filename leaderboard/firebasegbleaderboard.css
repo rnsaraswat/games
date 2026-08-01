@@ -6,8 +6,8 @@
     --firebase-gradient1: #fe6201;
     --firebase-gradient2: #ff904a;
     --firebase-text-gradient: #ffff00;
-    --firebase-box-shadow: rfirebasea(0, 0, 0, 0.2);
-    --firebase-btn-shadow: rfirebasea(0, 0, 0, 0.2);
+    --firebase-box-shadow: rgba(0, 0, 0, 0.2);
+    --firebase-btn-shadow: rgba(0, 0, 0, 0.2);
 }
 
 [data-theme='dark'] {
@@ -18,8 +18,8 @@
     --firebase-gradient1: #0015ff;
     --firebase-gradient2: #4a4aff;
     --firebase-text-gradient: #ff904a;
-    --firebase-box-shadow: rfirebasea(255, 255, 255, 0.5);
-    --firebase-btn-shadow: rfirebasea(0, 0, 0, 0.2);
+    --firebase-box-shadow: rgba(255, 255, 255, 0.5);
+    --firebase-btn-shadow: rgba(0, 0, 0, 0.2);
 }
 
 .firebase-main-container {
@@ -39,8 +39,7 @@
     background: var(--firebase-bg);
     color: var(--firebase-text);
     flex-direction: column;
-    box-shadow: 0 10px 30px rfirebasea(0, 0, 0, 0.3);
-    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .firebase-header-section {
@@ -121,7 +120,7 @@
     background: var(--firebase-bg);
     border: 1px solid var(--firebase-border);
     transition: 0.5s ease-in-out;
-    box-shadow: 0 4px 15px rfirebasea(0, 0, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     padding: 5px 10px;
     border-radius: 4px;
 
@@ -229,7 +228,7 @@
 } 
 
 
-.table-container {
+/* .table-container {
     max-height: 400px;
     overflow-y: auto;
     border: 1px solid #444;
@@ -252,7 +251,7 @@ thead th {
 .pagination {
     margin-top: 10px;
     text-align: center;
-}
+} */
 
   /* Portrait */
  @media (orientation: portrait)  {

@@ -1,6 +1,10 @@
 import { shareScore } from './share.js';
-import { saveScore } from '../../leaderboard/gbleaderboard.js';
+// import { saveScore } from '../../leaderboard/gbleaderboard.js';
 import { lcsaveToLeaderboard } from '../../leaderboard/lcleaderboard.js';
+// to add firebase leaderboard
+import { db } from "../../leaderboard/firebase-config.js";
+import { addDoc, collection, serverTimestamp } from
+    "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 export let gameName = 'tictactoe';
 export let score = 0;
@@ -373,6 +377,33 @@ window.addEventListener('load', function () {
         namebar.classList.add('show');
     }
 
+        // to add firebase leaderboard (save record)
+        window.saveScore = async function () {
+            text = `Black=${b}, White=${w}`
+    
+            try {
+                await addDoc(collection(db, "leaderboard"), {
+                    game_id: game_id || 'reversi',
+                    game: game || 'Reversi',
+                    name: winnerName || 'Guast',
+                    opponent: opponent || "Computer",
+                    difficulty: difficulty || "-",
+                    size: size || `8x8`,
+                    elapsed: Math.floor(Number(elapsedTime) / 1000) || 0,
+                    score: score || 0,
+                    moves: history.length || 0,
+                    email: email || "-",
+                    level: "-",
+                    mode: playMode || 'pvc',
+                    text: text || "-",
+                    createdAt: new Date()
+                });
+                console.log("Score Saved!");
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        };
+
     function updateleaderboard() {
         winnerName = currentPlayer === 'x' ? player1 : player2;
         let finalScore = score;
@@ -404,7 +435,7 @@ window.addEventListener('load', function () {
 
         lcsaveToLeaderboard(winnerName, opponent, email, size, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
 
-        saveScore(winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+        // saveScore(winnerName, opponent, email, size, difficulty, game_id, finalScore, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
     }
 
     document.addEventListener('DOMContentLoaded', () => {

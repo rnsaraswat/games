@@ -1,23 +1,4 @@
 import { db } from "./firebase-config.js";
-// import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-// import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-// const firebaseConfig = {
-//   apiKey: "AIzaSyCEEOj5ZaEs8LZ9HCEVPhapDFy0bw-N3D4",
-//   authDomain: "ravindra-games-hub-68e5f.firebaseapp.com",
-//   projectId: "ravindra-games-hub-68e5f",
-//   storageBucket: "ravindra-games-hub-68e5f.firebasestorage.app",
-//   messagingSenderId: "233066688435",
-//   appId: "1:233066688435:web:307f0bc7508df35579e5c6",
-//   measurementId: "G-B24P20E3K8"
-// };
-
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
-
-// export { db };
-// import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-
 import {
     getFirestore,
     collection,
@@ -37,23 +18,11 @@ import {
     limit
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyCEEOj5ZaEs8LZ9HCEVPhapDFy0bw-N3D4",
-//   authDomain: "ravindra-games-hub-68e5f.firebaseapp.com",
-//   projectId: "ravindra-games-hub-68e5f",
-//   storageBucket: "ravindra-games-hub-68e5f.firebasestorage.app",
-//   messagingSenderId: "233066688435",
-//   appId: "1:233066688435:web:307f0bc7508df35579e5c6",
-//   measurementId: "G-B24P20E3K8"
-// };
-
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
-
-// 👤 User
+console.log("firebasefeedback.js loaded");
+console.log(window.initFeedback);
+//User
 let user = localStorage.getItem("username") || "Guest";
 
-// Undo
 let last = "";
 let perPage = 10;
 let currentPage = 1;
@@ -63,13 +32,43 @@ let lastDoc = null;
 
 let pageStack = [];
 
-// 📤 Submit
+const hasFeedbackPage =
+    document.getElementById("feedback-form") &&
+    document.getElementById("fb-message") &&
+    document.getElementById("list");
+
+// const form = document.getElementById("feedback-form");
+
+// form.addEventListener("submit", async function (e) {
+//     e.preventDefault();
+//     await submitFeedback();
+// });
+
+//Submit feedback
 window.submitFeedback = async function () {
-    let text = input.value;
+
+    console.log("submitFeedback called");
+
+    const msg = document.getElementById("fb-message");
+
+    if (!msg) {
+        // console.error("Textarea #message not found");
+        return;
+    }
+
+    let text = msg.value.trim();
+
+    // let text = input.value;
     const rating = parseInt(document.getElementById("rating").value);
     if (!text) return;
 
     last = text;
+
+    console.log({
+        user,
+        text,
+        rating
+    });
 
     await addDoc(collection(db, "feedbacks"), {
         name: user,
@@ -82,16 +81,25 @@ window.submitFeedback = async function () {
         dislikedBy: []
     });
 
-    input.value = "";
+    console.log("Saved Successfully");
+    console.log("Reloading...");
+    loadFeedbacks("first");
+    document.getElementById("fb-message").value = "";
 }
 
-// 🔙 Undo
-window.undo = () => input.value = last;
+//Undo
+window.undo = () => {
+    const msg = document.getElementById("fb-message");
+    if (msg) msg.value = last;
+};
 
-// ❌ Clear
-window.clearBox = () => input.value = "";
+//Clear
+window.clearBox = () => {
+    const msg = document.getElementById("fb-message");
+    if (msg) msg.value = "";
+};
 
-// 📥 Load Feedbacks
+//Load Feedbacks
 const q = query(
     collection(db, "feedbacks"),
     orderBy("time", "desc")
@@ -130,7 +138,6 @@ async function loadFeedbacks(direction = "first") {
 
     const snap = await getDocs(q);
 
-    console.log("firebasefeeback.html loadFeedbacks snap", snap);
     if (snap.empty) return;
 
     firstDoc = snap.docs[0];
@@ -143,18 +150,8 @@ async function loadFeedbacks(direction = "first") {
         let id = d.id;
         let liked = data.likedBy?.includes(user);
         let disliked = data.dislikedBy?.includes(user);
-        //                 html += `
-        //   <div class="feedback">
-        //     <b>${data.name}</b>
-        //     <small>${new Date(data.time.seconds * 1000).toLocaleString()}</small>
 
-        //     <div style="color:gold;">
-        //       ${"⭐".repeat(data.rating || 0)}
-        //     </div>
-
-        //     <p>${data.text}</p>
-        //   </div>
-        //   `;
+        console.log(d.id, d.data(), liked, disliked);
 
         html += `
 <div class="feedback">
@@ -164,8 +161,17 @@ async function loadFeedbacks(direction = "first") {
 <div>⭐ ${"⭐".repeat(data.rating || 0)}</div>
 <p>${data.text}</p>
 
-<button onclick="like('${id}')" ${liked ? "disabled" : ""}>👍 ${data.likes}</button>
-<button onclick="dislike('${id}')" ${disliked ? "disabled" : ""}>👎 ${data.dislikes}</button>
+<button type="button"
+        onclick="like('${id}', this)"
+        ${liked ? "class='liked'" : ""}>
+    👍 ${data.likes}
+</button>
+
+<button type="button"
+        onclick="dislike('${id}', this)"
+        ${disliked ? "class='disliked'" : ""}>
+    👎 ${data.dislikes}
+</button>
 
 <button onclick="showReply('${id}')">Reply</button>
 
@@ -177,6 +183,12 @@ async function loadFeedbacks(direction = "first") {
 
         loadReplies(id);
     });
+
+    // document.getElementById("list").innerHTML = html;
+
+    const list = document.getElementById("list");
+
+    if (!list) return;
 
     list.innerHTML = html;
 
@@ -192,55 +204,21 @@ async function loadFeedbacks(direction = "first") {
     pageNo.value = currentPage;
 }
 
-//     onSnapshot(q, snap => {
-//         let html = "";
 
-//         snap.forEach(d => {
-//             let data = d.data();
-//             let id = d.id;
-
-//             let liked = data.likedBy?.includes(user);
-//             let disliked = data.dislikedBy?.includes(user);
-
-//             html += `
-// <div class="feedback">
-
-//   <b>${data.name}</b>
-//   <small>${new Date(data.time.seconds * 1000).toLocaleString()}</small>
-//   <div>⭐ ${"⭐".repeat(data.rating || 0)}</div>
-//   <p>${data.text}</p>
-
-//   <button onclick="like('${id}')" ${liked ? "disabled" : ""}>👍 ${data.likes}</button>
-//   <button onclick="dislike('${id}')" ${disliked ? "disabled" : ""}>👎 ${data.dislikes}</button>
-
-//   <button onclick="showReply('${id}')">Reply</button>
-
-//   <div id="replyBox-${id}"></div>
-//   <div id="replyList-${id}"></div>
-
-// </div>
-// `;
-
-//             loadReplies(id);
-//         });
-
-//         list.innerHTML = html;
-//     });
-
-// Like
+//Like upadte 
 window.like = async (id) => {
 
     const ref = doc(db, "feedbacks", id);
     const snap = await getDoc(ref);
     const data = snap.data();
 
-    // ❌ Already liked
+    //Already liked
     if (data.likedBy?.includes(user)) {
         alert("You already liked this!");
         return;
     }
 
-    // 🔄 If previously disliked → remove dislike first
+    //If previously disliked then remove dislike first
     if (data.dislikedBy?.includes(user)) {
         await updateDoc(ref, {
             dislikes: increment(-1),
@@ -248,7 +226,7 @@ window.like = async (id) => {
         });
     }
 
-    // ✅ Add like
+    //Add like
     await updateDoc(ref, {
         likes: increment(1),
         likedBy: arrayUnion(user)
@@ -263,13 +241,13 @@ window.dislike = async (id) => {
     const snap = await getDoc(ref);
     const data = snap.data();
 
-    // ❌ Already disliked
+    //Already disliked
     if (data.dislikedBy?.includes(user)) {
         alert("You already disliked this!");
         return;
     }
 
-    // 🔄 If previously liked → remove like first
+    //If previously liked then remove like first
     if (data.likedBy?.includes(user)) {
         await updateDoc(ref, {
             likes: increment(-1),
@@ -277,7 +255,7 @@ window.dislike = async (id) => {
         });
     }
 
-    // ✅ Add dislike
+    //Add dislike
     await updateDoc(ref, {
         dislikes: increment(1),
         dislikedBy: arrayUnion(user)
@@ -285,7 +263,7 @@ window.dislike = async (id) => {
 
 };
 
-// 💬 Reply box
+//Show Reply box
 window.showReply = function (id) {
     document.getElementById("replyBox-" + id).innerHTML = `
 <input id="r-${id}">
@@ -293,16 +271,7 @@ window.showReply = function (id) {
 `;
 }
 
-// window.replyLike = async (fid, rid) => {
-//     let ref = doc(db, "feedbacks", fid, "replies", rid);
-
-//     await updateDoc(ref, {
-//         likes: increment(1),
-//         likedBy: arrayUnion(user)
-//     });
-// };
-
-// 📤 Send reply
+//Send reply
 window.sendReply = async function (id) {
     let val = document.getElementById("r-" + id).value;
 
@@ -313,16 +282,7 @@ window.sendReply = async function (id) {
     });
 }
 
-// NESTED REPLY (Reply to Reply)
-// await addDoc(
-//     collection(db, "feedbacks", fid, "replies", rid, "replies"),
-//     {
-//         name: user,
-//         text: val,
-//         time: new Date()
-//     }
-// );
-
+//display reply of reply
 window.showReplyToReply = function (fid, rid) {
     document.getElementById("replyBox-" + rid).innerHTML = `
 <input id="rr-${rid}">
@@ -373,54 +333,8 @@ function loadNestedReplies(fid, rid) {
     });
 }
 
-
-// 📥 Load replies
-// function loadReplies(id) {
-
-//     const q = query(
-//         collection(db, "feedbacks", id, "replies"),
-//         orderBy("time")
-//     );
-
-//     onSnapshot(q, snap => {
-//         let html = "";
-
-//         snap.forEach(doc => {
-//             let d = doc.data();
-
-//             //                 html += `
-//             //   <div class="reply">
-//             //     <b>${d.name}</b>
-//             //     <small>${new Date(d.time.seconds * 1000).toLocaleString()}</small>
-//             //     <p>${d.text}</p>
-//             //   </div>
-//             //   `;
-
-//             html += `
-//         <div class="reply">
-
-//         <b>${d.name}</b>
-//         <small>${new Date(d.time.seconds * 1000).toLocaleString()}</small>
-
-//         <p>${d.text}</p>
-
-//         <button onclick="showReplyToReply('${fid}','${doc.id}')">Reply</button>
-
-//         <div id="replyBox-${doc.id}"></div>
-//         <div id="nested-${doc.id}"></div>
-
-//         </div>
-//         `;
-
-//         });
-
-
-//         document.getElementById("replyList-" + id).innerHTML = html;
-//         loadNestedReplies(fid, doc.id);
-//     });
-// }
-
-function loadReplies(fid) {   // 🔥 यहाँ नाम change
+//load reply
+function loadReplies(fid) {
 
     const q = query(
         collection(db, "feedbacks", fid, "replies"),
@@ -451,7 +365,7 @@ function loadReplies(fid) {   // 🔥 यहाँ नाम change
 </div>
 `;
 
-            // ✅ सही call
+            // load nested reply
             loadNestedReplies(fid, rid);
 
         });
@@ -495,37 +409,53 @@ window.changeLimit = () => {
     loadFeedbacks("first");
 };
 
-loadFeedbacks("first");
+window.initFeedback = function () {
 
-    // const rating = parseInt(document.getElementById("rating").value);
+    console.log("initFeedback called");
+    console.log("initFeedback =", window.initFeedback);
+    const form = document.getElementById("feedback-form");
 
-    // await addDoc(collection(db, "feedbacks"), {
-    //     name: user,
-    //     text,
-    //     rating,
-    //     time: new Date(),
-    //     likes: 0,
-    //     dislikes: 0,
-    //     likedBy: [],
-    //     dislikedBy: []
-    // });
+    if (!form) {
+        console.log("Feedback form not found.");
+        return;
+    }
 
-    // "⭐".repeat(data.rating)
+    if (!form.dataset.initialized) {
 
-    // ADMIN PANEL
-    // Admin Check
-    // let isAdmin = (user === "admin");
+        form.dataset.initialized = "true";
 
-    // Edit Feedback
-    // window.editFeedback = async (id, oldText) => {
-    //     let newText = prompt("Edit:", oldText);
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            await submitFeedback();
+        });
 
-    //     if (!newText) return;
+    }
 
-    //     await updateDoc(doc(db, "feedbacks", id), {
-    //         text: newText
-    //     });
-    // };
+    loadFeedbacks("first");
 
-    // Disable button if already liked
-    // let liked = data.likedBy?.includes(user);
+    console.log("Feedback Initialized");
+};
+
+document.addEventListener("feedbackLoaded", () => {
+
+    const form = document.getElementById("feedback-form");
+
+    if (!form) return;
+
+    if (!form.dataset.initialized) {
+
+        form.dataset.initialized = "true";
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            await submitFeedback();
+        });
+
+    }
+
+    loadFeedbacks("first");
+
+    console.log("Feedback Initialized");
+});
+
+console.log("initFeedback registered:", window.initFeedback);

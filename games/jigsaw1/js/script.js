@@ -1,5 +1,5 @@
 import { shareScore } from './share.js';
-import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+// import { saveScore } from '../../../leaderboard/gbleaderboard.js';
 import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
 import { playSound } from './sound.js';
 // to add firebase leaderboard
@@ -83,6 +83,22 @@ document.addEventListener("DOMContentLoaded", function () {
     let elapsedTime = 0;
     let timerInterval;
     let isPaused = false;
+
+    // define variables also used to add firebase leaderboard
+    const user = JSON.parse(localStorage.getItem("user"));
+    let player = user ? user.name : localStorage.getItem('player_name');
+    let email = user ? user.email : "";
+    let opponent = localStorage.getItem('opponent') || 'Human2';
+    let game = gameName;
+    let game_id = gameName;
+    let elapsed, level, date;
+    let size = 3;
+    let gsize = '8x8';
+    // let hours = 0;
+    // let seconds = 0;
+    // let minutes = 0;
+    let text = "";
+    let playMode = "-";
 
     //Timer Start Function
     function startTimer() {
@@ -190,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function () {
         pieceW = boardSize / cols;
         pieceH = boardSize / rows;
         draw();
-        
+
     }
 
     window.addEventListener("resize", () => {
@@ -373,8 +389,8 @@ document.addEventListener("DOMContentLoaded", function () {
             launchConfetti();
             playSound('win');
             updateleaderboard();
-            stopTimer();
             window.saveScore();
+            stopTimer();
             setTimeout(() => {
                 shareScore(gameName, score);
             }, 3000);
@@ -423,17 +439,6 @@ document.addEventListener("DOMContentLoaded", function () {
         draw();
     }
 
-    // pauseBtn.onclick = () => {
-    //     paused = true;
-    //     pauseOverlay.style.display = "flex";
-    // };
-
-    // if (resumeBtn && pauseOverlay) {
-    //     resumeBtn.onclick = () => {
-    //         paused = false;
-    //         pauseOverlay.style.display = "none";
-    //     };
-    // }
     /* =========================
        HINT
     ========================= */
@@ -530,41 +535,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 16);
     });
 
-    /* =========================
-       SHADOW + HIGHLIGHT
-    ========================= */
-    // function draw() {
-    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //     /* hint */
-    //     if (hintOpacity > 0) {
-    //         ctx.globalAlpha = hintOpacity;
-    //         ctx.drawImage(img, 0, 0, boardSize, boardSize);
-    //         ctx.globalAlpha = 1;
-    //     }
-    //     pieces.forEach(p => {
-    //         ctx.save();
-    //         ctx.translate(p.x + pieceW / 2, p.y + pieceH / 2);
-    //         ctx.rotate(p.rotation * Math.PI / 180);
-    //         /* shadow */
-    //         if (p === selected) {
-    //             ctx.shadowColor = "rgba(0,0,0,0.6)";
-    //             ctx.shadowBlur = 20;
-    //         }
-    //         /* image */
-    //         ctx.drawImage(
-    //             img,
-    //             p.col * (img.width / cols),
-    //             p.row * (img.height / rows),
-    //             img.width / cols,
-    //             img.height / rows,
-    //             -pieceW / 2,
-    //             -pieceH / 2,
-    //             pieceW,
-    //             pieceH
-    //         );
-    //     });
-    // }
-
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -576,19 +546,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         pieces.forEach(p => {
-            // let shape = shapeStyle.value;
-            // if (shape === "square") {
             drawSquarePiece(p);
-            // }
-            // else if (shape === "classic") {
-            //     drawClassicPiece(p);
-            // }
-            // else if (shape === "random") {
-            //     drawRandomPiece(p);
-            // }
-            // else if (shape === "bezier") {
-            //     drawBezierPiece(p);
-            // }
         });
     }
 
@@ -629,130 +587,6 @@ document.addEventListener("DOMContentLoaded", function () {
         ctx.restore();
 
     }
-
-    // function drawClassicPiece(p) {
-    //     ctx.save();
-    //     ctx.translate(p.x, p.y);
-    //     let sx = p.col * (img.width / cols);
-    //     let sy = p.row * (img.height / rows);
-    //     ctx.beginPath();
-    //     drawClassicPath(p);
-    //     ctx.clip();
-    //     ctx.drawImage(
-    //         img,
-    //         sx,
-    //         sy,
-    //         img.width / cols,
-    //         img.height / rows,
-    //         0,
-    //         0,
-    //         pieceW,
-    //         pieceH
-    //     );
-    //     ctx.stroke();
-    //     ctx.restore();
-    // }
-
-    // function drawRandomPiece(p) {
-    //     ctx.save();
-    //     ctx.translate(p.x, p.y);
-    //     let sx = p.col * (img.width / cols);
-    //     let sy = p.row * (img.height / rows);
-    //     ctx.beginPath();
-    //     drawRandomPath(p);
-    //     ctx.clip();
-    //     ctx.drawImage(
-    //         img,
-    //         sx,
-    //         sy,
-    //         img.width / cols,
-    //         img.height / rows,
-    //         0,
-    //         0,
-    //         pieceW,
-    //         pieceH
-    //     );
-    //     ctx.stroke();
-    //     ctx.restore();
-    // }
-
-    // function drawBezierPiece(p) {
-    //     ctx.save();
-    //     ctx.translate(p.x, p.y);
-    //     let sx = p.col * (img.width / cols);
-    //     let sy = p.row * (img.height / rows);
-    //     ctx.beginPath();
-    //     drawBezierPath(p);
-    //     ctx.clip();
-    //     ctx.drawImage(
-    //         img,
-    //         sx,
-    //         sy,
-    //         img.width / cols,
-    //         img.height / rows,
-    //         0,
-    //         0,
-    //         pieceW,
-    //         pieceH
-    //     );
-    //     ctx.lineWidth = 1.2;
-    //     ctx.stroke();
-    //     ctx.restore();
-    // }
-
-    // function drawClassicPath(p) {
-    //     let size = pieceW * 0.3;
-    //     ctx.moveTo(0, 0);
-    //     ctx.lineTo(pieceW * 0.35, 0);
-    //     ctx.bezierCurveTo(
-    //         pieceW * 0.35, -size,
-    //         pieceW * 0.65, -size,
-    //         pieceW * 0.65, 0
-    //     );
-    //     ctx.lineTo(pieceW, 0);
-    //     ctx.lineTo(pieceW, pieceH);
-    //     ctx.lineTo(0, pieceH);
-    //     ctx.closePath();
-    // }
-
-    // function drawRandomPath(p) {
-    //     let size = pieceW * (0.2 + Math.random() * 0.2);
-    //     ctx.moveTo(0, 0);
-    //     ctx.lineTo(pieceW * 0.3, 0);
-    //     ctx.bezierCurveTo(
-    //         pieceW * 0.3, -size,
-    //         pieceW * 0.7, size,
-    //         pieceW * 0.7, 0
-    //     );
-    //     ctx.lineTo(pieceW, 0);
-    //     ctx.lineTo(pieceW, pieceH);
-    //     ctx.lineTo(0, pieceH);
-    //     ctx.closePath();
-    // }
-
-    // function drawBezierPath(p) {
-    //     let size = pieceW * 0.35;
-    //     ctx.moveTo(0, 0);
-    //     ctx.lineTo(pieceW * 0.4, 0);
-    //     ctx.bezierCurveTo(
-    //         pieceW * 0.4, -size,
-    //         pieceW * 0.6, -size,
-    //         pieceW * 0.6, 0
-    //     );
-    //     ctx.lineTo(pieceW, 0);
-    //     ctx.lineTo(pieceW, pieceH * 0.4);
-    //     ctx.bezierCurveTo(
-    //         pieceW + size,
-    //         pieceH * 0.4,
-    //         pieceW + size,
-    //         pieceH * 0.6,
-    //         pieceW,
-    //         pieceH * 0.6
-    //     );
-    //     ctx.lineTo(pieceW, pieceH);
-    //     ctx.lineTo(0, pieceH);
-    //     ctx.closePath();
-    // }
 
     /* =========================
        SHUFFLE UNPLACED PIECES
@@ -880,7 +714,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 ctxfireworks.shadowBlur = 15;
                 ctxfireworks.shadowOffsetX = 0;
                 ctxfireworks.shadowOffsetY = 0;
-                if(Math.floor(Math.random() * 10) < 5) {
+                if (Math.floor(Math.random() * 10) < 5) {
                     //darw rectangle
                     ctxfireworks.fillRect(c.x, c.y, c.size, c.size);
                 } else {
@@ -907,6 +741,25 @@ document.addEventListener("DOMContentLoaded", function () {
     ========================= */
     // to add firebase leaderboard (save record)
     window.saveScore = async function () {
+        let opponent = "-";
+        let game_id = 'jigsaw';
+        let elapsed = Math.floor(Number(elapsedTime) / 1000);
+        let gameCount = 0;
+        let email = localStorage.getItem('email') || '-';
+        const created_at = new Date();
+        if (rows == 3) {
+            difficulty = "easy";
+            score = (rows * cols * 100 - Math.floor(Number(elapsedTime) / 1000)) * 1;
+        } else if (rows == 4) {
+            difficulty = "medium";
+            score = (rows * cols * 100 - Math.floor(Number(elapsedTime) / 1000)) * 1.5;
+        } else if (rows == 6) {
+            difficulty = "hard";
+            score = (rows * cols * 100 - Math.floor(Number(elapsedTime) / 1000)) * 2;
+        } else if (rows == 10) {
+            difficulty = "extreme";
+            score = (rows * cols * 100 - Math.floor(Number(elapsedTime) / 1000)) * 2.5;
+        }
         if (hintOpacity == 0) {
             text = "Hint: Off, Shape: Rectangle";
         } else if (hintOpacity == 0.25) {
@@ -980,7 +833,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         lcsaveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
 
-        saveScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
     }
 
     document.querySelectorAll("body > input[type='file']:not(#localImg)")

@@ -22,13 +22,13 @@
     --cl-btn-shadow: rgba(0, 0, 0, 0.2);
 }
 
-.ldbrand {
+/* .ldbrand {
     display: flex;
     gap: 1.2vw;
     width: 95%;
     align-items: center;
     margin: 1vw;
-}
+} */
 
 .lc-main-container {
     inset: 0;

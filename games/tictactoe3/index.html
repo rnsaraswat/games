@@ -21,16 +21,15 @@
   <meta name="description"
     content="Ravindra Games Hub — collection of lightweight web games (5 in a Row) Classic & Action-Oriented X vs O game">
   <link rel="stylesheet" href="../../commoncss.css">
-  <!-- <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
-  <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
-  <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
-  <link rel="stylesheet" href="../../commoncss.css"> -->
   <link rel="manifest" href="../../manifest.json" />
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <meta name="theme-color" content="#6200ee" />
 
 
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../../leaderboard/firebasefeedback.css" />
+  <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
+  <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+  <link rel="stylesheet" href="../../commoncss.css">
   <link rel="stylesheet" href="../../style.css">
   <style>
     body {
@@ -216,29 +215,34 @@
   CSS (minimal) */
 
     .share-popup {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-.hidden { display: none; }
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
 
-.share-box {
-  background: #fff;
-  padding: 20px;
-  text-align: center;
-  border-radius: 12px;
-  width: 280px;
-}
+    .hidden {
+      display: none;
+    }
 
-.share-logo { width: 80px; }
-.share-buttons button {
-  margin: 5px;
-}
+    .share-box {
+      background: #fff;
+      padding: 20px;
+      text-align: center;
+      border-radius: 12px;
+      width: 280px;
+    }
 
+    .share-logo {
+      width: 80px;
+    }
+
+    .share-buttons button {
+      margin: 5px;
+    }
   </style>
 </head>
 
@@ -251,110 +255,143 @@
     </div>
     <div class="button-div">
       <button id="reset" class="chip">Reset</button>
-      <button id="local-toggle-leaderboard" class="chip">Local Leaderboard</button>
-      <button id="toggle-leaderboard" class="chip">Global Leaderboard</button>
-      <!-- <button class="primary" id="sharing">📤Sharing main</button> -->
-
-      <button class="primary" id="toggle-feedback">📝Feedback</button>
-      <button class="primary"
+      <button class="button-primary" id="toggle-gb-leaderboard" onclick="openFirebaseGlobalLeaderboard()">🌍 Global
+        Leaderboard</button>
+    <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+        Leaderboard</button>
+    <button class="button-primary" id="shareBtn">📤Sharing</button>
+    <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+    <button class="button-primary"
         onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
-      <!-- <button id="shareScore">Share Score</button>
-      <button id="shareTwitter">Share on Twitter</button>
-      <button id="nativeShare">Share mobile</button> -->
-  <!-- --------------------1-------------------- -->
-      <!-- <button id="detectDevice">detect device Share</button> -->
-  <!-- --------------------1-------------------- -->
-</div>
+
+    </div>
 
   </div>
   <p id="timer-display">⏱️ 00:00:00</p>
   <p id="msg">Click in BOX to play</p>
-  <div id="leaderboardPopup" class="popupWindow">
-  </div>
-  <div id="localleaderboardPopup" class="popupWindow">
-  </div>
-  <div id="feedbackPopup" class="popupWindow"></div>
-
-  <!-- --------------------1-------------------- -->
-  <!-- <div id="sharePopup" class="share-popup">
-    <div class="share-box">
-      <h3>Share Your Score</h3>
-
-      <div class="share-icons-group">
-        <a id="twLink" target="_blank">twitter</a>
-        <a id="waLink" target="_blank">whatapp</a>
-        <a id="fbLink" class="share-icons" target="_blank">Facebook</a>
-        <a id="tgLink" class="share-icons" target="_blank">Telegram</a>
-        <a id="igLink" class="share-icons" target="_blank">Instagram</a>
-        <button id="copyBtn" class="share-icons">Copy link</button>
-      </div>
-
-      <button id="closePopup">Close</button>
-    </div>
-  </div> -->
-  <!-- --------------------1-------------------- -->
-
+  <div id="fb-feedbackModal" class="fb-container"></div>
+  <div id="lcLeaderboardModal" class="lc-main-container"></div>
+  <div id="firebasegbLeaderboardModal" class="firebase-main-container"></div>
 
   <!-- Desktop Share Popup (Custom UI)
 🔹 HTML (once in page) -->
   <div id="sharePopup" class="share-popup hidden">
     <div class="share-box">
-      <img src="../../assets/icons/RGHlogo.png"  alt="sitelogo" class="share-logo">
+      <img src="../../assets/icons/RGHlogo.png" alt="sitelogo" class="share-logo">
       <h2>RNS Games</h2>
       <h3 id="shareGame"></h3>
       <p id="shareScore"></p>
-  
+
       <div class="share-buttons">
         <button onclick="shareWhatsApp()">WhatsApp</button>
         <button onclick="shareTwitter()">Twitter</button>
         <button onclick="shareFacebook()">Facebook</button>
         <button onclick="copyLink()">Copy Link</button>
       </div>
-  
+
       <button class="close" onclick="closeShare()">✖</button>
     </div>
   </div>
-  
+
   <script type="module">
 
   </script>
   <script type="module">
-    import { renderLeaderboard, saveScore, sortTable } from '../../leaderboard/leaderboard.js';
+    import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
+    // to add firebase leaderboard
+    import { db } from "../../../leaderboard/firebase-config.js";
+    import { addDoc, collection, serverTimestamp } from
+      "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    window.sortTable = sortTable;
-    window.submitScore = async function (player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at) {
+    // to add firebase leaderboard (save record)
+    window.saveScore = async function () {
+      text = `Black=${b}, White=${w}`
+
       try {
-        await saveScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
-      } catch (e) {
-        document.getElementById("msg").textContent = 'Error saving score in global leaderboard:' + e;
+        await addDoc(collection(db, "leaderboard"), {
+          game_id: game_id || 'reversi',
+          game: game || 'Reversi',
+          name: winnerName || 'Guast',
+          opponent: opponent || "Computer",
+          difficulty: difficulty || "-",
+          size: size || `8x8`,
+          elapsed: Math.floor(Number(elapsedTime) / 1000) || 0,
+          score: score || 0,
+          moves: history.length || 0,
+          email: email || "-",
+          level: "-",
+          mode: playMode || 'pvc',
+          text: text || "-",
+          createdAt: new Date()
+        });
+        console.log("Score Saved!");
+      } catch (error) {
+        console.error("Error:", error);
       }
     };
-    document.addEventListener('DOMContentLoaded', () => {
-      renderLeaderboard('tictactoe');
-    });
-  </script>
 
-  <script type="module">
-    import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
-    document.addEventListener('DOMContentLoaded', () => {
-      localrenderLeaderboard('tictactoe');
-    });
+    // to add firebase leaderboard (save record)
+    function updateleaderboard() {
+      let opponent = "Computer";
+      let game_id = 'reversi';
+      let gsize = `9x9`;
+      let elapsed = Math.floor(Number(elapsedTime) / 1000);
+      let gameCount = history.length;
+      let filed1 = 0;
+      let filed2 = 0
+      let filed3 = `Black=${b}, White=${w}`;
+      let filed4 = playMode || 'pvc';
+      let email = localStorage.getItem('email') || '-';
+      const created_at = new Date();
+      if (depth == 2) {
+        score = (9 * 9 * 100 + (b - w > 0 ? b - w : w - b) - Math.floor(Number(elapsedTime) / 1000)) * 1;
+        difficulty = "easy";
+      } else if (depth == 4) {
+        score = (9 * 9 * 100 + (b - w > 0 ? b - w : w - b) - Math.floor(Number(elapsedTime) / 1000)) * 2;
+        difficulty = "medium";
+      } else if (depth == 6) {
+        score = (9 * 9 * 100 + (b - w > 0 ? b - w : w - b) - Math.floor(Number(elapsedTime) / 1000)) * 3;
+        difficulty = "hard";
+      }
+
+      // to add local leaderboard (save record)
+      lcsaveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
+
+      //save record to spabase global leaderboard
+      // saveScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+    }
+
   </script>
 
   <script>
+    //hide display
+    document.getElementById("fb-feedbackModal").style.display = 'none';
+    document.getElementById("lcLeaderboardModal").style.display = 'none';
+    document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
 
-  </script>
-  <script>
-    function hideFeedback() {
-      document.getElementById("feedbackPopup").style.display = 'none';
+    //global firebase leaderboard functions
+    function openFirebaseGlobalLeaderboard() {
+      document.getElementById("firebasegbLeaderboardModal").style.display = 'flex';
     };
 
-    function hideLB() {
-      document.getElementById("leaderboardPopup").style.display = 'none';
+    function closeFirebaseGlobalLeaderboard() {
+      document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
     };
 
-    function hideLLB() {
-      document.getElementById("localleaderboardPopup").style.display = 'none';
+    fetch('../../leaderboard/firebasegbleaderboard.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('firebasegbLeaderboardModal').innerHTML = htmlText;
+        document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+      });
+
+    //local leaderboard functions
+    function openLocalLeaderboard() {
+      document.getElementById("lcLeaderboardModal").style.display = 'flex';
+    };
+
+    function closeLocalLeaderboard() {
+      document.getElementById("lcLeaderboardModal").style.display = 'none';
     };
 
     function clearLLB() {
@@ -365,79 +402,29 @@
       }
     };
 
-    fetch('../../leaderboard/leaderboard.html')
+    fetch('../../leaderboard/lcleaderboard.html')
       .then(response => response.text())
       .then(htmlText => {
-        document.getElementById('leaderboardPopup').innerHTML = htmlText;
+        document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
+        document.getElementById("lcLeaderboardModal").style.display = 'none';
       });
 
-    fetch('../../leaderboard/localleaderboard.html')
-      .then(response => response.text())
-      .then(htmlText => {
-        document.getElementById('localleaderboardPopup').innerHTML = htmlText;
-      });
-
-    fetch('../../leaderboard/feedback.html')
-      .then(response => response.text())
-      .then(htmlText => {
-        document.getElementById('feedbackPopup').innerHTML = htmlText;
-      });
-
-    document.getElementById("leaderboardPopup").style.display = 'none';
-    document.getElementById("localleaderboardPopup").style.display = 'none';
-    document.getElementById("feedbackPopup").style.display = 'none';
-
-    document.getElementById("toggle-leaderboard").addEventListener("click", () => {
-      if (document.getElementById("toggle-leaderboard").style.display === 'block') {
-        document.getElementById("leaderboardPopup").style.display = 'none';
-      } else {
-        document.getElementById("leaderboardPopup").style.display = 'block';
-        loadCSS()
-      }
-    });
-
-    document.getElementById("local-toggle-leaderboard").addEventListener("click", () => {
-      if (document.getElementById("leaderboardPopup").style.display === 'block') {
-        document.getElementById("localleaderboardPopup").style.display = 'none';
-        return;
-      } else {
-        document.getElementById("localleaderboardPopup").style.display = 'block';
-        loadCSS();
-      }
-    });
-
-    document.getElementById("toggle-feedback").addEventListener("click", () => {
-      if (document.getElementById("feedbackPopup").style.display === 'block') {
-        document.getElementById("feedbackPopup").style.display = 'none';
-        return;
-      } else {
-        document.getElementById("feedbackPopup").style.display = 'block';
-        loadfeedbakCSS();
-      }
-    });
-
-    function loadfeedbakCSS() {
-      var head = document.head;
-      var link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = '../../leaderboard/feedback.css';
-      head.appendChild(link);
-    }
-
-    function loadCSS() {
-      var head = document.head;
-      var link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = '../../leaderboard/leaderboard.css';
-      head.appendChild(link);
-    }
-
-    window.onload = function () {
-      loadCSS();
-      loadfeedbakCSS();
+    //global feedback functions
+    function openGlobalFeedback() {
+      document.getElementById("fb-feedbackModal").style.display = 'flex';
     };
+
+    function closeFBFeedback() {
+      document.getElementById("fb-feedbackModal").style.display = 'none';
+    };
+
+    fetch('../../leaderboard/firebasefeedback.html')
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('fb-feedbackModal').innerHTML = htmlText;
+        document.getElementById("fb-feedbackModal").style.display = 'none';
+      });
+
 
     (async () => {
       const GAME_NAME = "TIC TAC TOE";
@@ -473,7 +460,6 @@
   </script>
 
   <script type="module">
-    import { localrenderLeaderboard, saveToLeaderboard } from '../../leaderboard/localleaderboard.js';
     window.gameName = 'tictactoe';
     window.game = `Tic Tac Toe`
     window.score = 0;
@@ -506,7 +492,7 @@
           setTimeout(() => onGameOver(winner, winner === 'X' ? 100 : 50), 100);
           // window.shareScoreCommon(gameName, score);
           // window.detectDevicePara();
-          window.handleWin() ;
+          window.handleWin();
 
           return;
         }
@@ -536,7 +522,8 @@
       let difficulty = 'easy';
       const created_at = new Date();
 
-      saveToLeaderboard(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+        // to add local leaderboard (save record)
+        lcsaveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
 
       window.submitScore && window.submitScore(player_name, player_opponent, email, size, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
 
@@ -545,442 +532,136 @@
     document.getElementById('reset').addEventListener('click', () => { board = Array(9).fill(null); over = false; moves = 0; render(); });
     render();
 
-      //--------------------1---------------------
-
-    // document.getElementById("detectDevice").addEventListener("click", async () => {
-    //   window.detectDevicePara();
-    
-  // });
-  //--------------------1---------------------
-
-    // document.getElementById("sharing").addEventListener("click", async () => {
-    //   shareScoreCommon("tictactoe", 0);
-    // });
   </script>
 
-  <script>
-
-  </script>
-  <script>
-      //--------------------1---------------------
-
-    // const currentScore = 420;
-
-    // // बनाएँ share URL (query param में score)
-    // function makeShareURL(score) {
-    //   const url = new URL(window.location.href);
-    //   url.searchParams.set('score', score);
-    //   // optional: short path like /share?score=420
-    //   return url.toString();
-    // }
-
-    // document.getElementById('copyBtn').addEventListener('click', async () => {
-    //   const url = makeShareURL(currentScore);
-    //   try {
-    //     await navigator.clipboard.writeText(url);
-    //     alert('Link copied to clipboard!');
-    //   } catch (e) {
-    //     prompt('Copy this link:', url);
-    //   }
-    // });
-
-      //--------------------1---------------------
-
-
-  </script>
 
 
   <script>
 
 
-    
-      function isMobile() {
-        // return (
-        //   navigator.share &&
-        //   /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
-        // );
 
-        const ua = navigator.userAgent;
-    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+    function isMobile() {
+      // return (
+      //   navigator.share &&
+      //   /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+      // );
+
+      const ua = navigator.userAgent;
+      if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
         return "Tablet";
-    }
-    if (/Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
-        return "Mobile";
-    }
-    return "Desktop";
       }
+      if (/Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+        return "Mobile";
+      }
+      return "Desktop";
+    }
 
-      async function shareMobile(gameName, score, shareLink, logoUrl) {
-        
-  console.log("shareScore",gameName, score);
+    async function shareMobile(gameName, score, shareLink, logoUrl) {
 
-const siteName = "Ravindra Games Hub";
-const gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
+      console.log("shareScore", gameName, score);
 
-const textToShare =
-  `${siteName}
+      const siteName = "Ravindra Games Hub";
+      const gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
+
+      const textToShare =
+        `${siteName}
 ${gameName}
 Can you beat my Score: ${score}
 
 Play here:
 ${gameLink}`;
 
-console.log("gamelink", gameLink);
-const imageUrl = "../../assets/icons/maskable-icon.png";
+      console.log("gamelink", gameLink);
+      const imageUrl = "../../assets/icons/maskable-icon.png";
 
-try {
-  await navigator.share({
-    title: siteName,
-    text: textToShare
-  });
-  console.log("try", gameLink);
+      try {
+        await navigator.share({
+          title: siteName,
+          text: textToShare
+        });
+        console.log("try", gameLink);
 
-  const blob = await (await fetch(imageUrl)).blob();
-  const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
+        const blob = await (await fetch(imageUrl)).blob();
+        const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
 
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    await navigator.share({
-      files: [file]
-    });
-  console.log("navigator.canShare && navigator.canShare", file, blob);
-}
-
-} catch (err) {
-  console.log("Share cancelled or failed", err);
-}
-
-        // try {
-        //   const response = await fetch(logoUrl);
-        //   const blob = await response.blob();
-        //   const file = new File([blob], "logo.png", { type: blob.type });
-
-        //   await navigator.share({
-        //     title: gameName,
-        //     text:
-        //       `🏆 ${gameName}\n` +
-        //       `🎮 Score: ${score}\n` +
-        //       `🔥 Play now:`,
-        //     url: shareLink,
-        //     files: [file]
-        //   });
-
-        //   console.log("✅ Mobile share success");
-
-        // } catch (err) {
-        //   console.warn("❌ Mobile share failed:", err);
-        //   alert("Share cancelled or not supported");
-        // }
-      }
-
-      // Desktop JS Logic
-      let SHARE_DATA = {};
-
-      function openDesktopShare(gameName, score, shareLink) {
-        SHARE_DATA = { gameName, score, shareLink };
-
-        document.getElementById("shareGame").innerText = gameName;
-        document.getElementById("shareScore").innerText = "Score: " + score;
-        document.getElementById("sharePopup").classList.remove("hidden");
-      }
-
-      function closeShare() {
-        document.getElementById("sharePopup").classList.add("hidden");
-      }
-
-      function shareWhatsApp() {
-        open(
-          `https://wa.me/?text=${encodeURIComponent(
-            `${SHARE_DATA.gameName} | Score: ${SHARE_DATA.score}\n${SHARE_DATA.shareLink}`
-          )}`
-        );
-      }
-
-      function shareTwitter() {
-        open(
-          `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-            `${SHARE_DATA.gameName} | Score: ${SHARE_DATA.score}`
-          )}&url=${encodeURIComponent(SHARE_DATA.shareLink)}`
-        );
-      }
-
-      function shareFacebook() {
-        open(
-          `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-            SHARE_DATA.shareLink
-          )}`
-        );
-      }
-
-      function copyLink() {
-        navigator.clipboard.writeText(SHARE_DATA.shareLink);
-        alert("Link copied!");
-      }
-
-
-      // FINAL MERGED handleWin() (🔥 MOST IMPORTANT)
-      // async function window.handleWin(gameName, score) {
-    window.handleWin = async function () {
-        // await launchConfetti(); // ⏳ wait until animation ends
-
-        const link = "https://rnsaraswat.github.io/games/";
-        // const logo = "images/RGHlogo.jpg";
-        const logo = '../../assets/icons/RGHlogo.png';
-
-        if (isMobile() == "Mobile" || isMobile() == "Tablet" ) {
-          await shareMobile(gameName, score, link, logo);
-        } else if (isMobile() == "Desktop") {
-          openDesktopShare(gameName, score, link);
-        } else {
-          await shareMobile(gameName, score, link, logo);
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file]
+          });
+          console.log("navigator.canShare && navigator.canShare", file, blob);
         }
+
+      } catch (err) {
+        console.log("Share cancelled or failed", err);
       }
 
+    }
 
-      //--------------------1---------------------
-      // this code working on both mobile and desktop in desktop style (on mobile also desktop style)
-      /* javascript code for share link/button for browser and mobile */
-    // Detect Mobile Browser
-    // function isMobile() {
-    //   return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
-    // }
+    // Desktop JS Logic
+    let SHARE_DATA = {};
+
+    function openDesktopShare(gameName, score, shareLink) {
+      SHARE_DATA = { gameName, score, shareLink };
+
+      document.getElementById("shareGame").innerText = gameName;
+      document.getElementById("shareScore").innerText = "Score: " + score;
+      document.getElementById("sharePopup").classList.remove("hidden");
+    }
+
+    function closeShare() {
+      document.getElementById("sharePopup").classList.add("hidden");
+    }
+
+    function shareWhatsApp() {
+      open(
+        `https://wa.me/?text=${encodeURIComponent(
+          `${SHARE_DATA.gameName} | Score: ${SHARE_DATA.score}\n${SHARE_DATA.shareLink}`
+        )}`
+      );
+    }
+
+    function shareTwitter() {
+      open(
+        `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+          `${SHARE_DATA.gameName} | Score: ${SHARE_DATA.score}`
+        )}&url=${encodeURIComponent(SHARE_DATA.shareLink)}`
+      );
+    }
+
+    function shareFacebook() {
+      open(
+        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+          SHARE_DATA.shareLink
+        )}`
+      );
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText(SHARE_DATA.shareLink);
+      alert("Link copied!");
+    }
 
 
-    // window.detectDevicePara = async function () {
-    //   score = 420;
-    //   const shareText = `I scored ${score} points! Try to beat me!`;
-    //   const shareURL = "https://yourdomain.com/share.html?score=" + score;
+    // FINAL MERGED handleWin() (🔥 MOST IMPORTANT)
+    // async function window.handleWin(gameName, score) {
+    window.handleWin = async function () {
+      // await launchConfetti(); // ⏳ wait until animation ends
 
-    //   // --------------------------
-    //   // 📱 MOBILE SHARE
-    //   // --------------------------
-    //   // if (isMobile() && navigator.share) {
-    //   if (isMobile() && navigator.share) {
-    //     try {
-    //       await navigator.share({
-    //         title: "My Score",
-    //         text: shareText,
-    //         url: shareURL
-    //       });
-    //       return;
-    //     } catch (e) { }
-    //   }
+      const link = "https://rnsaraswat.github.io/games/";
+      // const logo = "images/RGHlogo.jpg";
+      const logo = '../../assets/icons/RGHlogo.png';
 
-
-    //   // --------------------------
-    //   // 💻 DESKTOP SHARE POPUP
-    //   // --------------------------
-
-    //   // Encode
-    //   const t = encodeURIComponent(shareText);
-    //   const u = encodeURIComponent(shareURL);
-
-    //   // Twitter
-    //   document.getElementById("twLink").href =
-    //     `https://twitter.com/intent/tweet?text=${t}&url=${u}`;
-
-    //   // WhatsApp Web
-    //   document.getElementById("waLink").href =
-    //     `https://web.whatsapp.com/send?text=${t}%20${u}`;
-
-    //   // Facebook Share
-    //   document.getElementById("fbLink").href =
-    //     `https://www.facebook.com/sharer/sharer.php?u=${u}`;
-
-    //   // Telegram Web
-    //   document.getElementById("tgLink").href =
-    //     `https://t.me/share/url?url=${u}&text=${t}`;
-
-    //   // // Instagram (guide to direct message)
-    //   document.getElementById("igLink").href =
-    //     `https://www.instagram.com/direct/inbox/`;
-
-    //   // Show Popup
-    //   document.getElementById("sharePopup").style.display = "flex";
-
-    //   document.getElementById("closePopup").addEventListener("click", () => {
-    //     document.getElementById("sharePopup").style.display = "none";
-    //   });
-    // }
-    // document.getElementById("shareBtn2").addEventListener("click", async () => {
-
-    // });
-      //--------------------1---------------------
-
+      if (isMobile() == "Mobile" || isMobile() == "Tablet") {
+        await shareMobile(gameName, score, link, logo);
+      } else if (isMobile() == "Desktop") {
+        openDesktopShare(gameName, score, link);
+      } else {
+        await shareMobile(gameName, score, link, logo);
+      }
+    }
 
   </script>
 
-<script>
-  //     async function shareScore(gameName, score = 0) {
-
-//       console.log("shareScore", gameName, score);
-
-//       const siteName = "Ravindra Games Hub";
-//       const gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
-
-//       const textToShare =
-//         `${siteName}
-// ${gameName}
-// Can you beat my Score: ${score}
-
-// Play here:
-// ${gameLink}`;
-
-//       console.log("gamelink", gameLink);
-//       const imageUrl = "../../assets/icons/maskable-icon.png";
-
-//       try {
-//         await navigator.share({
-//           title: siteName,
-//           text: textToShare
-//         });
-//         console.log("try", gameLink);
-
-//         const blob = await (await fetch(imageUrl)).blob();
-//         const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
-
-//         if (navigator.canShare && navigator.canShare({ files: [file] })) {
-//           await navigator.share({
-//             files: [file]
-//           });
-//           console.log("navigator.canShare && navigator.canShare", file, blob);
-//         }
-
-//       } catch (err) {
-//         console.log("Share cancelled or failed", err);
-//       }
-//     }
-
-    // document.getElementById("shareScore").addEventListener("click", async () => {
-    //   console.log("share.js button", gameName, score);
-    //   shareScore(gameName, score);
-    //   console.log("share.js button after", gameName, score);
-    // });
-
-//     document.getElementById("nativeShare").addEventListener("click", async () => {
-//       // console.log("share.js button",gameName, score);
-//       // shareScore(gameName, score);
-//       // console.log("share.js button after",gameName, score);
-//       console.log("shareScore", gameName, score);
-
-//       const siteName = "Ravindra Games Hub";
-//       const gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
-
-//       const textToShare =
-//         `${siteName}
-// ${gameName}
-// Can you beat my Score: ${score}
-
-// Play here:
-// ${gameLink}`;
-
-//       console.log("gamelink", gameLink);
-//       const imageUrl = "../../assets/icons/maskable-icon.png";
-
-//       try {
-//         await navigator.share({
-//           title: siteName,
-//           text: textToShare
-//         });
-//         console.log("try", gameLink);
-
-//         const blob = await (await fetch(imageUrl)).blob();
-//         const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
-
-//         if (navigator.canShare && navigator.canShare({ files: [file] })) {
-//           await navigator.share({
-//             files: [file]
-//           });
-//           console.log("navigator.canShare && navigator.canShare", file, blob);
-//         }
-
-//       } catch (err) {
-//         console.log("Share cancelled or failed", err);
-//       }
-//     });
-
-      // window.shareScoreCommon = async function (gameName, score = 0) {
-
-    //   const siteName = "Ravindra Games Hub";
-    //   let gameLink = `https://rnsaraswat.github.io/games/index.html`;
-    //   let textToShare;
-    //   if (gameName == '-') {
-    //     gameLink = `https://rnsaraswat.github.io/games/index.html`;
-
-    //     textToShare =
-    //       `${siteName}
-    //     Play here:
-    // ${gameLink}`;
-    //   } else {
-    //     gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
-
-    //     textToShare =
-    //       `${siteName}
-    // ${gameName}
-    // Can you beat my Score: ${score}
-    
-    // Play here:
-    // ${gameLink}`;
-    //     console.log("gamelink", gameLink);
-    //   }
-
-    //   const imageUrl = "../../assets/icons/maskable-icon.png";
-
-    //   try {
-    //     await navigator.share({
-    //       title: siteName,
-    //       text: textToShare
-    //     });
-    //     console.log("try", gameLink);
-
-    //     const blob = await (await fetch(imageUrl)).blob();
-    //     const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
-
-    //     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    //       await navigator.share({
-    //         files: [file]
-    //       });
-    //       console.log("navigator.canShare && navigator.canShare", file, blob);
-    //     }
-
-    //   } catch (err) {
-    //     console.log("Share cancelled or failed", err);
-    //   }
-    // }
-
-      // // Quick share to twitter / facebook (opens new window)
-    // document.getElementById('shareTwitter').addEventListener('click', () => {
-    //   const url = encodeURIComponent(makeShareURL(currentScore));
-    //   const text = encodeURIComponent(`I scored ${currentScore} points! Can you beat me?`);
-
-    //   const facebook = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-
-    //   window.open(facebook, '_blank', 'noopener');
-    // });
-
-    // function makeScoreImage(score) {
-    //   const canvas = document.createElement('canvas');
-    //   canvas.width = 1200;
-    //   canvas.height = 630;
-    //   const ctx = canvas.getContext('2d');
-
-    //   const img = new Image();
-    //   img.src = '../../assets/icons/maskable-icon.png';
-    //   ctx.fillStyle = '#0f172a';
-    //   ctx.fillRect(0, 0, canvas.width, canvas.height);
-    //   ctx.drawImage(img, 300, 100, 600, 300);
-
-    //   ctx.fillStyle = '#FFFFFF';
-    //   ctx.font = '70px Impact';
-    //   ctx.textAlign = 'center';
-    //   const text1Y = img.height + 60;
-    //   ctx.fillText('Ravindra games hub', canvas.width / 2, 460);
-
-    //   ctx.font = '40px Arial';
-    //   const text2Y = text1Y + 50;
-    //   ctx.fillText(`Can you beat my score=${score}`, canvas.width / 2, 510);
-    //   return canvas;
-    // }
-</script>
 
   <script>
     if ("serviceWorker" in navigator) {

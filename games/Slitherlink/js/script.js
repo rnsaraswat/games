@@ -3,7 +3,7 @@ import { launchFireworks, showWinText } from './fireworks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
 import { shareScore } from './share.js';
-import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+// import { saveScore } from '../../../leaderboard/gbleaderboard.js';
 import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
 
 export const diffSel = document.getElementById('diffSel');
@@ -518,7 +518,7 @@ window.addEventListener('load', function () {
 
         lcsaveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
 
-        saveScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+        // saveScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
     }
 
     document.addEventListener('DOMContentLoaded', () => {

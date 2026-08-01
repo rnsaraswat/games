@@ -100,10 +100,7 @@
 
 			let moves = 0;
 			let startms = 0;
-			/*
-			 * Structure is like:
-			 * { numPegs: 4, colors: ["red", "green",."blue"], allowDups: true}
-			 */
+
 			var globalGameState = null;
 			console.log("$(function() end");
 
@@ -134,7 +131,7 @@
 				let retVal = [];
 				colors.forEach((color) => {
 					suffixes.forEach((suffix) => {
-						// console.log("generateAllPossibleGuessesWithDups(numPegs, colors) mid suffix ", suffix, color );
+
 						retVal.push([color].concat(suffix));
 					});
 				});
@@ -216,15 +213,6 @@
 				return false;
 			}
 
-			/**
-			 * Removes and returns the element at the provided index from an array.
-			 * This function may shuffle/reorder the elements of the array for
-			 * efficiency reasons. For example, if you request to remove the first
-			 * element of the array, rather than reindexing every element in the
-			 * array (O(N)), this function may choose to swap the first and last
-			 * element of the array, and then remove the last element from the
-			 * array (O(1)).
-			 */
 			function quickRemoveFromArray(index, array) {
 				console.log("quickRemoveFromArray(index, array) start ", index, array);
 				var arrayLength = array.length;
@@ -241,14 +229,6 @@
 				return retVal;
 			}
 
-			/**
-			 * Returns an array e.g. ["red", "green", "blue"] or null to indicate
-			 * that there are no possible guesses left. It randomly selects one of
-			 * the guesses from the provided `gameState` parameter, and removes
-			 * that guess from the list of possible guesses. This function may also
-			 * "shuffle" or reorder the elements in the possible guesses list for
-			 * efficiency reasons.
-			 */
 			function generateNextGuess(gameState, evidence) {
 				console.log("generateNextGuess(gameState, evidence)start ", gameState, evidence);
 				let guessIndex = Math.floor(Math.random() * gameState.possibleGuesses.length);
@@ -401,12 +381,7 @@
 					});
 				}
 				(() => {
-					/*
-					 * https://github.com/NebuPookins/JS-Mastermind-Solver/issues/3
-					 * With 8+ colors, 4 pegs, and no duplicates, if the first 4 colors
-					 * don't appear in the solution, then the next guess should only
-					 * contain colors that were not yet guessed.
-					 */
+
 					let numPegs = 4;
 					let colors = [1, 2, 3, 4, 5, 6, 7, 8];
 					let evidence = [
@@ -456,10 +431,6 @@
 
 
 				saveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at)
-				// const entry = { winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at };
-				// const boardData = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-				// boardData.push(entry);
-				// localStorage.setItem("leaderboard", JSON.stringify(boardData));
 
 				window.submitScore &&
 					window.submitScore(player_name, opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);

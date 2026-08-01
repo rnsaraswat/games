@@ -1,10 +1,14 @@
-import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
+import { startTimer, seconds, minutes, hours, timerInterval, elapsedTime } from './timer.js';
 import { launchFireworks } from './edgeFireWorks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
 import { shareScore } from './share.js';
-import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+// import { saveScore } from '../../../leaderboard/gbleaderboard.js';
 import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
+// to add firebase leaderboard
+import { db } from "../../../leaderboard/firebase-config.js";
+import { addDoc, collection, serverTimestamp } from
+    "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 export let timer = false;
 export let winnerName;
@@ -17,7 +21,7 @@ window.addEventListener('load', function () {
 
     const COLS = 7;
     const ROWS = 6;
-    let board = []; 
+    let board = [];
     let gameOver = false;
     let human = 1;
     let ai = 2;
@@ -26,24 +30,23 @@ window.addEventListener('load', function () {
     const statusEl = document.getElementById('status');
     const difficultySelect = document.getElementById('difficulty');
 
-    // const themeToggle = document.getElementById('toggle-theme');
-    // function setTheme(t) {
-    //   if (t === 'dark') {
-    //     document.documentElement.setAttribute('data-theme', 'dark');
-    //     localStorage.setItem('rg_theme', t);
-    //     themeToggle.textContent = '☀️ Light'
-    //     textToSpeechEng('Theme dark');
-    //   }
-    //   if (t === 'light') {
-    //     document.documentElement.setAttribute('data-theme', 'light');
-    //     localStorage.setItem('rg_theme', t);
-    //     themeToggle.textContent = '🌙 Dark'
-    //     textToSpeechEng('Theme Light');
-    //   }
-    // }
-    // if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
-    // setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
-  
+    // define variables also used to add firebase leaderboard
+    const user = JSON.parse(localStorage.getItem("user"));
+    let player = user ? user.name : localStorage.getItem('player_name');
+    let email = user ? user.email : "";
+    let opponent = localStorage.getItem('opponent') || 'Human2';
+    let game = gameName;
+    let game_id = gameName;
+    let difficulty = difficultySelect.value;
+    let elapsed, level, date;
+    let size = 3;
+    let gsize = '7x8';
+    // let hours = 0;
+    // let seconds = 0;
+    // let minutes = 0;
+    let text = "";
+    let playMode = "-";
+
     function initBoard() {
         board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
         gameOver = false;
@@ -76,7 +79,7 @@ window.addEventListener('load', function () {
 
     function handleColClick(col) {
         if (gameOver) return;
-        if (currentPlayer !== human) return; 
+        if (currentPlayer !== human) return;
         if (!isValidLocation(col)) {
             updateStatus('Column full — Click in other column');
             playSound('error');
@@ -89,8 +92,10 @@ window.addEventListener('load', function () {
             gameOver = true;
             updateStatus('🎉 You Won! 🎉');
             textToSpeechEng('You Won');
-            score = (7 * 7 - history.length) * 10 + 100;
+            winnerName = player;
+            score = (ROWS * COLS) * 10 + 100;
             updateleaderboard();
+            window.saveScore();
             timer = false;
             clearInterval(timerInterval);
             playSound('win');
@@ -98,14 +103,14 @@ window.addEventListener('load', function () {
             shareScore(gameName, score);
             return;
         }
-        if (isBoardFull()) { gameOver = true; updateStatus('Its a Draw!'); textToSpeechEng('Its a Draw');return; }
+        if (isBoardFull()) { gameOver = true; updateStatus('Its a Draw!'); textToSpeechEng('Its a Draw'); return; }
         currentPlayer = ai;
         updateStatus('Computer Thinking...');
         setTimeout(() => aiMove(), 120);
     }
 
     function isValidLocation(col) {
-        return board[ROWS - 1][col] === 0; 
+        return board[ROWS - 1][col] === 0;
     }
     function getNextOpenRow(col) {
         for (let r = 0; r < ROWS; r++) if (board[r][col] === 0) return r;
@@ -247,7 +252,7 @@ window.addEventListener('load', function () {
         const difficulty = difficultySelect.value;
         let depth = 4;
         if (difficulty === 'medium') depth = 5;
-        if (difficulty === 'hard') depth = 7; 
+        if (difficulty === 'hard') depth = 7;
 
         const validLocations = getValidLocations(board);
         for (const col of validLocations) {
@@ -289,7 +294,7 @@ window.addEventListener('load', function () {
         }
         renderBoard();
         if (winningMove(board, ai)) {
-            gameOver = true; updateStatus('Computer Wins 😐'); textToSpeechEng('Computer Wins'); return;
+            gameOver = true; updateStatus('Computer Wins 😐'); textToSpeechEng('Computer Wins'); winnerName = "Computer"; return;
         }
         if (isBoardFull()) { gameOver = true; updateStatus('Its a Draw'); textToSpeechEng('Its a Draw'); return; }
         currentPlayer = human;
@@ -303,27 +308,52 @@ window.addEventListener('load', function () {
 
     initBoard();
 
+    // to add firebase leaderboard (save record)
+    window.saveScore = async function () {
+        playMode = 'Player vs Player';
+        if (difficulty == 'hard') { score = score + 500 } else if (difficulty == 'medium') { score = score + 200 }
+
+        try {
+            await addDoc(collection(db, "leaderboard"), {
+                game_id: gameName || 'connect4',
+                game: gameName || 'connect4',
+                name: winnerName || 'Guast',
+                opponent: opponent || "Computer",
+                difficulty: difficulty || "-",
+                size: `${ROWS}x${COLS}` || `8x8`,
+                elapsed: Math.floor(Number(elapsedTime) / 1000) || 0,
+                score: score || 0,
+                moves: 0,
+                email: email || "-",
+                level: "-",
+                mode: '-',
+                text: "-",
+                createdAt: new Date()
+            });
+            console.log("Score Saved!");
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
     function updateleaderboard() {
-        winnerName = currentPlayer === 'x' ? player1 : player2;
-        let opponent = "Computer";
         let game_id = 'connect4';
-        let gsize = `7x6`;
-        let elapsed = hours * 3600 + minutes * 60 + seconds;
-        gameCount = history.length;
+        let gsize = `${ROWS}x${COLS}`;
+        let elapsed = 0;
+        let gameCount = 0;
         let filed1 = 0;
         let filed2 = 0
         let filed4 = "-";
         let filed3 = 'Player vs Computer';
         let email = localStorage.getItem('email') || '-';
         const created_at = new Date();
-    
+        if (difficulty == 'hard') { score = score + 500 } else if (difficulty == 'medium') { score = score + 200 }
+        console.log(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
         lcsaveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
-    
-        saveScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
-      }
+    }
 
-      document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
         lcrenderLeaderboard();
-      });
+    });
 });
 

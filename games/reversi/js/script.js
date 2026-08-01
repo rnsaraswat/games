@@ -1,6 +1,6 @@
 import { shareScore } from './share.js';
 import { textToSpeechEng } from './speak.js';
-import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+// import { saveScore } from '../../../leaderboard/gbleaderboard.js';
 import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
 import { playSound } from './sound.js';
 // to add firebase leaderboard
@@ -660,7 +660,7 @@ document.addEventListener("DOMContentLoaded", function () {
         lcsaveToLeaderboard(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at)
 
         //save record to spabase global leaderboard
-        saveScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
+        // saveScore(winnerName, opponent, email, gsize, difficulty, game_id, score, elapsed, gameCount, filed1, filed2, filed3, filed4, created_at);
     }
 
 });

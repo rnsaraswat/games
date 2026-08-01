@@ -78,7 +78,8 @@
       <button id="toggle-theme" class="button-memory">☀️ Light</button>
       <!-- to sound on / off button -->
       <button id="toggle-sound" class="button-memory">🔇 Sound: Off"</button>
-      <button class="button-primary-memory" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global
+      <button class="button-primary-memory" id="toggle-gb-leaderboard" onclick="openFirebaseGlobalLeaderboard()">🌍
+        Global
         Leaderboard</button>
       <button class="button-primary-memory" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
         Leaderboard</button>
@@ -94,11 +95,11 @@
   <div class="board-wrap">
     <main class="board" id="board" aria-label="Game board"></main>
   </div>
-  <div id="leaderboardPopup" class="popupWindow">
+  <!-- <div id="leaderboardPopup" class="popupWindow">
   </div>
   <div id="localleaderboardPopup" class="popupWindow">
   </div>
-  <div id="feedbackPopup" class="popupWindow"></div>
+  <div id="feedbackPopup" class="popupWindow"></div> -->
   <!-- Rules Popup -->
   <!-- <div id="rulesPopup">
         <h3>Game Rules</h3>
@@ -107,9 +108,9 @@
     </div> -->
 
   <p id="loading" class="loading">Loading...</p>
-  <div id="gb-feedbackModal" class="fb-container"></div>
+  <div id="gb-feedbackModal" class="firebase-main-container"></div>
   <div id="lcLeaderboardModal" class="lc-main-container"></div>
-  <div id="gbLeaderboardModal" class="gb-main-container"></div>
+  <div id="firebasegbLeaderboardModal" class="firebase-main-container"></div>
   <!-- Display winning text -->
   <div id="winText">🎉 You Won! 🎉</div>
   <!-- fire crackers canvas -->
@@ -127,7 +128,7 @@
     </script> -->
   <script>
     document.getElementById("gb-feedbackModal").style.display = 'none';
-    document.getElementById("gbLeaderboardModal").style.display = 'none';
+    document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
     document.getElementById("lcLeaderboardModal").style.display = 'none';
     document.getElementById("winText").style.display = 'none';
 
@@ -147,20 +148,20 @@
     if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
     setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
-    function openGlobalLeaderboard() {
-      document.getElementById("gbLeaderboardModal").style.display = 'flex';
+    function openFirebaseGlobalLeaderboard() {
+      document.getElementById("firebasegbLeaderboardModal").style.display = 'flex';
     };
 
     function closeFirebaseGlobalLeaderboard() {
-      document.getElementById("gbLeaderboardModal").style.display = 'none';
+      document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
     };
 
 
     fetch('../../leaderboard/firebasegbleaderboard.html')
       .then(response => response.text())
       .then(htmlText => {
-        document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
-        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById('firebasegbLeaderboardModal').innerHTML = htmlText;
+        document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
       });
 
     function openLocalLeaderboard() {
@@ -199,6 +200,18 @@
       .then(htmlText => {
         document.getElementById('gb-feedbackModal').innerHTML = htmlText;
         document.getElementById("gb-feedbackModal").style.display = 'none';
+
+        setTimeout(() => {
+          console.log("window.initFeedback =", window.initFeedback);
+
+          if (typeof window.initFeedback === "function") {
+            window.initFeedback();
+          } else {
+            console.error("initFeedback not available");
+          }
+
+        }, 100);
+
       });
 
     (async () => {

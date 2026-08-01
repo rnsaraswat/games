@@ -95,7 +95,8 @@
         </header>
         <main>
             <div class="hdr-child-div">
-                <button class="button-primary" id="toggle-firebase-leaderboard" onclick="openFirebaseGlobalLeaderboard()">🌍
+                <button class="button-primary" id="toggle-firebase-leaderboard"
+                    onclick="openFirebaseGlobalLeaderboard()">🌍
                     Global Leaderboard</button>
                 <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
                     Leaderboard</button>
@@ -209,6 +210,7 @@
             { id: 'mastermind', name: 'mastermind', title: 'Master Mind', desc: 'Thinking without limits', href: 'games/mastermind/index.html' },
             { id: '5inARow', name: '5inarow', title: '5 in A Row', desc: "It's not just luck, it's strategy", href: 'games/5inARow/index.html' },
             { id: 'connect4', name: 'connect4', title: 'Connect 4', desc: 'Endless ways to connect four X vs O', href: 'games/connect_4/index.html' },
+            { id: 'connect4', name: 'connect4', title: '3D Connect 4', desc: 'Challenge to Win connect four Red vs Black', href: 'games/connect4/index.html' },
             { id: 'sudoku', name: 'sudoku', title: 'Sudoku', desc: 'Solve logic puzzles of various sizes', href: 'games/sudoku/index.html' },
             { id: '4inARow', name: '4inarow', title: '4 in A Row', desc: 'Classic & Action-Oriented X vs O', href: 'games/4inARow/index.html' },
             { id: 'connect3', name: 'connect3', title: 'Connect 3', desc: 'Connect Three Classic X vs O', href: 'games/connect_3/index.html' },
@@ -216,20 +218,18 @@
             { id: 'tictactoe1', name: 'tictactoe', title: 'Tic Tac Toe New', desc: "One wrong move, and it's over X vs O", href: 'games/tictactoe1/index.html' },
             { id: '3inARow', name: 'threeinarow', title: '3 in Row', desc: "It's not just luck, it's strategy X vs O", href: 'games/3inARow/index.html' },
             { id: 'mastermind1', name: 'mastermind', title: 'Mastermind', desc: 'Thinking without limits', href: 'games/mastermindtext/mastermind_text.html' },
-            { id: 'tictactoe3', name: 'tictactoe', title: 'Tic Tac Toe Share', desc: "Three in a row to win X vs O", href: 'games/tictactoe3/index.html' },
-            { id: 'project', name: 'Project', title: 'Project Share', desc: "Three in a row to win X vs O", href: 'games/project/index.html' }
         ];
 
         const pad = (num) => num.toString().padStart(2, '0');
         const user = JSON.parse(localStorage.getItem("user"));
         let playerName;
-        if(user){
+        if (user) {
             playerName = user.name;
         } else {
             const date = new Date();
             playerName = localStorage.getItem('player_name') || `Guest${pad(date.getDate())}${pad(date.getMonth() + 1)}${date.getFullYear().toString().slice(-2)}_${pad(date.getHours())}${pad(date.getMinutes())}`;
         }
-        
+
         // let playerName = user ? user.name : localStorage.getItem('player_name');
 
         const player_name = playerName;
@@ -322,6 +322,17 @@
             .then(htmlText => {
                 document.getElementById('FB-feedbackModal').innerHTML = htmlText;
                 document.getElementById("FB-feedbackModal").style.display = 'none';
+
+                setTimeout(() => {
+                    console.log("window.initFeedback =", window.initFeedback);
+
+                    if (typeof window.initFeedback === "function") {
+                        window.initFeedback();
+                    } else {
+                        console.error("initFeedback not available");
+                    }
+
+                }, 100);
             });
     </script>
 

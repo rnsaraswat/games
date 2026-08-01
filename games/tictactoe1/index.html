@@ -294,8 +294,8 @@
             transform: translateY(-2px);
         }
     </style>
-    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
-    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/firebasefeedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
     <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
     <link rel="stylesheet" href="../../commoncss.css">
     <link rel="stylesheet" href="./shareDevice.css" />
@@ -342,9 +342,9 @@
         </div>
     </div>
     </div>
-    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+    <div id="fb-feedbackModal" class="fb-container"></div>
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
-    <div id="gbLeaderboardModal" class="gb-main-container"></div>
+    <div id="firebasegbLeaderboardModal" class="firebase-main-container"></div>
     <div id="winText">🎉 You Won! 🎉</div>
     <div class="name-main-container" id="namebar">
         <div class="name-top-section">Player Name : <span id="player1"></span></div>
@@ -375,8 +375,8 @@
         </div>
     </div>
     <!-- <button onclick="report(${f.id})">🚩 Report</button> -->
-    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
-    <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+    <script type="module" src="../../leaderboard/firebasefeedback.js"></script>
+    <script type="module" src="../../leaderboard/firebasegbleaderboard.js"></script>
     <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <canvas id="fireworksCanvas"></canvas>
     <script type="module" src="tictactoe1.js"></script>
@@ -389,9 +389,9 @@
     </script>
     <script>
 
-        document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById("fb-feedbackModal").style.display = 'none';
         document.getElementById("lcLeaderboardModal").style.display = 'none';
-        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
         document.getElementById("winText").style.display = 'none';
         // document.getElementById("rulesPopup").style.display = 'none';
 
@@ -412,19 +412,19 @@
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
         function openGlobalLeaderboard() {
-            document.getElementById("gbLeaderboardModal").style.display = 'flex';
+            document.getElementById("firebasegbLeaderboardModal").style.display = 'flex';
         };
 
-        function closeGlobalLeaderboard() {
-            document.getElementById("gbLeaderboardModal").style.display = 'none';
+        function closeFirebaseGlobalLeaderboard() {
+            document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
         };
 
 
-        fetch('../../leaderboard/gbleaderboard.html')
+        fetch('../../leaderboard/firebasegbleaderboard.html')
             .then(response => response.text())
             .then(htmlText => {
-                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
-                document.getElementById("gbLeaderboardModal").style.display = 'none';
+                document.getElementById('firebasegbLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
             });
 
         function openLocalLeaderboard() {
@@ -451,18 +451,18 @@
             });
 
         function openGlobalFeedback() {
-            document.getElementById("gb-feedbackModal").style.display = 'flex';
+            document.getElementById("fb-feedbackModal").style.display = 'flex';
         };
 
-        function closeGlobalFeedback() {
-            document.getElementById("gb-feedbackModal").style.display = 'none';
+        function closeFBFeedback() {
+            document.getElementById("fb-feedbackModal").style.display = 'none';
         };
 
-        fetch('../../leaderboard/gbfeedback.html')
+        fetch('../../leaderboard/firebasefeedback.html')
             .then(response => response.text())
             .then(htmlText => {
-                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
-                document.getElementById("gb-feedbackModal").style.display = 'none';
+                document.getElementById('fb-feedbackModal').innerHTML = htmlText;
+                document.getElementById("fb-feedbackModal").style.display = 'none';
             });
 
         (async () => {
