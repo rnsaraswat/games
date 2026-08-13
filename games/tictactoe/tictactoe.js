@@ -9,7 +9,7 @@ import { addDoc, collection, serverTimestamp } from
 let player = localStorage.getItem('player') || 'Human1';
 let opponent = localStorage.getItem('opponent') || 'Human2';
 let email = localStorage.getItem('email') || '-';
-let game = "Tic tac TOE";
+let game = "tictactoe";
 let game_id = "tictactoe";
 let difficulty, elapsed, moves, level, date;
 export let score;
@@ -389,8 +389,8 @@ window.addEventListener('load', function () {
     window.saveScore = async function() {
         try {
           await addDoc(collection(db, "leaderboard"), {
-            game_id: game_id,
-            game: game,
+            game_id: game_id || 'tictactoe',
+            game: game || 'tictactoe',
             name: player,
             opponent: opponent,
             difficulty: difficulty,

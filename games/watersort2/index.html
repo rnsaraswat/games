@@ -58,7 +58,8 @@
                     <button id="toggle-theme">☀️ Light</button>
                     <button id="toggle-sound">🔇 Music:Off</button>
                     <button id="toggle-rules">📜View Rules</button>
-                    <button class="button-primary" id="toggle-gb-leaderboard" onclick="openFirebaseGlobalLeaderboard()">🌍
+                    <button class="button-primary" id="toggle-gb-leaderboard"
+                        onclick="openFirebaseGlobalLeaderboard()">🌍
                         Global
                         Leaderboard</button>
                     <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
@@ -70,7 +71,8 @@
                     <div class="divtext">Moves: <span id="moves">0</span></div>
                     <div id="timer-display">⏱️ 00:00:00</div>
                     <div class="output-box" id="output">
-                        Please Select no of tubes and Difficulty to change level or press New Game for Level 1 Easy (4 tubes)
+                        Please Select no of tubes and Difficulty to change level or press New Game for Level 1 Easy (4
+                        tubes)
                     </div>
                     <p id="loading" class="loading">Loading...</p>
                 </div>
@@ -184,6 +186,18 @@
             .then(htmlText => {
                 document.getElementById('FB-feedbackModal').innerHTML = htmlText;
                 document.getElementById("FB-feedbackModal").style.display = 'none';
+
+                setTimeout(() => {
+                    console.log("window.initFeedback =", window.initFeedback);
+
+                    if (typeof window.initFeedback === "function") {
+                        window.initFeedback();
+                    } else {
+                        console.error("initFeedback not available");
+                    }
+
+                }, 100);
+
             });
 
         (async () => {

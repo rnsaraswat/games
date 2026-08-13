@@ -937,7 +937,7 @@ export const state = {
             try {
                 await addDoc(collection(db, "leaderboard"), {
                     game_id: game_id || 'sudoku',
-                    game: game || 'Sudoku',
+                    game: game || 'sudoku',
                     name: winnerName || 'Guast',
                     opponent: opponent || "Computer",
                     difficulty: difficulty || "-",

@@ -1,0 +1,152 @@
+/* ==========================================
+   REPLY POPUP - FULL SCREEN
+========================================== */
+
+.reply-popup {
+    position: fixed !important;
+
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+
+    width: 100vw !important;
+    height: 100vh !important;
+
+    margin: 0 !important;
+    padding: 20px !important;
+
+    box-sizing: border-box !important;
+
+    display: none;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: rgba(0, 0, 0, 0.72);
+
+    z-index: 2147483647 !important;
+}
+
+
+.reply-popup.active {
+    display: flex !important;
+}
+
+
+.reply-popup-content {
+    position: relative;
+
+    width: min(700px, 92vw);
+
+    max-height: 88vh;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background: var(--fd-bg, #ffffff);
+
+    color: var(--fd-text, #000000);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 20px 70px rgba(0, 0, 0, 0.6);
+}
+
+
+.reply-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 15px 20px;
+}
+
+
+.reply-header h2 {
+    margin: 0;
+}
+
+
+#replyCloseBtn {
+
+    border: none;
+
+    background: transparent;
+
+    color: inherit;
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    padding: 5px 10px;
+}
+
+
+.reply-list {
+
+    overflow-y: auto;
+
+    max-height: 45vh;
+
+    padding: 15px 20px;
+}
+
+
+.reply-form {
+
+    padding: 15px 20px;
+}
+
+
+#replyName,
+#replyMessage {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 10px;
+
+    margin-bottom: 10px;
+}
+
+
+#replyMessage {
+
+    min-height: 90px;
+
+    resize: vertical;
+}
+
+
+#replySendBtn {
+
+    padding: 10px 18px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            90deg,
+            #9c6eeb,
+            #7c3aed
+        );
+}
+
+
+body.reply-popup-open {
+    overflow: hidden !important;
+}

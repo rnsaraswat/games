@@ -150,6 +150,19 @@
 
     function openFirebaseGlobalLeaderboard() {
       document.getElementById("firebasegbLeaderboardModal").style.display = 'flex';
+
+      setTimeout(() => {
+
+        console.log("window.initLeaderboard =", window.initLeaderboard);
+
+        if (window.initLeaderboard) {
+          window.initLeaderboard();
+        } else {
+          console.error("initLeaderboard not found");
+        }
+
+      }, 500);
+
     };
 
     function closeFirebaseGlobalLeaderboard() {

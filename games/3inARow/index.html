@@ -114,7 +114,7 @@
     import { shareScore } from './js/share.js';
     document.getElementById("shareBtn").addEventListener("click", async () => {
       console.log("shareBtn clicked")
-      shareScore("4inARow", 0);
+      shareScore("3inARow", 0);
     });
   </script>
 
@@ -208,8 +208,8 @@
       });
 
     (async () => {
-      const GAME_NAME = "4 IN A ROW";
-      const GAME_SHORT = "4inARow";
+      const GAME_NAME = "3 IN A ROW";
+      const GAME_SHORT = "3inarow";
 
       const res = await fetch("../../manifest.json");
       const manifest = await res.json();
@@ -217,8 +217,8 @@
       manifest.short_name = GAME_SHORT;
       manifest.name = GAME_NAME;
 
-      manifest.start_url = 'https://rnsaraswat.github.io/games/games/4inARow/index.html';
-      manifest.scope = 'https://rnsaraswat.github.io/games/games/4inARow/index.html';
+      manifest.start_url = 'https://rnsaraswat.github.io/games/games/3inARow/index.html';
+      manifest.scope = 'https://rnsaraswat.github.io/games/games/3inARow/index.html';
 
       manifest.icons = manifest.icons.map(icon => ({
         ...icon,

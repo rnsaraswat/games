@@ -1,0 +1,225 @@
+<div class="fb-header-btn-close">
+
+    <div class="fbpopupHeadeer">
+
+        <div class="fdClose">
+
+            <button
+                class="fbclose-btn"
+                onclick="closeFBFeedback()">
+
+                Close ❌
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<form
+    id="feedback-form"
+    autocomplete="off">
+
+
+    <div>
+
+        <label class="fb-label">
+            Game
+        </label>
+
+        <select
+            id="feedbackGame"
+            class="fb-input">
+
+            <option value="">
+                Select Game
+            </option>
+
+        </select>
+
+
+        <label
+            class="fb-label"
+            for="feedbackName">
+
+            Name (optional)
+
+        </label>
+
+        <input
+            class="fb-input"
+            id="feedbackName"
+            type="text"
+            placeholder="Enter your name"
+            maxlength="60" />
+
+    </div>
+
+
+    <div style="margin-top:1vw">
+
+        <label
+            class="fb-label"
+            for="feedbackMessage">
+
+            Comment / Feedback / Suggestion
+
+        </label>
+
+        <textarea
+            class="fb-input"
+            id="feedbackMessage"
+            placeholder="write Comment / Feedback / Suggestio..."
+            required>
+        </textarea>
+
+    </div>
+
+
+    <label class="fb-label">
+        Category
+    </label>
+
+    <select
+        id="feedbackCategory"
+        class="fb-input">
+
+        <option value="Bug Report">
+            Bug Report
+        </option>
+
+        <option value="Feature Request">
+            Feature Request
+        </option>
+
+        <option value="UI / Design">
+            UI / Design
+        </option>
+
+        <option value="Performance">
+            Performance
+        </option>
+
+        <option value="Game Balance">
+            Game Balance
+        </option>
+
+        <option value="Other">
+            Other
+        </option>
+
+    </select>
+
+
+    <label class="fb-label">
+        Title
+    </label>
+
+    <input
+        id="feedbackTitle"
+        class="fb-input"
+        maxlength="80">
+
+
+    <div class="fb-controls">
+
+        <label
+            class="fb-label"
+            for="feedbackRating">
+
+            Rating
+
+        </label>
+
+        <select id="feedbackRating">
+
+            <option value="1">
+                ⭐
+            </option>
+
+            <option value="2">
+                ⭐⭐
+            </option>
+
+            <option value="3">
+                ⭐⭐⭐
+            </option>
+
+            <option value="4">
+                ⭐⭐⭐⭐
+            </option>
+
+            <option value="5" selected>
+                ⭐⭐⭐⭐⭐
+            </option>
+
+        </select>
+
+
+        <button
+            id="feedbackSubmitBtn"
+            class="fb-btn-primary"
+            type="submit">
+
+            Submit Feedback
+
+        </button>
+
+
+        <div
+            class="fb-server-status"
+            id="feedbackStatus">
+
+            Server: checking...
+
+        </div>
+
+    </div>
+
+</form>
+
+
+<!-- ==========================================
+     FEEDBACK LIST
+========================================== -->
+
+<div
+    id="feedbackList"
+    class="fb-list">
+</div>
+
+
+<!-- ==========================================
+     PAGINATION
+========================================== -->
+
+<div class="fb-pagination">
+
+    <button
+        id="feedbackPrevBtn"
+        class="fb-btn-ghost">
+
+        ◀ Previous
+
+    </button>
+
+
+    <span id="feedbackPageInfo">
+
+        Page 1
+
+    </span>
+
+
+    <button
+        id="feedbackNextBtn"
+        class="fb-btn-ghost">
+
+        Next ▶
+
+    </button>
+
+</div>

@@ -42,7 +42,9 @@
     <link rel="icon" type="image/png" sizes="512x512" href="./assets/icons/rgh-512x512.png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="commoncss.css">
-    <link rel="stylesheet" href="./leaderboard/firebasefeedback.css" />
+    <link rel="stylesheet" href="./leaderboard/feedback.css" />
+    <link rel="stylesheet" href="./leaderboard/reply-popup.css">
+    <!-- <link rel="stylesheet" href="./leaderboard/firebasefeedback.css" /> -->
     <link rel="stylesheet" href="./leaderboard/firebasegbleaderboard.css" />
     <link rel="stylesheet" href="./leaderboard/lcleaderboard.css" />
     <link rel="manifest" href="./manifest.json" />
@@ -101,7 +103,8 @@
                 <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
                     Leaderboard</button>
                 <button class="button-primary" id="shareBtn">📤Sharing</button>
-                <button class="button-primary" onclick="openFBFeedback()">💬 Feedback</button>
+                <!-- <button class="button-primary" onclick="openFBFeedback()">💬 Feedback</button> -->
+                <button class="button-primary" onclick="openFBFeedbackV2()">💬 Feedback 2</button>
                 <button class="button-primary" onclick="window.location.href='auth/login.html'">🚪Sign in</button>
                 <button class="button-primary" id="toggle-theme">☀️ Light</button>
             </div>
@@ -185,16 +188,71 @@
         </footer>
         <!-- </footer> -->
     </div>
-    <div id="FB-feedbackModal" class="fb-container"></div>
+    <!-- Feedback V2 -->
+    <div id="FB-feedbackModal" class="fb-container">
+    </div>
+
+
+    <!-- ==========================================
+     REPLY POPUP
+     यह FB-feedbackModal के अंदर नहीं है
+========================================== -->
+
+    <div id="replyPopup" class="reply-popup" aria-hidden="true">
+
+        <div class="reply-popup-content">
+
+            <div class="reply-header">
+
+                <h2>💬 Replies</h2>
+
+                <button type="button" id="replyCloseBtn">
+                    ✕
+                </button>
+
+            </div>
+
+
+            <div id="replyList" class="reply-list">
+            </div>
+
+
+            <div class="reply-form">
+
+                <input id="replyName" type="text" maxlength="60" placeholder="Your name">
+
+
+                <textarea id="replyMessage" maxlength="1000" placeholder="Write reply..."></textarea>
+
+
+                <button type="button" id="replySendBtn">
+
+                    Send Reply
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- <div id="replyPopup"></div> -->
     <div id="firebaseLeaderboardModal" class="firebase-main-container"></div>
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
-    <script type="module" src="./leaderboard/firebasefeedback.js"></script>
+
+    <script type="module" src="./leaderboard/feedback-controller.js"></script>
+    <script type="module" src="./leaderboard/feedback-ui.js"></script>
+    <script type="module" src="./leaderboard/feedback-firestore.js"></script>
+    <script type="module" src="./leaderboard/reply-popup.js"></script>
+
     <script type="module" src="./leaderboard/firebasegbleaderboard.js"></script>
     <script type="module" src="./leaderboard/lcleaderboard.js"></script>
     <script type="module" src="./script.js"></script>
+    <script type="module" src="./leaderboard/leaderboard-controller.js"></script>
 
     <script>
         document.getElementById("FB-feedbackModal").style.display = 'none';
+        // document.getElementById("replyPopup").style.display = 'none';
         document.getElementById("lcLeaderboardModal").style.display = 'none';
         document.getElementById("firebaseLeaderboardModal").style.display = 'none';
 
@@ -207,7 +265,7 @@
             { id: 'slitherlink', name: 'slintherlink', title: 'Slinther Link', desc: 'Draw a single, continuous, non-intersecting loop', href: 'games/Slitherlink/index.html' },
             { id: 'rockpaperscissor', name: 'rockpaperscissor', title: 'Rock Paper Scissor', desc: 'Classic & Action-Oriented X vs O', href: 'games/rock_paper_scissor/index.html' },
             { id: 'tictactoe', name: 'tictactoe', title: 'Tic Tac Toe', desc: "Challange Beat the HARD level against the computer", href: 'games/tictactoe/index.html' },
-            { id: 'mastermind', name: 'mastermind', title: 'Master Mind', desc: 'Thinking without limits', href: 'games/mastermind/index.html' },
+            { id: 'mastermind', name: 'mastermind', title: 'Mastermind', desc: 'Thinking without limits', href: 'games/mastermind/index.html' },
             { id: '5inARow', name: '5inarow', title: '5 in A Row', desc: "It's not just luck, it's strategy", href: 'games/5inARow/index.html' },
             { id: 'connect4', name: 'connect4', title: 'Connect 4', desc: 'Endless ways to connect four X vs O', href: 'games/connect_4/index.html' },
             { id: 'connect4', name: 'connect4', title: '3D Connect 4', desc: 'Challenge to Win connect four Red vs Black', href: 'games/connect4/index.html' },
@@ -276,6 +334,12 @@
         };
 
         function closeFirebaseGlobalLeaderboard() {
+            console.log("typeof =", typeof window.stopLeaderboard);
+
+            if (typeof window.stopLeaderboard === "function") {
+                window.stopLeaderboard();
+            }
+
             document.getElementById("firebaseLeaderboardModal").style.display = 'none';
         };
 
@@ -284,6 +348,19 @@
             .then(htmlText => {
                 document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
                 document.getElementById("firebaseLeaderboardModal").style.display = 'none';
+
+                setTimeout(() => {
+
+                    console.log("window.initLeaderboard =", window.initLeaderboard);
+
+                    if (window.initLeaderboard) {
+                        window.initLeaderboard();
+                    } else {
+                        console.error("initLeaderboard not found");
+                    }
+
+                }, 500);
+
             });
 
         function openLocalLeaderboard() {
@@ -309,31 +386,114 @@
                 document.getElementById("lcLeaderboardModal").style.display = 'none';
             });
 
-        function openFBFeedback() {
-            document.getElementById("FB-feedbackModal").style.display = 'flex';
-        };
+
+
+        function openFBFeedbackV2() {
+
+            const modal =
+                document.getElementById(
+                    "FB-feedbackModal"
+                );
+
+            if (!modal) {
+
+                console.error(
+                    "FB-feedbackModal not found"
+                );
+
+                return;
+
+            }
+
+            modal.style.display = "flex";
+
+        }
+
 
         function closeFBFeedback() {
-            document.getElementById("FB-feedbackModal").style.display = 'none';
-        };
 
-        fetch('./leaderboard/firebasefeedback.html')
-            .then(response => response.text())
+            const modal =
+                document.getElementById(
+                    "FB-feedbackModal"
+                );
+
+            if (!modal)
+                return;
+
+            modal.style.display = "none";
+
+        }
+
+        fetch('./leaderboard/feedback.html')
+            .then(response => {
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Feedback HTML load failed: " +
+                        response.status
+                    );
+
+                }
+
+                return response.text();
+
+            })
             .then(htmlText => {
-                document.getElementById('FB-feedbackModal').innerHTML = htmlText;
-                document.getElementById("FB-feedbackModal").style.display = 'none';
 
-                setTimeout(() => {
-                    console.log("window.initFeedback =", window.initFeedback);
+                const modal =
+                    document.getElementById(
+                        "FB-feedbackModal"
+                    );
 
-                    if (typeof window.initFeedback === "function") {
-                        window.initFeedback();
-                    } else {
-                        console.error("initFeedback not available");
-                    }
+                if (!modal) {
 
-                }, 100);
+                    console.error(
+                        "FB-feedbackModal not found"
+                    );
+
+                    return;
+
+                }
+
+                modal.innerHTML =
+                    htmlText;
+
+                modal.style.display =
+                    "none";
+
+                console.log(
+                    "Feedback V2 HTML loaded"
+                );
+
+            })
+            .catch(error => {
+
+                console.error(
+                    "Feedback V2 load error:",
+                    error
+                );
+
             });
+
+        // fetch('./leaderboard/feedback.html')
+        //     .then(response => response.text())
+        //     .then(htmlText => {
+        //         document.getElementById('FB-feedbackModal').innerHTML = htmlText;
+        //         document.getElementById("FB-feedbackModal").style.display = 'none';
+
+        //         setTimeout(() => {
+        //             console.log("window.initFeedback =", window.initFeedback);
+
+        //             if (typeof window.initFeedback === "function") {
+        //                 window.initFeedback();
+        //             } else {
+        //                 console.error("initFeedback not available");
+        //             }
+
+        //         }, 100);
+        //     });
+
     </script>
 
     <script>

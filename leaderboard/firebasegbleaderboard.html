@@ -1,78 +1,178 @@
 <!-- <div class="leaderboard-wrapper"> -->
-    <div class="firebase-header-section">
-        <span id="firebaseCloseBtn" class="firebasePopupClose" onclick="closeFirebaseGlobalLeaderboard()">Close X</span>
-        <h2 class="firebase-h2">🌍 Global Leaderboard</h2>
-    </div>
-    <!-- Top Controls -->
+<div class="firebase-header-section">
+    <span id="firebaseCloseBtn" class="firebasePopupClose" onclick="closeFirebaseGlobalLeaderboard()">Close X</span>
+    <h2 class="firebase-h2">🌍 Global Leaderboard</h2>
+</div>
+<!-- Top Controls -->
+<div class="lb-filters">
 
-    <div class="firebase-btn-container">
-        <label class="firebase-leaderboard">Filter game:</label>
-        <select class="firebase-leaderboard" id="firebasegameFilter">
-            <option value="all">All Games</option>
-            <option value="rockpaperscissor">Rock Paper Scissor</option>
-            <option value="5inARow">5 in A Row</option>
-            <option value="connect4">Connect 4</option>
-            <option value="sudoku">Sudoku</option>
-            <option value="sudokusolver">Sudoku Solver</option>
-            <option value="4inARow">4 in A Row</option>
-            <option value="connect3">Connect 3</option>
-            <option value="tictactoe">Tic Tac Toe</option>
-            <option value="threeinarow">3 in Row</option>
-            <option value="mastermind">Mastermind</option>
-            <option value="slitherlink">Slinther Link</option>
-            <option value="jigsaw">Jigsaw</option>
-            <option value="reversi">Reversi</option>
-            <option value="watersort">Water Sort</option>
-            <option value="blocksort">Block Sort</option>
-            <option value="memory">Memory</option>
-        </select>
-        <label class="firebase-leaderboard">Show per page:</label>
-        <select class="firebase-leaderboardSelect" id="pageSize">
-            <option value="5">5</option>
-            <option value="10" selected>10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-        </select>
+    <select id="filterGame">
+        <option value="All">All Games</option>
+        <option value="rockpaperscissor">Rock Paper Scissor</option>
+        <option value="5inARow">5 in A Row</option>
+        <option value="connect4">Connect 4</option>
+        <option value="sudoku">Sudoku</option>
+        <option value="sudokusolver">Sudoku Solver</option>
+        <option value="4inARow">4 in A Row</option>
+        <option value="connect3">Connect 3</option>
+        <option value="tictactoe">Tic Tac Toe</option>
+        <option value="3inarow">3 in Row</option>
+        <option value="mastermind">Mastermind</option>
+        <option value="slitherlink">Slinther Link</option>
+        <option value="jigsaw">Jigsaw</option>
+        <option value="reversi">Reversi</option>
+        <option value="watersort">Water Sort</option>
+        <option value="blocksort">Block Sort</option>
+        <option value="memory">Memory</option>
+    </select>
 
-        <input type="text" class="firebase-leaderboard" id="searchInput" placeholder="🔍 Search player..." />
-        <button class="button-primary"
-            onclick="window.location.href='https://rnsaraswat.github.io/games/auth/login.html'">🚪Sign in</button>
-    </div>
+    <select id="filterDifficulty">
+        <option value="All">All Difficulty</option>
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+    </select>
 
-    <!-- Table -->
-    <div class="firebase-table-area">
-        <table id="leaderboardTable" class="firebase-leaderboardTable">
-            <thead class="firebase-thead">
-                <tr>
-                    <th data-field="rank">Rank ▲▼</th>
-                    <th data-field="game">Game ▲▼</th>
-                    <th data-field="game_id">Game ID ▲▼</th>
-                    <th data-field="name">Player Name ▲▼</th>
-                    <th data-field="opponent">Opponent Name ▲▼</th>
-                    <th data-field="size">Size ▲▼</th>
-                    <th data-field="difficulty">Difficulty ▲▼</th>
-                    <th data-field="score">Score ▲▼</th>
-                    <th data-field="moves">Moves ▲▼</th>
-                    <th data-field="level">Level ▲▼</th>
-                    <th data-field="mode">Mode ▲▼</th>
-                    <th data-field="text">Text ▲▼</th>
-                    <th data-field="elapsed">Elapsed Time ▲▼</th>
-                    <th data-field="elapsed">Date Time ▲▼</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-            </tbody>
-        </table>
-    </div>
+    <select id="filterMode">
+        <option value="All">All Modes</option>
+        <option value="single">Single</option>
+        <option value="AI">AI</option>
+        <option value="2player">2 Player</option>
+    </select>
 
-    <!-- Pagination -->
-    <div class="firebase-footer-section">
-        <div class="firebase-pagination">
-            <button class="firebase-leaderboard" id="prevBtn">Previous</button>
-            <span id="pageInfo" class="firebase-pageInfo"></span>
-            <button class="firebase-leaderboard" id="nextBtn">Next</button>
+</div>
+<div class="firebase-btn-container">
+    <label class="firebase-leaderboard">Filter game:</label>
+    <select class="firebase-leaderboard" id="firebasegameFilter">
+        <option value="all">All Games</option>
+        <option value="rockpaperscissor">Rock Paper Scissor</option>
+        <option value="5inARow">5 in A Row</option>
+        <option value="connect4">Connect 4</option>
+        <option value="sudoku">Sudoku</option>
+        <option value="sudokusolver">Sudoku Solver</option>
+        <option value="4inARow">4 in A Row</option>
+        <option value="connect3">Connect 3</option>
+        <option value="tictactoe">Tic Tac Toe</option>
+        <option value="threeinarow">3 in Row</option>
+        <option value="mastermind">Mastermind</option>
+        <option value="slitherlink">Slinther Link</option>
+        <option value="jigsaw">Jigsaw</option>
+        <option value="reversi">Reversi</option>
+        <option value="watersort">Water Sort</option>
+        <option value="blocksort">Block Sort</option>
+        <option value="memory">Memory</option>
+    </select>
+    <label class="firebase-leaderboard">Show per page:</label>
+    <select class="firebase-leaderboardSelect" id="pageSize">
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+    </select>
+    <button id="refreshBtn" class="firebase-leaderboard">
+        🔄 Refresh
+    </button>
+    <button class="button-primary"
+    onclick="window.location.href='https://rnsaraswat.github.io/games/auth/login.html'">🚪Sign in</button>
+    <input type="text" class="firebase-leaderboard" id="searchInput" placeholder="🔍 Search player..." />
+    <div id="leaderboardLoading" class="firebase-loading" style="display:none;">
+
+        <div class="firebase-spinner"></div>
+    
+        <div class="firebase-loading-text">
+            Loading Leaderboard...
         </div>
+    
+    </div>
+    <div id="leaderboardEmpty" class="firebase-state" style="display:none;">
+
+        <div class="firebase-state-icon">📭</div>
+    
+        <div class="firebase-state-title">
+            No Records Found
+        </div>
+    
+        <div class="firebase-state-text">
+            Try another search or filter.
+        </div>
+    
+    </div>
+    
+    
+    <div id="leaderboardError" class="firebase-state" style="display:none;">
+    
+        <div class="firebase-state-icon">⚠️</div>
+    
+        <div class="firebase-state-title">
+            Unable to Load Leaderboard
+        </div>
+    
+        <div class="firebase-state-text">
+            Please check your internet connection.
+        </div>
+    
+        <button
+            id="retryLeaderboardBtn"
+            class="firebase-leaderboard">Retry</button>
     </div>
 
+</div>
+
+<!-- Table -->
+<div class="firebase-table-area">
+    <table id="leaderboardTable" class="firebase-leaderboardTable">
+        <thead class="firebase-thead">
+            <tr>
+                <th data-field="rank">Rank</th>
+                <th data-field="game">Game</th>
+                <th data-field="game_id">Game ID</th>
+                <th data-field="name">Player Name</th>
+                <th data-field="opponent">Opponent Name</th>
+                <th data-field="size">Size</th>
+                <th data-field="difficulty">Difficulty</th>
+                <th data-field="score">Score</th>
+                <th data-field="moves">Moves</th>
+                <th data-field="level">Level</th>
+                <th data-field="mode">Mode</th>
+                <th data-field="text">Text</th>
+                <th data-field="elapsed">Elapsed Time</th>
+                <th data-field="elapsed">Date Time ▼</th>
+            </tr>
+        </thead>
+ 
+        <tbody id="tableBody">
+        </tbody>
+    </table>
+</div>
+
+<div class="firebase-footer-section">
+
+    <div class="firebase-pagination">
+        <div id="recordInfo" class="firebase-recordInfo">
+            Showing 0 - 0 of 0 Records
+        </div>
+        <button id="firstBtn">First</button>
+
+        <button id="prevBtn">Previous</button>
+
+        <input
+            id="pageInput"
+            type="number"
+            value="1"
+            min="1"
+            style="width:70px;text-align:center">
+
+        <button id="goBtn">Go</button>
+
+        <span id="pageInfo"></span>
+
+        <button id="nextBtn">Next</button>
+
+        <button id="lastBtn">Last</button>
+
+    </div>
+
+
+</div>
 <!-- </div> -->

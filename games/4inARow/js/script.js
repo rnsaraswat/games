@@ -14,7 +14,7 @@ export const modeEl = document.getElementById('mode');
 export const difficultyEl = document.getElementById('difficulty');
 export let timer = false;
 export let winnerName;
-export let gameName = '4inARow';
+export let gameName = '4inarow';
 export let score = 0;
 
 window.addEventListener('load', function () {
@@ -419,7 +419,7 @@ window.addEventListener('load', function () {
         try {
             await addDoc(collection(db, "leaderboard"), {
                 game_id: game_id || '4inARow',
-                game: gameName || '4inARow',
+                game: gameName || '4inarow',
                 name: winnerName || 'Guast',
                 opponent: opponent || "Computer",
                 difficulty: difficulty || "-",

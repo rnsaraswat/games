@@ -5,7 +5,7 @@ import { playSound } from './sound.js';
 import { shareScore } from './share.js';
 
 // export let timer = false;
-export let gameName = 'mastermindsolverauto';
+export let gameName = 'sudokusolver';
 export let score = 0;
 
 // sizes with box rows/cols 

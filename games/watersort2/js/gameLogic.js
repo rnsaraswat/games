@@ -8,7 +8,7 @@ import { db } from "../../../leaderboard/firebase-config.js";
 import { addDoc, collection, serverTimestamp } from
   "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-let game = "Water Sort";
+let game = "watersort";
 let game_id = "watersort";
 let opponent, difficulty, elapsed, moves, level, date;
 

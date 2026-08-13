@@ -390,7 +390,7 @@ function WaterInc(p, q, b, count) {
     try {
       await addDoc(collection(db, "leaderboard"), {
         game_id: game_id || 'watersort',
-        game: game || 'Water Sort',
+        game: game || 'watersort',
         name: player1 || 'Guast',
         opponent: opponent || "-",
         difficulty: difficulty || "-",

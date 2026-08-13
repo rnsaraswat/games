@@ -9,7 +9,7 @@ import { addDoc, collection, serverTimestamp } from
 
 export let winnerName = localStorage.getItem('player_name') || getUserName();
 export let gameName = 'jigsaw';
-let game = "Jigsaw";
+let game = "jigsaw";
 let game_id = "jigsaw";
 let opponent, difficulty, elapsed, moves, level, date;
 export let score;
@@ -773,7 +773,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             await addDoc(collection(db, "leaderboard"), {
                 game_id: game_id || 'jigsaw',
-                game: game || 'Jigsaw',
+                game: game || 'jigsaw',
                 name: winnerName || 'Guast',
                 opponent: opponent || "-",
                 difficulty: difficulty || "-",

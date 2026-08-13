@@ -25,7 +25,7 @@ const user = JSON.parse(localStorage.getItem("user"));
 let player = user ? user.name : localStorage.getItem('player_name');
 let email = user ? user.email : "";
 let opponent = localStorage.getItem('opponent') || 'Human2';
-let game = "Memory";
+let game = "memory";
 let game_id = gameName;
 let difficulty, elapsed, level, date;
 let size = '3x3';
@@ -373,8 +373,8 @@ window.addEventListener('load', function () {
     window.saveScore = async function () {
         try {
             await addDoc(collection(db, "leaderboard"), {
-                game_id: game_id || "-",
-                game: game || "-",
+                game_id: game_id || "memory",
+                game: game || "memory",
                 name: player || "-",
                 opponent: opponent || "-",
                 difficulty: difficulty || "-",

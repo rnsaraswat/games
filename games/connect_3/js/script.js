@@ -465,7 +465,7 @@ window.addEventListener('load', function () {
         try {
             await addDoc(collection(db, "leaderboard"), {
                 game_id: game_id || 'connect3',
-                game: game || 'Connect 3',
+                game: game || 'connect3',
                 name: winnerName || 'Guast',
                 opponent: opponent || "Computer",
                 difficulty: difficulty || "-",

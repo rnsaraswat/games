@@ -612,7 +612,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             await addDoc(collection(db, "leaderboard"), {
                 game_id: game_id || 'reversi',
-                game: game || 'Reversi',
+                game: game || 'reversi',
                 name: winnerName || 'Guast',
                 opponent: opponent || "Computer",
                 difficulty: difficulty || "-",

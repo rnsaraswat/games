@@ -14,7 +14,7 @@ export const modeEl = document.getElementById('mode');
 export const difficultyEl = document.getElementById('difficulty');
 export let timer = false;
 export let winnerName;
-export let gameName = 'connect_4';
+export let gameName = 'connect4';
 export let score = 0;
 
 window.addEventListener('load', function () {
@@ -432,8 +432,8 @@ window.addEventListener('load', function () {
 
         try {
             await addDoc(collection(db, "leaderboard"), {
-                game_id: game_id || 'connect_4',
-                game: game || 'Connect 4',
+                game_id: game_id || 'connect4',
+                game: game || 'connect4',
                 name: winnerName || 'Guast',
                 opponent: opponent || "Computer",
                 difficulty: difficulty || "-",

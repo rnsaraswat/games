@@ -115,7 +115,7 @@
     import { shareScore } from './js/share.js';
     document.getElementById("shareBtn").addEventListener("click", async () => {
       console.log("shareBtn clicked")
-      shareScore("4inARow", 0);
+      shareScore("4inarow", 0);
     });
   </script>
 
@@ -210,7 +210,7 @@
 
     (async () => {
       const GAME_NAME = "4 IN A ROW";
-      const GAME_SHORT = "4inARow";
+      const GAME_SHORT = "4inarow";
 
       const res = await fetch("../../manifest.json");
       const manifest = await res.json();

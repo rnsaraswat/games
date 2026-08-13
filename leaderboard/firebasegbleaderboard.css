@@ -226,32 +226,86 @@
     border: none;
     box-shadow: 0 1px 4px var(--firebase-box-shadow);
 } 
-
-
-/* .table-container {
-    max-height: 400px;
-    overflow-y: auto;
-    border: 1px solid #444;
+.firebase-recordInfo{
+    margin-top:8px;
+    text-align:center;
+    font-size:14px;
+    font-weight:bold;
+    color:var(--text-color);
 }
 
-thead th {
-    position: sticky;
-    top: 0;
-    background: #222;
-    color: white;
-    cursor: pointer;
+.firebase-loading{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:40px;
 }
 
-.table-controls {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
+.firebase-spinner{
+    width:45px;
+    height:45px;
+    border:4px solid #ccc;
+    border-top:4px solid #2196F3;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
 }
 
-.pagination {
-    margin-top: 10px;
-    text-align: center;
-} */
+.firebase-loading-text{
+    margin-top:15px;
+    font-size:15px;
+    font-weight:bold;
+}
+
+@keyframes spin{
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+.firebase-state{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:50px 20px;
+    text-align:center;
+}
+
+.firebase-state-icon{
+    font-size:60px;
+}
+
+.firebase-state-title{
+    margin-top:15px;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.firebase-state-text{
+    margin-top:10px;
+    opacity:.8;
+    margin-bottom:20px;
+}
+
+.firebase-filter-bar{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:10px 0;
+}
+
+.firebase-filter-bar select{
+    padding:8px 12px;
+    border-radius:6px;
+    cursor:pointer;
+
+}
 
   /* Portrait */
  @media (orientation: portrait)  {

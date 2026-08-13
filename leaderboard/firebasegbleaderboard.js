@@ -1,5 +1,4 @@
 import { db } from "./firebase-config.js";
-// import { formatTime } from "./leaderboard-popup.js";
 import {
     collection,
     query,
@@ -10,8 +9,6 @@ import {
     onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { textToSpeechEng } from './speak.js';
-
-// // const TABLE_NAME = "scores";
 
 let currentData = [];
 let currentSortColumn = 7;
@@ -83,46 +80,6 @@ function loadLeaderboard() {
         console.log("Leaderboard Updated");
     });
 }
-
-// async function loadLeaderboard() {
-
-//   if (leaderboardListener) {
-//     leaderboardListener();
-//   }
-
-//   const q = query(
-//       collection(db, "leaderboard"),
-//       orderBy("createdAt", "desc")
-//   );
-
-//   const snapshot = await getDocs(q);
-
-//   fullData = [];
-
-//   snapshot.forEach(doc => {
-
-//       const data = doc.data();
-
-//       // 🔹 Date Formatting
-//       let formattedDate = "-";
-//       if (data.createdAt) {
-//           const dateObj = data.createdAt.toDate();
-//           formattedDate = formatDateTime(dateObj);
-//       }
-
-//       // 🔹 Elapsed Formatting
-//       let formattedElapsed = formatElapsed(data.elapsed);
-
-//       fullData.push({
-//           ...data,
-//           formattedDate: formattedDate,
-//           formattedElapsed: formattedElapsed
-//       });
-//       console.log(fullData);
-//   });
-
-//   renderTable();
-// }
 
 function renderTable() {
 

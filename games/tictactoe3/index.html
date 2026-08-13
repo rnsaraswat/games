@@ -19,7 +19,7 @@
 
 
   <meta name="description"
-    content="Ravindra Games Hub — collection of lightweight web games (5 in a Row) Classic & Action-Oriented X vs O game">
+    content="Ravindra Games Hub — collection of lightweight web games (Tic Tac Toe) Classic & Action-Oriented X vs O game">
   <link rel="stylesheet" href="../../commoncss.css">
   <link rel="manifest" href="../../manifest.json" />
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -309,8 +309,8 @@
 
       try {
         await addDoc(collection(db, "leaderboard"), {
-          game_id: game_id || 'reversi',
-          game: game || 'Reversi',
+          game_id: game_id || 'tictactoe',
+          game: game || 'tictactoe',
           name: winnerName || 'Guast',
           opponent: opponent || "Computer",
           difficulty: difficulty || "-",
@@ -333,7 +333,7 @@
     // to add firebase leaderboard (save record)
     function updateleaderboard() {
       let opponent = "Computer";
-      let game_id = 'reversi';
+      let game_id = 'tictactoe';
       let gsize = `9x9`;
       let elapsed = Math.floor(Number(elapsedTime) / 1000);
       let gameCount = history.length;
