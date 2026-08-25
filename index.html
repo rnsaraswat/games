@@ -13,30 +13,17 @@
         content="Ravindra Games Hub, Brain Games, Sudoku, Water Sort, Connect 4, Reversi, Tic Tac Toe, Memory, Block Sort, Mastermind, Mastermind solver, Sudoku solver, three in a row, Connect 3, four in a roe, Connect 4, Jigsaw Puzzle, slintherlink, Rock Paper Scissor, Android Games, Puzzle Games">
 
     <meta name="author" content="Ravindra Nath Saraswat">
-
     <meta name="robots" content="index,follow,max-image-preview:large">
-
     <meta property="og:type" content="website">
-
     <meta property="og:title" content="Ravindra Games Hub">
-
-    <meta property="og:description"
-        content="Play exciting brain games including Sudoku, Water Sort, Connect 4, Reversi and more.">
-
+    <meta property="og:description" content="Play exciting brain games including Sudoku, Water Sort, Connect 4, Reversi and more.">
     <meta property="og:url" content="https://rnsaraswat.github.io/games/">
-
     <meta property="og:image" content="https://rnsaraswat.github.io/games/assets/images/preview.png">
-
     <link rel="canonical" href="https://rnsaraswat.github.io/games/">
-
     <meta name="twitter:card" content="summary_large_image">
-
     <meta name="twitter:title" content="Ravindra Games Hub">
-
     <meta name="twitter:description" content="Free Brain Games for Android">
-
     <meta name="twitter:image" content="https://rnsaraswat.github.io/games/assets/images/preview.png">
-
     <meta name="theme-color" content="#6200ee" />
     <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/rgh-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="./assets/icons/rgh-512x512.png">
@@ -44,7 +31,6 @@
     <link rel="stylesheet" href="commoncss.css">
     <link rel="stylesheet" href="./leaderboard/feedback.css" />
     <link rel="stylesheet" href="./leaderboard/reply-popup.css">
-    <!-- <link rel="stylesheet" href="./leaderboard/firebasefeedback.css" /> -->
     <link rel="stylesheet" href="./leaderboard/firebasegbleaderboard.css" />
     <link rel="stylesheet" href="./leaderboard/lcleaderboard.css" />
     <link rel="manifest" href="./manifest.json" />
@@ -131,18 +117,21 @@
                     <h3>⚡ Lightweight</h3>
                     <p>Fast performance with beautiful themes.</p>
                 </div>
-
             </div>
             <h2 class="section-title">Frequently Asked Questions</h2>
-            <div class="features">
+            <div class="feq">
                 <h3>Is Ravindra Games Hub free?</h3>
-
                 <p>Yes, every game is free.</p>
-
                 <h3>Can I play offline?</h3>
-
-                <p>All games work offline after installation. Also save in local leaderboard. But need internet to
-                    include in global leaderboard</p>
+                <p>All games work offline after installation. Also save in local leaderboard. But need internet to include in global leaderboard</p>
+                <h3>Is Sign in is necessory?</h3>
+                <p>No, no need to sign in play game.</p>
+                <h3>Why Sign in?</h3>
+                <p>If you not sign in before play the name in leaderboard appear as guest.</p>
+                <h3>How many themes?</h3>
+                <p>Four themes are available - Light, Dark, Blue, Orange.</p>
+                <h3>Does my game save when minimise window?</h3>
+                <p>Yes, your games is save when minimise window for any resion, and game resume when leaderboard, feedback, theme, sharing, music and pause is clicked, but when home, brower back/refersh button is pressed game will be lost.</p>
             </div>
 
 
@@ -334,12 +323,10 @@
         };
 
         function closeFirebaseGlobalLeaderboard() {
-            console.log("typeof =", typeof window.stopLeaderboard);
-
+            // console.log("typeof =", typeof window.stopLeaderboard);
             if (typeof window.stopLeaderboard === "function") {
                 window.stopLeaderboard();
             }
-
             document.getElementById("firebaseLeaderboardModal").style.display = 'none';
         };
 
@@ -350,17 +337,13 @@
                 document.getElementById("firebaseLeaderboardModal").style.display = 'none';
 
                 setTimeout(() => {
-
                     console.log("window.initLeaderboard =", window.initLeaderboard);
-
                     if (window.initLeaderboard) {
                         window.initLeaderboard();
                     } else {
                         console.error("initLeaderboard not found");
                     }
-
                 }, 500);
-
             });
 
         function openLocalLeaderboard() {
@@ -386,114 +369,41 @@
                 document.getElementById("lcLeaderboardModal").style.display = 'none';
             });
 
-
-
         function openFBFeedbackV2() {
-
-            const modal =
-                document.getElementById(
-                    "FB-feedbackModal"
-                );
-
+            const modal = document.getElementById("FB-feedbackModal");
             if (!modal) {
-
-                console.error(
-                    "FB-feedbackModal not found"
-                );
-
+                console.error("FB-feedbackModal not found");
                 return;
-
             }
-
             modal.style.display = "flex";
-
         }
 
-
         function closeFBFeedback() {
-
-            const modal =
-                document.getElementById(
-                    "FB-feedbackModal"
-                );
-
-            if (!modal)
-                return;
-
+            const modal = document.getElementById("FB-feedbackModal");
+            if (!modal) return;
             modal.style.display = "none";
-
         }
 
         fetch('./leaderboard/feedback.html')
             .then(response => {
-
                 if (!response.ok) {
-
-                    throw new Error(
-                        "Feedback HTML load failed: " +
-                        response.status
-                    );
-
+                    throw new Error("Feedback HTML load failed: " + response.status);
                 }
-
                 return response.text();
-
             })
             .then(htmlText => {
-
-                const modal =
-                    document.getElementById(
-                        "FB-feedbackModal"
-                    );
-
+                const modal = document.getElementById("FB-feedbackModal");
                 if (!modal) {
-
-                    console.error(
-                        "FB-feedbackModal not found"
-                    );
-
+                    console.error("FB-feedbackModal not found");
                     return;
-
                 }
-
-                modal.innerHTML =
-                    htmlText;
-
-                modal.style.display =
-                    "none";
-
-                console.log(
-                    "Feedback V2 HTML loaded"
-                );
-
+                modal.innerHTML = htmlText;
+                modal.style.display = "none";
+                console.log("Feedback V2 HTML loaded");
             })
             .catch(error => {
-
-                console.error(
-                    "Feedback V2 load error:",
-                    error
-                );
-
+                console.error("Feedback V2 load error:",error);
             });
-
-        // fetch('./leaderboard/feedback.html')
-        //     .then(response => response.text())
-        //     .then(htmlText => {
-        //         document.getElementById('FB-feedbackModal').innerHTML = htmlText;
-        //         document.getElementById("FB-feedbackModal").style.display = 'none';
-
-        //         setTimeout(() => {
-        //             console.log("window.initFeedback =", window.initFeedback);
-
-        //             if (typeof window.initFeedback === "function") {
-        //                 window.initFeedback();
-        //             } else {
-        //                 console.error("initFeedback not available");
-        //             }
-
-        //         }, 100);
-        //     });
-
     </script>
 
     <script>

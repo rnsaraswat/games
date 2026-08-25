@@ -1,5 +1,4 @@
 import { shareScore } from './share.js';
-import { saveScore } from '../../../leaderboard/gbleaderboard.js';
 import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
 import { playSound } from './sound.js';
 // to add firebase leaderboard

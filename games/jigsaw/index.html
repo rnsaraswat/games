@@ -8,8 +8,8 @@
     <meta name="description"
         content="Ravindra Games Hub — collection of lightweight web games (Jigsaw) assembly of small, square shaped pieces to form a complete, cohesive image">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
-    <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/firebasefeedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/reply-popup.css">
     <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
     <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
     <link rel="stylesheet" href="../../commoncss.css">
@@ -61,7 +61,7 @@
                     <button id="resetBtn" class="smallbtn">Reset</button>
                     <button id="hintBtn" class="smallbtn">Show Hint</button>
 
-                    <button id="toggle-rules">📜View Rules</button>
+                    <!-- <button id="toggle-rules">📜View Rules</button> -->
                     <button id="downloadBtn" class="smallbtn">Download Result</button>
                     <!-- <div class="status" id="status">Pieces: 0 | Placed: 0 | Time: 00:00:00</div> -->
                     <div class="infoLabel">Pieces:
@@ -145,10 +145,54 @@
         <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
         <button class="button-primary" id="shareBtn">📤Sharing</button>
     </div>
-    <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+    <div id="FB-feedbackModal" class="fb-container">
+        
+
+    <!-- ==========================================
+     REPLY POPUP
+     यह FB-feedbackModal के अंदर नहीं है
+========================================== -->
+
+    <div id="replyPopup" class="reply-popup" aria-hidden="true">
+
+        <div class="reply-popup-content">
+
+            <div class="reply-header">
+
+                <h2>💬 Replies</h2>
+
+                <button type="button" id="replyCloseBtn">
+                    ✕
+                </button>
+
+            </div>
+
+
+            <div id="replyList" class="reply-list">
+            </div>
+
+
+            <div class="reply-form">
+
+                <input id="replyName" type="text" maxlength="60" placeholder="Your name">
+
+
+                <textarea id="replyMessage" maxlength="1000" placeholder="Write reply..."></textarea>
+
+
+                <button type="button" id="replySendBtn">
+
+                    Send Reply
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
-    <div id="gbLeaderboardModal" class="gb-main-container"></div>
-    <div id="firebasegbLeaderboardModal" class="gb-main-container"></div>
+    <div id="firebaseLeaderboardModal" class="gb-main-container"></div>
     <div id="rulesPopup" class="rules-popup-window">
         <div class="rules-header-section">
             <span id="rulesCloseBtn" class="rules-popup-close">Close X</span>
@@ -161,10 +205,11 @@
     <canvas id="fireworksCanvas"></canvas>
     <div id="winText">🎉 You Won! 🎉</div>
     <script type="module" src="js/rules.js"></script>
-    <script type="module" src="../../leaderboard/gbfeedback.js"></script>
-    <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+    <script type="module" src="../../leaderboard/firebasefeedback.js"></script>
+    <script type="module" src="../../leaderboard/firebasegbleaderboard.js"></script>
     <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <script type="module" src="js/script.js"></script>
+    <script type="module" src="../../leaderboard/leaderboard-controller.js"></script>
     <script type="module">
         import { shareScore } from './js/share.js';
         document.getElementById("shareBtn").addEventListener("click", async () => {
@@ -195,10 +240,9 @@
     </script> -->
 
     <script>
-        document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById("FB-feedbackModal").style.display = 'none';
         document.getElementById("lcLeaderboardModal").style.display = 'none';
-        document.getElementById("gbLeaderboardModal").style.display = 'none';
-        document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+        document.getElementById("firebaseLeaderboardModal").style.display = 'none';
         document.getElementById("winText").style.display = 'none';
         document.getElementById("rulesPopup").style.display = 'none';
 
@@ -226,34 +270,36 @@
             }
         }
 
-        function openGlobalLeaderboard() {
-            document.getElementById("gbLeaderboardModal").style.display = 'flex';
-        };
-
-        function closeGlobalLeaderboard() {
-            document.getElementById("gbLeaderboardModal").style.display = 'none';
-        };
-
         function openFirebaseGlobalLeaderboard() {
-            document.getElementById("firebasegbLeaderboardModal").style.display = 'flex';
+            document.getElementById("firebaseLeaderboardModal").style.display = 'flex';
         };
 
         function closeFirebaseGlobalLeaderboard() {
-            document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+            document.getElementById("firebaseLeaderboardModal").style.display = 'none';
+        };
+
+        function openFirebaseGlobalLeaderboard() {
+            document.getElementById("firebaseLeaderboardModal").style.display = 'flex';
+        };
+
+        function closeFirebaseGlobalLeaderboard() {
+            document.getElementById("firebaseLeaderboardModal").style.display = 'none';
         };
 
         fetch('../../leaderboard/firebasegbleaderboard.html')
-            .then(response => response.text())
+    .then(response => response.text())
             .then(htmlText => {
-                document.getElementById('firebasegbLeaderboardModal').innerHTML = htmlText;
-                document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
-            });
+                document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("firebaseLeaderboardModal").style.display = 'none';
 
-        fetch('../../leaderboard/gbleaderboard.html')
-            .then(response => response.text())
-            .then(htmlText => {
-                document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
-                document.getElementById("gbLeaderboardModal").style.display = 'none';
+                setTimeout(() => {
+                    console.log("window.initLeaderboard =", window.initLeaderboard);
+                    if (window.initLeaderboard) {
+                        window.initLeaderboard();
+                    } else {
+                        console.error("initLeaderboard not found");
+                    }
+                }, 500);
             });
 
         function openLocalLeaderboard() {
@@ -279,19 +325,41 @@
                 document.getElementById("lcLeaderboardModal").style.display = 'none';
             });
 
-        function openGlobalFeedback() {
-            document.getElementById("gb-feedbackModal").style.display = 'flex';
-        };
 
-        function closeGlobalFeedback() {
-            document.getElementById("gb-feedbackModal").style.display = 'none';
-        };
+        function openFBFeedbackV2() {
+            const modal = document.getElementById("FB-feedbackModal");
+            if (!modal) {
+                console.error("FB-feedbackModal not found");
+                return;
+            }
+            modal.style.display = "flex";
+        }
 
-        fetch('../../leaderboard/gbfeedback.html')
-            .then(response => response.text())
+        function closeFBFeedback() {
+            const modal = document.getElementById("FB-feedbackModal");
+            if (!modal) return;
+            modal.style.display = "none";
+        }
+
+        fetch('../../leaderboard/feedback.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Feedback HTML load failed: " + response.status);
+                }
+                return response.text();
+            })
             .then(htmlText => {
-                document.getElementById('gb-feedbackModal').innerHTML = htmlText;
-                document.getElementById("gb-feedbackModal").style.display = 'none';
+                const modal = document.getElementById("FB-feedbackModal");
+                if (!modal) {
+                    console.error("FB-feedbackModal not found");
+                    return;
+                }
+                modal.innerHTML = htmlText;
+                modal.style.display = "none";
+                console.log("Feedback V2 HTML loaded");
+            })
+            .catch(error => {
+                console.error("Feedback V2 load error:",error);
             });
 
         (async () => {

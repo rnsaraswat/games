@@ -42,7 +42,7 @@
 
 </div>
 <div class="firebase-btn-container">
-    <label class="firebase-leaderboard">Filter game:</label>
+    <!-- <label class="firebase-leaderboard">Filter game:</label>
     <select class="firebase-leaderboard" id="firebasegameFilter">
         <option value="all">All Games</option>
         <option value="rockpaperscissor">Rock Paper Scissor</option>
@@ -69,7 +69,7 @@
         <option value="25">25</option>
         <option value="50">50</option>
         <option value="100">100</option>
-    </select>
+    </select> -->
     <button id="refreshBtn" class="firebase-leaderboard">
         🔄 Refresh
     </button>
@@ -149,10 +149,12 @@
 <div class="firebase-footer-section">
 
     <div class="firebase-pagination">
-        <div id="recordInfo" class="firebase-recordInfo">
+        <button id="prevBtn">Previous</button>
+        <span id="recordInfo" class="firebase-recordInfo">
             Showing 0 - 0 of 0 Records
-        </div>
-        <button id="firstBtn">First</button>
+        </span>
+        <button id="nextBtn">Next</button>
+        <!-- <button id="firstBtn">First</button>
 
         <button id="prevBtn">Previous</button>
 
@@ -169,7 +171,7 @@
 
         <button id="nextBtn">Next</button>
 
-        <button id="lastBtn">Last</button>
+        <button id="lastBtn">Last</button> -->
 
     </div>
 

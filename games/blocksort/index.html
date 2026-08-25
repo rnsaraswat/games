@@ -140,6 +140,7 @@
     <!-- <script src="js/config.js"></script> -->
     <!-- <script src="js/layout.js"></script> -->
     <script type="module" src="js/script.js"></script>
+    <script type="module" src="../../leaderboard/leaderboard-controller.js"></script>
     <!-- <script src="js/win.js"></script> -->
     <script src="js/starFireworks.js"></script>
     <script type="module" src="../../leaderboard/firebasefeedback.js"></script>
@@ -183,10 +184,19 @@
         };
 
         fetch('../../leaderboard/firebasegbleaderboard.html')
-            .then(response => response.text())
+    .then(response => response.text())
             .then(htmlText => {
                 document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
                 document.getElementById("firebaseLeaderboardModal").style.display = 'none';
+
+                setTimeout(() => {
+                    console.log("window.initLeaderboard =", window.initLeaderboard);
+                    if (window.initLeaderboard) {
+                        window.initLeaderboard();
+                    } else {
+                        console.error("initLeaderboard not found");
+                    }
+                }, 500);
             });
 
         function openLocalLeaderboard() {

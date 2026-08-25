@@ -639,81 +639,110 @@ export function renderReplyList(replies) {
 
     }
 
-    list.innerHTML =
+    // list.innerHTML =
 
-        replies.map(reply => {
+        // replies.map(reply => {
 
-            const name =
-                reply.name || "Guest";
+        //     const name =
+        //         reply.name || "Guest";
 
-            const message =
-                reply.message || "";
+        //     const message =
+        //         reply.message || "";
 
-            const isAdmin =
-                reply.isAdmin === true;
+        //     const isAdmin =
+        //         reply.isAdmin === true;
 
-            let time = "";
+        //     let time = "";
 
-            if (
-                reply.createdAt &&
-                typeof reply.createdAt.toDate ===
-                "function"
-            ) {
+        //     if (
+        //         reply.createdAt &&
+        //         typeof reply.createdAt.toDate ===
+        //         "function"
+        //     ) {
 
-                time =
-                    reply.createdAt
-                        .toDate()
-                        .toLocaleString();
+        //         time =
+        //             reply.createdAt
+        //                 .toDate()
+        //                 .toLocaleString();
 
-            }
+        //     }
 
-            return `
+        //     return `
 
-                <div class="reply-item
-                    ${isAdmin
-                    ? "reply-admin"
-                    : ""}">
+        //         <div class="reply-item
+        //             ${isAdmin
+        //             ? "reply-admin"
+        //             : ""}">
 
-                    <div class="reply-header-row">
+        //             <div class="reply-header-row">
 
-                        <div class="reply-name">
+        //                 <div class="reply-name">
 
-                            ${escapeHtml(name)}
+        //                     ${escapeHtml(name)}
 
-                            ${isAdmin
-                    ? `
-                                    <span
-                                        class="reply-official-badge">
+        //                     ${isAdmin
+        //             ? `
+        //                             <span
+        //                                 class="reply-official-badge">
 
-                                        👑 Official Developer
+        //                                 👑 Official Developer
 
-                                    </span>
-                                  `
-                    : ""
-                }
+        //                             </span>
+        //                           `
+        //             : ""
+        //         }
 
-                        </div>
+        //                 </div>
 
-                        <div class="reply-time">
+        //                 <div class="reply-time">
 
-                            ${escapeHtml(time)}
+        //                     ${escapeHtml(time)}
 
-                        </div>
+        //                 </div>
 
+        //             </div>
+
+        //             <div class="reply-message">
+
+        //                 ${escapeHtml(message)}
+
+        //             </div>
+
+        //         </div>
+
+        //     `;
+
+        // }).join("");
+
+        let html = "";
+
+        replies.forEach(reply => {
+    
+            const adminBadge =
+                reply.isAdmin === true
+                    ? `<span class="developer-badge">
+                         👑 Official Developer
+                       </span>`
+                    : "";
+    
+            html += `
+                <div class="reply-card">
+    
+                    <div class="reply-author">
+                        ${escapeHtml(reply.name)}
+                        ${adminBadge}
                     </div>
-
+    
                     <div class="reply-message">
-
-                        ${escapeHtml(message)}
-
+                        ${escapeHtml(reply.message)}
                     </div>
-
+    
                 </div>
-
             `;
-
-        }).join("");
-
+    
+        });
+    
+        container.innerHTML = html;
 }
 
 

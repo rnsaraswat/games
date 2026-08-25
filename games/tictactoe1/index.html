@@ -344,7 +344,7 @@
     </div>
     <div id="fb-feedbackModal" class="fb-container"></div>
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
-    <div id="firebasegbLeaderboardModal" class="firebase-main-container"></div>
+    <div id="firebaseLeaderboardModal" class="firebase-main-container"></div>
     <div id="winText">🎉 You Won! 🎉</div>
     <div class="name-main-container" id="namebar">
         <div class="name-top-section">Player Name : <span id="player1"></span></div>
@@ -380,6 +380,7 @@
     <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <canvas id="fireworksCanvas"></canvas>
     <script type="module" src="tictactoe1.js"></script>
+    <script type="module" src="../../leaderboard/leaderboard-controller.js"></script>
     <script type="module" src="js/shareDevice.js"></script>
     <script type="module">
         import { shareScore } from './share.js';
@@ -391,7 +392,7 @@
 
         document.getElementById("fb-feedbackModal").style.display = 'none';
         document.getElementById("lcLeaderboardModal").style.display = 'none';
-        document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+        document.getElementById("firebaseLeaderboardModal").style.display = 'none';
         document.getElementById("winText").style.display = 'none';
         // document.getElementById("rulesPopup").style.display = 'none';
 
@@ -412,19 +413,28 @@
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
         function openGlobalLeaderboard() {
-            document.getElementById("firebasegbLeaderboardModal").style.display = 'flex';
+            document.getElementById("firebaseLeaderboardModal").style.display = 'flex';
         };
 
         function closeFirebaseGlobalLeaderboard() {
-            document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+            document.getElementById("firebaseLeaderboardModal").style.display = 'none';
         };
 
 
         fetch('../../leaderboard/firebasegbleaderboard.html')
-            .then(response => response.text())
+    .then(response => response.text())
             .then(htmlText => {
-                document.getElementById('firebasegbLeaderboardModal').innerHTML = htmlText;
-                document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+                document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("firebaseLeaderboardModal").style.display = 'none';
+
+                setTimeout(() => {
+                    console.log("window.initLeaderboard =", window.initLeaderboard);
+                    if (window.initLeaderboard) {
+                        window.initLeaderboard();
+                    } else {
+                        console.error("initLeaderboard not found");
+                    }
+                }, 500);
             });
 
         function openLocalLeaderboard() {

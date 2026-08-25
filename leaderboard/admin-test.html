@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Admin Auth Test</title>
+
+</head>
+
+<body>
+
+    <h2>Admin Login Test</h2>
+
+    <input id="adminEmail" type="email" placeholder="Admin Email">
+
+    <br><br>
+
+    <input id="adminPassword" type="password" placeholder="Password">
+
+    <br><br>
+
+    <button id="adminLoginBtn">
+        Admin Login
+    </button>
+
+    <button id="adminLogoutBtn">
+        Logout
+    </button>
+
+    <pre id="adminStatus"></pre>
+
+
+    <script type="module">
+
+        import {
+            adminLogin,
+            adminLogout,
+            watchAdminAuth,
+            isCurrentUserAdmin
+        }
+            from "./admin-auth.js";
+
+
+        const status =
+            document.getElementById(
+                "adminStatus"
+            );
+
+
+        document
+            .getElementById(
+                "adminLoginBtn"
+            )
+            .onclick = async () => {
+
+
+                const email =
+                    document.getElementById(
+                        "adminEmail"
+                    ).value;
+
+
+                const password =
+                    document.getElementById(
+                        "adminPassword"
+                    ).value;
+
+
+                status.textContent =
+                    "Logging in...";
+
+
+                const result =
+                    await adminLogin(
+                        email,
+                        password
+                    );
+
+
+                    if (result.success) {
+
+                        const admin =
+                            await isCurrentUserAdmin();
+
+                        console.log(
+                            "Is Admin:",
+                            admin
+                        );
+
+                        status.textContent =
+                            "Admin Login Success\n\n" +
+                            "UID: " +
+                            result.uid +
+                            "\n\nEmail: " +
+                            result.email +
+                            "\n\nIs Admin: " +
+                            admin;
+
+                    }
+
+                    else {
+
+                        status.textContent =
+                            result.message;
+
+                    }
+
+            };
+
+
+        document
+            .getElementById(
+                "adminLogoutBtn"
+            )
+            .onclick = async () => {
+
+                const result =
+                    await adminLogout();
+
+
+                status.textContent =
+                    result.success
+                        ? "Logged out."
+                        : result.message;
+
+            };
+
+
+        watchAdminAuth(
+            user => {
+
+                console.log(
+                    "Auth State:",
+                    user
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

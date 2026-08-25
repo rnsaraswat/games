@@ -16,7 +16,7 @@ let currentSortOrder = 'desc';
 let leaderboardData = [];
 let filteredData = [];
 // let currentPage = 1;
-let itemsPerPage = 10;
+// let itemsPerPage = 10;
 let rank = 1;
 
 const modal = document.getElementById('firebaseLeaderboardModal');
@@ -192,8 +192,8 @@ function updatePaginationInfo(total) {
 
   const totalPages = Math.ceil(total / rowsPerPage);
 
-  document.getElementById("pageInfo").innerText =
-      `Page ${currentPage} of ${totalPages}`;
+  // document.getElementById("pageInfo").innerText =
+  //     `Page ${currentPage} of ${totalPages}`;
 }
 
 document.getElementById("prevBtn").onclick = () => {
@@ -213,11 +213,11 @@ document.getElementById("nextBtn").onclick = () => {
   }
 };
 
-document.getElementById("pageSize").addEventListener("change", e => {
-  rowsPerPage = parseInt(e.target.value);
-  currentPage = 1;
-  renderTable();
-});
+// document.getElementById("pageSize").addEventListener("change", e => {
+//   rowsPerPage = parseInt(e.target.value);
+//   currentPage = 1;
+//   renderTable();
+// });
 
 document.getElementById("searchInput").addEventListener("input", () => {
   currentPage = 1;

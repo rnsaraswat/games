@@ -436,6 +436,7 @@
     <script type="module" src="../../leaderboard/firebasegbleaderboard.js"></script>
     <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <script type="module" src="tictactoe.js"></script>
+    <script type="module" src="../../leaderboard/leaderboard-controller.js"></script>
     <script>
         // function openLeaderboard() {
         //     document.getElementById("leaderboardModal").style.display = 'flex';
@@ -473,10 +474,19 @@
         };
 
         fetch('../../leaderboard/firebasegbleaderboard.html')
-            .then(response => response.text())
+    .then(response => response.text())
             .then(htmlText => {
                 document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
                 document.getElementById("firebaseLeaderboardModal").style.display = 'none';
+
+                setTimeout(() => {
+                    console.log("window.initLeaderboard =", window.initLeaderboard);
+                    if (window.initLeaderboard) {
+                        window.initLeaderboard();
+                    } else {
+                        console.error("initLeaderboard not found");
+                    }
+                }, 500);
             });
 
         // to add local leaderboard (display & hide)

@@ -135,7 +135,7 @@
     </div>
     <div id="fb-feedbackModal" class="fb-container"></div>
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
-    <div id="firebasegbLeaderboardModal" class="firebase-main-container"></div>
+    <div id="firebaseLeaderboardModal" class="firebase-main-container"></div>
     <div id="rulesPopup" class="rules-popup-window">
         <div class="rules-header-section">
             <span id="rulesCloseBtn" class="rules-popup-close">Close X</span>
@@ -151,6 +151,7 @@
     <script type="module" src="../../leaderboard/firebasegbleaderboard.js"></script>
     <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <script type="module" src="js/script.js"></script>
+    <script type="module" src="../../leaderboard/leaderboard-controller.js"></script>
     <script type="module">
         import { shareScore } from './js/share.js';
         document.getElementById("shareBtn").addEventListener("click", async () => {
@@ -161,7 +162,7 @@
     <script>
         document.getElementById("fb-feedbackModal").style.display = 'none';
         document.getElementById("lcLeaderboardModal").style.display = 'none';
-        document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+        document.getElementById("firebaseLeaderboardModal").style.display = 'none';
         // document.getElementById("winText").style.display = 'none';
         document.getElementById("pauseOverlay").style.display = 'none';
         document.getElementById("rulesPopup").style.display = 'none';
@@ -183,26 +184,35 @@
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
         function openFirebaseGlobalLeaderboard() {
-            document.getElementById("firebasegbLeaderboardModal").style.display = 'flex';
+            document.getElementById("firebaseLeaderboardModal").style.display = 'flex';
         };
 
         function closeFirebaseGlobalLeaderboard() {
-            document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+            document.getElementById("firebaseLeaderboardModal").style.display = 'none';
         };
 
         fetch('../../leaderboard/firebasegbleaderboard.html')
-            .then(response => response.text())
+    .then(response => response.text())
             .then(htmlText => {
-                document.getElementById('firebasegbLeaderboardModal').innerHTML = htmlText;
-                document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
+                document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
+                document.getElementById("firebaseLeaderboardModal").style.display = 'none';
+
+                setTimeout(() => {
+                    console.log("window.initLeaderboard =", window.initLeaderboard);
+                    if (window.initLeaderboard) {
+                        window.initLeaderboard();
+                    } else {
+                        console.error("initLeaderboard not found");
+                    }
+                }, 500);
             });
 
-        fetch('../../leaderboard/firebasegbleaderboard.html')
-            .then(response => response.text())
-            .then(htmlText => {
-                document.getElementById('firebasegbLeaderboardModal').innerHTML = htmlText;
-                document.getElementById("firebasegbLeaderboardModal").style.display = 'none';
-            });
+        // fetch('../../leaderboard/firebasegbleaderboard.html')
+        //     .then(response => response.text())
+        //     .then(htmlText => {
+        //         document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
+        //         document.getElementById("firebaseLeaderboardModal").style.display = 'none';
+        //     });
 
         function openLocalLeaderboard() {
             document.getElementById("lcLeaderboardModal").style.display = 'flex';
