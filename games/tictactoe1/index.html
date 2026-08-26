@@ -322,7 +322,7 @@
                 </select>
                 <button id="toggle-theme">☀️ Light</button>
                 <button id="toggle-sound">🔇 Music:Off"</button>
-                <button class="button-primary-memory" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍
+                <button class="button-primary-memory" id="toggle-gb-leaderboard" onclick="openFirebaseGlobalLeaderboard()">🌍
                     Global Leaderboard</button>
                 <button class="button-primary-memory" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆
                     Local Leaderboard</button>
@@ -412,7 +412,7 @@
         if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
-        function openGlobalLeaderboard() {
+        function openFirebaseGlobalLeaderboard() {
             document.getElementById("firebaseLeaderboardModal").style.display = 'flex';
         };
 

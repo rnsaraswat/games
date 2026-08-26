@@ -20,6 +20,7 @@ const el = {
     maxSols: document.getElementById('maxSolutions'),
     sizeSelect: document.getElementById('sizeSelect'),
     warnText: document.getElementById('warntext'),
+    warnbar: document.getElementById('warnbar'),
     // startBtn: document.getElementById('startBtn'),
     // newBtn: document.getElementById('newBtn'),
     solveBtn: document.getElementById('solveBtn'),
