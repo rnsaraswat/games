@@ -612,137 +612,122 @@ No Feedback Found
 
 export function renderReplyList(replies) {
 
-    const list =
-        document.getElementById(
-            "replyList"
+    const container =
+        document.getElementById("replyList");
+
+    if (!container) {
+
+        console.error(
+            "Reply List container #replyList not found"
         );
-
-    if (!list)
-        return;
-
-    if (
-        !Array.isArray(replies) ||
-        replies.length === 0
-    ) {
-
-        list.innerHTML = `
-
-            <div class="fb-empty">
-
-                No Replies Yet
-
-            </div>
-
-        `;
 
         return;
 
     }
 
-    // list.innerHTML =
 
-        // replies.map(reply => {
+    if (!Array.isArray(replies)) {
 
-        //     const name =
-        //         reply.name || "Guest";
+        console.error(
+            "Invalid replies data:",
+            replies
+        );
 
-        //     const message =
-        //         reply.message || "";
+        container.innerHTML = "";
 
-        //     const isAdmin =
-        //         reply.isAdmin === true;
+        return;
 
-        //     let time = "";
+    }
 
-        //     if (
-        //         reply.createdAt &&
-        //         typeof reply.createdAt.toDate ===
-        //         "function"
-        //     ) {
 
-        //         time =
-        //             reply.createdAt
-        //                 .toDate()
-        //                 .toLocaleString();
+    let html = "";
 
-        //     }
 
-        //     return `
+    replies.forEach(reply => {
 
-        //         <div class="reply-item
-        //             ${isAdmin
-        //             ? "reply-admin"
-        //             : ""}">
+        const name =
+            typeof escapeHtml === "function"
+                ? escapeHtml(reply.name || "Guest")
+                : (reply.name || "Guest");
 
-        //             <div class="reply-header-row">
 
-        //                 <div class="reply-name">
+        const message =
+            typeof escapeHtml === "function"
+                ? escapeHtml(reply.message || "")
+                : (reply.message || "");
 
-        //                     ${escapeHtml(name)}
 
-        //                     ${isAdmin
-        //             ? `
-        //                             <span
-        //                                 class="reply-official-badge">
+        const adminBadge =
+            reply.isAdmin === true
+                ? `
+                    <span class="developer-badge">
+                        👑 Official Developer
+                    </span>
+                  `
+                : "";
 
-        //                                 👑 Official Developer
 
-        //                             </span>
-        //                           `
-        //             : ""
-        //         }
+        let dateText = "";
 
-        //                 </div>
+        if (
+            reply.createdAt &&
+            typeof reply.createdAt.toDate === "function"
+        ) {
 
-        //                 <div class="reply-time">
+            dateText =
+                reply.createdAt
+                    .toDate()
+                    .toLocaleString();
 
-        //                     ${escapeHtml(time)}
+        }
 
-        //                 </div>
 
-        //             </div>
+        html += `
 
-        //             <div class="reply-message">
+            <div class="reply-card">
+                <div class="reply-top">
+                <div class="reply-author-left">
 
-        //                 ${escapeHtml(message)}
+                    ${name}
 
-        //             </div>
+                    ${adminBadge}
 
-        //         </div>
-
-        //     `;
-
-        // }).join("");
-
-        let html = "";
-
-        replies.forEach(reply => {
-    
-            const adminBadge =
-                reply.isAdmin === true
-                    ? `<span class="developer-badge">
-                         👑 Official Developer
-                       </span>`
-                    : "";
-    
-            html += `
-                <div class="reply-card">
-    
-                    <div class="reply-author">
-                        ${escapeHtml(reply.name)}
-                        ${adminBadge}
-                    </div>
-    
-                    <div class="reply-message">
-                        ${escapeHtml(reply.message)}
-                    </div>
-    
                 </div>
-            `;
-    
-        });
-    
-        container.innerHTML = html;
+
+
+                <div class="reply-date-right">
+
+                    ${dateText}
+
+                </div>
+
+                </div>
+                <div class="reply-message">
+
+                    ${message}
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    if (html === "") {
+
+        html = `
+            <div class="no-replies">
+                No replies yet.
+            </div>
+        `;
+
+    }
+
+
+    container.innerHTML = html;
+
 }
 
 

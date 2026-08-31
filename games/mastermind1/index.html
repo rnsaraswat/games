@@ -5,12 +5,29 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mastermind game</title>
+  <title>Mastermind</title>
   <meta name="description"
-    content="Ravindra Games Hub — collection of lightweight web games (Masterminbd) find the correct color in correct slots">
+  content="Ravindra Games Hub — collection of lightweight web games (mastermind) Guess the secret color code find the correct color code in correct pegs">
+
+  <title>Mastermind Online - Free Mastermind Puzzle Game | Ravindra Games Hub</title>
+  <meta name="description"
+    content="Ply free Mastermind puzzles online at Ravindra Games Hub. Play Mastermind puzzles. Guess the secret color code find the correct color code in correct pegs">
+  <link rel="canonical" href="https://rnsaraswat.github.io/games/games/mastermind/index.html">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Mastermind Online - Free Mastermind games puzzle">
+  <meta property="og:description" content="Play free Mastermind puzzles online at Ravindra Games Hub.">
+  <meta property="og:url" content="https://rnsaraswat.github.io/games/games/mastermind/index.html">
+  <meta property="og:image" content="https://rnsaraswat.github.io/games/assets/images/mastermind_preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mastermind Puzzle Online - Free Mastermind Puzzle Game">
+  <meta name="twitter:description" content="Play free Mastermind puzzles online at Ravindra Games Hub.">
+  <meta name="twitter:image" content="https://rnsaraswat.github.io/games/assets/images/mastermind_preview.png">
+
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" />
-  <link rel="stylesheet" href="../../leaderboard/gbleaderboard.css" />
+  <link rel="stylesheet" href="../../leaderboard/feedback.css" />
+  <link rel="stylesheet" href="../../leaderboard/reply-popup.css">
+  <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
   <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
   <link rel="stylesheet" href="../../commoncss.css">
   <link rel="manifest" href="../../manifest.json" />
@@ -74,12 +91,12 @@
           <button id="buttonEnd">🔚End</button>
           <button id="toggle-theme">☀️ Light</button>
           <button id="toggle-sound">🔇 Music:Off</button>
-          <button class="button-primary" id="toggle-gb-leaderboard" onclick="openGlobalLeaderboard()">🌍 Global
+          <button class="button-primary" id="toggle-gb-leaderboard" onclick="openFirebaseGlobalLeaderboard()">🌍 Global
             Leaderboard</button>
           <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
             Leaderboard</button>
           <button class="button-primary" id="shareBtn">📤Sharing</button>
-          <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+          <button class="button-primary" onclick="openFBFeedbackV2()">💬 Feedback</button>
           <button class="button-primary"
             onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
           <div id="timer-display">⏱️ 00:00:00</div>
@@ -100,9 +117,33 @@
     </div>
   </div>
   <div id="rules-popup-window" class="rules-feedback-main-container"></div>
-  <div id="gb-feedbackModal" class="gb-feedback-main-container"></div>
+  <div id="FB-feedbackModal" class="fb-container">
+  </div>
+  <!-- ==========================================
+   REPLY POPUP
+   यह FB-feedbackModal के अंदर नहीं है
+========================================== -->
+  <div id="replyPopup" class="reply-popup" aria-hidden="true">
+      <div class="reply-popup-content">
+          <div class="reply-header">
+              <h2>💬 Replies</h2>
+              <button type="button" id="replyCloseBtn">
+                  ✕
+              </button>
+          </div>
+          <div id="replyList" class="reply-list">
+          </div>
+          <div class="reply-form">
+              <input id="replyName" type="text" maxlength="60" placeholder="Your name">
+              <textarea id="replyMessage" maxlength="1000" placeholder="Write reply..."></textarea>
+              <button type="button" id="replySendBtn">
+                  Send Reply
+              </button>
+          </div>
+      </div>
+  </div>
   <div id="lcLeaderboardModal" class="lc-main-container"></div>
-  <div id="gbLeaderboardModal" class="gb-main-container"></div>
+  <div id="firebaseLeaderboardModal" class="firebase-main-container"></div>
   <div id="rulesPopup" class="rules-popup-window">
     <div class="rules-header-section">
       <span id="rulesCloseBtn" class="rules-popup-close">Close X</span>
@@ -114,15 +155,19 @@
   </div>
   <div id="winText">🎉 You Won! 🎉</div>
   <canvas id="fireworksCanvas"></canvas>
-  <script type="module" src="../../leaderboard/gbfeedback.js"></script>
-  <script type="module" src="../../leaderboard/gbleaderboard.js"></script>
+  <script type="module" src="../../leaderboard/feedback-controller.js"></script>
+  <script type="module" src="../../leaderboard/feedback-ui.js"></script>
+  <script type="module" src="../../leaderboard/feedback-firestore.js"></script>
+  <script type="module" src="../../leaderboard/reply-popup.js"></script>
+
+  <script type="module" src="../../leaderboard/firebasegbleaderboard.js"></script>
   <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
   <script type="module" src="js/script.js"></script>
   <script type="module" src="js/rules.js"></script>
   <script>
-    document.getElementById("gb-feedbackModal").style.display = 'none';
+    document.getElementById("FB-feedbackModal").style.display = 'none';
     document.getElementById("lcLeaderboardModal").style.display = 'none';
-    document.getElementById("gbLeaderboardModal").style.display = 'none';
+    document.getElementById("firebaseLeaderboardModal").style.display = 'none';
     document.getElementById("winText").style.display = 'none';
     document.getElementById("rulesPopup").style.display = 'none';
 
@@ -142,19 +187,19 @@
     if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
     setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
-    function openGlobalLeaderboard() {
-      document.getElementById("gbLeaderboardModal").style.display = 'flex';
+    function openFirebaseGlobalLeaderboard() {
+      document.getElementById("firebaseLeaderboardModal").style.display = 'flex';
     };
 
-    function closeGlobalLeaderboard() {
-      document.getElementById("gbLeaderboardModal").style.display = 'none';
+    function closeFirebaseGlobalLeaderboard() {
+      document.getElementById("firebaseLeaderboardModal").style.display = 'none';
     };
 
-    fetch('../../leaderboard/gbleaderboard.html')
+    fetch('../../leaderboard/firebasegbleaderboard.html')
       .then(response => response.text())
       .then(htmlText => {
-        document.getElementById('gbLeaderboardModal').innerHTML = htmlText;
-        document.getElementById("gbLeaderboardModal").style.display = 'none';
+        document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
+        document.getElementById("firebaseLeaderboardModal").style.display = 'none';
       });
 
     function openLocalLeaderboard() {
@@ -180,20 +225,40 @@
         document.getElementById("lcLeaderboardModal").style.display = 'none';
       });
 
-    function openGlobalFeedback() {
-      document.getElementById("gb-feedbackModal").style.display = 'flex';
-    };
+      function openFBFeedbackV2() {
+            const modal = document.getElementById("FB-feedbackModal");
+            if (!modal) {
+                console.error("FB-feedbackModal not found");
+                return;
+            }
+            modal.style.display = "flex";
+        }
 
-    function closeGlobalFeedback() {
-      document.getElementById("gb-feedbackModal").style.display = 'none';
-    };
+        function closeFBFeedback() {
+            const modal = document.getElementById("FB-feedbackModal");
+            if (!modal) return;
+            modal.style.display = "none";
+        }
 
-    fetch('../../leaderboard/gbfeedback.html')
-      .then(response => response.text())
-      .then(htmlText => {
-        document.getElementById('gb-feedbackModal').innerHTML = htmlText;
-        document.getElementById("gb-feedbackModal").style.display = 'none';
-      });
+        fetch('../../leaderboard/feedback.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Feedback HTML load failed: " + response.status);
+                }
+                return response.text();
+            })
+            .then(htmlText => {
+                const modal = document.getElementById("FB-feedbackModal");
+                if (!modal) {
+                    console.error("FB-feedbackModal not found");
+                    return;
+                }
+                modal.innerHTML = htmlText;
+                modal.style.display = "none";
+            })
+            .catch(error => {
+                console.error("Feedback V2 load error:",error);
+            });
 
     (async () => {
       const GAME_NAME = "Mastermind Game";

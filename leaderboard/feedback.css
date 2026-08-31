@@ -2,7 +2,11 @@
     --fd-bg: #ffcea9;
     --fd-bg-hover: #ff9748;
     --fd-text: #000000;
+    --fd-border: #333;
     --muted: #30343c;
+    --fd-gradient1: #fe6201;
+    --fd-gradient2: #ff904a;
+    --fd-text-gradient: #ffff00;
     --fd-cell-border: #333;
     --fd-box-shadow: rgba(0, 0, 0, 0.2);
     --fd-btn-shadow: rgba(0, 0, 0, 0.2);
@@ -13,6 +17,9 @@
     --fd-bg-hover: #474dfb;
     --fd-text: #ffffff;
     --muted: #baccee;
+    --fd-border: #d9d8d8;
+    --fd-gradient1: #0015ff;
+    --fd-gradient2: #4a4aff;
     --fd-cell-border: #d9d8d8;
     --fd-box-shadow: rgba(255, 255, 255, 0.5);
     --fd-btn-shadow: rgba(0, 0, 0, 0.2);
@@ -31,9 +38,9 @@
     height: 95%;
     overflow-y: auto;
     text-align: center;
-    border: 2px solid var(--firebase-border);
-    background: var(--firebase-bg);
-    color: var(--firebase-text);
+    border: 2px solid var(--fd-border);
+    background: var(--fd-bg);
+    color: var(--fd-text);
     flex-direction: column;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     /* overflow: hidden; */
@@ -156,7 +163,6 @@
 .fb-label {
     font-size: 2vw;
     color: var(--muted);
-    display: block;
     margin-bottom: 0.6vw;
     text-align: left;
 }
@@ -278,4 +284,211 @@ textarea {
 
     font-size:20px;
 
+}
+
+.feedback {
+    background: var(--fd-bg-hover);
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+/* ==========================================
+   Feedback reply Card
+========================================== */
+.reply {
+    margin-left: 20px;
+    background: var(--fd-bg);
+    padding: 5px;
+    margin-top: 5px;
+}
+
+.reply-card{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    padding:18px;
+    margin-bottom:15px;
+    border-radius:14px;
+    background:var(--fd-bg);
+    border:1px solid var(--fd-cell-border);
+    box-shadow:0 8px 20px var(--fd-box-shadow);
+    transition:.25s;
+}
+
+.reply-card:hover{
+    transform:translateY(-3px);
+}
+
+
+.reply-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.reply-author-left{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.reply-date-right{
+    text-align:right;
+}
+
+.reply-message{
+    text-align: center;
+}
+
+/* ==========================================
+   Feedback Card V2
+========================================== */
+
+.fb-item{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+    padding:18px;
+
+    margin-bottom:15px;
+
+    border-radius:14px;
+
+    background:var(--fd-bg);
+
+    border:1px solid var(--fd-cell-border);
+
+    box-shadow:0 8px 20px var(--fd-box-shadow);
+
+    transition:.25s;
+
+}
+
+.fb-item:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.fb-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.fb-left{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.fb-name{
+
+    font-size:18px;
+
+    font-weight:bold;
+
+}
+
+.fb-game{
+
+    font-size:14px;
+
+    opacity:.8;
+
+}
+
+.fb-right{
+
+    text-align:right;
+
+}
+
+.fb-category{
+
+    display:inline-block;
+
+    padding:4px 10px;
+
+    border-radius:20px;
+
+    background:#4caf50;
+
+    color:white;
+
+    font-size:13px;
+
+}
+
+.fb-title{
+
+    font-size:20px;
+
+    font-weight:bold;
+
+}
+
+.fb-message{
+    line-height:1.5;
+}
+
+.fb-footer{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+}
+
+.fb-actions{
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+.fb-action{
+
+    cursor:pointer;
+
+    border:none;
+
+    background:none;
+
+    font-size:16px;
+
+}
+
+.fb-time{
+
+    opacity:.65;
+
+    font-size:13px;
+
+}
+
+.fb-list {
+
+    overflow-y: auto;
+
+    max-height: 45vh;
+
+    padding: 15px 20px;
 }

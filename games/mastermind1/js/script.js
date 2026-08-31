@@ -3,8 +3,11 @@ import { launchFireworks } from './edgeFireWorks.js';
 import { playSound } from './sound.js';
 import { textToSpeechEng } from './speak.js';
 import { shareScore } from './share.js';
-import { saveScore } from '../../../leaderboard/gbleaderboard.js';
+// import { saveScore } from '../../../leaderboard/gbleaderboard.js';
 import { lcrenderLeaderboard, lcsaveToLeaderboard } from '../../../leaderboard/lcleaderboard.js';
+import { db } from "../../../leaderboard/firebase-config.js";
+import { addDoc, collection, serverTimestamp } from
+    "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 export let timer = false;
 export let gameName = 'mastermind';
@@ -466,6 +469,33 @@ window.addEventListener('load', function () {
         document.getElementById("colorPopup").style.display = "none";
     }
 
+            // to add firebase leaderboard (save record)
+            window.saveScore = async function () {
+                text = `Black=${b}, White=${w}`
+        
+                try {
+                    await addDoc(collection(db, "leaderboard"), {
+                        game_id: game_id || 'mastermind',
+                        game: game || 'mastermind',
+                        name: winnerName || 'Guast',
+                        opponent: opponent || "Computer",
+                        difficulty: difficulty || "-",
+                        size: size || `8x8`,
+                        elapsed: Math.floor(Number(elapsedTime) / 1000) || 0,
+                        score: score || 0,
+                        moves: history.length || 0,
+                        email: email || "-",
+                        level: "-",
+                        mode: playMode || 'pvc',
+                        text: text || "-",
+                        createdAt: new Date()
+                    });
+                    console.log("Score Saved!");
+                } catch (error) {
+                    console.error("Error:", error);
+                }
+            };
+            
     function updateleaderboard() {
         let player_name = player1;
         let player_opponent = "-";
@@ -515,7 +545,7 @@ window.addEventListener('load', function () {
 
         lcsaveToLeaderboard(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
 
-        saveScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
+        // saveScore(player_name, player_opponent, email, gsize, difficulty, game_id, score, elapsed, moves, filed1, filed2, filed3, filed4, created_at);
     }
     document.addEventListener('DOMContentLoaded', () => {
         lcrenderLeaderboard();

@@ -90,7 +90,7 @@
                     Leaderboard</button>
                 <button class="button-primary" id="shareBtn">📤Sharing</button>
                 <!-- <button class="button-primary" onclick="openFBFeedback()">💬 Feedback</button> -->
-                <button class="button-primary" onclick="openFBFeedbackV2()">💬 Feedback 2</button>
+                <button class="button-primary" onclick="openFBFeedbackV2()">💬 Feedback</button>
                 <button class="button-primary" onclick="window.location.href='auth/login.html'">🚪Sign in</button>
                 <button class="button-primary" id="toggle-theme">☀️ Light</button>
             </div>
@@ -188,42 +188,23 @@
 ========================================== -->
 
     <div id="replyPopup" class="reply-popup" aria-hidden="true">
-
         <div class="reply-popup-content">
-
             <div class="reply-header">
-
                 <h2>💬 Replies</h2>
-
                 <button type="button" id="replyCloseBtn">
                     ✕
                 </button>
-
             </div>
-
-
             <div id="replyList" class="reply-list">
             </div>
-
-
             <div class="reply-form">
-
                 <input id="replyName" type="text" maxlength="60" placeholder="Your name">
-
-
                 <textarea id="replyMessage" maxlength="1000" placeholder="Write reply..."></textarea>
-
-
                 <button type="button" id="replySendBtn">
-
                     Send Reply
-
                 </button>
-
             </div>
-
         </div>
-
     </div>
     <!-- <div id="replyPopup"></div> -->
     <div id="firebaseLeaderboardModal" class="firebase-main-container"></div>
@@ -280,7 +261,6 @@
         // let playerName = user ? user.name : localStorage.getItem('player_name');
 
         const player_name = playerName;
-        console.log("Welcome", player_name);
 
         document.getElementById("welcom").textContent = `Welcome ${player_name}`;
         document.getElementById("welcom").style.alignContent = "center";
@@ -323,7 +303,6 @@
         };
 
         function closeFirebaseGlobalLeaderboard() {
-            // console.log("typeof =", typeof window.stopLeaderboard);
             if (typeof window.stopLeaderboard === "function") {
                 window.stopLeaderboard();
             }
@@ -337,7 +316,6 @@
                 document.getElementById("firebaseLeaderboardModal").style.display = 'none';
 
                 setTimeout(() => {
-                    console.log("window.initLeaderboard =", window.initLeaderboard);
                     if (window.initLeaderboard) {
                         window.initLeaderboard();
                     } else {
@@ -399,7 +377,6 @@
                 }
                 modal.innerHTML = htmlText;
                 modal.style.display = "none";
-                console.log("Feedback V2 HTML loaded");
             })
             .catch(error => {
                 console.error("Feedback V2 load error:",error);

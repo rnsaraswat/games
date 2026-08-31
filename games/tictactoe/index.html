@@ -7,8 +7,25 @@
     <title>Tic Tac Toe</title>
     <meta name="description"
         content="Ravindra Games Hub — collection of lightweight web games (Tic tac Toe) Classic & Action-Oriented X vs O game">
-    <!-- <link rel="stylesheet" href="../../leaderboard/gbfeedback.css" /> -->
-    <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
+
+        <title>Tic Tac Toe Online - Free Tic Tac Toe Puzzle Game | Ravindra Games Hub</title>
+        <meta name="description"
+          content="Play free Tic Tac Toe puzzles online at Ravindra Games Hub. Play Tic Tac Toe puzzles. Classic & Action-Oriented X vs O game">
+        <link rel="canonical" href="https://rnsaraswat.github.io/games/games/tictactoe/index.html">
+        <meta name="robots" content="index, follow, max-image-preview:large">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Tic Tac Toe Online - Free Tic Tac Toe games puzzle">
+        <meta property="og:description" content="Play free Tic Tac Toe puzzles online at Ravindra Games Hub.">
+        <meta property="og:url" content="https://rnsaraswat.github.io/games/games/tictactoe/index.html">
+        <meta property="og:image" content="https://rnsaraswat.github.io/games/assets/images/tictactoe_preview.png">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Tic Tac Toe Puzzle Online - Free Tic Tac Toe Puzzle Game">
+        <meta name="twitter:description" content="Play free Tic Tac Toe puzzles online at Ravindra Games Hub.">
+        <meta name="twitter:image" content="https://rnsaraswat.github.io/games/assets/images/tictactoe_preview.png">
+
+  <link rel="stylesheet" href="../../leaderboard/feedback.css" />
+  <link rel="stylesheet" href="../../leaderboard/reply-popup.css">
+  <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
     <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
     <link rel="stylesheet" href="../../commoncss.css">
     <link rel="manifest" href="../../manifest.json" />
@@ -356,6 +373,7 @@
                 <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
                     Leaderboard</button>
                 <button class="button-primary" id="shareBtn">📤Sharing</button>
+                <button class="button-primary" onclick="openFBFeedbackV2()">💬 Feedback</button>
                 <button class="button-primary" onclick="window.location.href='http://127.0.0.1:5501/startup/games/auth/firebase-login.html'">sign in</button>
                 <!-- <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button> -->
                 <button class="button-primary"
@@ -370,7 +388,31 @@
             <div id="board"></div>
         </div>
     </div>
-    <!-- <div id="gb-feedbackModal" class="gb-feedback-main-container"></div> -->
+    <div id="FB-feedbackModal" class="fb-container">
+    </div>
+    <!-- ==========================================
+     REPLY POPUP
+     यह FB-feedbackModal के अंदर नहीं है
+  ========================================== -->
+    <div id="replyPopup" class="reply-popup" aria-hidden="true">
+        <div class="reply-popup-content">
+            <div class="reply-header">
+                <h2>💬 Replies</h2>
+                <button type="button" id="replyCloseBtn">
+                    ✕
+                </button>
+            </div>
+            <div id="replyList" class="reply-list">
+            </div>
+            <div class="reply-form">
+                <input id="replyName" type="text" maxlength="60" placeholder="Your name">
+                <textarea id="replyMessage" maxlength="1000" placeholder="Write reply..."></textarea>
+                <button type="button" id="replySendBtn">
+                    Send Reply
+                </button>
+            </div>
+        </div>
+    </div>
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
     <div id="firebaseLeaderboardModal" class="firebase-main-container"></div>
     <div id="winText">🎉 You Won! 🎉</div>
@@ -433,6 +475,11 @@
     <!-- <script type="module" src="../../leaderboard/gbfeedback.js"></script> -->
     <!-- <script type="module" src="../../leaderboard/firebaseleaderboard.js"></script> -->
     <!-- <script type="module" src="../../leaderboard/firebase-config.js"></script> -->
+    <script type="module" src="../../leaderboard/feedback-controller.js"></script>
+    <script type="module" src="../../leaderboard/feedback-ui.js"></script>
+    <script type="module" src="../../leaderboard/feedback-firestore.js"></script>
+    <script type="module" src="../../leaderboard/reply-popup.js"></script>
+  
     <script type="module" src="../../leaderboard/firebasegbleaderboard.js"></script>
     <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <script type="module" src="tictactoe.js"></script>
@@ -441,7 +488,7 @@
         // function openLeaderboard() {
         //     document.getElementById("leaderboardModal").style.display = 'flex';
         // };
-        // document.getElementById("gb-feedbackModal").style.display = 'none';
+        document.getElementById("FB-feedbackModal").style.display = 'none';
         document.getElementById("lcLeaderboardModal").style.display = 'none';
         document.getElementById("firebaseLeaderboardModal").style.display = 'none';
         // document.getElementById("leaderboardModal").style.display = 'none';
@@ -512,21 +559,40 @@
                 document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
                 document.getElementById("lcLeaderboardModal").style.display = 'none';
             });
+            function openFBFeedbackV2() {
+            const modal = document.getElementById("FB-feedbackModal");
+            if (!modal) {
+                console.error("FB-feedbackModal not found");
+                return;
+            }
+            modal.style.display = "flex";
+        }
 
-        // function openGlobalFeedback() {
-        //     document.getElementById("gb-feedbackModal").style.display = 'flex';
-        // };
+        function closeFBFeedback() {
+            const modal = document.getElementById("FB-feedbackModal");
+            if (!modal) return;
+            modal.style.display = "none";
+        }
 
-        // function closeGlobalFeedback() {
-        //     document.getElementById("gb-feedbackModal").style.display = 'none';
-        // };
-
-        // fetch('../../leaderboard/gbfeedback.html')
-        //     .then(response => response.text())
-        //     .then(htmlText => {
-        //         document.getElementById('gb-feedbackModal').innerHTML = htmlText;
-        //         document.getElementById("gb-feedbackModal").style.display = 'none';
-        //     });
+        fetch('../../leaderboard/feedback.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Feedback HTML load failed: " + response.status);
+                }
+                return response.text();
+            })
+            .then(htmlText => {
+                const modal = document.getElementById("FB-feedbackModal");
+                if (!modal) {
+                    console.error("FB-feedbackModal not found");
+                    return;
+                }
+                modal.innerHTML = htmlText;
+                modal.style.display = "none";
+            })
+            .catch(error => {
+                console.error("Feedback V2 load error:",error);
+            });
 
         (async () => {
             const GAME_NAME = "TIC TAC TOE";

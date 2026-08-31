@@ -4,9 +4,7 @@
 
         <div class="fdClose">
 
-            <button
-                class="fbclose-btn"
-                onclick="closeFBFeedback()">
+            <button class="fbclose-btn" onclick="closeFBFeedback()">
 
                 Close ❌
 
@@ -19,61 +17,45 @@
 </div>
 
 
-<form
-    id="feedback-form"
-    autocomplete="off">
+<form id="feedback-form" autocomplete="off">
 
 
     <div>
 
-        <label class="fb-label">
+        <label class="fb-label" for="feedbackGame">
             Game
+
+
+            <select id="feedbackGame" class="fb-input">
+
+                <option value="">
+                    Select Game
+                </option>
+
+            </select>
         </label>
 
-        <select
-            id="feedbackGame"
-            class="fb-input">
-
-            <option value="">
-                Select Game
-            </option>
-
-        </select>
-
-
-        <label
-            class="fb-label"
-            for="feedbackName">
+        <label class="fb-label" for="feedbackName">
 
             Name (optional)
 
+
+
+            <input class="fb-input" id="feedbackName" type="text" placeholder="Enter your name" maxlength="60" />
+
         </label>
-
-        <input
-            class="fb-input"
-            id="feedbackName"
-            type="text"
-            placeholder="Enter your name"
-            maxlength="60" />
-
     </div>
 
 
     <div style="margin-top:1vw">
 
-        <label
-            class="fb-label"
-            for="feedbackMessage">
+        <label class="fb-label" for="feedbackMessage">
 
             Comment / Feedback / Suggestion
 
         </label>
 
-        <textarea
-            class="fb-input"
-            id="feedbackMessage"
-            placeholder="write Comment / Feedback / Suggestio..."
-            required>
+        <textarea class="fb-input" id="feedbackMessage" placeholder="write Comment / Feedback / Suggestio..." required>
         </textarea>
 
     </div>
@@ -81,54 +63,45 @@
 
     <label class="fb-label">
         Category
+
+
+        <select id="feedbackCategory" class="fb-input">
+
+            <option value="Bug Report">
+                Bug Report
+            </option>
+
+            <option value="Feature Request">
+                Feature Request
+            </option>
+
+            <option value="UI / Design">
+                UI / Design
+            </option>
+
+            <option value="Performance">
+                Performance
+            </option>
+
+            <option value="Game Balance">
+                Game Balance
+            </option>
+
+            <option value="Other">
+                Other
+            </option>
+
+        </select>
     </label>
 
-    <select
-        id="feedbackCategory"
-        class="fb-input">
-
-        <option value="Bug Report">
-            Bug Report
-        </option>
-
-        <option value="Feature Request">
-            Feature Request
-        </option>
-
-        <option value="UI / Design">
-            UI / Design
-        </option>
-
-        <option value="Performance">
-            Performance
-        </option>
-
-        <option value="Game Balance">
-            Game Balance
-        </option>
-
-        <option value="Other">
-            Other
-        </option>
-
-    </select>
-
-
-    <label class="fb-label">
+    <label class="fb-label" for="feedbackTitle">
         Title
+        <input id="feedbackTitle" class="fb-input" maxlength="80">
     </label>
-
-    <input
-        id="feedbackTitle"
-        class="fb-input"
-        maxlength="80">
-
 
     <div class="fb-controls">
 
-        <label
-            class="fb-label"
-            for="feedbackRating">
+        <label class="fb-label" for="feedbackRating">
 
             Rating
 
@@ -159,19 +132,14 @@
         </select>
 
 
-        <button
-            id="feedbackSubmitBtn"
-            class="fb-btn-primary"
-            type="submit">
+        <button id="feedbackSubmitBtn" class="fb-btn-primary" type="submit">
 
             Submit Feedback
 
         </button>
 
 
-        <div
-            class="fb-server-status"
-            id="feedbackStatus">
+        <div class="fb-server-status" id="feedbackStatus">
 
             Server: checking...
 
@@ -186,9 +154,7 @@
      FEEDBACK LIST
 ========================================== -->
 
-<div
-    id="feedbackList"
-    class="fb-list">
+<div id="feedbackList" class="fb-list">
 </div>
 
 
@@ -198,9 +164,7 @@
 
 <div class="fb-pagination">
 
-    <button
-        id="feedbackPrevBtn"
-        class="fb-btn-ghost">
+    <button id="feedbackPrevBtn" class="fb-btn-ghost">
 
         ◀ Previous
 
@@ -214,9 +178,7 @@
     </span>
 
 
-    <button
-        id="feedbackNextBtn"
-        class="fb-btn-ghost">
+    <button id="feedbackNextBtn" class="fb-btn-ghost">
 
         Next ▶
 

@@ -5,11 +5,25 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Water Sort Game</title>
+    <title>Water Sort Puzzle - Free Color Sorting Game | Ravindra Games Hub</title>
     <meta name="description"
-        content="Ravindra Games Hub — collection of lightweight web games (water sort) Train your critical thinking same colors wate in one tube game">
+        content="Play Water Sort Puzzle online for free. Sort colorful liquids into tubes, solve challenging levels and improve your logical thinking.">
+    <link rel="canonical" href="https://rnsaraswat.github.io/games/games/watersort2/index.html">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Water sort Online - free Water Puzzle game">
+    <meta property="og:description" content="Play free Water sort puzzles Online at Ravindra Games Hub.">
+    <meta property="og:url" content="https://rnsaraswat.github.io/games/games/watersort2/index.html">
+    <meta property="og:image" content="https://rnsaraswat.github.io/games/assets/images/watersort_preview.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Water sort Online - Free Water sort Puzzle Game">
+    <meta name="twitter:description" content="Play free Water sort puzzles online at Ravindra Games Hub.">
+    <meta name="twitter:image" content="https://rnsaraswat.github.io/games/assets/images/watersort_preview.png">
+
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="../../leaderboard/firebasefeedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/feedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/reply-popup.css">
     <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
     <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
     <link rel="stylesheet" href="starFireworks.css">
@@ -65,7 +79,7 @@
                     <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
                         Leaderboard</button>
                     <button class="button-primary" id="shareBtn">📤Sharing</button>
-                    <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+                    <button class="button-primary" onclick="openFBFeedbackV2()">💬 Feedback</button>
                     <button class="button-primary"
                         onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
                     <div class="divtext">Moves: <span id="moves">0</span></div>
@@ -80,7 +94,31 @@
         </div>
         <div id="board"></div>
     </div>
-    <div id="FB-feedbackModal" class="fb-container"></div>
+    <div id="FB-feedbackModal" class="fb-container">
+    </div>
+    <!-- ==========================================
+     REPLY POPUP
+     यह FB-feedbackModal के अंदर नहीं है
+  ========================================== -->
+    <div id="replyPopup" class="reply-popup" aria-hidden="true">
+        <div class="reply-popup-content">
+            <div class="reply-header">
+                <h2>💬 Replies</h2>
+                <button type="button" id="replyCloseBtn">
+                    ✕
+                </button>
+            </div>
+            <div id="replyList" class="reply-list">
+            </div>
+            <div class="reply-form">
+                <input id="replyName" type="text" maxlength="60" placeholder="Your name">
+                <textarea id="replyMessage" maxlength="1000" placeholder="Write reply..."></textarea>
+                <button type="button" id="replySendBtn">
+                    Send Reply
+                </button>
+            </div>
+        </div>
+    </div>
     <div id="lcLeaderboardModal" class="lc-main-container"></div>
     <div id="firebaseLeaderboardModal" class="firebase-main-container"></div>
     <div id="pauseOverlay">
@@ -135,7 +173,7 @@
         }
         if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
-        
+
         function openFirebaseGlobalLeaderboard() {
             document.getElementById("firebaseLeaderboardModal").style.display = 'flex';
         };
@@ -146,7 +184,7 @@
 
 
         fetch('../../leaderboard/firebasegbleaderboard.html')
-    .then(response => response.text())
+            .then(response => response.text())
             .then(htmlText => {
                 document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
                 document.getElementById("firebaseLeaderboardModal").style.display = 'none';
@@ -184,31 +222,39 @@
                 document.getElementById("lcLeaderboardModal").style.display = 'none';
             });
 
-        function openGlobalFeedback() {
-            document.getElementById("FB-feedbackModal").style.display = 'flex';
-        };
+            function openFBFeedbackV2() {
+            const modal = document.getElementById("FB-feedbackModal");
+            if (!modal) {
+                console.error("FB-feedbackModal not found");
+                return;
+            }
+            modal.style.display = "flex";
+        }
 
         function closeFBFeedback() {
-            document.getElementById("FB-feedbackModal").style.display = 'none';
-        };
+            const modal = document.getElementById("FB-feedbackModal");
+            if (!modal) return;
+            modal.style.display = "none";
+        }
 
-        fetch('../../leaderboard/firebasefeedback.html')
-            .then(response => response.text())
+        fetch('../../leaderboard/feedback.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Feedback HTML load failed: " + response.status);
+                }
+                return response.text();
+            })
             .then(htmlText => {
-                document.getElementById('FB-feedbackModal').innerHTML = htmlText;
-                document.getElementById("FB-feedbackModal").style.display = 'none';
-
-                setTimeout(() => {
-                    console.log("window.initFeedback =", window.initFeedback);
-
-                    if (typeof window.initFeedback === "function") {
-                        window.initFeedback();
-                    } else {
-                        console.error("initFeedback not available");
-                    }
-
-                }, 100);
-
+                const modal = document.getElementById("FB-feedbackModal");
+                if (!modal) {
+                    console.error("FB-feedbackModal not found");
+                    return;
+                }
+                modal.innerHTML = htmlText;
+                modal.style.display = "none";
+            })
+            .catch(error => {
+                console.error("Feedback V2 load error:",error);
             });
 
         (async () => {

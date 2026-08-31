@@ -428,11 +428,11 @@ export function destroyFeedbackFirestore() {
    Version
 ========================================== */
 
-console.log(
+// console.log(
 
-    "Feedback Firestore Ready"
+//     "Feedback Firestore Ready"
 
-);
+// );
 
 /* =========================================================
    Public Getters

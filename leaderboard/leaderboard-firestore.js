@@ -12,7 +12,7 @@ import {
     getCountFromServer
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-console.log("leaderboard-firestore.js loaded");
+// console.log("leaderboard-firestore.js loaded");
 
 // Firestore Listener
 let leaderboardListener = null;

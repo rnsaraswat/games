@@ -4,11 +4,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>4 in a Row</title>
+
+  <title>Four in Row Online - Free 4 in a ROW Puzzle Game | Ravindra Games Hub | RGH</title>
   <meta name="description"
-    content="Ravindra Games Hub — collection of lightweight web games (4 in a Row) Classic & Action-Oriented X vs O game">
+    content="Play free 4 in a ROW puzzles online at Ravindra Games Hub. Improve your logic, concentration and problem-solving skills with challenging 4 in A ROW puzzles. Classic & Action-Oriented X vs O game">
+  <link rel="canonical" href="https://rnsaraswat.github.io/games/games/4inARow/index.html">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="4 in a ROW Online - Free 4 in a ROW Puzzle Game">
+  <meta property="og:description" content="Play free 4 in a ROW puzzles online at Ravindra Games Hub.">
+  <meta property="og:url" content="https://rnsaraswat.github.io/games/games/4inARow/index.html">
+  <meta property="og:image" content="https://rnsaraswat.github.io/games/assets/images/4inARow_preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="4 in a ROW Online - Free 4 in a ROW Puzzle Game">
+  <meta name="twitter:description" content="Play free 4 in a ROW puzzles online at Ravindra Games Hub.">
+  <meta name="twitter:image" content="https://rnsaraswat.github.io/games/assets/images/4inARow_preview.png">
+
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="../../leaderboard/firebasefeedback.css" />
+  <link rel="stylesheet" href="../../leaderboard/feedback.css" />
+  <link rel="stylesheet" href="../../leaderboard/reply-popup.css">
   <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
   <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
   <link rel="stylesheet" href="../../commoncss.css">
@@ -65,7 +79,7 @@
           <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
             Leaderboard</button>
           <button class="button-primary" id="shareBtn">📤Sharing</button>
-          <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+          <button class="button-primary" onclick="openFBFeedbackV2()">💬 Feedback</button>
           <button class="button-primary"
             onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
         <!-- </div>
@@ -80,7 +94,31 @@
       </section>
     </div>
   </div>
-  <div id="fb-feedbackModal" class="fb-container"></div>
+  <div id="FB-feedbackModal" class="fb-container">
+  </div>
+  <!-- ==========================================
+   REPLY POPUP
+   यह FB-feedbackModal के अंदर नहीं है
+========================================== -->
+  <div id="replyPopup" class="reply-popup" aria-hidden="true">
+      <div class="reply-popup-content">
+          <div class="reply-header">
+              <h2>💬 Replies</h2>
+              <button type="button" id="replyCloseBtn">
+                  ✕
+              </button>
+          </div>
+          <div id="replyList" class="reply-list">
+          </div>
+          <div class="reply-form">
+              <input id="replyName" type="text" maxlength="60" placeholder="Your name">
+              <textarea id="replyMessage" maxlength="1000" placeholder="Write reply..."></textarea>
+              <button type="button" id="replySendBtn">
+                  Send Reply
+              </button>
+          </div>
+      </div>
+  </div>
   <div id="lcLeaderboardModal" class="lc-main-container"></div>
   <div id="firebaseLeaderboardModal" class="firebase-main-container"></div>
   <div id="rulesPopup" class="rules-popup-window">
@@ -107,7 +145,11 @@
   </div>
   <canvas id="fireworksCanvas"></canvas>
   <script type="module" src="js/rules.js"></script>
-  <script type="module" src="../../leaderboard/firebasefeedback.js"></script>
+  <script type="module" src="../../leaderboard/feedback-controller.js"></script>
+  <script type="module" src="../../leaderboard/feedback-ui.js"></script>
+  <script type="module" src="../../leaderboard/feedback-firestore.js"></script>
+  <script type="module" src="../../leaderboard/reply-popup.js"></script>
+
   <script type="module" src="../../leaderboard/firebasegbleaderboard.js"></script>
   <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
   <script type="module" src="js/script.js"></script>
@@ -121,7 +163,7 @@
   </script>
 
   <script>
-    document.getElementById("fb-feedbackModal").style.display = 'none';
+    document.getElementById("FB-feedbackModal").style.display = 'none';
     document.getElementById("lcLeaderboardModal").style.display = 'none';
     document.getElementById("firebaseLeaderboardModal").style.display = 'none';
     document.getElementById("winText").style.display = 'none';
@@ -144,22 +186,23 @@
     setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
     function openFirebaseGlobalLeaderboard() {
-      document.getElementById("firebaseLeaderboardModal").style.display = 'flex';
-    };
+            document.getElementById("firebaseLeaderboardModal").style.display = 'flex';
+        };
 
-    function closeFirebaseGlobalLeaderboard() {
-      document.getElementById("firebaseLeaderboardModal").style.display = 'none';
-    };
+        function closeFirebaseGlobalLeaderboard() {
+            if (typeof window.stopLeaderboard === "function") {
+                window.stopLeaderboard();
+            }
+            document.getElementById("firebaseLeaderboardModal").style.display = 'none';
+        };
 
-
-    fetch('../../leaderboard/firebasegbleaderboard.html')
-    .then(response => response.text())
+        fetch('../../leaderboard/firebasegbleaderboard.html')
+            .then(response => response.text())
             .then(htmlText => {
                 document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
                 document.getElementById("firebaseLeaderboardModal").style.display = 'none';
 
                 setTimeout(() => {
-                    console.log("window.initLeaderboard =", window.initLeaderboard);
                     if (window.initLeaderboard) {
                         window.initLeaderboard();
                     } else {
@@ -191,32 +234,40 @@
         document.getElementById("lcLeaderboardModal").style.display = 'none';
       });
 
-    function openGlobalFeedback() {
-      document.getElementById("fb-feedbackModal").style.display = 'flex';
-    };
+      function openFBFeedbackV2() {
+            const modal = document.getElementById("FB-feedbackModal");
+            if (!modal) {
+                console.error("FB-feedbackModal not found");
+                return;
+            }
+            modal.style.display = "flex";
+        }
 
-    function closeFBFeedback() {
-      document.getElementById("fb-feedbackModal").style.display = 'none';
-    };
+        function closeFBFeedback() {
+            const modal = document.getElementById("FB-feedbackModal");
+            if (!modal) return;
+            modal.style.display = "none";
+        }
 
-    fetch('../../leaderboard/firebasefeedback.html')
-      .then(response => response.text())
-      .then(htmlText => {
-        document.getElementById('fb-feedbackModal').innerHTML = htmlText;
-        document.getElementById("fb-feedbackModal").style.display = 'none';
-
-        setTimeout(() => {
-          console.log("window.initFeedback =", window.initFeedback);
-
-          if (typeof window.initFeedback === "function") {
-            window.initFeedback();
-          } else {
-            console.error("initFeedback not available");
-          }
-
-        }, 100);
-        
-      });
+        fetch('../../leaderboard/feedback.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Feedback HTML load failed: " + response.status);
+                }
+                return response.text();
+            })
+            .then(htmlText => {
+                const modal = document.getElementById("FB-feedbackModal");
+                if (!modal) {
+                    console.error("FB-feedbackModal not found");
+                    return;
+                }
+                modal.innerHTML = htmlText;
+                modal.style.display = "none";
+            })
+            .catch(error => {
+                console.error("Feedback V2 load error:",error);
+            });
 
     (async () => {
       const GAME_NAME = "4 IN A ROW";

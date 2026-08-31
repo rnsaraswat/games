@@ -31,10 +31,10 @@ export async function openReplyPopup(
     feedbackId
 ) {
 
-    console.log(
-        "Opening Reply Popup:",
-        feedbackId
-    );
+    // console.log(
+    //     "Opening Reply Popup:",
+    //     feedbackId
+    // );
 
 
     const popup =
@@ -209,9 +209,9 @@ export function getCurrentReplyFeedbackId() {
 
 async function handleReplySubmit() {
 
-    console.log(
-        "Reply Submit Clicked"
-    );
+    // console.log(
+    //     "Reply Submit Clicked"
+    // );
 
 
     /* -----------------------------------------
@@ -355,9 +355,9 @@ async function handleReplySubmit() {
             );
 
 
-            console.log(
-                "✅ Reply submitted successfully"
-            );
+            // console.log(
+            //     "✅ Reply submitted successfully"
+            // );
 
         }
 
@@ -412,9 +412,9 @@ async function handleReplySubmit() {
 
 export function initReplyPopup() {
 
-    console.log(
-        "Initializing Reply Popup..."
-    );
+    // console.log(
+    //     "Initializing Reply Popup..."
+    // );
 
 
     const popup =
@@ -508,9 +508,9 @@ export function initReplyPopup() {
     );
 
 
-    console.log(
-        "✅ Reply Popup initialized"
-    );
+    // console.log(
+    //     "✅ Reply Popup initialized"
+    // );
 
 }
 

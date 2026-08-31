@@ -93,11 +93,11 @@ window.initFeedback =
 
     async function () {
 
-        console.log(
+        // console.log(
 
-            "Feedback Initialized"
+        //     "Feedback Initialized"
 
-        );
+        // );
 
         fillGames(games);
 
@@ -400,10 +400,10 @@ document.addEventListener(
    Debug
 ========================================== */
 
-console.log(
+// console.log(
 
-    "feedback-controller.js Loaded"
+//     "feedback-controller.js Loaded"
 
-);
+// );
 
 

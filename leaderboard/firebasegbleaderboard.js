@@ -196,6 +196,48 @@ function updatePaginationInfo(total) {
   //     `Page ${currentPage} of ${totalPages}`;
 }
 
+
+// Pagination buttons initialize
+function initPagination() {
+
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+
+  if (!prevBtn) {
+      console.error("❌ prevBtn not found");
+      return;
+  }
+
+  if (!nextBtn) {
+      console.error("❌ nextBtn not found");
+      return;
+  }
+
+  prevBtn.onclick = () => {
+
+      if (currentPage > 1) {
+          currentPage--;
+          renderTable();
+      }
+
+  };
+
+
+  nextBtn.onclick = () => {
+
+      const total = filterData().length;
+      const totalPages = Math.ceil(total / rowsPerPage);
+
+      if (currentPage < totalPages) {
+          currentPage++;
+          renderTable();
+      }
+
+  };
+
+}
+
+
 document.getElementById("prevBtn").onclick = () => {
   if (currentPage > 1) {
       currentPage--;
