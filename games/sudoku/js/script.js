@@ -354,8 +354,8 @@ export const state = {
 
         for (let i = 0; i < state.N * state.N; i++) {
             const el = grid.children[i];
-            // el.className = 'cell';
-                el.classList.add("cell");
+            el.className = 'cell';
+                // el.classList.add("cell");
                 const r = rowOf(i), c = colOf(i);
             //   if (r % state.blockRows === 0) el.classList.add('top-border');
             //   if (c % state.blockCols === 0) el.classList.add('left-border');

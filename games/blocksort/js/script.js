@@ -19,11 +19,12 @@ let m = 0;
 let s = 0;
 let text = `tubes:4, Colors:2`;
 let playMode = "-";
+let email = localStorage.getItem('email') || '-';
 
   // define variables also used to add firebase leaderboard
   const user = JSON.parse(localStorage.getItem("user"));
   let player = user ? user.name : localStorage.getItem('player_name');
-  let email = user ? user.email : "";
+  email = user ? user.email : "";
   let opponent = localStorage.getItem('opponent') || 'Human2';
   // let game = gameName;
   let game_id = gameName;
@@ -609,6 +610,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.saveScore = async function () {
     text = `tubes:${currentMode}, Colors:${currentMode - 2}`;
 
+
     if (currentDifficulty.toUpperCase() === "EASY") {
       score = (Number(currentMode) * (Number(currentMode) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 1;
     } else if (currentDifficulty.toUpperCase() === "MEDIUM") {
@@ -656,7 +658,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let filed2 = 0
     let filed3 = `tube=${currentMode}`;
     let filed4 = `color=${currentMode - 2}`;
-    let email = localStorage.getItem('email') || '-';
+    email = localStorage.getItem('email') || '-';
     const created_at = new Date();
     if (currentDifficulty.toUpperCase() === "EASY") {
       score = (Number(currentMode) * (Number(currentMode) - 2) * 100 - moves * 1 - Math.floor(Number(elapsedTime) / 1000) + undoCount * 10) * 1;

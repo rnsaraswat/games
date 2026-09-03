@@ -4,9 +4,21 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sudoku</title>
+  <title>Sudoku Online - Free Sudoku Puzzle Game | Ravindra Games Hub</title>
   <meta name="description"
-    content="Ravindra Games Hub — collection of lightweight web games (Sudoku) Solve login puzzles of numbers">
+    content="Play free Sudoku puzzles online at Ravindra Games Hub. Improve your logic, concentration and problem-solving skills with challenging Sudoku puzzles.">
+  <link rel="canonical" href="https://rnsaraswat.github.io/games/games/sudoku/index.html">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Sudoku Online - Free Sudoku Puzzle Game">
+  <meta property="og:description" content="Play free Sudoku puzzles online at Ravindra Games Hub.">
+  <meta property="og:url" content="https://rnsaraswat.github.io/games/games/sudoku/index.html">
+  <meta property="og:image" content="https://rnsaraswat.github.io/games/assets/images/sudoku_preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sudoku Online - Free Sudoku Puzzle Game">
+  <meta name="twitter:description" content="Play free Sudoku puzzles online at Ravindra Games Hub.">
+  <meta name="twitter:image" content="https://rnsaraswat.github.io/games/assets/images/Screenshot_sudoku.png">
+
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="../../leaderboard/firebasefeedback.css" />
   <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
@@ -156,20 +168,20 @@
 
 
     fetch('../../leaderboard/firebasegbleaderboard.html')
-    .then(response => response.text())
-            .then(htmlText => {
-                document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
-                document.getElementById("firebaseLeaderboardModal").style.display = 'none';
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
+        document.getElementById("firebaseLeaderboardModal").style.display = 'none';
 
-                setTimeout(() => {
-                    console.log("window.initLeaderboard =", window.initLeaderboard);
-                    if (window.initLeaderboard) {
-                        window.initLeaderboard();
-                    } else {
-                        console.error("initLeaderboard not found");
-                    }
-                }, 500);
-            });
+        setTimeout(() => {
+          console.log("window.initLeaderboard =", window.initLeaderboard);
+          if (window.initLeaderboard) {
+            window.initLeaderboard();
+          } else {
+            console.error("initLeaderboard not found");
+          }
+        }, 500);
+      });
 
     function openLocalLeaderboard() {
       document.getElementById("lcLeaderboardModal").style.display = 'flex';

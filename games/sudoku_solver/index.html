@@ -4,12 +4,28 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Sudoku Solver</title>
+    <title>Sudoku Solver Online - Free Sudoku Puzzle Solver Puzzle | Ravindra Games Hub</title>
     <meta name="description"
-        content="Ravindra Games Hub — collection of lightweight web games (Sudoku Solver) Solve number game in squre">
+        content="Solve free Sudoku puzzles online at Ravindra Games Hub. Solve Sudoku puzzles. Solve number game in squre">
+    <link rel="canonical" href="https://rnsaraswat.github.io/games/games/sudoku_solver/index.html">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Solve Sudoku Online - Free Solve Sudoku games puzzle">
+    <meta property="og:description" content="Solve free Sudoku puzzles online at Ravindra Games Hub.">
+    <meta property="og:url" content="https://rnsaraswat.github.io/games/games/sudoku_solver/index.html">
+    <meta property="og:image" content="https://rnsaraswat.github.io/games/assets/images/sudoku_preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Solve Sudoku Puzzle Online - Free Solve Sudoku Puzzle Game">
+    <meta name="twitter:description" content="Solve free Sudoku puzzles online at Ravindra Games Hub.">
+    <meta name="twitter:image" content="https://rnsaraswat.github.io/games/assets/images/sudoku_preview.png">
+
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="../../leaderboard/feedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/reply-popup.css">
+    <!-- <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" /> -->
+    <!-- <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" /> -->
     <link rel="stylesheet" href="../../commoncss.css">
+
     <link rel="manifest" href="../../manifest.json" />
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <meta name="theme-color" content="#6200ee" />
@@ -24,7 +40,7 @@
                     <label>Size = </label>
                     <select id="sizeSelect"></select>
                     <!-- <button class="btn" id="newBtn">New Game</button> -->
-                    <!-- <button class="btn" id="startBtn">Start / Fill</button> -->
+                    <button class="btn" id="startBtn">Start / Fill</button>
                     <label id="lebelMaxSol" for="maxSolutions">Max Solutions = </label><input id="maxSolutions"
                         class="lebelMaxSolVal" type="number" value="1" min="1" max="100" />
 
@@ -32,11 +48,17 @@
                     <button class="btn" id="unsolveBtn">🔒Unsolve</button>
                     <button class="btn" id="resetBtn">🔄 Reset</button>
                     <button class="btn" id="undoBtn">↶ Undo</button>
+                    <button id="pauseBtn">⏸ Pause</button>
+     
                     <button class="btn" id="toggle-theme">🌙 Dark</button>
                     <button class="btn" id="toggle-sound">🔇 Music:Off</button>
+                    <!-- <button class="button-primary" id="toggle-gb-leaderboard" onclick="openFirebaseGlobalLeaderboard()">🌍 Global
+                        Leaderboard</button> -->
+                    <!-- <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+                        Leaderboard</button> -->
                     <button class="button-primary" id="shareBtn">📤Sharing</button>
 
-                    <button class="button-primary" onclick="openGlobalFeedback()">💬 Feedback</button>
+                    <button class="button-primary" onclick="openFBFeedbackV2()">💬 Feedback</button>
                     <button class="button-primary"
                         onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
                     <p id="filledInfo">Filled: 0</p>
@@ -60,72 +82,58 @@
         </div>
     </div>
     <div id="FB-feedbackModal" class="fb-container">
-
-
+    </div>
     <!-- ==========================================
      REPLY POPUP
      यह FB-feedbackModal के अंदर नहीं है
-========================================== -->
-
+  ========================================== -->
     <div id="replyPopup" class="reply-popup" aria-hidden="true">
-
         <div class="reply-popup-content">
-
             <div class="reply-header">
-
                 <h2>💬 Replies</h2>
-
                 <button type="button" id="replyCloseBtn">
                     ✕
                 </button>
-
             </div>
-
-
             <div id="replyList" class="reply-list">
             </div>
-
-
             <div class="reply-form">
-
                 <input id="replyName" type="text" maxlength="60" placeholder="Your name">
-
-
                 <textarea id="replyMessage" maxlength="1000" placeholder="Write reply..."></textarea>
-
-
                 <button type="button" id="replySendBtn">
-
                     Send Reply
-
                 </button>
-
             </div>
-
         </div>
-
     </div>
+    <!-- <div id="lcLeaderboardModal" class="lc-main-container"></div> -->
+    <!-- <div id="firebaseLeaderboardModal" class="firebase-main-container"></div> -->
     <!-- Warning popup window -->
     <div class="warnbar" id="warnbar" aria-live="polite">
         <div class="row">
             <label id="warntext">Bigger the grid size and higher the no of solution may slow the solving process
             </label>
-            <button id="warn" class="primary">Ok</button>
+            <button type="button" id="warn" class="primary">Ok</button>
         </div>
     </div>
     <!-- Conformation popup window -->
     <div class="warnbar" id="conformbar">
         <div class="row">
             <p>Your filled data will be lost, are you sure?</p>
-            <button id="confirmYes" class="primary">Yes</button>
-            <button id="confirmNo" class="primary">No</button>
+            <button type="button" id="confirmYes" class="primary">Yes</button>
+            <button type="button" id="confirmNo" class="primary">No</button>
         </div>
     </div>
+
     <script type="module" src="../../leaderboard/feedback-controller.js"></script>
     <script type="module" src="../../leaderboard/feedback-ui.js"></script>
     <script type="module" src="../../leaderboard/feedback-firestore.js"></script>
     <script type="module" src="../../leaderboard/reply-popup.js"></script>
+
+    <!-- <script type="module" src="../../leaderboard/firebasegbleaderboard.js"></script> -->
+    <!-- <script type="module" src="../../leaderboard/lcleaderboard.js"></script> -->
     <script type="module" src="js/script.js"></script>
+    <!-- <script type="module" src="../../leaderboard/leaderboard-controller.js"></script> -->
     <!-- <script type="module">
         import { shareScore } from '../../leaderboard/share.js';
         document.getElementById("shareBtn").addEventListener("click", async () => {
@@ -135,8 +143,7 @@
     <script>
 
         document.getElementById("FB-feedbackModal").style.display = 'none';
-        // document.getElementById("winText").style.display = 'none';
-        // document.getElementById("rulesPopup").style.display = 'none';
+
 
         const themeToggle = document.getElementById('toggle-theme');
         function setTheme(t) {
@@ -155,12 +162,19 @@
         setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
 
         function openFBFeedbackV2() {
-            document.getElementById("FB-feedbackModal").style.display = 'flex';
-        };
+            const modal = document.getElementById("FB-feedbackModal");
+            if (!modal) {
+                console.error("FB-feedbackModal not found");
+                return;
+            }
+            modal.style.display = "flex";
+        }
 
-        function closeGlobalFeedback() {
-            document.getElementById("FB-feedbackModal").style.display = 'none';
-        };
+        function closeFBFeedback() {
+            const modal = document.getElementById("FB-feedbackModal");
+            if (!modal) return;
+            modal.style.display = "none";
+        }
 
         fetch('../../leaderboard/feedback.html')
             .then(response => {
@@ -177,10 +191,9 @@
                 }
                 modal.innerHTML = htmlText;
                 modal.style.display = "none";
-                console.log("Feedback V2 HTML loaded");
             })
             .catch(error => {
-                console.error("Feedback V2 load error:",error);
+                console.error("Feedback V2 load error:", error);
             });
 
         (async () => {
@@ -225,6 +238,8 @@
             });
         }
     </script>
+
+
 </body>
 
 </html>

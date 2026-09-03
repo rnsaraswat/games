@@ -1,5 +1,5 @@
 import { textToSpeechEng } from './speak.js';
-import { startTimer, stopTimer } from './timer.js';
+// import { startTimer, stopTimer } from './timer.js';
 import { playSound } from './sound.js';
 // import { startTimer, seconds, minutes, hours, timerInterval } from './timer.js';
 import { shareScore } from './share.js';
@@ -16,57 +16,129 @@ const sizes = [
 ];
 
 /* Elements */
-const el = {
-    maxSols: document.getElementById('maxSolutions'),
-    sizeSelect: document.getElementById('sizeSelect'),
-    warnText: document.getElementById('warntext'),
-    warnbar: document.getElementById('warnbar'),
-    // startBtn: document.getElementById('startBtn'),
-    // newBtn: document.getElementById('newBtn'),
-    solveBtn: document.getElementById('solveBtn'),
-    unsolveBtn: document.getElementById('unsolveBtn'),
-    resetBtn: document.getElementById('resetBtn'),
-    undoBtn: document.getElementById('undoBtn'),
-    pauseBtn: document.getElementById('pauseBtn'),
-    status: document.getElementById('status'),
-    numpad: document.getElementById('numpad'),
-    boardContainer: document.getElementById('boardContainer'),
-    themeToggle: document.getElementById('themeToggle'),
-    // notesToggle: document.getElementById('notesToggle'),
-    timerEl: document.getElementById('timer'),
-    prevSol: document.getElementById('prevSol'),
-    nextSol: document.getElementById('nextSol'),
-    solIndexEl: document.getElementById('solIndex'),
-    filledInfo: document.getElementById('filledInfo'),
-    remainInfo: document.getElementById('remainInfo'),
-    totalInfo: document.getElementById('totalInfo'),
+let el = {};
 
-    yesBtn: document.getElementById('confirmYes'),
-    noBtn: document.getElementById('confirmNo'),
-    conformbar: document.getElementById('conformbar'),
+function initElements() {
+    el = {
+        maxSols: document.getElementById('maxSolutions'),
+        sizeSelect: document.getElementById('sizeSelect'),
+        warnText: document.getElementById('warnText'),
+        warnbar: document.getElementById('warnbar'),
+        // startBtn: document.getElementById('startBtn'),
+        // newBtn: document.getElementById('newBtn'),
+        solveBtn: document.getElementById('solveBtn'),
+        unsolveBtn: document.getElementById('unsolveBtn'),
+        resetBtn: document.getElementById('resetBtn'),
+        undoBtn: document.getElementById('undoBtn'),
+        pauseBtn: document.getElementById('pauseBtn'),
+        status: document.getElementById('status'),
+        numpad: document.getElementById('numpad'),
+        boardContainer: document.getElementById('boardContainer'),
+        themeToggle: document.getElementById('toggle-theme'),
+        // notesToggle: document.getElementById('notesToggle'),
+        // timerEl: document.getElementById('timer'),
+        prevSol: document.getElementById('prevSol'),
+        nextSol: document.getElementById('nextSol'),
+        solIndexEl: document.getElementById('solIndex'),
+        filledInfo: document.getElementById('filledInfo'),
+        remainInfo: document.getElementById('remainInfo'),
+        totalInfo: document.getElementById('totalInfo'),
 
-};
+        yesBtn: document.getElementById('confirmYes'),
+        noBtn: document.getElementById('confirmNo'),
+        conformbar: document.getElementById('conformbar'),
+    };
+}
 
-sizes.sort((a, b) => a.n - b.n);
-sizes.forEach(s => {
-    const o = document.createElement('option'); o.value = s.n; o.textContent = `${s.n} (${s.box[0]}x${s.box[1]})`;
-    el.sizeSelect.appendChild(o);
-});
-el.sizeSelect.value = 9;
 
-// state ---------- */
-let N = 9, boxR = 3, boxC = 3;            // current size & box dimensions
-let grid = [], userGrid = [], notesGrid = []; // grid values and which are user-filled
+function initSizeSelect() {
+    sizes.sort((a, b) => a.n - b.n);
+    sizes.forEach(s => {
+        const option = document.createElement('option');
+        option.value = s.n;
+        option.textContent = `${s.n} (${s.box[0]}x${s.box[1]})`;
+        el.sizeSelect.appendChild(option);
+    });
+    el.sizeSelect.value = 9;
+}
+
+// // state ---------- */
+// let N = 9, boxR = 3, boxC = 3;            // current size & box dimensions
+// let grid = [], userGrid = [], notesGrid = []; // grid values and which are user-filled
+// let selectedDigit = null, selectedCell = null;
+// let undoStack = [];
+// let solutions = [], solIndex = 0, solvedMode = false;
+// export let timer = 0, timerInterval = null, paused = false;
+// let solverAbort = false, solvingInBackground = false;
+// let filledcell = 0;
+// let conform = false;
+
+// let conformbar;
+
+// // Initialize DOM elements immediately.
+// // This script is loaded as a module, so the HTML has already been parsed.
+// initElements();
+// initSizeSelect();
+// updateInitialInfo();
+
+// console.log('confirmYes:', el.yesBtn);
+// console.log('confirmNo:', el.noBtn);
+// console.log('conformbar:', el.conformbar);
+
+// conformbar = el.conformbar;
+
+// const warn = document.getElementById('warn');
+
+// if (warn) {
+//     warn.addEventListener('click', () => {
+//         el.warnbar.classList.remove('show');
+//     });
+// }
+
+let N = 9, boxR = 3, boxC = 3;
+
+let grid = [], userGrid = [], notesGrid = [];
 let selectedDigit = null, selectedCell = null;
 let undoStack = [];
 let solutions = [], solIndex = 0, solvedMode = false;
-export let timer = 0, timerInterval = null, paused = false;
+
+// export let timer = 0, timerInterval = null, paused = false;
+
 let solverAbort = false, solvingInBackground = false;
+
 let filledcell = 0;
 let conform = false;
-el.filledInfo.textContent = `Filled: ${filledcell}`;
-el.remainInfo.textContent = `Empty: ${N * N - filledcell}`;
-el.totalInfo.textContent = `Total: ${N * N}`;
+
+let conformbar;
+
+// DOM initialization
+initElements();
+initSizeSelect();
+updateInitialInfo();
+
+conformbar = el.conformbar;
+
+const warn = document.getElementById('warn');
+
+if (warn) {
+    warn.addEventListener('click', () => {
+        if (el.warnbar) {
+            el.warnbar.classList.remove('show');
+        }
+    });
+}
+
+function updateInitialInfo() {
+
+    el.filledInfo.textContent =
+        `Filled: ${filledcell}`;
+
+    el.remainInfo.textContent =
+        `Empty: ${N * N - filledcell}`;
+
+    el.totalInfo.textContent =
+        `Total: ${N * N}`;
+}
 
 // build board DOM (as per size)
 function buildBoard(n, box) {
@@ -103,7 +175,6 @@ function buildBoard(n, box) {
             cell.dataset.val = '';
             // subgrid alternate bg
             const br = Math.floor(r / boxR), bc = Math.floor(c / boxC);
-            // console.log(el.altBgToggle.checked, br, bc, (br + bc) % 2)
             if ((br + bc) % 2 === 1) cell.classList.add('alt-bg');
             const input = document.createElement('input');
             input.readOnly = true;
@@ -270,30 +341,14 @@ function refreshCell(r, c) {
     elCell.dataset.val = val || '';
     elCell.classList.toggle('user', !!userGrid[r][c]);
     elCell.classList.toggle('solved', solvedMode && !userGrid[r][c] && val);
-
-    //for notes
-    // const noteWrap = elCell.querySelector('.notes'); 
-    // noteWrap.innerHTML = '';
-    // if (el.notesToggle.checked && !val) {
-    // const maxCols = Math.ceil(Math.sqrt(N)); 
-    // noteWrap.style.gridTemplateColumns = `repeat(${maxCols},1fr)`;
-    // const cand = getCandidates(r, c);
-    // for (let i = 1; i <= N; i++) { 
-    //     const sp = document.createElement('span'); 
-    //     sp.textContent = cand.includes(i) ? i : ''; 
-    //     noteWrap.appendChild(sp); 
-    // }
-    // }
 }
 
 function refreshAll() {
-    console.log(userGrid, grid);
     filledcell = 0;
     for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
         refreshCell(r, c);
         if (grid[r][c] > 0) filledcell++;
     }
-    console.log(filledcell, N * N - filledcell);
     el.filledInfo.textContent = `Filled: ${filledcell}`;
     el.remainInfo.textContent = `Empty: ${N * N - filledcell}`;
     el.totalInfo.textContent = `Total: ${N * N}`;
@@ -469,12 +524,12 @@ function generateBaseSolution(n, r, c) {
 
 // Solve flow (first solution immediate + background)
 async function startSolveFlow() {
-    warnbar.classList.remove('show');
+    el.warnbar.classList.remove('show');
     const maxSol = Math.max(1, Math.min(1000, parseInt(el.maxSols.value) || 2));
     // check for 25% filled or not
     // if(N >= 12 && filled < Math.ceil(total * 0.25)){
     //     // el.warnText.textContent = "Bigger no of solution may and bigger the size may slow the solving process";
-    //     // warnbar.classList.add('show');
+    //     // el.warnbar.classList.add('show');
     //     setStatus(`Too few clues for ${N}×${N}. Need at least ${Math.ceil(total*0.25)} clues (25%).`);
     //     textToSpeechEng(`Fill more ${Math.ceil(total*0.25) - filled} numbers`);
     //     return;
@@ -505,7 +560,7 @@ async function startSolveFlow() {
     // first-solution callback: apply immediately
     const onFirst = (sol) => {
         applySolution(sol);
-        stopTimer();
+        // stopTimer();
         setStatus('First solution shown. Continuing search in background...');
         textToSpeechEng('First Solition');
         el.filledInfo.textContent = `Filled: ${filledcell}`;
@@ -533,54 +588,92 @@ async function startSolveFlow() {
     selectedDigit = null;
     document.querySelectorAll('.cell').forEach(c => c.classList.remove('selected', 'row-highlight', 'col-highlight'));
     document.querySelectorAll('.nbtn').forEach(elc => elc.classList.remove('selected'));
-    stopTimer();
+    // stopTimer();
 }
 
 // update solution navigation
+// update solution navigation
 function updateSolNav() {
-    el.solIndexEl.textContent = (solutions.length ? `${solIndex + 1} / ${solutions.length}` : '0 / 0');
+    el.solIndexEl.textContent =
+        (solutions.length ? `${solIndex + 1} / ${solutions.length}` : '0 / 0');
 }
 
-//max solution change
+
+// max solution change
 el.maxSols.addEventListener('input', function () {
-    let inputval = this.value;
-    console.log(inputval);
-    const maxSol = Math.max(1, Math.min(1000, parseInt(inputval) || 2));
+
+    const inputval = this.value;
+
+    const maxSol = Math.max(
+        1,
+        Math.min(1000, parseInt(inputval) || 2)
+    );
+
     if (maxSol > 10) {
-        el.warnText.textContent = "Higher the no of solution and Bigger the grid size may slow the solving process";
-        warnbar.classList.add('show');
+
+        if (el.warnText !== null) {
+            el.warnText.textContent =
+                "Higher the no of solution and Bigger the grid size may slow the solving process";
+        }
+
+        if (el.warnbar !== null) {
+            el.warnbar.classList.add('show');
+        }
+
     } else {
-        warnbar.classList.remove('show');
+
+        if (el.warnbar !== null) {
+            el.warnbar.classList.remove('show');
+        }
     }
 });
 
-//size change
-el.sizeSelect.addEventListener('click', () => {
+
+// size change
+el.sizeSelect.addEventListener('change', () => {
+
     const n = parseInt(el.sizeSelect.value);
+
     if (n > 12) {
-        el.warnText.textContent = "Bigger the grid size and higher the no of solution may slow the solving process";
-        warnbar.classList.add('show');
+
+        if (el.warnText !== null) {
+            el.warnText.textContent =
+                "Bigger the grid size and higher the no of solution may slow the solving process";
+        }
+
+        if (el.warnbar !== null) {
+            el.warnbar.classList.add('show');
+        }
+
     } else {
-        warnbar.classList.remove('show');
+
+        if (el.warnbar !== null) {
+            el.warnbar.classList.remove('show');
+        }
     }
+
     const opt = sizes.find(s => s.n === n);
+
+    if (!opt) {
+        console.error("❌ Size configuration not found:", n);
+        return;
+    }
+
     buildBoard(n, opt.box);
+
     setStatus('New board Ready — Click number to start fill board');
+
     refreshAll();
-    startTimer();
 });
 
-//show warning popup
-document.getElementById('warn').addEventListener('click', () => {
-    warnbar.classList.remove('show');
-});
+
 
 // action to check after 25% number filledd or not
 // click warning window ok button
 // el.sizeSelect.addEventListener('click', () => {
 //     const n = parseInt(el.sizeSelect.value); 
 //     if (n>12) {
-//         warnbar.classList.add('show');
+//         el.warnbar.classList.add('show');
 //     }
 //     const opt = sizes.find(s => s.n === n);
 //     buildBoard(n, opt.box); 
@@ -624,20 +717,32 @@ el.prevSol.addEventListener('click', () => { textToSpeechEng('Previous'); if (so
 el.nextSol.addEventListener('click', () => { textToSpeechEng('Next'); if (solutions.length === 0) return; solIndex = (solIndex + 1) % solutions.length; applySolution(solutions[solIndex]); updateSolNav(); });
 
 //reset yes button
-el.yesBtn.addEventListener('click', () => {
-    conformbar.style.display = 'none';
-    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) { userGrid[r][c] = 0; grid[r][c] = 0; }
-    refreshAll();
-    undoStack = [];
-    setStatus('Board reset, Select numpad number first to fill');
-    return;
-});
+// el.yesBtn.addEventListener('click', () => {
+//     conformbar.style.display = 'none';
+//     for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) { userGrid[r][c] = 0; grid[r][c] = 0; }
+//     refreshAll();
+//     undoStack = [];
+//     setStatus('Board reset, Select numpad number first to fill');
+//     return;
+// });
+
+if (el.yesBtn) {
+    el.yesBtn.addEventListener('click', () => {
+        conformbar.style.display = 'none';
+        for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) { userGrid[r][c] = 0; grid[r][c] = 0; }
+        refreshAll();
+        undoStack = [];
+        setStatus('Board reset, Select numpad number first to fill');
+        return;
+    });
+}
 
 //reset no button
 el.noBtn.onclick = function () {
     conformbar.style.display = 'none';
     return;
 }
+
 
 // key's action
 window.addEventListener('keydown', (e) => {

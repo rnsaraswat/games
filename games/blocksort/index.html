@@ -183,6 +183,7 @@
     <script type="module" src="../../leaderboard/reply-popup.js"></script>
   
     <script type="module" src="../../leaderboard/firebasegbleaderboard.js"></script>
+    <script type="module" src="../../leaderboard/leaderboard-controller.js"></script>
     <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
     <script type="module" src="js/rules.js"></script>
     <script>
@@ -217,6 +218,9 @@
         };
 
         function closeFirebaseGlobalLeaderboard() {
+            if (typeof window.stopLeaderboard === "function") {
+                window.stopLeaderboard();
+            }
             document.getElementById("firebaseLeaderboardModal").style.display = 'none';
         };
 

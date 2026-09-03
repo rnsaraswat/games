@@ -412,106 +412,37 @@ async function handleReplySubmit() {
 
 export function initReplyPopup() {
 
-    // console.log(
-    //     "Initializing Reply Popup..."
-    // );
-
-
-    const popup =
-        document.getElementById(
-            "replyPopup"
-        );
-
-
-    const closeButton =
-        document.getElementById(
-            "replyCloseBtn"
-        );
-
-
-    const sendButton =
-        document.getElementById(
-            "replySendBtn"
-        );
-
-
-    /* -----------------------------------------
-       Popup Check
-    ----------------------------------------- */
+    const popup = document.getElementById("replyPopup");
+    const closeButton = document.getElementById("replyCloseBtn");
+    const sendButton = document.getElementById("replySendBtn");
 
     if (!popup) {
-
-        console.error(
-            "❌ Reply Popup: #replyPopup not found"
-        );
-
+        console.error("❌ Reply Popup: #replyPopup not found");
         return;
-
     }
-
-
-    /* -----------------------------------------
-       Close Button
-    ----------------------------------------- */
 
     if (closeButton) {
-
-        closeButton.onclick =
-            closeReplyPopup;
-
+        closeButton.onclick = closeReplyPopup;
     }
     else {
-
-        console.warn(
-            "⚠️ #replyCloseBtn not found"
-        );
-
+        console.warn("⚠️ #replyCloseBtn not found");
     }
-
-
-    /* -----------------------------------------
-       Send Button
-    ----------------------------------------- */
 
     if (sendButton) {
-
-        sendButton.onclick =
-            handleReplySubmit;
-
+        sendButton.onclick = handleReplySubmit;
     }
     else {
-
-        console.warn(
-            "⚠️ #replySendBtn not found"
-        );
-
+        console.warn("⚠️ #replySendBtn not found");
     }
 
-
-    /* -----------------------------------------
-       Click Outside Popup
-    ----------------------------------------- */
-
-    popup.addEventListener(
-        "click",
-        function (event) {
-
+    popup.addEventListener("click", function (event) {
             if (
                 event.target === popup
             ) {
-
                 closeReplyPopup();
-
             }
-
         }
     );
-
-
-    // console.log(
-    //     "✅ Reply Popup initialized"
-    // );
-
 }
 
 

@@ -178,12 +178,13 @@ window.addEventListener('load', function () {
 
     /* ---------- Start / Reset ---------- */
     startBtn.addEventListener('click', () => {
-        if (document.getElementById("startBtn").textContent === "Start") {
-            document.getElementById("startBtn").textContent = "End";
+        const text = document.getElementById("startBtn");
+        if (text.textContent.trim() === "🔄Start") {
+            document.getElementById("startBtn").textContent = "🔚End";
             textToSpeechEng('Start');
             startGame();
         } else {
-            document.getElementById("startBtn").textContent = "Start"
+            document.getElementById("startBtn").textContent = "🔄Start"
             textToSpeechEng('End');
             playSound('loose');
             clearInterval(timerInterval);
@@ -197,14 +198,14 @@ window.addEventListener('load', function () {
     //level change
     levelSel.addEventListener('change', () => {
         board.innerHTML = '';
-        document.getElementById("startBtn").textContent = "Start";
+        document.getElementById("startBtn").textContent = "🔄Start";
         textToSpeechEng('level' + levelSel.value);
     });
 
     // theme change
     themeSel.addEventListener('change', () => {
         board.innerHTML = '';
-        document.getElementById("startBtn").textContent = "Start";
+        document.getElementById("startBtn").textContent = "🔄Start";
         textToSpeechEng('theme' + themeSel.value);
     });
 
@@ -351,7 +352,7 @@ window.addEventListener('load', function () {
     /* ---------- Win ---------- */
     function onWin() {
         clearInterval(timerInterval);
-        document.getElementById("startBtn").textContent = "Start";
+        document.getElementById("startBtn").textContent = "🔄Start";
         // updateleaderboard()
         updateleaderboard();
         window.saveScore();
