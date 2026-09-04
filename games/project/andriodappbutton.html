@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android app button</title>
+    <style>
+        .android-app-btn {
+            display: inline-block;
+            padding: 12px 22px;
+            background: #7c3aed;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .android-app-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .playstore-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 18px;
+            background: #111;
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            transition: 0.25s;
+        }
+
+        .playstore-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 18px rgba(0, 0, 0, 0.3);
+        }
+
+        .play-icon {
+            font-size: 25px;
+        }
+
+        .playstore-btn small {
+            display: block;
+            font-size: 9px;
+            line-height: 1;
+        }
+
+        .playstore-btn strong {
+            display: block;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Android app button</h1>
+    <h2>HTML + JavaScript</h2>
+    <button id="androidAppBtn">📱 Android App</button>
+    <h2>Play Store link button</h2>
+    <a href="https://play.google.com/store/apps/details?id=com.rnsaraswat.ravindragameshub" target="_blank"
+        rel="noopener noreferrer" class="android-app-btn">
+        📱 Get Android App
+    </a>
+    <h2>Play store link Button with JavaScript</h2>
+    <h2>app button for Ravindra Games Hub</h2>
+    <a href="https://play.google.com/store/apps/details?id=com.rnsaraswat.ravindragameshub" target="_blank"
+        rel="noopener noreferrer" class="playstore-btn">
+        <span class="play-icon">▶</span>
+        <span>
+            <small>GET IT ON</small>
+            <strong>Google Play</strong>
+        </span>
+    </a>
+    <script>
+        document.getElementById("androidAppBtn").addEventListener("click", function () {
+            window.open(
+                "https://play.google.com/store/apps/details?id=com.rnsaraswat.ravindragameshub",
+                "_blank"
+            );
+        });
+
+        const btn = document.createElement("a");
+
+        btn.href =
+            "https://play.google.com/store/apps/details?id=com.rnsaraswat.ravindragameshub";
+
+        btn.target = "_blank";
+        btn.rel = "noopener noreferrer";
+        btn.textContent = "📱 Get Android App";
+
+        btn.className = "android-app-btn";
+
+        document.body.appendChild(btn);
+
+    </script>
+</body>
+
+</html>
