@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Responsive Photo Gallery</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #111;
+        }
+
+        /* GALLERY */
+        .gallery {
+            width: 100%;
+            max-width: 1200px;
+            margin: 10px auto;
+            padding: 0 50px;
+            position: relative;
+        }
+
+        /* FRAME */
+        .gallery-frame {
+            width: 100%;
+            /* Photo की maximum height creen height का 30% */
+            max-height: 30vh;
+            overflow: hidden;
+            border-radius: 15px;
+        }
+
+        /* PHOTOS */
+        .photos {
+            display: flex;
+            gap: 12px;
+            transition: transform 0.6s ease;
+        }
+
+        /* PHOTO */
+        .photo {
+            /* Desktop: एक साथ 6 photos */
+            flex: 0 0 calc((100% - 60px) / 6);
+            /* Portrait ratio */
+            aspect-ratio: 9 / 16;
+            /* 30vh से ज्यादा height नहीं */
+            max-height: 30vh;
+            text-align: center;
+            min-width: 0;
+        }
+
+
+        /* IMAGE */
+        .photo img {
+            /* width कम हो सकती है, लेकिन height 30vh से ज्यादा नहीं */
+            width: 100%;
+            height: 30vh;
+            max-height: 30vh;
+            /* IMPORTANT: पूरी photo दिखाई जाएगी */
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            border-radius: 10px;
+        }
+
+        /* PHOTO NAME */
+        .photo-name {
+            color: white;
+            font-size: clamp(9px, 1.3vw, 16px);
+            margin-top: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+        /* ARROWS */
+        .arrow {
+            position: absolute;
+            top: 45%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.85);
+            color: #111;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .arrow:hover {
+            background: white;
+        }
+
+        .prev {
+            left: 5px;
+        }
+
+        .next {
+            right: 5px;
+        }
+
+
+        /* TABLET */
+        @media (max-width: 900px) {
+            .photo {
+                /* Tablet: 4 photos */
+                flex: 0 0 calc((100% - 36px) / 4);
+                aspect-ratio: 9 / 16;
+            }
+        }
+
+
+        /* MOBILE */
+        @media (max-width: 600px) {
+            .gallery {
+                padding: 0 40px;
+            }
+
+            .photo {
+                /* Mobile: 2 photos */
+                flex: 0 0 calc((100% - 12px) / 2);
+                aspect-ratio: 9 / 16;
+            }
+
+            .photo img {
+                height: 30vh;
+                max-height: 30vh;
+                object-fit: contain;
+            }
+
+            .arrow {
+                width: 12px;
+                height: 12px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="gallery">
+        <!-- Previous -->
+        <button class="arrow prev" onclick="previousPhoto()">
+            &#10094;
+        </button>
+
+        <div class="gallery-frame">
+            <div class="photos" id="photos">
+                <div class="photo">
+                    <img src="../../assets/images/3inARow_preview.png">
+                    <div class="photo-name">3 in ARow</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/4inARow_preview.png">
+                    <div class="photo-name">4 in ARow</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/5inARow_preview.png">
+                    <div class="photo-name">5 in ARow</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/blocksort_preview.png">
+                    <div class="photo-name">Block Sort</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/connect_3_preview.png">
+                    <div class="photo-name">Connect 3</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/connect_4_preview.png">
+                    <div class="photo-name">Connect 4</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/slitherlink_preview.png">
+                    <div class="photo-name">Slitherlink</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/sudoku_preview.png">
+                    <div class="photo-name">Sudoku</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/tictactoe_preview.png">
+                    <div class="photo-name">Tic Tac Toe</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/watersort_preview.png">
+                    <div class="photo-name">Water Sort</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/jigsaw_preview.png">
+                    <div class="photo-name">Jigsaw</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/mastermind_preview.png">
+                    <div class="photo-name">Mastermind</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/memory_preview.png">
+                    <div class="photo-name">Memory</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/reversi_preview.png">
+                    <div class="photo-name">Reversi</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/rock_paper_scissor_preview.png">
+                    <div class="photo-name">Rock Paper Scissor</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/connect4_preview.png">
+                    <div class="photo-name">Connect 4</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/mastermind_preview.png">
+                    <div class="photo-name">Mastermind Solver</div>
+                </div>
+                <div class="photo">
+                    <img src="../../assets/images/sudoku_preview.png">
+                    <div class="photo-name">Sudoku Solver</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Next -->
+        <button class="arrow next" onclick="nextPhoto()">&#10095;
+        </button>
+    </div>
+    <script>
+        const photosContainer = document.getElementById("photos");
+        let currentIndex = 0;
+
+        /* कितनी photos एक साथ दिखाई दें */
+        function getVisiblePhotos() {
+            if (window.innerWidth <= 600) {
+                return 2;
+            }
+            if (window.innerWidth <= 900) {
+                return 4;
+            }
+            return 6;
+        }
+
+
+        /* Next photo */
+        function nextPhoto() {
+            const items = document.querySelectorAll(".photo");
+            const visible = getVisiblePhotos();
+
+            if (currentIndex < items.length - visible) {
+                currentIndex++;
+            }
+            else {
+                currentIndex = 0;
+            }
+            moveGallery();
+        }
+
+        /* Previous photo */
+        function previousPhoto() {
+            const items = document.querySelectorAll(".photo");
+            const visible = getVisiblePhotos();
+
+            if (currentIndex > 0) {
+                currentIndex--;
+            }
+            else {
+                currentIndex = items.length - visible;
+            }
+            moveGallery();
+        }
+
+
+        /* Gallery move */
+        function moveGallery() {
+            const item = document.querySelector(".photo");
+            const gap = 12;
+            const itemWidth = item.offsetWidth + gap;
+
+            photosContainer.style.transform =
+                `translateX(-${currentIndex * itemWidth}px)`;
+        }
+
+        /* Automatic slide */
+        setInterval(() => {
+            nextPhoto();
+        }, 3000);
+
+        /* Screen resize होने पर position ठीक करें */
+        window.addEventListener("resize", () => {
+            currentIndex = 0;
+            photosContainer.style.transform = "translateX(0)";
+        });
+
+    </script>
+
+</body>
+
+</html>

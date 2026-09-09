@@ -16,7 +16,8 @@
     <meta name="robots" content="index,follow,max-image-preview:large">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Ravindra Games Hub">
-    <meta property="og:description" content="Play exciting brain games including Sudoku, Water Sort, Connect 4, Reversi and more.">
+    <meta property="og:description"
+        content="Play exciting brain games including Sudoku, Water Sort, Connect 4, Reversi and more.">
     <meta property="og:url" content="https://rnsaraswat.github.io/games/">
     <meta property="og:image" content="https://rnsaraswat.github.io/games/assets/images/preview.png">
     <link rel="canonical" href="https://rnsaraswat.github.io/games/">
@@ -94,21 +95,148 @@
                 <button class="button-primary" onclick="window.location.href='auth/login.html'">🚪Sign in</button>
                 <button class="button-primary" id="toggle-theme">☀️ Light</button>
                 <a href="https://play.google.com/store/apps/details?id=com.rnsaraswat.ravindragameshub" target="_blank"
-                rel="noopener noreferrer" class="playstore-btn">
-                <span class="playstore-icon">▶</span>
-                <span>
-                    <small class="playstore-small">GET IT ON</small>
-                    <strong class="playstore-strong">Google Play</strong>
-                </span>
-            </a>
+                    rel="noopener noreferrer" class="playstore-btn">
+                    <span class="playstore-icon">▶</span>
+                    <span>
+                        <small class="playstore-small">GET IT ON</small>
+                        <strong class="playstore-strong">Google Play</strong>
+                    </span>
+                </a>
             </div>
             <div class="hdr-child-div">
                 <p id="welcom" class="lead">Welcome</p>
             </div>
-            <h2 class="section-title">
+            <!-- Screen shot slide show html -->
+            <div class="gallery">
+                <!-- Previous -->
+                <button class="arrow prev" onclick="previousPhoto()">
+                    &#10094;
+                </button>
+
+                <div class="gallery-frame">
+                    <div class="photos" id="photos">
+                        <div class="photo">
+                            <img src="../../assets/images/3inARow_preview.png">
+                            <div class="photo-name">3 in ARow</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/4inARow_preview.png">
+                            <div class="photo-name">4 in ARow</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/5inARow_preview.png">
+                            <div class="photo-name">5 in ARow</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/blocksort_preview.png">
+                            <div class="photo-name">Block Sort</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/connect_3_preview.png">
+                            <div class="photo-name">Connect 3</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/connect_4_preview.png">
+                            <div class="photo-name">Connect 4</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/slitherlink_preview.png">
+                            <div class="photo-name">Slitherlink</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/sudoku_preview.png">
+                            <div class="photo-name">Sudoku</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/tictactoe_preview.png">
+                            <div class="photo-name">Tic Tac Toe</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/watersort_preview.png">
+                            <div class="photo-name">Water Sort</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/jigsaw_preview.png">
+                            <div class="photo-name">Jigsaw</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/mastermind_preview.png">
+                            <div class="photo-name">Mastermind</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/memory_preview.png">
+                            <div class="photo-name">Memory</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/reversi_preview.png">
+                            <div class="photo-name">Reversi</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/rock_paper_scissor_preview.png">
+                            <div class="photo-name">Rock Paper Scissor</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/connect4_preview.png">
+                            <div class="photo-name">Connect 4</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/mastermind_preview.png">
+                            <div class="photo-name">Mastermind Solver</div>
+                        </div>
+                        <div class="photo">
+                            <img src="../../assets/images/sudoku_preview.png">
+                            <div class="photo-name">Sudoku Solver</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Next -->
+                <button class="arrow next" onclick="nextPhoto()">&#10095;
+                </button>
+            </div>
+            <!-- <h2 class="section-title">
                 Why Choose RGH?
-            </h2>
-            <div class="features">
+            </h2> -->
+            <!-- FEQ & Why RGH slide show HTML1 -->
+            <section class="message-section">
+
+                <!-- LEFT / WHY TO CHOOSE RGH -->
+                <div class="message-box">
+                    <h2>Why Choose RGH?</h2>
+                    <div class="message-slider">
+                        <button class="msg-arrow msg-prev" onclick="changeWhy(-1)"> &#10094;
+                        </button>
+                        <div class="message-content">
+                            <div id="whyMessage">
+                                <h3 class='slide-h3'>🎮 Multiple Games</h3>
+                                <p class='slide-p'>Enjoy many brain games in one application.</p>
+                            </div>
+                        </div>
+                        <button class="msg-arrow msg-next" onclick="changeWhy(1)">
+                            &#10095;
+                        </button>
+                    </div>
+                </div>
+
+                <!-- RIGHT / FAQ -->
+                <div class="message-box">
+                    <h2>Frequently Asked Questions</h2>
+                    <div class="message-slider">
+                        <button class="msg-arrow msg-prev" onclick="changeFaq(-1)">&#10094;
+                        </button>
+
+                        <div class="message-content">
+                            <div id="faqMessage">
+                                What is Ravindra Games Hub?
+                            </div>
+                        </div>
+
+                        <button class="msg-arrow msg-next" onclick="changeFaq(1)">&#10095;
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <!-- <div class="features">
                 <div class="feature">
                     <h3>🎮 Multiple Games</h3>
                     <p>Enjoy many brain games in one application.</p>
@@ -131,7 +259,8 @@
                 <h3>Is Ravindra Games Hub free?</h3>
                 <p>Yes, every game is free.</p>
                 <h3>Can I play offline?</h3>
-                <p>All games work offline after installation. Also save in local leaderboard. But need internet to include in global leaderboard</p>
+                <p>All games work offline after installation. Also save in local leaderboard. But need internet to
+                    include in global leaderboard</p>
                 <h3>Is Sign in is necessory?</h3>
                 <p>No, no need to sign in play game.</p>
                 <h3>Why Sign in?</h3>
@@ -139,7 +268,9 @@
                 <h3>How many themes?</h3>
                 <p>Four themes are available - Light, Dark, Blue, Orange.</p>
                 <h3>Does my game save when minimise window?</h3>
-                <p>Yes, your games is save when minimise window for any resion, and game resume when leaderboard, feedback, theme, sharing, music and pause is clicked, but when home, brower back/refersh button is pressed game will be lost.</p>
+                <p>Yes, your games is save when minimise window for any resion, and game resume when leaderboard,
+                    feedback, theme, sharing, music and pause is clicked, but when home, brower back/refersh button is
+                    pressed game will be lost.</p>
             </div>
 
 
@@ -151,7 +282,7 @@
                 <img src="assets/images/Screenshot_watersort.png" alt="Ravindra Games Hub Home Screen" loading="lazy">
                 <img src="assets/images/Screenshot_reversi.png" alt="Reversi Game Screenshot" loading="lazy">
                 <img src="./assets/images/Screenshot_about.png" alt="About Ravindra Games Hub" loading="lazy">
-            </div>
+            </div> -->
 
             <h2 class="section-title">
                 GAMES
@@ -182,13 +313,13 @@
                     Contact Us
                 </a>
                 <a href="https://play.google.com/store/apps/details?id=com.rnsaraswat.ravindragameshub" target="_blank"
-                rel="noopener noreferrer" class="playstore-btn">
-                <span class="playstore-icon">▶</span>
-                <span>
-                    <small class="playstore-small">GET IT ON</small>
-                    <strong class="playstore-strong">Google Play</strong>
-                </span>
-            </a>
+                    rel="noopener noreferrer" class="playstore-btn">
+                    <span class="playstore-icon">▶</span>
+                    <span>
+                        <small class="playstore-small">GET IT ON</small>
+                        <strong class="playstore-strong">Google Play</strong>
+                    </span>
+                </a>
             </p>
         </footer>
         <!-- </footer> -->
@@ -395,8 +526,178 @@
                 modal.style.display = "none";
             })
             .catch(error => {
-                console.error("Feedback V2 load error:",error);
+                console.error("Feedback V2 load error:", error);
             });
+
+        // FEQ and WHY TO CHOOSE RGH MESSAGES script
+        // WHY TO CHOOSE RGH MESSAGES
+        const whyMessages = [
+            "<h3 class='slide-h3'>🎮 Multiple Games</h3><p class='slide-p'>Enjoy many brain games in one application.</p>",
+
+            "<h3 class='slide-h3'>🧠 Brain Training</h3><p class='slide-p'>Improve memory, strategy and logic skills.</p>",
+
+            "<h3 class='slide-h3'>📱 Offline Play</h3><p class='slide-p'>Play anytime without an internet connection.</p>",
+
+            "<h3 class='slide-h3'>⚡ Lightweight</h3><p>Fast performance with beautiful themes.</p>"
+
+        ];
+
+        // FAQ MESSAGES
+        const faqMessages = [
+            "<h3 class='slide-h3'>Is Ravindra Games Hub free?</h3><p class='slide-p'>Yes, every game is free.</p>",
+            "<h3 class='slide-h3'>Can I play offline?</h3><p class='slide-p'>Yes, All app games work offline after download 'Ravindra Games Hub' App.",
+            "<h3 class='slide-h3'>Can I play offline?</h3><p class='slide-p'>No, All website games need internet connection for play.",
+            "<h3 class='slide-h3'>Is Sign in is necessory?</h3><p class='slide-p'>No, no need to sign in play game.</p>",
+            "<h3 class='slide-h3'>Why Sign in?</h3><p class='slide-p'>If you not sign in before play the name in game appear as guest in App.</p>",
+            "<h3 class='slide-h3'>Why Sign in?</h3><p class='slide-p'>If you not sign in before play the name in leaderboard appear as guest.</p>",
+            "<h3 class='slide-h3'>How many themes?</h3><p>Four themes are available - Light, Dark, Blue, Orange.</p>",
+            "<h3 class='slide-h3'>How many themes?</h3><p>Two themes are available - Dark(Blue), Light(Orange) in website.</p>",
+            "<h3 class='slide-h3'>Does my game lost?</h3><p class='slide-p'>No, in app Your game is save in all conditionlos like, minimise/close app.</p>",
+            "<h3 class='slide-h3'>Does my game lost?</h3><p class='slide-p'>Your game is lost in website when home, brower back/refersh button is pressed.</p>",
+            "<h3 class='slide-h3'>When my game is save?</h3><p class='slide-p'>Your games is resume in website when leaderboard, feedback, theme, sharing, music and pause is clicked.</p>",
+            "<h3 class='slide-h3'>Which Games available?</h3><p class='slide-p'>Memory, Block Sort, Sudoku, Water Sort, Reversi, Connect 4, Tic Tac Toe, Mastermind, Mastermind solver, Sudoku solver, three in a row, Connect 3, four in a row, Connect 4, Jigsaw, slintherlink, Rock Paper Scissor</p>",
+            "<h3 class='slide-h3'>Can two players play game?</h3><p class='slide-p'>Yes, Reversi, Connect 4, Tic Tac Toe, 5 in a row, 3 in a row, Connect 3, 4 in a row, Connect 4 can play two human players</p>",
+            "<h3 class='slide-h3'>Can play game with AI?</h3><p class='slide-p'>Yes, Reversi, Connect 4, Tic Tac Toe, 5 in a row, 3 in a row, Connect 3, 4 in a row, Connect 4 can playe with AI</p>",
+            "<h3 class='slide-h3'>Is games have different difficulty levels?</h3><p class='slide-p'>Yes, All the games in app and website are 3 difficulty leves. Easy, Medium and Hard</p>",
+            "<h3 class='slide-h3'>Can single player play games?</h3><p class='slide-p'>Yes, Memory, Block Sort, Sudoku, Water Sort, Rock Paper Scissor play indiviual players.</p>",
+            "<h3 class='slide-h3'>Can game solver availabe?</h3><p class='slide-p'>Yes, Mastermind solver, Sudoku solver available in website games.",
+        ];
+
+        // CURRENT INDEX
+        let whyIndex = 0;
+        let faqIndex = 0;
+
+        // CHANGE WHY MESSAGE
+        function changeWhy(direction) {
+            whyIndex += direction;
+            if (whyIndex >= whyMessages.length) {
+                whyIndex = 0;
+            }
+            if (whyIndex < 0) {
+                whyIndex = whyMessages.length - 1;
+            }
+            showMessage("whyMessage", whyMessages[whyIndex], direction);
+        }
+
+        // CHANGE FAQ MESSAGE
+        function changeFaq(direction) {
+            faqIndex += direction;
+            if (faqIndex >= faqMessages.length) {
+                faqIndex = 0;
+            }
+
+            if (faqIndex < 0) {
+                faqIndex = faqMessages.length - 1;
+            }
+
+            showMessage("faqMessage", faqMessages[faqIndex], direction);
+        }
+
+        // SHOW MESSAGE WITH ANIMATION
+        function showMessage(id, text, direction) {
+            const element = document.getElementById(id);
+            if (!element) return;
+            // Old message बाहर जाए
+            element.style.opacity = "0";
+            element.style.transform =
+                direction > 0
+                    ? "translateX(-30px)"
+                    : "translateX(30px)";
+
+            setTimeout(() => {
+                // नया message
+                element.innerHTML = text;
+
+                // नई position
+                element.style.transform =
+                    direction > 0
+                        ? "translateX(30px)"
+                        : "translateX(-30px)";
+
+                // नया message अंदर आए
+                requestAnimationFrame(() => {
+                    element.style.opacity = "1";
+                    element.style.transform =
+                        "translateX(0)";
+                });
+            }, 300);
+        }
+
+        // AUTOMATIC WHY MESSAGE
+        setInterval(() => {
+            changeWhy(1);
+        }, 4000);
+
+        // AUTOMATIC FAQ MESSAGE
+        setInterval(() => {
+            changeFaq(1);
+        }, 5000);
+
+        // screenshot slideshow script
+        const photosContainer = document.getElementById("photos");
+        let currentIndex = 0;
+
+        /* कितनी photos एक साथ दिखाई दें */
+        function getVisiblePhotos() {
+            if (window.innerWidth <= 600) {
+                return 2;
+            }
+            if (window.innerWidth <= 900) {
+                return 4;
+            }
+            return 6;
+        }
+
+
+        /* Next photo */
+        function nextPhoto() {
+            const items = document.querySelectorAll(".photo");
+            const visible = getVisiblePhotos();
+
+            if (currentIndex < items.length - visible) {
+                currentIndex++;
+            }
+            else {
+                currentIndex = 0;
+            }
+            moveGallery();
+        }
+
+        /* Previous photo */
+        function previousPhoto() {
+            const items = document.querySelectorAll(".photo");
+            const visible = getVisiblePhotos();
+
+            if (currentIndex > 0) {
+                currentIndex--;
+            }
+            else {
+                currentIndex = items.length - visible;
+            }
+            moveGallery();
+        }
+
+
+        /* Gallery move */
+        function moveGallery() {
+            const item = document.querySelector(".photo");
+            const gap = 12;
+            const itemWidth = item.offsetWidth + gap;
+
+            photosContainer.style.transform =
+                `translateX(-${currentIndex * itemWidth}px)`;
+        }
+
+        /* Automatic slide */
+        setInterval(() => {
+            nextPhoto();
+        }, 3000);
+
+        /* Screen resize होने पर position ठीक करें */
+        window.addEventListener("resize", () => {
+            currentIndex = 0;
+            photosContainer.style.transform = "translateX(0)";
+        });
     </script>
 
     <script>

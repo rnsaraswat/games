@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide show of text box</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* MAIN SECTION */
+        .message-section {
+            width: 100%;
+            margin: 10px auto;
+            padding: 0 5px;
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 10px;
+        }
+
+        /* MESSAGE BOX */
+        .message-box {
+            /* Maximum width = screen का 30% */
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 2px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            border: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Heading */
+        .slide-h3 {
+            /* text-align: left; */
+            display: block;
+            font: 1rem sans-serif;
+            font-weight: bold;
+            margin-block-start: 0.3em;
+            margin-block-end: 0.3em;
+            margin-inline-start: 0.5em;
+            margin-inline-end: 0em;
+            unicode-bidi: isolate;
+        }
+
+        .message-box h2 {
+            text-align: left;
+            display: block;
+            font-weight: bold;
+            margin-block-start: 0.1em;
+            margin-block-end: 0.1em;
+            margin-inline-start: 0.5em;
+            margin-inline-end: 0em;
+            text-align: center;
+            font-size: clamp(17px, 2vw, 25px);
+            flex-shrink: 0;
+        }
+
+        /* SLIDER */
+        .message-slider {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            min-width: 0;
+        }
+
+        /* MESSAGE CONTENT */
+        .message-content {
+            flex: 1;
+            min-width: 0;
+            /* Message की maximum height */
+            max-height: 150px;
+            min-height: 100px;
+            padding: 2px;
+            background: #f5f5f5;
+            border-radius: 12px;
+            /* ज्यादा text होने पर vertical scrollbar */
+            overflow-y: auto;
+            /* horizontal scrollbar नहीं */
+            overflow-x: hidden;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Actual text */
+        .message-content div {
+            width: 100%;
+            font-size: clamp(13px, 1.4vw, 19px);
+            line-height: 1.2;
+            color: #222;
+            overflow-wrap: anywhere;
+            transition:
+                opacity 0.3s ease,
+                transform 0.3s ease;
+        }
+
+        .slide-p {
+            display: block;
+            margin-block-start: 0.3em;
+            margin-block-end: 0.3em;
+            margin-inline-start: 0.5em;
+            margin-inline-end: 0px;
+            unicode-bidi: isolate;
+            width: 100%;
+        }
+
+        /* ARROWS */
+
+        .msg-arrow {
+            flex-shrink: 0;
+            width: 10px;
+            height: 10px;
+            border: none;
+            border-radius: 50%;
+            background: #333;
+            color: white;
+            font-size: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .msg-arrow:hover {
+            background: #555;
+            transform: scale(1.08);
+        }
+
+
+        /* MESSAGE ANIMATION */
+        .message-exit {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+
+        .message-enter {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+
+        /* TABLET */
+        @media (max-width: 900px) {
+            .message-section {
+                gap: 5px;
+            }
+
+            .message-box {
+                /* Tablet पर भी maximum 30% */
+                width: 100%;
+                max-width: 100%;
+                padding: 1px;
+            }
+
+            .message-content {
+                max-height: 140px;
+                min-height: 90px;
+            }
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+            .message-section {
+                flex-direction: column;
+                align-items: center;
+                gap: 2px;
+                padding: 0 10px;
+            }
+
+            .message-box {
+                /* Mobile पर पूरा available width */
+                width: 100%;
+                max-width: 100%;
+                padding: 1px;
+            }
+
+            .message-content {
+                max-height: 160px;
+                min-height: 90px;
+            }
+
+            .msg-arrow {
+                width: 10px;
+                height: 10px;
+                font-size: 5px;
+                font-weight: bold;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="message-section">
+
+        <!-- LEFT / WHY TO CHOOSE RGH -->
+        <div class="message-box">
+            <h2>Why Choose RGH?</h2>
+            <div class="message-slider">
+                <button class="msg-arrow msg-prev" onclick="changeWhy(-1)"> &#10094;
+                </button>
+                <div class="message-content">
+                    <div id="whyMessage">
+                        <h3 class='slide-h3'>🎮 Multiple Games</h3>
+                        <p class='slide-p'>Enjoy many brain games in one application.</p>
+                    </div>
+                </div>
+                <button class="msg-arrow msg-next" onclick="changeWhy(1)">
+                    &#10095;
+                </button>
+            </div>
+        </div>
+
+        <!-- RIGHT / FAQ -->
+        <div class="message-box">
+            <h2>Frequently Asked Questions</h2>
+            <div class="message-slider">
+                <button class="msg-arrow msg-prev" onclick="changeFaq(-1)">&#10094;
+                </button>
+
+                <div class="message-content">
+                    <div id="faqMessage">
+                        What is Ravindra Games Hub?
+                    </div>
+                </div>
+
+                <button class="msg-arrow msg-next" onclick="changeFaq(1)">&#10095;
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // WHY TO CHOOSE RGH MESSAGES
+        const whyMessages = [
+            "<h3 class='slide-h3'>🎮 Multiple Games</h3><p class='slide-p'>Enjoy many brain games in one application.</p>",
+
+            "<h3 class='slide-h3'>🧠 Brain Training</h3><p class='slide-p'>Improve memory, strategy and logic skills.</p>",
+
+            "<h3 class='slide-h3'>📱 Offline Play</h3><p class='slide-p'>Play anytime without an internet connection.</p>",
+
+            "<h3 class='slide-h3'>⚡ Lightweight</h3><p>Fast performance with beautiful themes.</p>"
+
+        ];
+
+        // FAQ MESSAGES
+        const faqMessages = [
+        "<h3 class='slide-h3'>Is Ravindra Games Hub free?</h3><p class='slide-p'>Yes, every game is free.</p>",
+            "<h3 class='slide-h3'>Can I play offline?</h3><p class='slide-p'>Yes, All app games work offline after download 'Ravindra Games Hub' App.",
+            "<h3 class='slide-h3'>Can I play offline?</h3><p class='slide-p'>No, All website games need internet connection for play.",
+            "<h3 class='slide-h3'>Is Sign in is necessory?</h3><p class='slide-p'>No, no need to sign in play game.</p>",
+            "<h3 class='slide-h3'>Why Sign in?</h3><p class='slide-p'>If you not sign in before play the name in game appear as guest in App.</p>",
+            "<h3 class='slide-h3'>Why Sign in?</h3><p class='slide-p'>If you not sign in before play the name in leaderboard appear as guest.</p>",
+            "<h3 class='slide-h3'>How many themes?</h3><p>Four themes are available - Light, Dark, Blue, Orange.</p>",
+            "<h3 class='slide-h3'>How many themes?</h3><p>Two themes are available - Dark(Blue), Light(Orange) in website.</p>",
+            "<h3 class='slide-h3'>Does my game lost?</h3><p class='slide-p'>No, in app Your game is save in all conditionlos like, minimise/close app.</p>",
+            "<h3 class='slide-h3'>Does my game lost?</h3><p class='slide-p'>Your game is lost in website when home, brower back/refersh button is pressed.</p>",
+            "<h3 class='slide-h3'>When my game is save?</h3><p class='slide-p'>Your games is resume in website when leaderboard, feedback, theme, sharing, music and pause is clicked.</p>",
+            "<h3 class='slide-h3'>Which Games available?</h3><p class='slide-p'>Memory, Block Sort, Sudoku, Water Sort, Reversi, Connect 4, Tic Tac Toe, Mastermind, Mastermind solver, Sudoku solver, three in a row, Connect 3, four in a row, Connect 4, Jigsaw, slintherlink, Rock Paper Scissor</p>",
+            "<h3 class='slide-h3'>Can two players play game?</h3><p class='slide-p'>Yes, Reversi, Connect 4, Tic Tac Toe, 5 in a row, 3 in a row, Connect 3, 4 in a row, Connect 4 can play two human players</p>",
+            "<h3 class='slide-h3'>Can play game with AI?</h3><p class='slide-p'>Yes, Reversi, Connect 4, Tic Tac Toe, 5 in a row, 3 in a row, Connect 3, 4 in a row, Connect 4 can playe with AI</p>",
+            "<h3 class='slide-h3'>Is games have different difficulty levels?</h3><p class='slide-p'>Yes, All the games in app and website are 3 difficulty leves. Easy, Medium and Hard</p>",
+            "<h3 class='slide-h3'>Can single player play games?</h3><p class='slide-p'>Yes, Memory, Block Sort, Sudoku, Water Sort, Rock Paper Scissor play indiviual players.</p>",
+            "<h3 class='slide-h3'>Can game solver availabe?</h3><p class='slide-p'>Yes, Mastermind solver, Sudoku solver available in website games."
+        ];
+
+        // CURRENT INDEX
+        let whyIndex = 0;
+        let faqIndex = 0;
+
+        // CHANGE WHY MESSAGE
+        function changeWhy(direction) {
+            whyIndex += direction;
+            if (whyIndex >= whyMessages.length) {
+                whyIndex = 0;
+            }
+            if (whyIndex < 0) {
+                whyIndex = whyMessages.length - 1;
+            }
+            showMessage("whyMessage", whyMessages[whyIndex], direction);
+        }
+
+        // CHANGE FAQ MESSAGE
+        function changeFaq(direction) {
+            faqIndex += direction;
+            if (faqIndex >= faqMessages.length) {
+                faqIndex = 0;
+            }
+
+            if (faqIndex < 0) {
+                faqIndex = faqMessages.length - 1;
+            }
+
+            showMessage("faqMessage", faqMessages[faqIndex], direction);
+        }
+
+        // SHOW MESSAGE WITH ANIMATION
+        function showMessage(id, text, direction) {
+            const element = document.getElementById(id);
+            if (!element) return;
+            // Old message बाहर जाए
+            element.style.opacity = "0";
+            element.style.transform =
+                direction > 0
+                    ? "translateX(-30px)"
+                    : "translateX(30px)";
+
+            setTimeout(() => {
+                // नया message
+                element.innerHTML = text;
+
+                // नई position
+                element.style.transform =
+                    direction > 0
+                        ? "translateX(30px)"
+                        : "translateX(-30px)";
+
+                // नया message अंदर आए
+                requestAnimationFrame(() => {
+                    element.style.opacity = "1";
+                    element.style.transform =
+                        "translateX(0)";
+                });
+            }, 300);
+        }
+
+        // AUTOMATIC WHY MESSAGE
+        setInterval(() => {
+            changeWhy(1);
+        }, 4000);
+
+        // AUTOMATIC FAQ MESSAGE
+        setInterval(() => {
+            changeFaq(1);
+        }, 5000);
+    </script>
+</body>
+</html>
