@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="hi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>RGH Chess Puzzle</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    <script defer src="js/script.js"></script>
+</head>
+
+<body>
+    <header><b class="logo">RGH</b>
+        <div>
+            <h1>Ravindra Games Hub</h1>
+            <p>Chess Puzzle • दिमाग की कसरत</p>
+        </div>
+    </header>
+    <main>
+        <section class="panel">
+            <div class="heading">
+                <div><small>CHESS PUZZLE</small>
+                    <h2 id="level">Level 1</h2>
+                </div><b id="rating">Rating —</b>
+            </div>
+            <div class="stats">
+                <div>समय<strong id="timer">00:00:00</strong></div>
+                <div>Lives<strong id="lives">♥ ♥ ♥</strong></div>
+                <div>Puzzle<strong id="pid">—</strong></div>
+            </div>
+            <p id="status">Puzzle लोड हो रहा है…</p>
+            <div id="board" class="board"></div>
+            <div class="buttons"><button id="hint">💡 Hint</button><button id="undo">↶ Undo</button><button
+                    id="restart">⟳ Try Again</button><button id="next" class="primary">Next Level →</button></div>
+            <p class="muted">पहले piece और फिर destination square पर क्लिक करें।</p>
+        </section>
+        <aside class="panel">
+            <h2>Levels</h2>
+            <p class="muted">Progress इसी browser में save होगी।</p>
+            <div id="levels" class="levels"></div>
+            <hr>
+            <h3>कैसे खेलें?</h3>
+            <ol>
+                <li>सही चाल चलकर puzzle पूरा करें।</li>
+                <li>गलत चाल पर एक life कम होगी।</li>
+                <li>Hint से starting square देखें।</li>
+                <li>Level पूरा करने पर अगला level खुलेगा।</li>
+            </ol>
+        </aside>
+    </main>
+    <footer>© Ravindra Games Hub • Chess Puzzle</footer>
+</body>
+
+</html>
