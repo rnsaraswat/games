@@ -35,6 +35,7 @@ function showRules() {
         You can only pour water into a tube that has enough space to accommodate the poured water. <br>
         <b>Winning:</b> The game is won when all the tubes contain water of only one colour and the tubes are full. <br>
         <b>Restarting:</b> You can restart a level at any time if you get stuck.</p>
+    
     <h2>The Core Rules</h2>
         <b><u>Tap to Pour:</b></u> Tap a tube to pick up its top layer of liquid, then tap another tube to pour it.<br>
         <b><u>Same Colour Only:</b></u>  You can only pour liquid onto another layer of the exact same colour or into a completely empty tube.<br>
@@ -46,6 +47,7 @@ function showRules() {
         <b><u>Top colours:</b></u> Look for top colours of filled tubes which can be transfer to empty tube<br>
         <b><u>Second / other colours:</b></u> remaining tubes top colours can be transferred into top empty tube only is the both colours are same.<br>
         <b><u>Number in water:</b></u> Number in side water are color number and it only helping to  playing for semi or fully color blind players.
+
     <h2>Buttons used in the game</h2>
         <u>No of tubes(mode):</u> This dropdown menu to select no of tubes (mode) in puzzle. 4 to 14 tubes option are available in which 2 tubes are empty. lesser the tubes easy the difficulty level and more tubes harder the difficulty level.<br>
         the levels are Easy/Medium/Hard<br>

@@ -252,6 +252,12 @@ header {
     z-index: 9999;
 }
 
+@media (max-width:560px), (orientation: portrait) {
+    h1 {
+        font-size: 15px;
+    }
+}
+
 @media (max-width:560px) {
     .winbar {
         left: 8px;
@@ -285,27 +291,10 @@ header {
     #timer-display{
         font-size: 20px;
     }
+    .rules-h2 {
+        font-size: 15px;
+    }
 }
-
-/* Leaderboard/Rules Popup */
-#rulesPopup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 2vw;
-    border-radius: 1vw;
-    display: none;
-    z-index: 10;
-    width: 80%;
-    height: 60%;
-    overflow-y: auto;
-    text-align: center;
-    border: 0.2vw solid var(--cell-border);
-    background: var(--bg);
-    color: var(--text);
-}
-
 
 /* display wining text */
 #winText {
@@ -321,4 +310,72 @@ header {
     z-index: 1001;
     transition: opacity 0.5s ease, transform 0.5s ease;
     pointer-events: none;
+}
+
+
+.rules-popup-window {
+    inset: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 10;
+    width: 95%;
+    height: 95%;
+    overflow-y: auto;
+    text-align: center;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.rules-header-section {
+    padding: 2px;
+    background: var(--bg);
+    color: var(--text);
+    text-align: center;
+}
+
+.rules-h2 {
+    font-size: 20px;
+    background: var(--bg);
+}
+
+.rules-content {
+    height: calc(100% - 60px);
+    overflow-y: auto;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.rules-popup-close {
+    float: right;
+    cursor: pointer;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    transition: 0.5s ease-in-out;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--accent), #7c3aed);
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(90deg, #b91010, #960505);
+    border: 2px solid #b91010;
+    box-shadow: 0 10px 40px var(--box-shadow);
+}
+
+.rules-popup-close:hover {
+    background: linear-gradient(90deg, #960505, #b91010);
+    color: var(--text);
+    transform: translateY(-2px);
+}
+
+#RulesBox {
+    text-align: left;
 }

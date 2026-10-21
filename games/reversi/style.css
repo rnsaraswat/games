@@ -248,12 +248,14 @@ button.primary:hover {
 }
 
 .rules-h2 {
+    font-size: 20px;
     background: var(--bg);
 }
 
 .rules-content {
-    height: calc(100% - 20px);
+    height: calc(100% - 60px);
     overflow-y: auto;
+    margin-top: 10px;
     text-align: left;
 }
 
@@ -319,6 +321,9 @@ button.primary:hover {
         margin: 1vw;
         padding: 1vw;
     }
+    .rules-h2 {
+        font-size: 15px;
+    }
 }
 
 @media (orientation:portrait) {
@@ -369,6 +374,9 @@ button.primary:hover {
         font-size: 15px;
         margin: 10px;
         padding: 10px;
+    }
+    .rules-h2 {
+        font-size: 15px;
     }
 }
 

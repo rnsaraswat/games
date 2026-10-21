@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1b2430">
+  <title>Chess - Free Chess game | Ravindra Games Hub | RGH</title>
+  <meta name="description"
+    content="Play free Chess online at Ravindra Games Hub. Improve your logic, concentration and problem-solving skills with challenging Chess game. Life is like chess, make your moves wisely">
+  <link rel="canonical" href="https://rnsaraswat.github.io/games/games/chess/index.html">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Chess Online - Free Chess Game">
+  <meta property="og:description" content="Play free Chess online at Ravindra Games Hub.">
+  <meta property="og:url" content="https://rnsaraswat.github.io/games/games/chess/index.html">
+  <meta property="og:image" content="https://rnsaraswat.github.io/games/assets/images/5inARow_preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Chess Online - Free Chess Game">
+  <meta name="twitter:description" content="Play free Chess online at Ravindra Games Hub.">
+  <meta name="twitter:image" content="https://rnsaraswat.github.io/games/assets/images/5inARow_preview.png">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../../leaderboard/feedback.css" />
+  <link rel="stylesheet" href="../../leaderboard/reply-popup.css">
+  <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
+  <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+  <link rel="stylesheet" href="../../commoncss.css">
+  <link rel="manifest" href="../../manifest.json" />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta name="theme-color" content="#6200ee" />
+</head>
+
+<body>
+  <div id="container">
+    <div class="main">
+      <!-- Left Panel -->
+      <div id="left" class="section">
+        <h1>♟ Chess</h1>
+
+        <div class="button-group">
+          <label class="mode-label" for="modeSelect">Game mode</label>
+          <select id="modeSelect">
+            <option value="pvp">Player vs Player</option>
+            <option value="computer">Player vs Computer</option>
+          </select>
+          <label id="levelLabel" for="levelSelect" hidden>AI level</label>
+          <select id="levelSelect" hidden>
+            <option>Easy</option>
+            <option selected>Medium</option>
+            <option>Hard</option>
+          </select>
+          <label id="levelLabel" for="levelSelect" hidden>AI level</label>
+          <select id="levelSelect" hidden>
+            <option>Easy</option>
+            <option selected>Medium</option>
+            <option>Hard</option>
+          </select>
+          <button id="newBtn" class="primary" type="button">↻ New Game</button>
+          <button id="undoBtn" type="button">↶ Undo</button>
+          <button id="deselectBtn" type="button">✕ Deselect</button>
+          <button id="soundBtn" type="button" aria-pressed="true">♪ Sound On</button>
+          <button id="toggle-theme">☀️ Light</button>
+          <!-- to sound on / off button -->
+          <button id="toggle-sound">🔇 Sound: Off</button>
+          <button id="toggle-rules">📜View Rules</button>
+          <button class="button-primary" id="toggle-gb-leaderboard" onclick="openFirebaseGlobalLeaderboard()">🌍
+            Global
+            Leaderboard</button>
+          <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+            Leaderboard</button>
+          <button class="button-primary" id="shareBtn">📤Sharing</button>
+          <button class="button-primary" onclick="openFBFeedbackV2()">💬 Feedback</button>
+          <button class="button-primary"
+            onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+          <div id="timer-display">⏱️ 00:00:00</div>
+          <div class="moves-count">Moves played: <strong id="movesCount">0</strong></div>
+          <p class="hint">Select a piece to see its legal moves. Pawns promote to queens automatically.</p>
+          <p id="status" class="status" role="status" aria-live="polite">White's turn</p>
+        </div>
+        <div class="board-wrap">
+          <div id="board" class="board" role="grid" aria-label="Chess board"></div>
+        </div>
+      </div>
+    </div>
+    <!-- <main class="app">
+          <header class="topbar">
+            <a class="back-link" href="./" aria-label="Back to games">RGH</a>
+            <h1>♟ Chess</h1>
+            <button id="themeBtn" class="icon-btn" type="button" title="Change theme" aria-label="Change theme">◐
+              Theme</button>
+          </header> -->
+
+    <!-- <section class="game-layout" aria-label="Chess game">
+            <div class="game-main">
+              <div class="controls">
+                <label class="mode-label" for="modeSelect">Game mode</label>
+                <select id="modeSelect">
+                  <option value="pvp">Player vs Player</option>
+                  <option value="computer">Player vs Computer</option>
+                </select>
+                <label id="levelLabel" for="levelSelect" hidden>AI level</label>
+                <select id="levelSelect" hidden>
+                  <option>Easy</option>
+                  <option selected>Medium</option>
+                  <option>Hard</option>
+                </select>
+                <button id="newBtn" class="primary" type="button">↻ New Game</button>
+                <button id="undoBtn" type="button">↶ Undo</button>
+                <button id="deselectBtn" type="button">✕ Deselect</button>
+                <button id="soundBtn" type="button" aria-pressed="true">♪ Sound On</button>
+                <button id="toggle-theme">☀️ Light</button> -->
+    <!-- to sound on / off button -->
+    <!-- <button id="toggle-sound">🔇 Sound: Off</button>
+                <button id="toggle-rules">📜View Rules</button>
+                <button class="button-primary" id="toggle-gb-leaderboard" onclick="openFirebaseGlobalLeaderboard()">🌍
+                  Global
+                  Leaderboard</button>
+                <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local
+                  Leaderboard</button>
+                <button class="button-primary" id="shareBtn">📤Sharing</button>
+                <button class="button-primary" onclick="openFBFeedbackV2()">💬 Feedback</button>
+                <button class="button-primary"
+                  onclick="window.location.href='https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+                <div id="timer-display">⏱️ 00:00:00</div>
+                <div class="moves-count">Moves played: <strong id="movesCount">0</strong></div>
+                <p class="hint">Select a piece to see its legal moves. Pawns promote to queens automatically.</p>
+              </div>
+            </div>
+      </div> -->
+    <!-- <p id="status" class="status" role="status" aria-live="polite">White's turn</p>
+      <div class="board-wrap">
+        <div id="board" class="board" role="grid" aria-label="Chess board"></div>
+      </div> -->
+
+
+
+    <aside class="side-panel">
+      <section class="panel">
+        <h2>Captured Pieces</h2>
+        <p><strong>White captured:</strong> <span id="capturedBlack">—</span></p>
+        <p><strong>Black captured:</strong> <span id="capturedWhite">—</span></p>
+      </section>
+      <section class="panel history-panel">
+        <h2>Move History</h2>
+        <div id="history" class="history">No moves yet.</div>
+      </section>
+    </aside>
+    <!-- </section> -->
+    <!-- <footer>Ravindra Games Hub · Chess</footer> -->
+    <!-- </main> -->
+    <div id="FB-feedbackModal" class="fb-container">
+    </div>
+    <!-- ==========================================
+   REPLY POPUP
+   यह FB-feedbackModal के अंदर नहीं है
+  ========================================== -->
+    <div id="replyPopup" class="reply-popup" aria-hidden="true">
+      <div class="reply-popup-content">
+        <div class="reply-header">
+          <h2>💬 Replies</h2>
+          <button type="button" id="replyCloseBtn">
+            ✕
+          </button>
+        </div>
+        <div id="replyList" class="reply-list">
+        </div>
+        <div class="reply-form">
+          <input id="replyName" type="text" maxlength="60" placeholder="Your name">
+          <textarea id="replyMessage" maxlength="1000" placeholder="Write reply..."></textarea>
+          <button type="button" id="replySendBtn">
+            Send Reply
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="lcLeaderboardModal" class="lc-main-container"></div>
+    <div id="firebaseLeaderboardModal" class="firebase-main-container"></div>
+    <div id="winText">🎉 You Won! 🎉</div>
+    <div class="name-main-container" id="namebar">
+      <div class="name-top-section">Player Name : <span id="player1"></span></div>
+      <div class="name-mid-section">
+        <label class="name-mid-section" for="nameInput">Other Player Name :
+          <input type="text" id="nameInput" placeholder="ABC" value="ABC">
+        </label>
+      </div>
+      <div class="name-footer-section">
+
+        <button id="name" class="name-primary-button">Ok</button>
+      </div>
+    </div>
+    <div id="rulesPopup" class="rules-popup-window">
+      <div class="rules-header-section">
+        <span id="rulesCloseBtn" class="rules-popup-close">Close X</span>
+        <h2 class="rules-h2">Game Rules</h2>
+      </div>
+      <div class="rules-content">
+        <p id="RulesBox"></p>
+      </div>
+    </div>
+    <canvas id="fireworksCanvas"></canvas>
+    <script type="module" src="../../leaderboard/feedback-controller.js"></script>
+    <script type="module" src="../../leaderboard/feedback-ui.js"></script>
+    <script type="module" src="../../leaderboard/feedback-firestore.js"></script>
+    <script type="module" src="../../leaderboard/reply-popup.js"></script>
+
+    <script type="module" src="../../leaderboard/firebasegbleaderboard.js"></script>
+    <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
+    <script type="module" src="js/rules.js"></script>
+    <script src="js/chess.js"></script>
+    <script src="js/chess-ui.js"></script>
+    <script type="module" src="../../leaderboard/leaderboard-controller.js"></script>
+    <script>
+
+      document.getElementById("FB-feedbackModal").style.display = 'none';
+      document.getElementById("lcLeaderboardModal").style.display = 'none';
+      document.getElementById("firebaseLeaderboardModal").style.display = 'none';
+      document.getElementById("winText").style.display = 'none';
+      document.getElementById("rulesPopup").style.display = 'none';
+      document.getElementById("namebar").style.display = 'none';
+
+      const themeToggle = document.getElementById('toggle-theme');
+      function setTheme(t) {
+        if (t === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          localStorage.setItem('rg_theme', t);
+          themeToggle.textContent = '☀️ Light'
+        }
+        if (t === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+          localStorage.setItem('rg_theme', t);
+          themeToggle.textContent = '🌙 Dark'
+        }
+      }
+      if (themeToggle) themeToggle.addEventListener('click', () => setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'light' : 'dark'));
+      setTheme(localStorage.getItem('rg_theme') === 'dark' ? 'dark' : 'light');
+
+      function openFirebaseGlobalLeaderboard() {
+        document.getElementById("firebaseLeaderboardModal").style.display = 'flex';
+      };
+
+      function closeFirebaseGlobalLeaderboard() {
+        document.getElementById("firebaseLeaderboardModal").style.display = 'none';
+      };
+
+
+      fetch('../../leaderboard/firebasegbleaderboard.html')
+        .then(response => response.text())
+        .then(htmlText => {
+          document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
+          document.getElementById("firebaseLeaderboardModal").style.display = 'none';
+
+          setTimeout(() => {
+            console.log("window.initLeaderboard =", window.initLeaderboard);
+            if (window.initLeaderboard) {
+              window.initLeaderboard();
+            } else {
+              console.error("initLeaderboard not found");
+            }
+          }, 500);
+        });
+
+      function openLocalLeaderboard() {
+        document.getElementById("lcLeaderboardModal").style.display = 'flex';
+      };
+
+      function closeLocalLeaderboard() {
+        document.getElementById("lcLeaderboardModal").style.display = 'none';
+      };
+
+      function clearLLB() {
+        if (confirm("Do you realy Want to Remove all games local Leaderboard data?")) {
+          localStorage.removeItem('leaderboard');
+          alert("All games Local Leaderboard Data is Cleared");
+          textToSpeechEng('Local Leaderboard data cleared');
+        }
+      };
+
+      fetch('../../leaderboard/lcleaderboard.html')
+        .then(response => response.text())
+        .then(htmlText => {
+          document.getElementById('lcLeaderboardModal').innerHTML = htmlText;
+          document.getElementById("lcLeaderboardModal").style.display = 'none';
+        });
+
+      function openFBFeedbackV2() {
+        const modal = document.getElementById("FB-feedbackModal");
+        if (!modal) {
+          console.error("FB-feedbackModal not found");
+          return;
+        }
+        modal.style.display = "flex";
+      }
+
+      function closeFBFeedback() {
+        const modal = document.getElementById("FB-feedbackModal");
+        if (!modal) return;
+        modal.style.display = "none";
+      }
+
+      fetch('../../leaderboard/feedback.html')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Feedback HTML load failed: " + response.status);
+          }
+          return response.text();
+        })
+        .then(htmlText => {
+          const modal = document.getElementById("FB-feedbackModal");
+          if (!modal) {
+            console.error("FB-feedbackModal not found");
+            return;
+          }
+          modal.innerHTML = htmlText;
+          modal.style.display = "none";
+        })
+        .catch(error => {
+          console.error("Feedback V2 load error:", error);
+        });
+
+      (async () => {
+        const GAME_NAME = "Chess";
+        const GAME_SHORT = "chess";
+
+        const res = await fetch("../../manifest.json");
+        const manifest = await res.json();
+
+        manifest.short_name = GAME_SHORT;
+        manifest.name = GAME_NAME;
+
+        manifest.start_url = 'https://rnsaraswat.github.io/games/games/chess/index.html';
+        manifest.scope = 'https://rnsaraswat.github.io/games/games/chess/index.html';
+
+        // 🔥 icons ko absolute banane ka safety fix
+        manifest.icons = manifest.icons.map(icon => ({
+          ...icon,
+          src: new URL(icon.src, location.origin).href
+        }));
+
+        const blob = new Blob(
+          [JSON.stringify(manifest)],
+          { type: "application/json" }
+        );
+
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("link");
+        link.rel = "manifest";
+        link.href = url;
+        document.head.appendChild(link);
+      })();
+    </script>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("../../sw.js")
+            .then(() => console.log("SW registered"))
+            .catch((err) => console.log("SW error", err));
+        });
+      }
+    </script>
+</body>
+
+</html>

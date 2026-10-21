@@ -5,21 +5,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Memory Online - Free Mastermind Puzzle Game | Ravindra Games Hub</title>
-  <meta name="description"
-    content="Ravindra Games Hub — collection of lightweight web games (memory) flip, match and win. Varaous pictures Animals, Beach, Bird, City Item, Cloath, country Flags, Emoji, Food, Hallween, Actor, House item, Actress, Items,Number, Occupations,Ocen Animals, Past tense, Solar System, Plant, playground, Social,
+  <meta name="description" content="Ravindra Games Hub — collection of lightweight web games (memory) flip, match and win. Varaous pictures Animals, Beach, Bird, City Item, Cloath, country Flags, Emoji, Food, Hallween, Actor, House item, Actress, Items,Number, Occupations,Ocen Animals, Past tense, Solar System, Plant, playground, Social,
     Toy, Transportation, Vegitable. Play Memory puzzles. Flip slide, memorise slide, match slides with minimum flips.">
-    <link rel="canonical" href="https://rnsaraswat.github.io/games/games/memory/index.html">
-    <meta name="robots" content="index, follow, max-image-preview:large">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Memory Online - Free Memory games puzzle">
-    <meta property="og:description" content="Play free Memory puzzles online at Ravindra Games Hub.">
-    <meta property="og:url" content="https://rnsaraswat.github.io/games/games/memory/index.html">
-    <meta property="og:image" content="https://rnsaraswat.github.io/games/assets/images/memory_preview.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Memory Puzzle Online - Free Mastermind Puzzle Game">
-    <meta name="twitter:description" content="Play free Memory puzzles online at Ravindra Games Hub.">
-    <meta name="twitter:image" content="https://rnsaraswat.github.io/games/assets/images/memory_preview.png">
-
+  <link rel="canonical" href="https://rnsaraswat.github.io/games/games/memory/index.html">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Memory Online - Free Memory games puzzle">
+  <meta property="og:description" content="Play free Memory puzzles online at Ravindra Games Hub.">
+  <meta property="og:url" content="https://rnsaraswat.github.io/games/games/memory/index.html">
+  <meta property="og:image" content="https://rnsaraswat.github.io/games/assets/images/memory_preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Memory Puzzle Online - Free Mastermind Puzzle Game">
+  <meta name="twitter:description" content="Play free Memory puzzles online at Ravindra Games Hub.">
+  <meta name="twitter:image" content="https://rnsaraswat.github.io/games/assets/images/memory_preview.png">
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="rules.css">
@@ -41,16 +39,16 @@
       <button id="startBtn" class="button-primary-memory">🔄Start</button>
       <label class="label-memory">Level
         <select id="level" class="button-memory">
-          <option value="veryeasy">👶 Very Easy (4×4)</option>
+          <option value="veryeasy" selected>👶 Very Easy (4×4)</option>
           <option value="easy">🙂 Easy (6×6)</option>
           <option value="medium">🤔 Medium (8×8)</option>
           <option value="hard">😥 Hard (10×10)</option>
-          <option value="expert" selected>🎓Expert (12×12)</option>
+          <option value="expert">🎓Expert (12×12)</option>
         </select>
       </label>
       <label class="label-memory">Theme
         <select id="theme" class="button-memory">
-          <option value="animals">🦁Animals</option>
+          <option value="animals" selected>🦁Animals</option>
           <option value="beach">🏖️ Beach</option>
           <option value="bird">🐦 Bird</option>
           <option value="city">🏙️ City Item</option>
@@ -61,7 +59,7 @@
           <option value="hall">🎃 Hallween</option>
           <option value="hero">🎭 Actor</option>
           <option value="houses">📺 House item</option>
-          <option value="heroin" selected>🎭 Actress</option>
+          <option value="heroin">🎭 Actress</option>
           <option value="items">📦 Items</option>
           <option value="Number">0️⃣ Number</option>
           <option value="occu">🧑‍🍳 Occupations</option>
@@ -76,23 +74,10 @@
           <option value="vegetable">🍅 Vegitable</option>
         </select>
       </label>
-
-      <!-- </div> -->
-      <!-- <div class="stats"> -->
-      <!-- <div>🏆 Best: <b id="best">—</b></div> -->
-      <!-- </div> -->
-      <!-- <div> -->
-      <!-- <button class="primary" id="local-toggle-leaderboard">🏆 Local Leaderboard</button>
-                <button class="primary" id="toggle-leaderboard">🌍 Global Leaderboard</button>
-                <div id="timer-display">⏱️ 00:00:00</div>
-            <button class="primary" id="toggle-rules">View Rules</button>
-            <button class="primary" id="dark">☀️ Light</button>
-            <button class="primary" id="toggle-sound">🔇 Music:Off"</button>
-            <p id="loading">Loading...</p> -->
-      <!-- </div> -->
       <button id="toggle-theme" class="button-memory">☀️ Light</button>
       <!-- to sound on / off button -->
       <button id="toggle-sound" class="button-memory">🔇 Sound: Off"</button>
+      <button id="toggle-rules" class="button-memory">📜View Rules</button>
       <button class="button-primary-memory" id="toggle-gb-leaderboard" onclick="openFirebaseGlobalLeaderboard()">🌍
         Global
         Leaderboard</button>
@@ -110,48 +95,63 @@
   <div class="board-wrap">
     <main class="board" id="board" aria-label="Game board"></main>
   </div>
-  <!-- <div id="leaderboardPopup" class="popupWindow">
-  </div>
-  <div id="localleaderboardPopup" class="popupWindow">
-  </div>
-  <div id="feedbackPopup" class="popupWindow"></div> -->
-  <!-- Rules Popup -->
-  <!-- <div id="rulesPopup">
-        <h3>Game Rules</h3>
-        <button class="primary" id="hide-rules">Hide Rules</button>
-        <ul id="RulesBox"></ul>
-    </div> -->
+
 
   <p id="loading" class="loading">Loading...</p>
-  <div id="FB-feedbackModal" class="fb-container">
-  </div>
-  <!-- ==========================================
-   REPLY POPUP
-   यह FB-feedbackModal के अंदर नहीं है
-========================================== -->
+  <div id="FB-feedbackModal" class="fb-container"></div>
   <div id="replyPopup" class="reply-popup" aria-hidden="true">
-      <div class="reply-popup-content">
-          <div class="reply-header">
-              <h2>💬 Replies</h2>
-              <button type="button" id="replyCloseBtn">
-                  ✕
-              </button>
-          </div>
-          <div id="replyList" class="reply-list">
-          </div>
-          <div class="reply-form">
-              <input id="replyName" type="text" maxlength="60" placeholder="Your name">
-              <textarea id="replyMessage" maxlength="1000" placeholder="Write reply..."></textarea>
-              <button type="button" id="replySendBtn">
-                  Send Reply
-              </button>
-          </div>
+    <div class="reply-popup-content">
+      <div class="reply-header">
+        <h2>💬 Replies</h2>
+        <button type="button" id="replyCloseBtn">
+          ✕
+        </button>
       </div>
+      <div id="replyList" class="reply-list">
+      </div>
+      <div class="reply-form">
+        <input id="replyName" type="text" maxlength="60" placeholder="Your name">
+        <textarea id="replyMessage" maxlength="1000" placeholder="Write reply..."></textarea>
+        <button type="button" id="replySendBtn">
+          Send Reply
+        </button>
+      </div>
+    </div>
   </div>
   <div id="lcLeaderboardModal" class="lc-main-container"></div>
   <div id="firebaseLeaderboardModal" class="firebase-main-container"></div>
   <!-- Display winning text -->
   <div id="winText">🎉 You Won! 🎉</div>
+  <!-- Rules Popup -->
+  <div id="rulesPopup" class="rules-popup-window">
+    <div class="rules-header-section">
+      <span id="rulesCloseBtn" class="rules-popup-close">Close X</span>
+      <h1 class="rules-h2">Game Rules</h1>
+    </div>
+    <div class="rules-content">
+      <div>
+        <h2>Memory Rules</h2>
+        <p id="RulesBox"></p>
+      </div>
+      <div>
+        <h2>How to Play Memory</h2>
+          <p id="HowtoPlayBox"></p>
+      </div>
+      <div>
+        <h2>Buttons in the Memory game</h2>
+          <p id="ButtonBox"></p>
+      </div>
+      <div>
+        <h2>Memory Game Features</h2>
+          <p id="GameFeatureBox"></p>
+      </div>
+      <div>
+        <h2>Frequently Asked Questions</h2>
+          <p id="FeqBox"></p>
+      </div>
+    </div>
+
+  </div>
   <!-- fire crackers canvas -->
   <canvas id="confettiCanvas"></canvas>
   <script type="module" src="../../leaderboard/feedback-controller.js"></script>
@@ -163,7 +163,7 @@
   <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
   <script type="module" src="js/script.js"></script>
   <script type="module" src="../../leaderboard/leaderboard-controller.js"></script>
-  <!-- <script type="module" src="js/rules.js"></script> -->
+  <script type="module" src="js/rules.js"></script>
   <!-- <script type="module">
         import { shareScore } from '../../leaderboard/share.js';
         document.getElementById("shareBtn").addEventListener("click", async () => {
@@ -175,6 +175,7 @@
     document.getElementById("firebaseLeaderboardModal").style.display = 'none';
     document.getElementById("lcLeaderboardModal").style.display = 'none';
     document.getElementById("winText").style.display = 'none';
+    document.getElementById("rulesPopup").style.display = 'none';
 
     const themeToggle = document.getElementById('toggle-theme');
     function setTheme(t) {
@@ -202,19 +203,19 @@
 
 
     fetch('../../leaderboard/firebasegbleaderboard.html')
-    .then(response => response.text())
-            .then(htmlText => {
-                document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
-                document.getElementById("firebaseLeaderboardModal").style.display = 'none';
+      .then(response => response.text())
+      .then(htmlText => {
+        document.getElementById('firebaseLeaderboardModal').innerHTML = htmlText;
+        document.getElementById("firebaseLeaderboardModal").style.display = 'none';
 
-                setTimeout(() => {
-                    if (window.initLeaderboard) {
-                        window.initLeaderboard();
-                    } else {
-                        console.error("initLeaderboard not found");
-                    }
-                }, 500);
-            });
+        setTimeout(() => {
+          if (window.initLeaderboard) {
+            window.initLeaderboard();
+          } else {
+            console.error("initLeaderboard not found");
+          }
+        }, 500);
+      });
 
     function openLocalLeaderboard() {
       document.getElementById("lcLeaderboardModal").style.display = 'flex';
@@ -239,40 +240,40 @@
         document.getElementById("lcLeaderboardModal").style.display = 'none';
       });
 
-      function openFBFeedbackV2() {
-            const modal = document.getElementById("FB-feedbackModal");
-            if (!modal) {
-                console.error("FB-feedbackModal not found");
-                return;
-            }
-            modal.style.display = "flex";
-        }
+    function openFBFeedbackV2() {
+      const modal = document.getElementById("FB-feedbackModal");
+      if (!modal) {
+        console.error("FB-feedbackModal not found");
+        return;
+      }
+      modal.style.display = "flex";
+    }
 
-        function closeFBFeedback() {
-            const modal = document.getElementById("FB-feedbackModal");
-            if (!modal) return;
-            modal.style.display = "none";
-        }
+    function closeFBFeedback() {
+      const modal = document.getElementById("FB-feedbackModal");
+      if (!modal) return;
+      modal.style.display = "none";
+    }
 
-        fetch('../../leaderboard/feedback.html')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Feedback HTML load failed: " + response.status);
-                }
-                return response.text();
-            })
-            .then(htmlText => {
-                const modal = document.getElementById("FB-feedbackModal");
-                if (!modal) {
-                    console.error("FB-feedbackModal not found");
-                    return;
-                }
-                modal.innerHTML = htmlText;
-                modal.style.display = "none";
-            })
-            .catch(error => {
-                console.error("Feedback V2 load error:",error);
-            });
+    fetch('../../leaderboard/feedback.html')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Feedback HTML load failed: " + response.status);
+        }
+        return response.text();
+      })
+      .then(htmlText => {
+        const modal = document.getElementById("FB-feedbackModal");
+        if (!modal) {
+          console.error("FB-feedbackModal not found");
+          return;
+        }
+        modal.innerHTML = htmlText;
+        modal.style.display = "none";
+      })
+      .catch(error => {
+        console.error("Feedback V2 load error:", error);
+      });
 
     (async () => {
       const GAME_NAME = "Memory Game";
