@@ -1,55 +1,224 @@
 <!doctype html>
 <html lang="hi">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>RGH Chess Puzzle</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    <title>
+      Chess Puzzle Online - Chess Puzzle Game | Ravindra Games Hub | RGH
+    </title>
+    <meta
+      name="description"
+      content="Play Chess puzzles online at Ravindra Games Hub. Improve your logic, concentration and problem-solving skills with challenging Chess puzzles. Look for the Loose Pieces and Checks, Captures, Attacks!"
+    />
+    <link
+      rel="canonical"
+      href="https://rnsaraswat.github.io/games/games/chess_puzzles/index.html"
+    />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Chess Puzzles Online - Free Chess Puzzles"
+    />
+    <meta
+      property="og:description"
+      content="Solve free Chess puzzles online at Ravindra Games Hub."
+    />
+    <meta
+      property="og:url"
+      content="https://rnsaraswat.github.io/games/games/chess_puzzles/index.html"
+    />
+    <meta
+      property="og:image"
+      content="https://rnsaraswat.github.io/games/assets/images/Screenshot_chess_puzzle.jpeg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Chess Puzzles Online - Free Chess Puzzle Game"
+    />
+    <meta
+      name="twitter:description"
+      content="Solve free Chess puzzles online at Ravindra Games Hub."
+    />
+    <meta
+      name="twitter:image"
+      content="https://rnsaraswat.github.io/games/assets/images/Screenshot_chess_puzzle.jpeg"
+    />
+
+    <link rel="stylesheet" href="styles1.css" />
+    <link rel="stylesheet" href="../../leaderboard/feedback.css" />
+    <link rel="stylesheet" href="../../leaderboard/reply-popup.css" />
+    <link rel="stylesheet" href="../../leaderboard/firebasegbleaderboard.css" />
+    <link rel="stylesheet" href="../../leaderboard/lcleaderboard.css" />
+    <link rel="stylesheet" href="starFireworks.css" />
+    <link rel="stylesheet" href="../../commoncss.css" />
+    <link rel="manifest" href="../../manifest.json" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+    <meta name="theme-color" content="#6200ee" />
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"
+    ></script>
     <script defer src="js/script.js"></script>
-</head>
+  </head>
 
-<body>
-    <header><b class="logo">RGH</b>
-        <div>
-            <h1>Ravindra Games Hub</h1>
-            <p>Chess Puzzle • A Workout for the Brain</p>
+  <body>
+    <div id="container">
+      <div class="main">
+        <div id="left" class="section">
+          <div>
+            <h1>CHESS PUZZLE</h1>
+          </div>
+          <div class="button-group">
+            <button id="hint"></button>
+            <button id="restart">⟳ Try Again</button>
+            <button id="openLevels" type="button">☷ Levels</button>
+            <button id="toggle-theme">☀️ Light</button>
+            <button id="toggle-sound">🔇 Sound: Off</button>
+            <button id="toggle-rules">📜View Rules</button>
+            <button class="button-primary" id="toggle-lc-leaderboard" onclick="openLocalLeaderboard()">🏆 Local Leaderboard</button>
+            <button class="button-primary" id="shareBtn">📤Sharing</button>
+            <button class="button-primary" onclick="window.location.href = 'https://rnsaraswat.github.io/games/index.html'">🏠Home</button>
+            <p id="level">Puzzle No. 1</p>
+            <b id="rating">Rating —</b>
+            <p id="timer-display">⏱️ 00:00:00</p>
+            <p>Lives : <strong id="lives">♥ ♥ ♥</strong></p>
+            <p>Puzzle ID: <strong id="pid">—</strong></p>
+            <div id="status" class="output-box">Puzzle loading...</div>
+          </div>
         </div>
-    </header>
-    <main>
-        <section class="panel">
-            <div class="heading">
-                <div><small>CHESS PUZZLE</small>
-                    <h2 id="level">Level 1</h2>
-                </div><b id="rating">Rating —</b>
-            </div>
-            <div class="stats">
-                <div>समय<strong id="timer">00:00:00</strong></div>
-                <div>Lives<strong id="lives">♥ ♥ ♥</strong></div>
-                <div>Puzzle<strong id="pid">—</strong></div>
-            </div>
-            <p id="status">Puzzle लोड हो रहा है…</p>
-            <div id="board" class="board"></div>
-            <div class="buttons"><button id="hint">💡 Hint</button><button id="undo">↶ Undo</button><button
-                    id="restart">⟳ Try Again</button><button id="next" class="primary">Next Level →</button></div>
-            <p class="muted">पहले piece और फिर destination square पर क्लिक करें।</p>
+        <section id="right">
+          <div id="board" class="board"></div>
         </section>
-        <aside class="panel">
-            <h2>Levels</h2>
-            <p class="muted">Progress इसी browser में save होगी।</p>
-            <div id="levels" class="levels"></div>
-            <hr>
-            <h3>कैसे खेलें?</h3>
-            <ol>
-                <li>सही चाल चलकर puzzle पूरा करें।</li>
-                <li>गलत चाल पर एक life कम होगी।</li>
-                <li>Hint से starting square देखें।</li>
-                <li>Level पूरा करने पर अगला level खुलेगा।</li>
-            </ol>
-        </aside>
-    </main>
-    <footer>© Ravindra Games Hub • Chess Puzzle</footer>
-</body>
+      </div>
+    </div>
 
+    <div id="lcLeaderboardModal" class="lc-main-container"></div>
+    <div id="rulesPopup" class="rules-popup-window">
+      <div class="rules-header-section">
+        <span id="rulesCloseBtn" class="rules-popup-close">Close X</span>
+        <h2 class="rules-h2">Game Rules</h2>
+      </div>
+      <div class="rules-content">
+        <p id="RulesBox"></p>
+      </div>
+    </div>
+    <div id="levelsModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="levelsModalTitle">
+      <div class="modal-card levels-card">
+        <div class="modal-head">
+            <h2 id="levelsModalTitle">SELECT CHESS PUZZLE</h2>
+            <button id="closeLevels" class="close-modal" aria-label="Close levels">×</button>
+        </div>
+        <p class="muted">To start solve Puzzle click on unlocked Puzzle</p>
+        <div class="legend">
+          <span><i class="dot green"></i> Solved Puzzles</span>
+          <span><i class="dot orange"></i> Next Unlocked puzzle</span>
+          <span><i class="dot gray"></i> Locked Puzzles</span>
+        </div>
+        <div id="levelsContainer" class="levels"></div>
+        <p class="muted">Green = solved, Orange = unlocked & unsolved, Grey = locked</p>
+      </div>
+    </div>
+    <script type="module" src="../../leaderboard/lcleaderboard.js"></script>
+    <script type="module" src="js/rules.js"></script>
+    <script type="module" src="js/script.js"></script>
+    <script>
+      document.getElementById("lcLeaderboardModal").style.display = "none";
+      document.getElementById("rulesPopup").style.display = "none";
+
+      const themeToggle = document.getElementById("toggle-theme");
+      function setTheme(t) {
+        if (t === "dark") {
+          document.documentElement.setAttribute("data-theme", "dark");
+          localStorage.setItem("rg_theme", t);
+          themeToggle.textContent = "☀️ Light";
+        }
+        if (t === "light") {
+          document.documentElement.setAttribute("data-theme", "light");
+          localStorage.setItem("rg_theme", t);
+          themeToggle.textContent = "🌙 Dark";
+        }
+      }
+      if (themeToggle)
+        themeToggle.addEventListener("click", () =>
+          setTheme(
+            localStorage.getItem("rg_theme") === "dark" ? "light" : "dark",
+          ),
+        );
+      setTheme(localStorage.getItem("rg_theme") === "dark" ? "dark" : "light");
+
+      function openLocalLeaderboard() {
+        document.getElementById("lcLeaderboardModal").style.display = "flex";
+      }
+
+      function closeLocalLeaderboard() {
+        document.getElementById("lcLeaderboardModal").style.display = "none";
+      }
+
+      function clearLLB() {
+        if (
+          confirm(
+            "Do you realy Want to Remove all games local Leaderboard data?",
+          )
+        ) {
+          localStorage.removeItem("leaderboard");
+          alert("All games Local Leaderboard Data is Cleared");
+          textToSpeechEng("Local Leaderboard data cleared");
+        }
+      }
+
+      fetch("../../leaderboard/lcleaderboard.html")
+        .then((response) => response.text())
+        .then((htmlText) => {
+          document.getElementById("lcLeaderboardModal").innerHTML = htmlText;
+          document.getElementById("lcLeaderboardModal").style.display = "none";
+        });
+
+      (async () => {
+        const GAME_NAME = "Chess Puzzle";
+        const GAME_SHORT = "ChessPuzzle";
+
+        const res = await fetch("../../manifest.json");
+        const manifest = await res.json();
+
+        manifest.short_name = GAME_SHORT;
+        manifest.name = GAME_NAME;
+
+        manifest.start_url =
+          "https://rnsaraswat.github.io/games/games/chess_puzzle1/index.html";
+        manifest.scope =
+          "https://rnsaraswat.github.io/games/games/chess_puzzle1/index.html";
+
+        // 🔥 icons ko absolute banane ka safety fix
+        manifest.icons = manifest.icons.map((icon) => ({
+          ...icon,
+          src: new URL(icon.src, location.origin).href,
+        }));
+
+        const blob = new Blob([JSON.stringify(manifest)], {
+          type: "application/json",
+        });
+
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("link");
+        link.rel = "manifest";
+        link.href = url;
+        document.head.appendChild(link);
+      })();
+    </script>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("../../sw.js")
+            .then(() => console.log("SW registered"))
+            .catch((err) => console.log("SW error", err));
+        });
+      }
+    </script>
+  </body>
 </html>
