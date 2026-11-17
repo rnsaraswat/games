@@ -1,45 +1,14 @@
-import { gameName, score } from './script.js';
-
-export async function shareScore(gameName, score = 0) {
-
+// Share helper adapted for Ravindra Games Hub Chess.
+export async function shareScore(gameName = "Chess", score = 0) {
   const siteName = "Ravindra Games Hub";
-  const gameLink = `https://rnsaraswat.github.io/games/games/${gameName}/index.html`;
-
-  const textToShare =
-    `${siteName}
-${gameName}
-Can you beat my Score: ${score}
-
-Play here:
-${gameLink}`;
-
-  console.log("gamelink", gameLink);
-  const imageUrl = "../../assets/icons/maskable-icon.png";
-
-  try {
-    await navigator.share({
-      title: siteName,
-      text: textToShare
-    });
-    console.log("try", gameLink);
-
-    const blob = await (await fetch(imageUrl)).blob();
-    const file = new File([blob], "../../assets/icons/maskable-icon.png", { type: "image/png" });
-
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({
-        files: [file]
-      });
-    console.log("navigator.canShare && navigator.canShare", file, blob);
+  const gameLink = `https://rnsaraswat.github.io/games/games/${encodeURIComponent(String(gameName).toLowerCase())}/index.html`;
+  const text = `${siteName}\n${gameName}\nCan you beat my Score: ${score}\n\nPlay here:\n${gameLink}`;
+  const data = { title: `${siteName} — ${gameName}`, text, url: gameLink };
+  if (navigator.share) {
+    try { await navigator.share(data); return true; }
+    catch (err) { if (err && err.name === "AbortError") return false; }
   }
-
-  } catch (err) {
-    console.log("Share cancelled or failed", err);
-  }
+  try { await navigator.clipboard.writeText(text); alert("Share text copied to clipboard."); return true; }
+  catch (_) { window.prompt("Copy this game link and message:", text); return false; }
 }
-
-document.getElementById("shareBtn").addEventListener("click", async () => {
-  console.log("share.js button",gameName, score);
-  shareScore(gameName, score);
-  console.log("share.js button after",gameName, score);
-});
+export async function shareGame() { return shareScore("Chess", 0); }

@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="hi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
+        <title>Tangram Puzzle Game</title>
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            body {
+                background-color: #0f172a;
+                color: #f8fafc;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                min-height: 100vh;
+                padding: 12px;
+                user-select: none;
+                touch-action: manipulation;
+            }
+
+            h1 {
+                font-size: clamp(1.4rem, 4vw, 2rem);
+                color: #38bdf8;
+                margin-bottom: 4px;
+                text-align: center;
+            }
+
+            p.instructions {
+                color: #cbd5e1;
+                font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+                text-align: center;
+                max-width: 750px;
+                margin-bottom: 12px;
+                line-height: 1.4;
+            }
+
+            .controls {
+                display: flex;
+                gap: 8px;
+                margin-bottom: 12px;
+                flex-wrap: wrap;
+                justify-content: center;
+                max-width: 820px;
+            }
+
+            button {
+                background-color: #1e293b;
+                color: #f8fafc;
+                border: 1px solid #334155;
+                padding: 8px 14px;
+                border-radius: 8px;
+                font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            button:hover {
+                background-color: #334155;
+            }
+
+            button.active {
+                background-color: #0284c7;
+                border-color: #38bdf8;
+                color: #ffffff;
+            }
+
+            .action-btn {
+                background-color: #0d9488;
+                border-color: #14b8a6;
+            }
+
+            .reset-btn {
+                background-color: #e11d48;
+                border-color: #fb7185;
+            }
+
+            #status-bar {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                margin-bottom: 10px;
+                font-size: 0.95rem;
+                background: #1e293b;
+                padding: 6px 16px;
+                border-radius: 20px;
+                border: 1px solid #334155;
+            }
+
+            #match-percent {
+                color: #38bdf8;
+                font-weight: bold;
+            }
+
+            #game-wrapper {
+                width: 100%;
+                max-width: 800px;
+                aspect-ratio: 4 / 3;
+                background-color: #1e293b;
+                border: 3px solid #334155;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+                overflow: hidden;
+                position: relative;
+                touch-action: none;
+            }
+
+            svg {
+                width: 100%;
+                height: 100%;
+                display: block;
+            }
+
+            .tan {
+                stroke: #0f172a;
+                stroke-width: 2;
+                stroke-linejoin: round;
+                cursor: grab;
+                transition: filter 0.1s;
+            }
+
+            .tan:active {
+                cursor: grabbing;
+            }
+
+            .tan.selected {
+                stroke: #ffffff;
+                stroke-width: 3;
+                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+            }
+
+            .target-outline {
+                fill: #0f172a;
+                stroke: #475569;
+                stroke-width: 3;
+                stroke-dasharray: 8, 6;
+            }
+
+            /* Win Modal */
+            #win-modal {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(15, 23, 42, 0.85);
+                backdrop-filter: blur(4px);
+                justify-content: center;
+                align-items: center;
+                z-index: 100;
+                padding: 20px;
+            }
+
+            .modal-content {
+                background: #1e293b;
+                border: 2px solid #10b981;
+                padding: 28px;
+                border-radius: 16px;
+                text-align: center;
+                max-width: 380px;
+                width: 100%;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+                animation: popIn 0.3s ease;
+            }
+
+            @keyframes popIn {
+                0% {
+                    transform: scale(0.8);
+                    opacity: 0;
+                }
+                100% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+            }
+
+            .modal-content h2 {
+                color: #10b981;
+                font-size: 1.8rem;
+                margin-bottom: 10px;
+            }
+
+            .modal-content p {
+                color: #cbd5e1;
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Tangram Puzzle (टैनग्राम)</h1>
+        <p class="instructions">
+            टुकड़ों को <b>Drag</b> करके काली आकृति में फिट करें। घुमाने के लिए टुकड़े पर
+            <b>Tap/Click</b> करें या नीचे दिए गए बटन दबाएं।
+        </p>
+
+        <!-- आकृति चुनने के बटन -->
+        <div class="controls" id="shape-buttons">
+            <button onclick="setShape('square')" id="btn-square" class="active">
+                वर्ग (Square)
+            </button>
+            <button onclick="setShape('house')" id="btn-house">
+                घर (House)
+            </button>
+            <button onclick="setShape('rocket')" id="btn-rocket">
+                रॉकेट (Rocket)
+            </button>
+            <button onclick="setShape('swan')" id="btn-swan">हंस (Swan)</button>
+            <button onclick="setShape('cat')" id="btn-cat">बिल्ली (Cat)</button>
+        </div>
+
+        <!-- कंट्रोल बटन -->
+        <div class="controls">
+            <button class="action-btn" onclick="rotateSelected()">
+                ↻ घुमाएं (45°)
+            </button>
+            <button class="action-btn" onclick="flipSelected()">
+                ⇄ पलटें (Flip)
+            </button>
+            <button class="reset-btn" onclick="resetPieces()">↺ रीसेट</button>
+        </div>
+
+        <div id="status-bar">
+            <span>मिलान (Match): <span id="match-percent">0%</span></span>
+        </div>
+
+        <div id="game-wrapper">
+            <svg
+                id="board"
+                viewBox="0 0 800 600"
+                preserveAspectRatio="xMidYMid meet"
+            >
+                <!-- लक्ष्य आकृतियां (Target Shapes) -->
+                <g id="target-layer"></g>
+                <!-- 7 टैनग्राम टुकड़े -->
+                <g id="pieces-layer"></g>
+            </svg>
+        </div>
+
+        <!-- जीत का पॉपअप (Win Modal) -->
+        <div id="win-modal">
+            <div class="modal-content">
+                <h2>🎉 शानदार! आप जीत गए!</h2>
+                <p>आपने टैनग्राम पज़ल को बिल्कुल सही तरीके से पूरा कर लिया है।</p>
+                <button class="action-btn" onclick="nextShape()">
+                    अगली आकृति खेलें ➔
+                </button>
+            </div>
+        </div>
+
+        <script>
+            const svg = document.getElementById('board');
+            const targetLayer = document.getElementById('target-layer');
+            const piecesLayer = document.getElementById('pieces-layer');
+            const matchText = document.getElementById('match-percent');
+            const winModal = document.getElementById('win-modal');
+
+            // मानक आकार: 200x200 वर्ग (कुल क्षेत्रफल = 40,000 वर्ग पिक्सल)
+            // सभी आकृतियों का कुल क्षेत्रफल ठीक 40,000 रखा गया है ताकि 100% समाधान संभव हो।
+            const shapes = {
+              square: [
+                "300,200 500,200 500,400 300,400"
+              ],
+              house: [
+                "400,110 541,251 500,251 500,430 300,430 300,251 259,251"
+              ],
+              rocket: [
+                "400,90 471,161 471,361 521,411 471,411 450,460 350,460 329,411 279,411 329,361 329,161"
+              ],
+              swan: [
+                "280,140 330,90 380,140 330,190 330,310 470,310 540,380 470,450 310,450 260,380 280,290"
+              ],
+              cat: [
+                "310,110 345,145 380,110 380,180 345,215 415,285 415,430 315,430 315,320 275,280 275,180",
+                "415,380 485,310 520,345 450,415"
+              ]
+            };
+
+            const shapeKeys = Object.keys(shapes);
+            let currentShapeKey = 'square';
+
+            // सभी 7 मानक टुकड़े जिनका केंद्र (0,0) पर है ताकि रोटेशन और फ्लिप एकदम सटीक रहे
+            const initialPieces = [
+              // 2 बड़े समकोण त्रिभुज (कर्ण = 200, भुजाएं = 141.4)
+              { id: 'bigTri1', points: '-100,-33 100,-33 0,67', color: '#ef4444', x: 130, y: 120, rot: 0, flip: 1 },
+              { id: 'bigTri2', points: '-100,-33 100,-33 0,67', color: '#f97316', x: 130, y: 260, rot: 90, flip: 1 },
+
+              // 1 मध्यम समकोण त्रिभुज (कर्ण = 141.4, भुजाएं = 100)
+              { id: 'medTri',  points: '-71,-24 71,-24 0,47', color: '#eab308', x: 670, y: 120, rot: 0, flip: 1 },
+
+              // 2 छोटे समकोण त्रिभुज (कर्ण = 100, भुजाएं = 70.7)
+              { id: 'smTri1',  points: '-50,-17 50,-17 0,33', color: '#22c55e', x: 670, y: 240, rot: 0, flip: 1 },
+              { id: 'smTri2',  points: '-50,-17 50,-17 0,33', color: '#06b6d4', x: 670, y: 340, rot: 180, flip: 1 },
+
+              // 1 वर्ग (भुजा = 70.7)
+              { id: 'square',  points: '0,-50 50,0 0,50 -50,0', color: '#8b5cf6', x: 130, y: 420, rot: 0, flip: 1 },
+
+              // 1 समानांतर चतुर्भुज (आधार = 100, ऊंचाई = 50)
+              { id: 'para',    points: '-75,25 -25,-25 75,-25 25,25', color: '#ec4899', x: 670, y: 460, rot: 0, flip: 1 }
+            ];
+
+            let pieces = JSON.parse(JSON.stringify(initialPieces));
+            let selectedId = null;
+            let isDragging = false;
+            let hasMoved = false;
+            let dragOffset = { x: 0, y: 0 };
+            let gameWon = false;
+
+            // ऑफscreen कैनवास (Auto-Win चेक करने के लिए)
+            const evalCanvas = document.createElement('canvas');
+            evalCanvas.width = 400;  // 800 का आधा स्केल (तेज़ गणना के लिए)
+            evalCanvas.height = 300; // 600 का आधा स्केल
+            const ctx = evalCanvas.getContext('2d', { willReadFrequently: true });
+
+            // आकृति सेट करें
+            function setShape(shapeName) {
+              currentShapeKey = shapeName;
+              gameWon = false;
+              winModal.style.display = 'none';
+
+              targetLayer.innerHTML = '';
+              shapes[shapeName].forEach(pts => {
+                const poly = document.createElementNS('http://w3.org', 'polygon');
+                poly.setAttribute('points', pts);
+                poly.setAttribute('class', 'target-outline');
+                targetLayer.appendChild(poly);
+              });
+
+              document.querySelectorAll('#shape-buttons button').forEach(btn => btn.classList.remove('active'));
+              const activeBtn = document.getElementById('btn-' + shapeName);
+              if (activeBtn) activeBtn.classList.add('active');
+
+              checkWinCondition();
+            }
+
+            // टुकड़ों को रेंडर करें
+            function renderPieces() {
+              piecesLayer.innerHTML = '';
+              pieces.forEach(p => {
+                const poly = document.createElementNS('http://w3.org', 'polygon');
+                poly.setAttribute('points', p.points);
+                poly.setAttribute('fill', p.color);
+                poly.setAttribute('class', 'tan' + (p.id === selectedId ? ' selected' : ''));
+                poly.dataset.id = p.id;
+
+                updateTransform(poly, p);
+
+                // PointerDown माउस और टच दोनों को सपोर्ट करता है
+                poly.addEventListener('pointerdown', (e) => startDrag(e, p));
+                piecesLayer.appendChild(poly);
+              });
+            }
+
+            function updateTransform(el, p) {
+              el.setAttribute(
+                'transform',
+                `translate(${p.x}, ${p.y}) rotate(${p.rot}) scale(${p.flip}, 1)`
+              );
+            }
+
+            function startDrag(e, piece) {
+              e.preventDefault();
+              e.stopPropagation();
+
+              selectedId = piece.id;
+              isDragging = true;
+              hasMoved = false;
+              // चुने गए टुकड़े को सबसे ऊपर लाएं
+              pieces = pieces.filter(item => item.id !== piece.id);
+              pieces.push(piece);
+              const pt = getPointerPosition(e);
+              dragOffset.x = pt.x - piece.x;
+              dragOffset.y = pt.y - piece.y;
+              renderPieces();
+            }
+            window.addEventListener('pointermove', (e) => {
+              if (!isDragging || !selectedId) return;
+              e.preventDefault();
+              const piece = pieces.find(p => p.id === selectedId);
+              const pt = getPointerPosition(e);
+              const rawX = pt.x - dragOffset.x;
+              const rawY = pt.y - dragOffset.y;
+              if (Math.abs(rawX - piece.x) > 3 || Math.abs(rawY - piece.y) > 3) {
+                hasMoved = true;
+              }
+              // 5px ग्रिड स्नैपिंग और बोर्ड सीमा (Boundary) के अंदर रखना
+              piece.x = Math.max(40, Math.min(760, Math.round(rawX / 5) * 5));
+              piece.y = Math.max(40, Math.min(560, Math.round(rawY / 5) * 5));
+              const el = piecesLayer.querySelector(`[data-id="${piece.id}"]`);
+              if (el) updateTransform(el, piece);
+            }, { passive: false });
+              window.addEventListener('pointerup', () => {
+              if (!isDragging) return;
+              if (!hasMoved && selectedId) {
+              // बिना खींचे क्लिक/टैप करने पर 45° घुमाएं
+              rotateSelected();
+              } else {
+              checkWinCondition();
+              }
+              isDragging = false;
+              });
+              function getPointerPosition(e) {
+              const CTM = svg.getScreenCTM();
+              return {
+              x: (e.clientX - CTM.e) / CTM.a,
+              y: (e.clientY - CTM.f) / CTM.d
+              };
+              }
+              function rotateSelected() {
+              if (!selectedId) return;
+              const piece = pieces.find(p => p.id === selectedId);
+              piece.rot = (piece.rot + 45) % 360;
+              renderPieces();
+              checkWinCondition();
+              }
+              function flipSelected() {
+              if (!selectedId) return;
+              const piece = pieces.find(p => p.id === selectedId);
+              piece.flip *= -1;
+              renderPieces();
+              checkWinCondition();
+              }
+              function resetPieces() {
+              pieces = JSON.parse(JSON.stringify(initialPieces));
+              selectedId = null;
+              gameWon = false;
+              winModal.style.display = 'none';
+              renderPieces();
+              checkWinCondition();
+              }
+              function nextShape() {
+              const nextIndex = (shapeKeys.indexOf(currentShapeKey) + 1) % shapeKeys.length;
+              setShape(shapeKeys[nextIndex]);
+              resetPieces();
+              }
+              // कीबोर्ड शॉर्टकट्स (डेस्कटॉप के लिए)
+              window.addEventListener('keydown', (e) => {
+              if (e.key === 'r' || e.key === 'R' || e.code === 'Space') {
+              e.preventDefault();
+              rotateSelected();
+              } else if (e.key === 'f' || e.key === 'F') {
+              flipSelected();
+              }
+              });
+              // ऑटो-विन डिटेक्शन लॉजिक (Pixel Coverage Comparison)
+              function checkWinCondition() {
+              if (gameWon) return;
+              const scale = 0.5;
+              ctx.clearRect(0, 0, evalCanvas.width, evalCanvas.height);
+              // 1. पहले लक्ष्य आकृति (Target Shape) को लाल रंग में बनाएं
+              ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+              shapes[currentShapeKey].forEach(ptsStr => {
+              const pts = ptsStr.split(' ').map(pair => pair.split(',').map(Number));
+              ctx.beginPath();
+              pts.forEach(([x, y], idx) => {
+              if (idx === 0) ctx.moveTo(x * scale, y * scale);
+              else ctx.lineTo(x * scale, y * scale);
+              });
+              ctx.closePath();
+              ctx.fill();
+              });
+              const targetData = ctx.getImageData(0, 0, evalCanvas.width, evalCanvas.height).data;
+              let targetPixels = 0;
+              for (let i = 3; i < targetData.length; i += 4) {
+              if (targetData[i] > 128) targetPixels++;
+              }
+              // 2. अब सभी 7 टुकड़ों को नीले रंग में बनाएं
+              ctx.clearRect(0, 0, evalCanvas.width, evalCanvas.height);
+              ctx.fillStyle = 'rgba(0, 0, 255, 1)';
+              pieces.forEach(p => {
+              const pts = p.points.split(' ').map(pair => pair.split(',').map(Number));
+              ctx.save();
+              ctx.translate(p.x * scale, p.y * scale);
+              ctx.rotate((p.rot * Math.PI) / 180);
+              ctx.scale(p.flip * scale, scale);
+              ctx.beginPath();
+              pts.forEach(([x, y], idx) => {
+              if (idx === 0) ctx.moveTo(x, y);
+              else ctx.lineTo(x, y);
+              });
+              ctx.closePath();
+              ctx.fill();
+              ctx.restore();
+              });
+              const piecesData = ctx.getImageData(0, 0, evalCanvas.width, evalCanvas.height).data;
+              let matchedPixels = 0;
+              let outsidePixels = 0;
+              for (let i = 3; i < targetData.length; i += 4) {
+              const inTarget = targetData[i] > 128;
+              const inPieces = piecesData[i] > 128;
+              if (inTarget && inPieces) matchedPixels++;
+              else if (!inTarget && inPieces) outsidePixels++;
+              }
+              // सटीकता प्रतिशत निकालें (अतिरिक्त बाहर निकले पिक्सल घटाकर)
+              const score = Math.max(0, ((matchedPixels - outsidePixels * 0.5) / targetPixels) * 100);
+              const displayPercent = Math.min(100, Math.round(score));
+              matchText.textContent = displayPercent + '%';
+              // यदि 92% से अधिक आकृति सही ढक गई है तो जीत घोषित करें
+              if (displayPercent >= 92) {
+              gameWon = true;
+              matchText.textContent = '100% 🎉';
+              setTimeout(() => {
+              winModal.style.display = 'flex';
+              }, 300);
+              }
+              }
+              // गेम शुरू करें
+              setShape('square');
+              renderPieces();
+        </script>
+    </body>
+</html>

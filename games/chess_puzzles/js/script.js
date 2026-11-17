@@ -70,7 +70,7 @@ let difficulty;
   function stats() {
     $("timer-display").textContent = time(seconds);
     $("lives").textContent = "♥ ".repeat(lives).trim() || "—";
-    $("pid").textContent = "Puzzle ID : " + (puzzles[index]?.puzzle_id || "—");
+    $("pid").textContent = (puzzles[index]?.puzzle_id || "—");
     $("rating").textContent = "Rating : " + (puzzles[index]?.rating ?? "—");
     $("level").textContent = "Puzzle No. : " + (index + 1);
   }
